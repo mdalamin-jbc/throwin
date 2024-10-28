@@ -6,6 +6,9 @@ import { useNavigate } from "react-router-dom";
 const Home = () => {
   const navigate = useNavigate();
   const handleLogin = () => {
+    navigate("/login");
+  };
+  const handleStart = () => {
     navigate("/socialLogin");
   };
 
@@ -29,7 +32,7 @@ const Home = () => {
 
       {/* Buttons */}
       <div className="absolute bottom-[40px] lg:-bottom-[60%] xl:bottom-0  w-full flex flex-col gap-3 justify-center items-center z-10">
-        <button>
+        <button onClick={handleStart}>
           <ButtonPrimary
             btnText="始める"
             style="bg-gradient-to-r from-[#65D0F2] to-[#2399F4] min-w-[350px] rounded-full text-center py-[10px] lg:py-6 font-bold text-white"

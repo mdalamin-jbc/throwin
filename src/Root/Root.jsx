@@ -1,10 +1,14 @@
-
-import { Outlet } from "react-router-dom";
+import NavMenu from "../Shared/NavMenu/NavMenu";
+import { Outlet, useLocation } from "react-router-dom";
 
 const Root = () => {
+  const location = useLocation();
+
   return (
     <div>
-      <Outlet></Outlet>
+      {/* Only render NavMenu on the "gacha" route */}
+      {location.pathname.includes("gacha") && <NavMenu />}
+      <Outlet />
     </div>
   );
 };

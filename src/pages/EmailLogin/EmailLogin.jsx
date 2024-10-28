@@ -4,9 +4,10 @@ import logo from "../../assets/images/socialLogin/logo2.png";
 import socialBg from "../../assets/images/socialLogin/social bg.jpeg";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import { useForm } from "react-hook-form";
+import axios from "axios"; // Import axios or fetch for API requests
 
 const EmailLogin = () => {
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const handleClose = () => {
     navigate("/socialLogin"); // Navigate to the home page or any desired route
@@ -19,8 +20,24 @@ const EmailLogin = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    navigate("/password", { state: { email: data.mail } });
+
+    // Uncomment to enable email existence check
+    // try {
+    //   // Replace with your API endpoint
+    //   const response = await axios.post("/api/check-email", { email: data.mail });
+
+    //   if (response.data.exists) {
+    //     // If email is registered, navigate to login page with email
+    //     navigate("/password", { state: { email: data.mail } });
+    //   } else {
+    //     // If email is not registered, navigate to password page with email
+    //     navigate("/newReg", { state: { email: data.mail } });
+    //   }
+    // } catch (error) {
+    //   console.error("Error checking email:", error);
+    // }
   };
 
   return (
@@ -30,26 +47,30 @@ const EmailLogin = () => {
     >
       <div className="absolute inset-0 bg-[#072233fb] "></div>
 
-      <div className="bg-white p-6 rounded-[10px] shadow-xl  text-center relative w-[291px] h-[336px] ">
-        {/* Logo Image */}
+      <div className="bg-white p-6 rounded-[10px] shadow-xl text-center relative w-[291px] h-[336px]">
         <img src={logo} alt="Logo" className="w-[150px] h-auto mx-auto mb-4" />
 
-        {/* email input */}
         <div className="flex flex-col justify-center">
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-control ">
+            <div className="form-control">
               <label className="label flex font-bold text-sm">
                 <span className="label-text font-Noto">メールアドレス</span>
               </label>
               <input
-                {...register("mail", { required: true })}
+                {...register("mail", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Invalid email format"
+                  }
+                })}
                 name="mail"
                 type="text"
                 placeholder="メールアドレス"
                 className="input border rounded-[3px] py-4 mt-1 mb-[9px] w-[253px] pl-4 font-Noto text-[#44495B80] text-sm"
               />
               {errors.mail && (
-                <span className="text-red-500 mt-1">Email is required</span>
+                <span className="text-red-500 mt-1">{errors.mail.message}</span>
               )}
             </div>
 
@@ -66,19 +87,20 @@ const EmailLogin = () => {
             <p>|</p>
             <button>プライバシーポリシー</button>
           </div>
-          <Link to="/socialLogin" className="font-hiragino font-bold text-sm text-[#5297FF]">ログイン画面へ</Link>
+          <Link
+            to="/socialLogin"
+            className="font-hiragino font-bold text-sm text-[#5297FF]"
+          >
+            ログイン画面へ
+          </Link>
         </div>
       </div>
 
-      {/* Close Icon Button Below the Form */}
-      <button
-        className="mt-24 relative"
-        onClick={handleClose} // Call handleClose on click
-      >
+      <button className="mt-24 relative" onClick={handleClose}>
         <img
           src={closeIcon}
           alt="Close"
-          className="w-[17px] h-[17px] text-gray-500 hover:text-gray-700" // Apply your desired styles here
+          className="w-[17px] h-[17px] text-gray-500 hover:text-gray-700"
         />
       </button>
     </div>

@@ -7,6 +7,7 @@
    - React Router for navigation.
    - [react-hook-form](https://www.react-hook-form.com/get-started/)
    - [Swiper Slider](https://swiperjs.com/get-started)
+   - [Axios](https://axios-http.com)
 
 
 

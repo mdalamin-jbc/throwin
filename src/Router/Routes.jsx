@@ -6,6 +6,8 @@ import EmailLogin from "../pages/EmailLogin/EmailLogin";
 import Password from "../pages/Password/Password";
 import NewReg from "../pages/NewReg/NewReg";
 import Onboarding from "../pages/Onboarding/Onboarding";
+import Login from "../pages/Login/Login";
+import Gacha from "../pages/Gacha/Gacha";
 
 export const Routes = createBrowserRouter([
   {
@@ -29,12 +31,16 @@ export const Routes = createBrowserRouter([
         element: <Password />,
       },
       {
-        path: "/newReg",
-        element: <NewReg />,
+        path: "/login",
+        element: <Login />,
       },
       {
         path: "/onboarding",
         element: <Onboarding />,
+      },
+      {
+        path: "/gacha",
+        element: <Gacha />,
       },
     ],
   },
