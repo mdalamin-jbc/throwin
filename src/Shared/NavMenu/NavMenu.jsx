@@ -17,7 +17,7 @@ const NavMenu = () => {
               viewTransitionName: isTransitioning ? "slide" : "",
             };
           }}
-          to="/"
+          to="/search"
         >
           <div className="grid ">
             <img src={search} alt="" /> <p>探す</p>
@@ -33,7 +33,7 @@ const NavMenu = () => {
               viewTransitionName: isTransitioning ? "slide" : "",
             };
           }}
-          to="/"
+          to="/favorite"
         >
           <div className="flex flex-col justify-center items-center">
             <img className="w-[30px]" src={favorite} alt="" /> <p>お気に入り</p>
@@ -49,10 +49,10 @@ const NavMenu = () => {
               viewTransitionName: isTransitioning ? "slide" : "",
             };
           }}
-          to="/"
+          to="/gacha"
         >
-          <div className="grid">
-            <img className="w-[23px]" src={gacha} alt="" /> <p>ガチャ</p>
+          <div className="grid -mt-7">
+            <img className="w-[]" src={gacha} alt="" /> <p>ガチャ</p>
           </div>
         </NavLink>
       </li>
@@ -68,8 +68,7 @@ const NavMenu = () => {
           to="/"
         >
           <div>
-
-          <img src={notice} alt="" /> <p>お知らせ</p>
+            <img src={notice} alt="" /> <p>お知らせ</p>
           </div>
         </NavLink>
       </li>

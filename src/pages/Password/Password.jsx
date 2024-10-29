@@ -1,18 +1,24 @@
 import { useForm } from "react-hook-form";
-import { useNavigate, useLocation, Link } from "react-router-dom"; // Import Link here
+import { useNavigate, useLocation } from "react-router-dom";
 import closeIcon from "../../assets/icons/close.png";
 import logo from "../../assets/images/socialLogin/logo2.png";
 import socialBg from "../../assets/images/socialLogin/social bg.jpeg";
 import ButtonPrimary from "../../components/ButtonPrimary";
-import useAxiosPublic from "../../hooks/axiosPublic";
+import useAxiosReg, { fetchCSRFToken } from "../../hooks/axiosReg";
+import { useEffect } from "react";
+import { toast } from "react-toastify"; // Import toast for notifications
 
 const Password = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const axiosPublic = useAxiosPublic();
+  const axiosReg = useAxiosReg();
 
   const { email } = location.state || {};
   console.log(email);
+
+  useEffect(() => {
+    fetchCSRFToken();
+  }, []);
 
   const handleClose = () => {
     navigate("/socialLogin");
@@ -33,26 +39,26 @@ const Password = () => {
       confirm_password: data.confirmPassword,
     };
 
-    console.log("Request data:", requestData); 
+    console.log("Request data:", requestData);
 
     try {
-      const response = await axiosPublic.post(
-        `/auth/register/consumer`,
+      const response = await axiosReg.post(
+        "auth/register/consumer",
         requestData
       );
 
-      if (response.data.msg === "Registration Successful") {
-        console.log("Registration successful!", response.data);
+      if (response.data.detail === "User Created Successfully") {
+        toast.success("Registration successful! Redirecting to dashboard...");
         navigate("/dashboard");
       } else {
-        console.error("Registration failed:", response.data.msg);
-        alert("Registration failed: " + response.data.msg);
+        console.error("Registration failed:", response.data.detail);
+        toast.error("Registration failed: " + response.data.detail);
       }
     } catch (error) {
+      console.error("Error details:", error);
       const errorMessage =
-        error.response?.data?.msg || "An error occurred. Please try again.";
-      console.error("Error registering:", errorMessage);
-      // alert(errorMessage);
+        error.response?.data?.detail || "An error occurred. Please try again.";
+      toast.error("Error registering: " + errorMessage);
     }
   };
 
@@ -61,13 +67,11 @@ const Password = () => {
       className="flex flex-col justify-center items-center h-screen bg-cover bg-center p-4"
       style={{ backgroundImage: `url(${socialBg})` }}
     >
-      <div className="absolute inset-0 bg-[#072233fb] "></div>
+      <div className="absolute inset-0 bg-[#072233fb]"></div>
 
-      <div className="bg-white p-6 rounded-[10px] shadow-xl text-center relative w-[291px] h-[490px] ">
-        {/* Logo Image */}
+      <div className="bg-white p-6 rounded-[10px] shadow-xl text-center relative w-[291px] h-[490px]">
         <img src={logo} alt="Logo" className="w-[150px] h-auto mx-auto mb-4" />
 
-        {/* email input */}
         <div className="flex flex-col justify-center">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="form-control">
@@ -75,9 +79,9 @@ const Password = () => {
                 <span className="label-text font-hiragino">パスワード設定</span>
               </label>
               <input
-                {...register("password", { required: true })} // Change to password instead of email
+                {...register("password", { required: true })}
                 name="password"
-                type="password" // Use password type for input
+                type="password"
                 placeholder="パスワード"
                 className="input border rounded-[3px] py-4 mt-4 mb-[9px] w-[253px] pl-4 font-Noto text-[#44495B80] text-sm"
               />
@@ -97,7 +101,6 @@ const Password = () => {
                 placeholder="パスワード（確認用）"
                 className="input border rounded-[3px] py-4 mb-[9px] w-[253px] pl-4 font-Noto text-[#44495B80] text-sm"
               />
-
               {errors.confirmPassword && (
                 <span className="text-red-500 my-1">
                   Confirmation is required
@@ -114,11 +117,9 @@ const Password = () => {
           </form>
 
           <div className="mt-11 grid gap-4 font-hiragino font-light text-[10px] text-start text-[#6B6969]">
-            <p className="">ご利用情報がSNSに公開されることはありません。</p>
-            <p className="">
-              複数アカウントの作成、保有、または利用する行為は
-              禁止されており、会員アカウントを停止・永久凍結も
-              しくは強制退化させていただきます。
+            <p>ご利用情報がSNSに公開されることはありません。</p>
+            <p>
+              複数アカウントの作成、保有、または利用する行為は 禁止されており、会員アカウントを停止・永久凍結も しくは強制退化させていただきます。
             </p>
           </div>
         </div>
