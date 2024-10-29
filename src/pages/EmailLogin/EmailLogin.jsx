@@ -21,7 +21,7 @@ const EmailLogin = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    navigate("/password", { state: { email: data.mail } });
+    navigate("/new_reg", { state: { email: data.mail } });
 
     // Uncomment to enable email existence check
     // try {
@@ -30,10 +30,10 @@ const EmailLogin = () => {
 
     //   if (response.data.exists) {
     //     // If email is registered, navigate to login page with email
-    //     navigate("/password", { state: { email: data.mail } });
+    //     navigate("/login", { state: { email: data.mail } });
     //   } else {
     //     // If email is not registered, navigate to password page with email
-    //     navigate("/newReg", { state: { email: data.mail } });
+    //     navigate("/password", { state: { email: data.mail } });
     //   }
     // } catch (error) {
     //   console.error("Error checking email:", error);

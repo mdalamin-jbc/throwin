@@ -5,10 +5,12 @@ import logo from "../../assets/images/socialLogin/logo2.png";
 import socialBg from "../../assets/images/socialLogin/social bg.jpeg";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import useAxiosReg, { fetchCSRFToken } from "../../hooks/axiosReg";
-import { useEffect } from "react";
-import { toast } from "react-toastify"; // Import toast for notifications
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 const Password = () => {
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   const axiosReg = useAxiosReg();
@@ -16,6 +18,7 @@ const Password = () => {
   const { email } = location.state || {};
   console.log(email);
 
+  // Fetch the CSRF token on component mount
   useEffect(() => {
     fetchCSRFToken();
   }, []);
@@ -42,23 +45,23 @@ const Password = () => {
     console.log("Request data:", requestData);
 
     try {
-      const response = await axiosReg.post(
-        "auth/register/consumer",
-        requestData
-      );
+      const response = await axiosReg.post("/auth/register/consumer", requestData);
 
       if (response.data.detail === "User Created Successfully") {
-        toast.success("Registration successful! Redirecting to dashboard...");
-        navigate("/dashboard");
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Your work has been saved",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       } else {
-        console.error("Registration failed:", response.data.detail);
-        toast.error("Registration failed: " + response.data.detail);
+        setError("Registration failed. Please try again.");
       }
     } catch (error) {
-      console.error("Error details:", error);
-      const errorMessage =
-        error.response?.data?.detail || "An error occurred. Please try again.";
-      toast.error("Error registering: " + errorMessage);
+      setError(
+        error.response ? error.response.data.detail : "An error occurred."
+      );
     }
   };
 
@@ -119,7 +122,9 @@ const Password = () => {
           <div className="mt-11 grid gap-4 font-hiragino font-light text-[10px] text-start text-[#6B6969]">
             <p>ご利用情報がSNSに公開されることはありません。</p>
             <p>
-              複数アカウントの作成、保有、または利用する行為は 禁止されており、会員アカウントを停止・永久凍結も しくは強制退化させていただきます。
+              複数アカウントの作成、保有、または利用する行為は
+              禁止されており、会員アカウントを停止・永久凍結も
+              しくは強制退化させていただきます。
             </p>
           </div>
         </div>

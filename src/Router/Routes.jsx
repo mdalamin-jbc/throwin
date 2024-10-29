@@ -9,6 +9,7 @@ import Login from "../pages/Login/Login";
 import Gacha from "../pages/Gacha/Gacha";
 import Search from "../pages/Search/Search";
 import Favorite from "../pages/Favorite/Favorite";
+import NewReg from "../pages/NewReg/NewReg";
 
 export const Routes = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ export const Routes = createBrowserRouter([
       {
         path: "/gacha",
         element: <Gacha />,
+      },
+      {
+        path: "/new_reg",
+        element: <NewReg />,
       },
     ],
   },
