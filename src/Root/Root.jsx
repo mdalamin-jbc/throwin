@@ -3,8 +3,8 @@ import { Outlet, useLocation } from "react-router-dom";
 
 const Root = () => {
   const location = useLocation();
-  const exist = ["gacha", "search","favorite"].some((path) =>
-    location.pathname.includes(path)
+  const exist = ["search", "favorite", "gacha", "notice", "setting"].some(
+    (path) => location.pathname.includes(path)
   );
 
   return (

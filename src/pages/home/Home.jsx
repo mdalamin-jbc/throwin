@@ -38,11 +38,12 @@ const Home = () => {
             style="bg-gradient-to-r from-[#65D0F2] to-[#2399F4] min-w-[350px] rounded-full text-center py-[10px] lg:py-6 font-bold text-white"
           />
         </button>
-        <button onClick={handleLogin}>
-          <ButtonPrimary
-            btnText="ログイン"
-            style="bg-white min-w-[350px] rounded-full text-center py-[10px] lg:py-6 font-bold text-[#49BBDF]"
-          />
+
+        <button
+          onClick={handleLogin}
+          className=" bg-white min-w-[350px] lg:py-6  text-center py-3 font-bold   rounded-full font-hiragino  text-[#49BBDF] "
+        >
+          ログイン
         </button>
       </div>
     </div>

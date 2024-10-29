@@ -23,7 +23,7 @@ const OnboardingSlider = () => {
     if (swiperRef.current) {
       // Navigate to "dashboard" if the active index is 2 (third slide)
       if (activeIndex === 2) {
-        navigate("/dashboard");
+        navigate("/gacha");
       } else {
         swiperRef.current.slideNext();
       }

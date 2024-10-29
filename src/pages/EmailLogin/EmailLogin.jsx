@@ -20,8 +20,8 @@ const EmailLogin = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = async (data) => {
-    navigate("/new_reg", { state: { email: data.mail } });
+  const onSubmit =  (data) => {
+    navigate("/password", { state: { email: data.mail } });
 
     // Uncomment to enable email existence check
     // try {

@@ -10,89 +10,144 @@ const NavMenu = () => {
     <>
       <li>
         <NavLink
-          style={({ isActive, isTransitioning }) => {
-            return {
-              fontWeight: isActive ? "bold" : "",
-              color: isActive ? "#f7931e" : "",
-              viewTransitionName: isTransitioning ? "slide" : "",
-            };
-          }}
           to="/search"
+          style={({ isActive, isTransitioning }) => ({
+            fontWeight: isActive ? "" : "",
+            color: isActive ? "#49BBDF" : "",
+            viewTransitionName: isTransitioning ? "slide" : "",
+            background: "transparent",
+            marginTop: isActive ? "-15px" : "",
+          })}
         >
-          <div className="grid ">
-            <img src={search} alt="" /> <p>探す</p>
-          </div>
+          {({ isActive }) => (
+            <div className="flex flex-col items-center gap-2">
+              <img
+                className={`transition-all ${
+                  isActive ? "w-[29px]" : "w-[24px]"
+                }`}
+                src={search}
+                alt=""
+              />
+              <p>探す</p>
+            </div>
+          )}
         </NavLink>
       </li>
       <li>
         <NavLink
-          style={({ isActive, isTransitioning }) => {
-            return {
-              fontWeight: isActive ? "bold" : "",
-              color: isActive ? "#f7931e" : "",
-              viewTransitionName: isTransitioning ? "slide" : "",
-            };
-          }}
           to="/favorite"
+          style={({ isActive, isTransitioning }) => ({
+            fontWeight: isActive ? "" : "",
+            color: isActive ? "#49BBDF" : "",
+            viewTransitionName: isTransitioning ? "slide" : "",
+            background: "transparent",
+            marginTop: isActive ? "-15px" : "",
+          })}
         >
-          <div className="flex flex-col justify-center items-center">
-            <img className="w-[30px]" src={favorite} alt="" /> <p>お気に入り</p>
-          </div>
+          {({ isActive }) => (
+            <div className="flex flex-col items-center gap-2">
+              <img
+                className={`transition-all ${
+                  isActive ? "w-[33px]" : "w-[28px]"
+                }`}
+                src={favorite}
+                alt=""
+              />
+              <p>お気に入り</p>
+            </div>
+          )}
         </NavLink>
       </li>
       <li>
         <NavLink
-          style={({ isActive, isTransitioning }) => {
-            return {
-              fontWeight: isActive ? "bold" : "",
-              color: isActive ? "#f7931e" : "",
-              viewTransitionName: isTransitioning ? "slide" : "",
-            };
-          }}
           to="/gacha"
+          style={({ isActive, isTransitioning }) => ({
+            fontWeight: isActive ? "" : "",
+            color: isActive ? "#49BBDF" : "",
+            viewTransitionName: isTransitioning ? "slide" : "",
+            background: "transparent",
+            marginTop: isActive ? "-15px" : "",
+          })}
         >
-          <div className="grid -mt-7">
-            <img className="w-[]" src={gacha} alt="" /> <p>ガチャ</p>
-          </div>
+          {({ isActive }) => (
+            <div className="flex flex-col items-center gap-2">
+              <img
+                className={`transition-all ${
+                  isActive ? "w-[23px]" : "w-[18px]"
+                }`}
+                src={gacha}
+                alt=""
+              />
+              <p>ガチャ</p>
+            </div>
+          )}
         </NavLink>
       </li>
       <li>
         <NavLink
-          style={({ isActive, isTransitioning }) => {
-            return {
-              fontWeight: isActive ? "bold" : "",
-              color: isActive ? "#f7931e" : "",
-              viewTransitionName: isTransitioning ? "slide" : "",
-            };
-          }}
-          to="/"
+          to="/notice"
+          style={({ isActive, isTransitioning }) => ({
+            fontWeight: isActive ? "" : "",
+            color: isActive ? "#49BBDF" : "",
+            viewTransitionName: isTransitioning ? "slide" : "",
+            background: "transparent",
+            marginTop: isActive ? "-15px" : "",
+          })}
         >
-          <div>
-            <img src={notice} alt="" /> <p>お知らせ</p>
-          </div>
+          {({ isActive }) => (
+            <div className="flex flex-col items-center gap-2">
+              <img
+                className={`transition-all ${
+                  isActive ? "w-[28px]" : "w-[23px]"
+                }`}
+                src={notice}
+                alt=""
+              />
+              <p>お知らせ</p>
+            </div>
+          )}
         </NavLink>
       </li>
       <li>
         <NavLink
-          style={({ isActive, isTransitioning }) => {
-            return {
-              fontWeight: isActive ? "bold" : "",
-              color: isActive ? "#f7931e" : "",
-              viewTransitionName: isTransitioning ? "slide" : "",
-            };
-          }}
-          to="/"
+          to="/setting"
+          style={({ isActive, isTransitioning }) => ({
+            fontWeight: isActive ? "" : "",
+            color: isActive ? "#49BBDF" : "",
+            viewTransitionName: isTransitioning ? "slide" : "",
+            background: "transparent",
+            marginTop: isActive ? "-15px" : "",
+          })}
         >
-          <img src={setting} alt="" /> <p>設定</p>
+          {({ isActive }) => (
+            <div className="flex flex-col items-center gap-2">
+              <img
+                className={`transition-all ${
+                  isActive ? "w-[28px]" : "w-[23px]"
+                }`}
+                src={setting}
+                alt=""
+              />
+              <p>設定</p>
+            </div>
+          )}
         </NavLink>
       </li>
     </>
   );
 
   return (
-    <footer className="bg-gray-800 p-4 text-white fixed bottom-0 w-full">
-      <div className="flex justify-center items-center">
-        <ul className="menu menu-horizontal px-1">{links}</ul>
+    <footer
+      className=" text-[#44495B] fixed bottom-0  w-full lg:w-full"
+      style={{
+        boxShadow:
+          "0 -30px 30px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, -0.1)",
+      }}
+    >
+      <div className="flex justify-center items-center py-5 ">
+        <ul className="flex gap-6">
+          {links}
+        </ul>
       </div>
     </footer>
   );

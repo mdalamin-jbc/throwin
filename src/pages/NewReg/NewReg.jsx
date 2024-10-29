@@ -6,7 +6,6 @@ import socialBg from "../../assets/images/socialLogin/social bg.jpeg";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import useAxiosReg, { fetchCSRFToken } from "../../hooks/axiosReg";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 
 const Password = () => {
@@ -58,6 +57,7 @@ const Password = () => {
           showConfirmButton: false,
           timer: 1500,
         });
+        navigate("/onboarding")
       } else {
         setError("Registration failed. Please try again.");
       }
