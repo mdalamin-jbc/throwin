@@ -157,7 +157,7 @@ const Login = () => {
       {/* Close Icon Button Below the Form */}
       <button
         className="mt-6 p-2 relative"
-        onClick={handleClose} // Call handleClose on click
+        onClick={handleClose} 
       >
         <img
           src={closeIcon}

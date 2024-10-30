@@ -13,6 +13,8 @@ import NewReg from "../pages/NewReg/NewReg";
 import Notice from "../pages/Notice/Notice";
 import Setting from "../pages/Setting/Setting";
 import NickNameReg from "../pages/NickNameReg/NickNameReg";
+import CheckMail from "../pages/NewReg/CheckMail";
+import AccountActivation from "../pages/AccountActivation/AccountActivation";
 
 export const Routes = createBrowserRouter([
   {
@@ -70,6 +72,14 @@ export const Routes = createBrowserRouter([
       {
         path: "/new_reg",
         element: <NewReg />,
+      },
+      {
+        path: "/new_reg/mail_check",
+        element: <CheckMail />,
+      },
+      {
+        path: "/activate/:userId/:token",
+        element: <AccountActivation />,
       },
     ],
   },

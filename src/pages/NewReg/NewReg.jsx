@@ -50,14 +50,14 @@ const Password = () => {
       );
 
       if (response.data.detail === "User Created Successfully") {
-        Swal.fire({
-          position: "top",
-          icon: "success",
-          title: "Your work has been saved",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        navigate("/onboarding")
+        // Swal.fire({
+        //   position: "top",
+        //   icon: "success",
+        //   title: "Your work has been saved",
+        //   showConfirmButton: false,
+        //   timer: 1500,
+        // });
+        navigate("/mail_check")
       } else {
         setError("Registration failed. Please try again.");
       }

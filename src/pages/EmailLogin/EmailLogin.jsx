@@ -96,7 +96,7 @@ const EmailLogin = () => {
         </div>
       </div>
 
-      <button className="mt-24 relative" onClick={handleClose}>
+      <button className="mt-24 p-2 relative" onClick={handleClose}>
         <img
           src={closeIcon}
           alt="Close"
