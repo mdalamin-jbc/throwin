@@ -41,12 +41,12 @@ const RegistrationForm = () => {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
           },
-          withCredentials: true  // This may be required if backend uses cookies for CSRF
+          withCredentials: true  
         }
       );
 
       if (response.data.detail === "User Created Successfully") {
-        navigate('/dashboard');
+        navigate('/mail_check');
       } else {
         setError("Registration failed. Please try again.");
       }

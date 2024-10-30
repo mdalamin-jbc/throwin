@@ -4,23 +4,17 @@ import closeIcon from "../../assets/icons/close.png";
 import logo from "../../assets/images/socialLogin/logo2.png";
 import socialBg from "../../assets/images/socialLogin/social bg.jpeg";
 import ButtonPrimary from "../../components/ButtonPrimary";
-import useAxiosReg, { fetchCSRFToken } from "../../hooks/axiosReg";
-import { useEffect, useState } from "react";
-import Swal from "sweetalert2";
+import useAxiosReg from "../../hooks/axiosReg";
+import { useState } from "react";
 
-const Password = () => {
+const NewReg = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   const axiosReg = useAxiosReg();
 
   const { email } = location.state || {};
-  console.log(email);
-
-  // Fetch the CSRF token on component mount
-  useEffect(() => {
-    fetchCSRFToken();
-  }, []);
+  console.log("Email from state:", email);
 
   const handleClose = () => {
     navigate("/socialLogin");
@@ -48,23 +42,19 @@ const Password = () => {
         "/auth/register/consumer",
         requestData
       );
+      console.log("Response data:", response.data);
 
-      if (response.data.detail === "User Created Successfully") {
-        // Swal.fire({
-        //   position: "top",
-        //   icon: "success",
-        //   title: "Your work has been saved",
-        //   showConfirmButton: false,
-        //   timer: 1500,
-        // });
-        navigate("/mail_check")
+      if (
+        response.data.msg ===
+        "User Created Successfully, Please check your email to activate your account in 48 hours."
+      ) {
+        navigate("/new_reg/mail_check");
       } else {
         setError("Registration failed. Please try again.");
       }
     } catch (error) {
-      setError(
-        error.response ? error.response.data.detail : "An error occurred."
-      );
+      setError(error.response ? error.response.data.msg : "An error occurred.");
+      console.error("Registration error:", error);
     }
   };
 
@@ -109,7 +99,7 @@ const Password = () => {
               />
               {errors.confirmPassword && (
                 <span className="text-red-500 my-1">
-                  Confirmation is required
+                  {errors.confirmPassword.message}
                 </span>
               )}
             </div>
@@ -144,4 +134,4 @@ const Password = () => {
   );
 };
 
-export default Password;
+export default NewReg;

@@ -1,43 +1,48 @@
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import closeIcon from "../../assets/icons/close.png";
 import logo from "../../assets/images/socialLogin/logo2.png";
 import socialBg from "../../assets/images/socialLogin/social bg.jpeg";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import { useForm } from "react-hook-form";
-import axios from "axios"; // Import axios or fetch for API requests
+import Swal from "sweetalert2";
+import useAxiosPublic from "../../hooks/axiosPublic";
 
 const EmailLogin = () => {
   const navigate = useNavigate();
+  const axiosPublic = useAxiosPublic();
 
   const handleClose = () => {
-    navigate("/socialLogin"); // Navigate to the home page or any desired route
+    navigate("/socialLogin");
   };
 
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    navigate("/new_reg", { state: { email: data.mail } });
+  const onSubmit = async (data) => {
+    try {
+      // API call to check if the email exists
+      const response = await axiosPublic.post("/auth/register/check-email", {
+        email: data.mail,
+      });
+      console.log(response);
 
-    // Uncomment to enable email existence check
-    // try {
-    //   // Replace with your API endpoint
-    //   const response = await axios.post("/api/check-email", { email: data.mail });
-
-    //   if (response.data.exists) {
-    //     // If email is registered, navigate to login page with email
-    //     navigate("/login", { state: { email: data.mail } });
-    //   } else {
-    //     // If email is not registered, navigate to password page with email
-    //     navigate("/password", { state: { email: data.mail } });
-    //   }
-    // } catch (error) {
-    //   console.error("Error checking email:", error);
-    // }
+      // If email is available, navigate to registration
+      navigate("/new_reg", { state: { email: data.mail } });
+    } catch (error) {
+      const errorMsg =
+        error.response?.data?.email?.[0] ||
+        "An error occurred. Please try again later.";
+      Swal.fire({
+        title: "Error",
+        text: errorMsg,
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    }
   };
 
   return (
@@ -74,7 +79,7 @@ const EmailLogin = () => {
               )}
             </div>
 
-            <button>
+            <button type="submit">
               <ButtonPrimary
                 btnText="新規登録"
                 style="bg-gradient-to-r from-[#65D0F2] to-[#2399F4] min-w-[253px] rounded-full font-hiragino text-center py-[10px] font-bold text-white"
@@ -83,7 +88,7 @@ const EmailLogin = () => {
           </form>
 
           <div className="flex font-hiragino text-xs text-[#626262A6] justify-center gap-2 mt-6 mb-2">
-            <button className="">利用規約</button>
+            <button>利用規約</button>
             <p>|</p>
             <button>プライバシーポリシー</button>
           </div>
