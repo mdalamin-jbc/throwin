@@ -1,8 +1,16 @@
 import { useForm } from "react-hook-form";
 import TitleBar from "../../components/TitleBar";
+import search from "../../assets/icons/search2.png";
+import camera from "../../assets/icons/camera.png";
 import ButtonPrimary from "../../components/ButtonPrimary";
+import useAxiosPublic from "../../hooks/axiosPublic";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react"; // Import useState
 
 const Gacha = () => {
+  const [searchTerm, setSearchTerm] = useState(""); // State to hold the search term
+
   const {
     register,
     handleSubmit,
@@ -10,45 +18,70 @@ const Gacha = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    console.log(value); // Log the search term to the console
   };
 
   return (
     <div className="w-[390px] mx-auto">
       <TitleBar title={"スタッフを探す"} />
-      <h4 className="mt-4 mb-4 font-semibold font-hiragino text-center">
-        ニックネーム（表示名）をご登録ください
+      <h4 className="mt-8 mb-4 font-semibold font-hiragino w-[342px] mx-auto">
+        店舗から探す
       </h4>
 
       <div className="flex flex-col justify-center">
-        <form className="flex flex-col w-[342px] mx-auto" onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-control ">
+        <form className="flex flex-col w-[342px] mx-auto">
+          <div className="relative flex items-center w-full">
             <input
               {...register("name", {
-                required: "name is required",
+                required: "メールアドレスは必須です",
                 pattern: {
                   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: "Invalid email format",
+                  message: "無効なメール形式です",
                 },
               })}
               name="name"
               type="text"
-              placeholder="メールアドレス"
-              className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
+              placeholder="店舗コードを入力"
+              className="w-full rounded-[8px] py-3 pl-4 pr-10 border border-[#D9D9D9] text-[#44495B] text-sm placeholder-gray-400 focus:outline-none focus:border-[#707070] shadow-sm"
+              value={searchTerm}
+              onChange={handleSearchChange} // Call handleSearchChange on input change
             />
-            {errors.mail && (
-              <span className="text-red-500 mt-1">{errors.mail.message}</span>
-            )}
+            <div
+              type="submit"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2"
+            >
+              <img
+                className="w-5 h-5 opacity-70"
+                src={search}
+                alt="search icon"
+              />
+            </div>
           </div>
-
-          <div className="fixed bottom-[130px]  ">
-            <ButtonPrimary
-              btnText="新規登録"
-              style="bg-gradient-to-r from-[#65D0F2] to-[#2399F4] w-[342px] rounded-full font-hiragino text-center py-[12px] font-bold text-white"
-            />
-          </div>
+          {errors.name && (
+            <span className="text-red-500 mt-1">{errors.name.message}</span>
+          )}
         </form>
+      </div>
+      <div className="w-[342px] mx-auto">
+        <h4 className="font-hiragino font-semibold text-lg mt-8 mb-4 ">
+          QRコードで探す
+        </h4>
+        <button className=" ">
+          <ButtonPrimary
+            icon={
+              <img
+                className="mr-4"
+                src={camera}
+                alt="search icon"
+              />
+            }
+            btnText="新規登録"
+            style="flex justify-center bg-gradient-to-r from-[#65D0F2] to-[#2399F4] w-[342px] rounded-[10px] font-hiragino  py-[12px] font-bold text-white "
+          />
+        </button>
       </div>
     </div>
   );

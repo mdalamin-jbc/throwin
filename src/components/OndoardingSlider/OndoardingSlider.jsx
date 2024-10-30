@@ -23,7 +23,7 @@ const OnboardingSlider = () => {
     if (swiperRef.current) {
       // Navigate to "dashboard" if the active index is 2 (third slide)
       if (activeIndex === 2) {
-        navigate("/gacha");
+        navigate("/gacha/nick_name_reg");
       } else {
         swiperRef.current.slideNext();
       }
@@ -137,7 +137,7 @@ const OnboardingSlider = () => {
           <div className="custom-pagination absolute inset-x-0 flex justify-center"></div>
           {/* Next Button with conditional text */}
           <button onClick={handleNext} className="next-button mt-6">
-            <ButtonPrimary btnText={activeIndex === 2 ? "始める" : "次へ"} />
+            <ButtonPrimary style={"rounded-full"} btnText={activeIndex === 2 ? "始める" : "次へ"} />
           </button>
         </div>
       </div>

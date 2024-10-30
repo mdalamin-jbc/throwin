@@ -12,6 +12,7 @@ import Favorite from "../pages/Favorite/Favorite";
 import NewReg from "../pages/NewReg/NewReg";
 import Notice from "../pages/Notice/Notice";
 import Setting from "../pages/Setting/Setting";
+import NickNameReg from "../pages/NickNameReg/NickNameReg";
 
 export const Routes = createBrowserRouter([
   {
@@ -49,6 +50,10 @@ export const Routes = createBrowserRouter([
       {
         path: "/favorite",
         element: <Favorite />,
+      },
+      {
+        path: "/gacha/nick_name_reg",
+        element: <NickNameReg />,
       },
       {
         path: "/gacha",
