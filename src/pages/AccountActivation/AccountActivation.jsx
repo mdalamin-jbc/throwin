@@ -7,15 +7,19 @@ const AccountActivation = () => {
   const { userId, token } = useParams();
   const navigate = useNavigate();
   const axiosPublic = useAxiosPublic();
-  const hasActivated = useRef(false); // Flag to prevent double calls
+  const hasActivated = useRef(false);
+
+  console.log(userId, token);
 
   useEffect(() => {
     const activateAccount = async () => {
-      if (hasActivated.current) return; // Exit if already called once
-      hasActivated.current = true; // Set flag after first call
+      if (hasActivated.current) return;
+      hasActivated.current = true;
 
       try {
-        const response = await axiosPublic.get(`/auth/user/acivate/${userId}/${token}`);
+        const response = await axiosPublic.get(
+          `/auth/user/acivate/${userId}/${token}`
+        );
         if (response.data.detail === "Account Activated Successfully") {
           Swal.fire({
             title: "Success",

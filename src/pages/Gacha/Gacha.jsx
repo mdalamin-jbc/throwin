@@ -3,13 +3,11 @@ import TitleBar from "../../components/TitleBar";
 import search from "../../assets/icons/search2.png";
 import camera from "../../assets/icons/camera.png";
 import ButtonPrimary from "../../components/ButtonPrimary";
-import useAxiosPublic from "../../hooks/axiosPublic";
-import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react"; // Import useState
 
 const Gacha = () => {
-  const [searchTerm, setSearchTerm] = useState(""); // State to hold the search term
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isScannerOpen, setIsScannerOpen] = useState(false); 
 
   const {
     register,
@@ -21,7 +19,11 @@ const Gacha = () => {
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
-    console.log(value); // Log the search term to the console
+    console.log(value); 
+  };
+
+  const handleOpenScanner = () => {
+    setIsScannerOpen(true); 
   };
 
   return (
@@ -65,24 +67,30 @@ const Gacha = () => {
           )}
         </form>
       </div>
+
+      {/* QR Scanner Section */}
       <div className="w-[342px] mx-auto">
-        <h4 className="font-hiragino font-semibold text-lg mt-8 mb-4 ">
+        <h4 className="font-hiragino font-semibold text-lg mt-8 mb-4">
           QRコードで探す
         </h4>
-        <button className=" ">
+        <button onClick={handleOpenScanner} className=" ">
           <ButtonPrimary
-            icon={
-              <img
-                className="mr-4"
-                src={camera}
-                alt="search icon"
-              />
-            }
+            icon={<img className="mr-4" src={camera} alt="search icon" />}
             btnText="新規登録"
-            style="flex justify-center bg-gradient-to-r from-[#65D0F2] to-[#2399F4] w-[342px] rounded-[10px] font-hiragino  py-[12px] font-bold text-white "
+            style="flex justify-center bg-gradient-to-r from-[#65D0F2] to-[#2399F4] w-[342px] rounded-[10px] font-hiragino py-[12px] font-bold text-white"
           />
         </button>
       </div>
+
+      {/* Conditional QR Scanner Component */}
+      {isScannerOpen && (
+        <div className="w-[342px] mx-auto mt-4">
+          <p className="text-center font-hiragino font-semibold text-lg">
+            QR Scanner is Open
+          </p>
+          {/* Insert your QR scanner component here */}
+        </div>
+      )}
     </div>
   );
 };

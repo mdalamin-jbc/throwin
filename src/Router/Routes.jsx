@@ -15,6 +15,7 @@ import Setting from "../pages/Setting/Setting";
 import NickNameReg from "../pages/NickNameReg/NickNameReg";
 import CheckMail from "../pages/NewReg/CheckMail";
 import AccountActivation from "../pages/AccountActivation/AccountActivation";
+import PrivateRoute from "./PrivateRoute";
 
 export const Routes = createBrowserRouter([
   {
@@ -59,7 +60,11 @@ export const Routes = createBrowserRouter([
       },
       {
         path: "/gacha",
-        element: <Gacha />,
+        element: (
+          <PrivateRoute>
+            <Gacha />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/notice",

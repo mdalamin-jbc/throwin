@@ -7,11 +7,14 @@ import logo from "../../assets/images/socialLogin/logo2.png";
 import socialBg from "../../assets/images/socialLogin/social bg.jpeg";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import useAxiosPublic from "../../hooks/axiosPublic";
+import { useContext } from "react";
+import AuthContext from "../../contexts/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const axiosPublic = useAxiosPublic();
+  const { login } = useContext(AuthContext); // Get login function from context
 
   const { email = "" } = location.state || {};
 
@@ -36,13 +39,8 @@ const Login = () => {
       if (response.data.msg === "Login Successful") {
         console.log("Login successful!", response.data);
 
-        // Set access and refresh tokens in cookies
-        Cookies.set("access_token", response.data.data.access, { expires: 7 });
-        Cookies.set("refresh_token", response.data.data.refresh, {
-          expires: 7,
-        });
-
-        // Show SweetAlert success message
+        // Use the login function from context
+        login(response.data.data);
         Swal.fire({
           position: "top",
           icon: "success",
@@ -50,9 +48,7 @@ const Login = () => {
           showConfirmButton: false,
           timer: 1500,
         });
-
-        // Navigate to the dashboard after successful login
-        navigate("/gacha");
+        navigate("/gacha"); // Use navigate to redirect
       } else {
         console.error("Login failed:", response.data.msg);
 
@@ -87,10 +83,8 @@ const Login = () => {
       <div className="absolute inset-0 bg-[#072233fb] h-screen"></div>
 
       <div className="bg-white p-6 rounded-[10px] shadow-xl text-center relative w-[291px] h-[460px]">
-        {/* Logo Image */}
         <img src={logo} alt="Logo" className="w-[150px] h-auto mx-auto mb-4" />
 
-        {/* email input */}
         <div className="flex flex-col justify-center">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="form-control">
@@ -155,14 +149,11 @@ const Login = () => {
       </div>
 
       {/* Close Icon Button Below the Form */}
-      <button
-        className="mt-6 p-2 relative"
-        onClick={handleClose} 
-      >
+      <button className="mt-6 p-2 relative" onClick={handleClose}>
         <img
           src={closeIcon}
           alt="Close"
-          className="w-[17px] h-[17px] text-gray-500 hover:text-gray-700" // Apply your desired styles here
+          className="w-[17px] h-[17px] text-gray-500 hover:text-gray-700"
         />
       </button>
     </div>
