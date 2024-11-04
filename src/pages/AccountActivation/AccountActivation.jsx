@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -18,8 +19,9 @@ const AccountActivation = () => {
 
       try {
         const response = await axiosPublic.get(
-          `/auth/user/acivate/${userId}/${token}`
+          `/auth/users/acivate/${userId}/${token}`
         );
+
         if (response.data.detail === "Account Activated Successfully") {
           Swal.fire({
             title: "Success",

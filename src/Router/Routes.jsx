@@ -16,6 +16,12 @@ import NickNameReg from "../pages/NickNameReg/NickNameReg";
 import CheckMail from "../pages/NewReg/CheckMail";
 import AccountActivation from "../pages/AccountActivation/AccountActivation";
 import PrivateRoute from "./PrivateRoute";
+import MemberList from "../pages/MemberList/MemberList";
+import IndividualStores from "../pages/IndividualStores/IndividualStores";
+import UserProfile from "../pages/Profile/UserProfile";
+
+import ChangeEmail from "../pages/Profile/ChangeEmail";
+import ChangePassword from "../pages/Profile/ChangePassword";
 
 export const Routes = createBrowserRouter([
   {
@@ -54,10 +60,7 @@ export const Routes = createBrowserRouter([
         path: "/favorite",
         element: <Favorite />,
       },
-      {
-        path: "/gacha/nick_name_reg",
-        element: <NickNameReg />,
-      },
+
       {
         path: "/gacha",
         element: (
@@ -85,6 +88,31 @@ export const Routes = createBrowserRouter([
       {
         path: "/activate/:userId/:token",
         element: <AccountActivation />,
+      },
+      {
+        path: "/store",
+        element: <IndividualStores />,
+      },
+      {
+        path: "/member_list",
+        element: <MemberList />,
+      },
+      // Profile
+      {
+        path: "/myPage",
+        element: <UserProfile />,
+      },
+      {
+        path: "/myPage/display_name",
+        element: <NickNameReg />,
+      },
+      {
+        path: "/myPage/Change_email",
+        element: <ChangeEmail />,
+      },
+      {
+        path: "/myPage/change_password",
+        element: <ChangePassword />,
       },
     ],
   },

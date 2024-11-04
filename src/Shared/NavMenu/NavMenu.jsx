@@ -138,16 +138,14 @@ const NavMenu = () => {
 
   return (
     <footer
-      className=" text-[#44495B] fixed bottom-0  w-full lg:w-full"
+      className="z-40 bg-white text-[#44495B] fixed bottom-0  w-full lg:w-full"
       style={{
         boxShadow:
           "0 -30px 30px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, -0.1)",
       }}
     >
       <div className="flex justify-center items-center py-5 ">
-        <ul className="flex gap-6">
-          {links}
-        </ul>
+        <ul className="flex gap-6">{links}</ul>
       </div>
     </footer>
   );

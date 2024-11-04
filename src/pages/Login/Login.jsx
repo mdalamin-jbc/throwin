@@ -14,7 +14,7 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const axiosPublic = useAxiosPublic();
-  const { login } = useContext(AuthContext); // Get login function from context
+  const { login } = useContext(AuthContext); 
 
   const { email = "" } = location.state || {};
 

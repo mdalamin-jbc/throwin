@@ -1,39 +1,35 @@
 import logo from "../../assets/images/home/logo.png";
-import bg from "../../assets/images/home/bg.jpg";
+import bg from "../../assets/images/home/bg.png";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const navigate = useNavigate();
+
   const handleLogin = () => {
     navigate("/login");
   };
+
   const handleStart = () => {
     navigate("/socialLogin");
   };
 
   return (
     <div
-      className="relative bg-[#49BBDF] h-screen overflow-auto pt-[70px] md:pt-5  border-white"
+      className="relative bg-[#49BBDF] h-screen overflow-auto pt-[70px] md:pt-5 border-white"
       style={{
         backgroundImage: `url(${bg})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
+        backgroundSize: "cover",
+        backgroundPosition: "top",
+        backgroundRepeat: "no-repeat",
       }}
     >
       {/* Overlay */}
-      <div className="absolute inset-0 bg-black opacity-40 z-10"></div>
+      {/* <div className="absolute inset-0 bg-black opacity-40 z-10"></div> */}
 
-      {/* Logo */}
-      <div className="absolute top-[30px] w-full flex justify-center z-20">
-        <img src={logo} alt="logo" />
-      </div>
-
-      {/* Title */}
-      <div className="absolute top-[150px] lg:top-[120px] w-full text-white text-center font-bold text-[26px] z-20">
-        <h2>スローインで</h2>
-        <h2>人の願いや夢を応援しよう</h2>
+      {/* Centered Logo */}
+      <div className="absolute inset-0 flex justify-center items-center z-20">
+        <img src={logo} alt="logo" className="w-[350px]" />
       </div>
 
       {/* Buttons */}
