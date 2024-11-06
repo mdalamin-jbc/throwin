@@ -89,7 +89,7 @@ const MemberList = () => {
       </h2>
 
       {/* Team Images */}
-      <div className="flex flex-wrap justify-center gap-4">
+      <div className="grid grid-cols-2 gap-3 w-[342px] mx-auto ">
         {teamMembers.map((member, index) => (
           <div key={index} className="relative w-[170px] h-[170px]">
             <img

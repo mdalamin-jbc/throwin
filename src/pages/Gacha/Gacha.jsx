@@ -7,7 +7,7 @@ import { useState } from "react"; // Import useState
 
 const Gacha = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [isScannerOpen, setIsScannerOpen] = useState(false); 
+  const [isScannerOpen, setIsScannerOpen] = useState(false);
 
   const {
     register,
@@ -19,11 +19,11 @@ const Gacha = () => {
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
-    console.log(value); 
+    console.log(value);
   };
 
   const handleOpenScanner = () => {
-    setIsScannerOpen(true); 
+    setIsScannerOpen(true);
   };
 
   return (

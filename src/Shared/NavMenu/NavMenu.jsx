@@ -3,7 +3,8 @@ import search from "../../assets/icons/search.png";
 import favorite from "../../assets/icons/favorite.png";
 import gacha from "../../assets/icons/Gacha.png";
 import notice from "../../assets/icons/notice.png";
-import setting from "../../assets/icons/setting.png";
+import history from "../../assets/icons//history.png";
+import user from "../../assets/icons/user.png";
 
 const NavMenu = () => {
   const links = (
@@ -85,7 +86,7 @@ const NavMenu = () => {
       </li>
       <li>
         <NavLink
-          to="/notice"
+          to="/history"
           style={({ isActive, isTransitioning }) => ({
             fontWeight: isActive ? "" : "",
             color: isActive ? "#49BBDF" : "",
@@ -100,17 +101,17 @@ const NavMenu = () => {
                 className={`transition-all ${
                   isActive ? "w-[28px]" : "w-[23px]"
                 }`}
-                src={notice}
+                src={history}
                 alt=""
               />
-              <p>お知らせ</p>
+              <p>履歴</p>
             </div>
           )}
         </NavLink>
       </li>
       <li>
         <NavLink
-          to="/setting"
+          to="/myPage"
           style={({ isActive, isTransitioning }) => ({
             fontWeight: isActive ? "" : "",
             color: isActive ? "#49BBDF" : "",
@@ -125,10 +126,10 @@ const NavMenu = () => {
                 className={`transition-all ${
                   isActive ? "w-[28px]" : "w-[23px]"
                 }`}
-                src={setting}
+                src={user}
                 alt=""
               />
-              <p>設定</p>
+              <p>マイページ</p>
             </div>
           )}
         </NavLink>

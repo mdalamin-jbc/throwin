@@ -13,6 +13,7 @@ const Root = () => {
     "setting",
     "member_list",
     "myPage",
+    "store",
   ].some((path) => location.pathname.includes(path));
 
   return (

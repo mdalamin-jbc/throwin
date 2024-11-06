@@ -1,13 +1,23 @@
 import { GoChevronRight } from "react-icons/go";
 import TitleBar from "../../components/TitleBar";
 import { useAuth } from "../../hooks/useAuth";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const UserProfile = () => {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
+    Swal.fire({
+      icon: "success",
+      title: "Logout Successful",
+      text: "You have been logged out successfully.",
+      confirmButtonText: "OK",
+    }).then(() => {
+      navigate("/login");
+    });
   };
   return (
     <div className="w-full  mx-auto mb-[120px]">

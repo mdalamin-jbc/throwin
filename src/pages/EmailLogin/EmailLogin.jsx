@@ -1,4 +1,3 @@
-
 import { Link, useNavigate } from "react-router-dom";
 import closeIcon from "../../assets/icons/close.png";
 import logo from "../../assets/images/socialLogin/logo2.png";
@@ -93,7 +92,7 @@ const EmailLogin = () => {
             <button>プライバシーポリシー</button>
           </div>
           <Link
-            to="/socialLogin"
+            to="/login"
             className="font-hiragino font-bold text-sm text-[#5297FF]"
           >
             ログイン画面へ

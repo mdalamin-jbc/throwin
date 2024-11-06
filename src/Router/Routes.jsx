@@ -100,19 +100,35 @@ export const Routes = createBrowserRouter([
       // Profile
       {
         path: "/myPage",
-        element: <UserProfile />,
+        element: (
+          <PrivateRoute>
+            <UserProfile />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/myPage/display_name",
-        element: <NickNameReg />,
+        element: (
+          <PrivateRoute>
+            <NickNameReg />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/myPage/Change_email",
-        element: <ChangeEmail />,
+        element: (
+          <PrivateRoute>
+            <ChangeEmail />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/myPage/change_password",
-        element: <ChangePassword />,
+        element: (
+          <PrivateRoute>
+            <ChangePassword />
+          </PrivateRoute>
+        ),
       },
     ],
   },
