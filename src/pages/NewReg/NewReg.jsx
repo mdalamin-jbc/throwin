@@ -8,7 +8,7 @@ import useAxiosReg from "../../hooks/axiosReg";
 import { useState } from "react";
 
 const NewReg = () => {
-  const [error, setError] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   const axiosReg = useAxiosReg();
@@ -25,6 +25,7 @@ const NewReg = () => {
     handleSubmit,
     watch,
     formState: { errors },
+    setError,
   } = useForm();
   const password = watch("password");
 
@@ -50,10 +51,23 @@ const NewReg = () => {
       ) {
         navigate("/new_reg/mail_check");
       } else {
-        setError("Registration failed. Please try again.");
+        setErrorMessage("Registration failed. Please try again.");
       }
     } catch (error) {
-      setError(error.response ? error.response.data.msg : "An error occurred.");
+      if (error.response && error.response.data.password) {
+        console.log(
+          "Password validation errors:",
+          error.response.data.password
+        );
+        setError("password", {
+          type: "manual",
+          message: error.response.data.password.join(" "),
+        });
+      } else {
+        setErrorMessage(
+          error.response ? error.response.data.msg : "An error occurred."
+        );
+      }
       console.error("Registration error:", error);
     }
   };
@@ -65,24 +79,34 @@ const NewReg = () => {
     >
       <div className="absolute inset-0 bg-[#072233fb]"></div>
 
-      <div className="bg-white p-6 rounded-[10px] shadow-xl text-center relative w-[291px] h-[490px]">
+      <div
+        className={`bg-white p-6 rounded-[10px] shadow-xl text-center relative w-[291px] ${
+          errors.password ? "h-[545px]" : "h-[490px]"
+        }`}
+      >
         <img src={logo} alt="Logo" className="w-[150px] h-auto mx-auto mb-4" />
 
         <div className="flex flex-col justify-center">
           <form onSubmit={handleSubmit(onSubmit)}>
+            {/* General error message */}
+            {errorMessage && (
+              <div className="text-red-500 text-sm mb-2">{errorMessage}</div>
+            )}
+
             <div className="form-control">
               <label className="label font-bold text-sm">
                 <span className="label-text font-hiragino">パスワード設定</span>
               </label>
               <input
-                {...register("password", { required: true })}
-                name="password"
+                {...register("password", { required: "Password is required" })}
                 type="password"
                 placeholder="パスワード"
                 className="input border rounded-[3px] py-4 mt-4 mb-[9px] w-[253px] pl-4 font-Noto text-[#44495B80] text-sm"
               />
               {errors.password && (
-                <span className="text-red-500 mt-1">{error}</span>
+                <span className="text-red-500 mt-1">
+                  {errors.password.message}
+                </span>
               )}
             </div>
             <div className="form-control">
@@ -92,7 +116,6 @@ const NewReg = () => {
                   validate: (value) =>
                     value === password || "Passwords do not match",
                 })}
-                name="confirmPassword"
                 type="password"
                 placeholder="パスワード（確認用）"
                 className="input border rounded-[3px] py-4 mb-[9px] w-[253px] pl-4 font-Noto text-[#44495B80] text-sm"
