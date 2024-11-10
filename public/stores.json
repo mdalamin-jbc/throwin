@@ -1,0 +1,57 @@
+[
+    {
+      "storeName": "旬菜鮮魚と旨い酒 わらび",
+      "storeImage": "/src/assets/images/store&staff/store1.png",
+      "items": [
+        {
+          "staff_name": "かりん",
+          "type": "食べることや笑うことが...",
+          "rating": "123PT",
+          "image": "/src/assets/images/store&staff/image.png"
+        },
+        {
+          "staff_name": "さくら",
+          "type": "笑うことや飲むことが...",
+          "rating": "456PT",
+          "image": "/src/assets/images/store&staff/image.png"
+        },
+        {
+          "staff_name": "たろう",
+          "type": "遊ぶことや学ぶことが...",
+          "rating": "789PT",
+          "image": "/src/assets/images/store&staff/image.png"
+        },
+        {
+          "staff_name": "ひな",
+          "type": "休むことや楽しむことが...",
+          "rating": "321PT",
+          "image": "/src/assets/images/store&staff/image.png"
+        },
+        {
+          "staff_name": "れい",
+          "type": "作ることや学ぶことが...",
+          "rating": "654PT",
+          "image": "/src/assets/images/store&staff/image.png"
+        },
+        {
+          "staff_name": "あや",
+          "type": "話すことや遊ぶことが...",
+          "rating": "987PT",
+          "image": "/src/assets/images/store&staff/image.png"
+        },
+        {
+          "staff_name": "ゆう",
+          "type": "見ることや感じることが...",
+          "rating": "123PT",
+          "image": "/src/assets/images/store&staff/image.png"
+        },
+        {
+          "staff_name": "まい",
+          "type": "歌うことや踊ることが...",
+          "rating": "234PT",
+          "image": "/src/assets/images/store&staff/image.png"
+        }
+      ]
+    }
+    
+  ]

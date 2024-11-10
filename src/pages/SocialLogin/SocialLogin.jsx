@@ -21,10 +21,10 @@ const SocialLogin = () => {
 
   return (
     <div
-      className="flex flex-col justify-center items-center h-screen bg-cover bg-center p-4"
+      className="flex flex-col justify-center items-center h-screen bg-cover bg-center p-4 overflow-hidden"
       style={{ backgroundImage: `url(${socialBg})` }}
     >
-      <div className="absolute inset-0 bg-[#072233fb] "></div>
+      <div className="absolute inset-0 bg-[#072233fb]  h-screen"></div>
 
       <div className="bg-white p-6 rounded-[10px] shadow-xl space-y-6 text-center relative w-[291px] h-[573px] ">
         {/* Logo Image */}
@@ -116,13 +116,13 @@ const SocialLogin = () => {
 
       {/* Close Icon Button Below the Form */}
       <button
-        className="mt-4 relative"
-        onClick={handleClose} // Call handleClose on click
+        className="mt-2 relative p-2"
+        onClick={handleClose} 
       >
         <img
           src={closeIcon}
           alt="Close"
-          className="w-[17px] h-[17px] text-gray-500 hover:text-gray-700" // Apply your desired styles here
+          className="w-[17px] h-[17px] text-gray-500 hover:text-gray-700" 
         />
       </button>
     </div>

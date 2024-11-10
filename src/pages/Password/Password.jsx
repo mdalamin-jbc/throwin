@@ -1,102 +1,102 @@
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import closeIcon from "../../assets/icons/close.png";
-import logo from "../../assets/images/socialLogin/logo2.png";
-import socialBg from "../../assets/images/socialLogin/social bg.jpeg";
-import ButtonPrimary from "../../components/ButtonPrimary";
+import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-const Password = () => {
-  const navigate = useNavigate(); // Initialize useNavigate
+const RegistrationForm = () => {
+  const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  const handleClose = () => {
-    navigate("/socialLogin"); // Navigate to the home page or any desired route
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
+  const handleNext = () => {
+    if (step === 1 && formData.email) {
+      setStep(2);
+    } else if (step === 2 && formData.password && formData.confirmPassword) {
+      handleSubmit();
+    } else {
+      setError("Please fill in all fields.");
+    }
+  };
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post(
+        'https://throwin-backend.onrender.com/api/v1/auth/register/consumer',
+        {
+          email: formData.email,
+          password: formData.password,
+          confirm_password: formData.confirmPassword
+        },
+        {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true  
+        }
+      );
+
+      if (response.data.detail === "User Created Successfully") {
+        navigate('/mail_check');
+      } else {
+        setError("Registration failed. Please try again.");
+      }
+    } catch (error) {
+      setError(error.response ? error.response.data.detail : "An error occurred.");
+    }
   };
 
   return (
-    <div
-      className="flex flex-col justify-center items-center h-screen bg-cover bg-center p-4"
-      style={{ backgroundImage: `url(${socialBg})` }}
-    >
-      <div className="absolute inset-0 bg-[#072233fb] "></div>
-
-      <div className="bg-white p-6 rounded-[10px] shadow-xl  text-center relative w-[291px] h-[460px] ">
-        {/* Logo Image */}
-        <img src={logo} alt="Logo" className="w-[150px] h-auto mx-auto mb-4" />
-
-        {/* email input */}
-        <div className="flex flex-col justify-center">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-control">
-              <label className="label font-bold text-sm">
-                <span className="label-text font-hiragino">パスワード設定</span>
-              </label>
-              <input
-                {...register("email", { required: true })}
-                name="email"
-                type="text"
-                placeholder="パスワード"
-                className="input border rounded-[3px] py-4 mt-4 mb-[9px] w-[253px] pl-4 font-Noto text-[#44495B80] text-sm"
-              />
-              {errors.name && (
-                <span className="text-red-500 mt-1">Email is required</span>
-              )}
-            </div>
-            <div className="form-control">
-              <input
-                {...register("mail", { required: true })}
-                name="mail"
-                type="text"
-                placeholder="パスワード（確認用）"
-                className="input border rounded-[3px] py-4  mb-[9px] w-[253px] pl-4 font-Noto text-[#44495B80] text-sm"
-              />
-              {errors.mail && (
-                <span className="text-red-500 my-1">Email is required</span>
-              )}
-            </div>
-
-            <button>
-              <ButtonPrimary
-                btnText="登録"
-                style="bg-gradient-to-r from-[#65D0F2] to-[#2399F4] min-w-[253px] rounded-full font-hiragino text-center py-[10px] font-bold text-white"
-              />
-            </button>
-          </form>
-
-          <div className=" mt-11 grid gap-4 font-hiragino font-light text-[10px] text-start text-[#6B6969]">
-            <p className="">ご利用情報がSNSに公開されることはありません。</p>
-            <p className="">
-              複数アカウントの作成、保有、または利用する行為は
-              禁止されており、会員アカウントを停止・永久凍結も
-              しくは強制退化させていただきます。
-            </p>
-          </div>
+    <div>
+      <h2>Register</h2>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      
+      {step === 1 && (
+        <div>
+          <label>Email:</label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+          <button onClick={handleNext}>Next</button>
         </div>
-      </div>
-
-      {/* Close Icon Button Below the Form */}
-      <button
-        className="mt-8 relative"
-        onClick={handleClose} // Call handleClose on click
-      >
-        <img
-          src={closeIcon}
-          alt="Close"
-          className="w-[17px] h-[17px] text-gray-500 hover:text-gray-700" // Apply your desired styles here
-        />
-      </button>
+      )}
+      
+      {step === 2 && (
+        <div>
+          <label>Password:</label>
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+          <label>Confirm Password:</label>
+          <input
+            type="password"
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            required
+          />
+          <button onClick={handleNext}>Sign Up</button>
+        </div>
+      )}
     </div>
   );
 };
 
-export default Password;
+export default RegistrationForm;
