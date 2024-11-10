@@ -21,7 +21,7 @@ const OnboardingSlider = () => {
 
   const handleNext = () => {
     if (swiperRef.current) {
-      // Navigate to "dashboard" if the active index is 2 (third slide)
+      // Navigate to "login" if the active index is 2 (third slide)
       if (activeIndex === 2) {
         navigate("/login");
       } else {
@@ -31,15 +31,15 @@ const OnboardingSlider = () => {
   };
 
   return (
-    <div className="relative h-screen w-full flex justify-center items-center ">
+    <div className="relative h-screen w-full flex justify-center items-center">
       <div
-        className="shadow-xl text-center relative h-screen"
+        className="shadow-xl text-center relative h-full lg:h-[130%]"
         style={{
           backgroundImage: `url(${bgImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           width: "100%",
-          height: "100vh",
+          
         }}
       >
         <div className="pt-[157px] md:pt-0 md:mt-20">
@@ -64,7 +64,7 @@ const OnboardingSlider = () => {
                   <img
                     src={effect}
                     alt=""
-                    className="absolute w-full md:w-auto -mt-3]]"
+                    className="absolute w-full md:w-auto -mt-3"
                   />
                 </div>
                 <div className="mt-6">
@@ -78,7 +78,7 @@ const OnboardingSlider = () => {
                   <img
                     src={img}
                     alt="Slide 1"
-                    className="object-contain w-[450px] lg:w-auto  "
+                    className="object-contain w-[450px] lg:w-auto"
                   />
                 </div>
               </div>
@@ -89,7 +89,7 @@ const OnboardingSlider = () => {
                   <img
                     src={effect}
                     alt=""
-                    className="absolute w-full md:w-auto -mt-3]]"
+                    className="absolute w-full md:w-auto -mt-3"
                   />
                 </div>
                 <div className="mt-6">
@@ -104,7 +104,7 @@ const OnboardingSlider = () => {
                   <img
                     src={img}
                     alt="Slide 2"
-                    className="object-contain w-[450px] lg:w-auto  "
+                    className="object-contain w-[450px] lg:w-auto"
                   />
                 </div>
               </div>
@@ -115,7 +115,7 @@ const OnboardingSlider = () => {
                   <img
                     src={effect}
                     alt=""
-                    className="absolute w-full md:w-auto -mt-3]]"
+                    className="absolute w-full md:w-auto -mt-3"
                   />
                 </div>
                 <div className="mt-6">
@@ -127,17 +127,25 @@ const OnboardingSlider = () => {
                   <img
                     src={img}
                     alt="Slide 3"
-                    className="object-contain w-[450px] lg:w-auto  "
+                    className="object-contain w-[450px] lg:w-auto"
                   />
                 </div>
               </div>
             </SwiperSlide>
           </Swiper>
-          {/* Custom Pagination Dots */}
-          <div className="custom-pagination absolute inset-x-0 flex justify-center"></div>
+          <div
+            className="custom-pagination absolute inset-x-0 flex justify-center bottom-[120px]"
+            style={{ bottom: "120px" }} 
+          ></div>
+
           {/* Next Button with conditional text */}
-          <button onClick={handleNext} className="next-button mt-6">
-            <ButtonPrimary style={"rounded-full"} btnText={activeIndex === 2 ? "始める" : "次へ"} />
+          <button onClick={handleNext} className="next-button mt-12">
+            <ButtonPrimary
+              style={
+                "rounded-full bg-gradient-to-r from-[#65D0F2] to-[#2399F4]"
+              }
+              btnText={activeIndex === 2 ? "始める" : "次へ"}
+            />
           </button>
         </div>
       </div>
