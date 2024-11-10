@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { IoMdStar } from "react-icons/io";
+import { Link } from "react-router-dom";
 
 const IndividualStores = () => {
   const [data, setData] = useState([]);
@@ -39,23 +40,27 @@ const IndividualStores = () => {
 
           <div className="grid grid-cols-2 gap-4 w-[342px] mx-auto ">
             {store.items.map((staff, idx) => (
-              <div key={idx} className="relative">
-                <img
-                  src={staff.image}
-                  alt={`${staff.staff_name} image`}
-                  className="object-cover rounded-lg w-[170px] h-[170px]"
-                />
-                {/* Rating in the top right corner */}
-                <div className="absolute top-[6px] right-[6px] bg-white text-[#49BBDF] flex items-center gap-1 px-2 py-1 rounded-[4px] shadow-md">
-                  <IoMdStar />
-                  {staff.rating}
+              <Link to={`/staff/${staff._id}`} key={idx}>
+                <div className="relative">
+                  <img
+                    src={staff.image}
+                    alt={`${staff.staff_name} image`}
+                    className="object-cover rounded-lg w-[170px] h-[170px]"
+                  />
+                  {/* Rating in the top right corner */}
+                  <div className="absolute top-[6px] right-[6px] bg-white text-[#49BBDF] flex items-center gap-1 px-2 py-1 rounded-[4px] shadow-md">
+                    <IoMdStar />
+                    {staff.rating}
+                  </div>
+                  {/* Name and Type in the bottom left corner */}
+                  <div className="absolute bottom-0 left-0 bg-gradient-to-t from-black via-transparent to-transparent w-full p-2 text-white rounded-b-lg">
+                    <h3 className="text-sm font-semibold">
+                      {staff.staff_name}
+                    </h3>
+                    <p className="text-xs">{staff.type}</p>
+                  </div>
                 </div>
-                {/* Name and Type in the bottom left corner */}
-                <div className="absolute bottom-0 left-0 bg-gradient-to-t from-black via-transparent to-transparent w-full p-2 text-white rounded-b-lg">
-                  <h3 className="text-sm font-semibold">{staff.staff_name}</h3>
-                  <p className="text-xs">{staff.type}</p>
-                </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
