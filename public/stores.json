@@ -1,57 +1,72 @@
 [
-    {
-      "storeName": "旬菜鮮魚と旨い酒 わらび",
-      "storeImage": "/src/assets/images/store&staff/store1.png",
-      "items": [
-        {
-          "staff_name": "かりん",
-          "type": "食べることや笑うことが...",
-          "rating": "123PT",
-          "image": "/src/assets/images/store&staff/image.png"
-        },
-        {
-          "staff_name": "さくら",
-          "type": "笑うことや飲むことが...",
-          "rating": "456PT",
-          "image": "/src/assets/images/store&staff/image.png"
-        },
-        {
-          "staff_name": "たろう",
-          "type": "遊ぶことや学ぶことが...",
-          "rating": "789PT",
-          "image": "/src/assets/images/store&staff/image.png"
-        },
-        {
-          "staff_name": "ひな",
-          "type": "休むことや楽しむことが...",
-          "rating": "321PT",
-          "image": "/src/assets/images/store&staff/image.png"
-        },
-        {
-          "staff_name": "れい",
-          "type": "作ることや学ぶことが...",
-          "rating": "654PT",
-          "image": "/src/assets/images/store&staff/image.png"
-        },
-        {
-          "staff_name": "あや",
-          "type": "話すことや遊ぶことが...",
-          "rating": "987PT",
-          "image": "/src/assets/images/store&staff/image.png"
-        },
-        {
-          "staff_name": "ゆう",
-          "type": "見ることや感じることが...",
-          "rating": "123PT",
-          "image": "/src/assets/images/store&staff/image.png"
-        },
-        {
-          "staff_name": "まい",
-          "type": "歌うことや踊ることが...",
-          "rating": "234PT",
-          "image": "/src/assets/images/store&staff/image.png"
-        }
-      ]
-    }
-    
-  ]
+  {
+    "storeName": "旬菜鮮魚と旨い酒 わらび",
+    "storeImage": "/src/assets/images/store&staff/store1.png",
+    "items": [
+      {
+        "staff_name": "かりん",
+        "_id": "1",
+        "type": "食べることや笑うことが...",
+        "rating": "123PT",
+        "image": "/src/assets/images/store&staff/image.png",
+        "self_introduction": "こんにちは、かりんです。食べることが大好きで、笑顔が絶えない毎日を過ごしています。"
+      },
+      {
+        "staff_name": "さくら",
+        "_id": "2",
+        "type": "笑うことや飲むことが...",
+        "rating": "456PT",
+        "image": "/src/assets/images/store&staff/image.png",
+        "self_introduction": "こんにちは、さくらです。笑顔を届けることが大好きです！一緒に楽しい時間を過ごしましょう。"
+      },
+      {
+        "staff_name": "たろう",
+        "_id": "3",
+        "type": "遊ぶことや学ぶことが...",
+        "rating": "789PT",
+        "image": "/src/assets/images/store&staff/image.png",
+        "self_introduction": "はじめまして、たろうです。新しいことを学び、成長するのが楽しみです。"
+      },
+      {
+        "staff_name": "ひな",
+        "_id": "4",
+        "type": "休むことや楽しむことが...",
+        "rating": "321PT",
+        "image": "/src/assets/images/store&staff/image.png",
+        "self_introduction": "こんにちは、ひなです。リラックスした空間を提供するのが好きです。"
+      },
+      {
+        "staff_name": "れい",
+        "_id": "5",
+        "type": "作ることや学ぶことが...",
+        "rating": "654PT",
+        "image": "/src/assets/images/store&staff/image.png",
+        "self_introduction": "はじめまして、れいです。創造することが好きで、新しい発見を楽しんでいます。"
+      },
+      {
+        "staff_name": "あや",
+        "_id": "6",
+        "type": "話すことや遊ぶことが...",
+        "rating": "987PT",
+        "image": "/src/assets/images/store&staff/image.png",
+        "self_introduction": "あやです！話すことが好きで、皆さんとたくさんの思い出を作りたいです。"
+      },
+      {
+        "staff_name": "ゆう",
+        "_id": "7",
+        "type": "見ることや感じることが...",
+        "rating": "123PT",
+        "image": "/src/assets/images/store&staff/image.png",
+        "self_introduction": "ゆうです。視野を広げ、新しい視点で物事を感じるのが好きです。"
+      },
+      {
+        "staff_name": "まい",
+        "_id": "8",
+        "type": "歌うことや踊ることが...",
+        "rating": "234PT",
+        "image": "/src/assets/images/store&staff/image.png",
+        "self_introduction": "まいです！歌うことが大好きで、皆さんと一緒に楽しいひとときを過ごしたいです。"
+      }
+    ]
+  }
+]

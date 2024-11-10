@@ -82,7 +82,7 @@ const NewReg = () => {
                 className="input border rounded-[3px] py-4 mt-4 mb-[9px] w-[253px] pl-4 font-Noto text-[#44495B80] text-sm"
               />
               {errors.password && (
-                <span className="text-red-500 mt-1">Password is required</span>
+                <span className="text-red-500 mt-1">{error}</span>
               )}
             </div>
             <div className="form-control">

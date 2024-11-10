@@ -22,6 +22,9 @@ import UserProfile from "../pages/Profile/UserProfile";
 
 import ChangeEmail from "../pages/Profile/ChangeEmail";
 import ChangePassword from "../pages/Profile/ChangePassword";
+import Staff from "../pages/home/Staffs/Staff";
+import RegComplete from "../pages/RegComplete/RegComplete";
+import BillingScreen from "../pages/BillingScreen/BillingScreen";
 
 export const Routes = createBrowserRouter([
   {
@@ -89,9 +92,22 @@ export const Routes = createBrowserRouter([
         path: "/activate/:userId/:token",
         element: <AccountActivation />,
       },
+
+      {
+        path: "/reg_complete",
+        element: <RegComplete />,
+      },
       {
         path: "/store",
         element: <IndividualStores />,
+      },
+      {
+        path: "/staff/:id",
+        element: <Staff />,
+      },
+      {
+        path: "/staff/:id/billing_screen",
+        element: <BillingScreen />,
       },
       {
         path: "/member_list",
@@ -108,11 +124,7 @@ export const Routes = createBrowserRouter([
       },
       {
         path: "/myPage/display_name",
-        element: (
-          <PrivateRoute>
-            <NickNameReg />
-          </PrivateRoute>
-        ),
+        element: <NickNameReg />,
       },
       {
         path: "/myPage/Change_email",
