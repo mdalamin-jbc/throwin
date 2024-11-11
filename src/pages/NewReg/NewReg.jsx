@@ -74,10 +74,10 @@ const NewReg = () => {
 
   return (
     <div
-      className="flex flex-col justify-center items-center h-screen bg-cover bg-center p-4"
+      className="flex flex-col justify-center items-center min-h-screen overflow-auto bg-cover bg-center p-4"
       style={{ backgroundImage: `url(${socialBg})` }}
     >
-      <div className="absolute inset-0 bg-[#072233fb]"></div>
+      <div className="fixed inset-0 bg-[#072233fb] min-h-screen overflow-auto"></div>
 
       <div
         className={`bg-white p-6 rounded-[10px] shadow-xl text-center relative w-[291px] ${

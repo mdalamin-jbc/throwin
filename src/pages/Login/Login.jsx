@@ -1,5 +1,5 @@
 import Swal from "sweetalert2";
-import Cookies from "js-cookie";
+
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import closeIcon from "../../assets/icons/close.png";
@@ -14,7 +14,8 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const axiosPublic = useAxiosPublic();
-  const { login } = useContext(AuthContext); 
+  const { login, user } = useContext(AuthContext);
+  // console.log(user.access);
 
   const { email = "" } = location.state || {};
 
@@ -41,6 +42,8 @@ const Login = () => {
 
         // Use the login function from context
         login(response.data.data);
+
+        // Show success message
         Swal.fire({
           position: "top",
           icon: "success",
@@ -48,10 +51,27 @@ const Login = () => {
           showConfirmButton: false,
           timer: 1500,
         });
-        navigate("/gacha"); // Use navigate to redirect
+
+        // Fetch user details
+        const res = await axiosPublic.get(`/auth/users/me`, {
+          headers: user?.access
+            ? { Authorization: `Bearer ${user.access}` }
+            : {},
+          ...(user?.access && { withCredentials: true }),
+        });
+        console.log(res);
+
+        if (res.status === 200) {
+          if (res.data.name) {
+            navigate("/gacha");
+          } else {
+            navigate("/myPage/display_name");
+          }
+        }
       } else {
         console.error("Login failed:", response.data.msg);
 
+        // Show error message
         Swal.fire({
           position: "top",
           icon: "error",
@@ -65,10 +85,12 @@ const Login = () => {
         "Error logging in:",
         error.response ? error.response.data : error
       );
+
+      // Show error message
       Swal.fire({
         position: "top",
         icon: "error",
-        title: `${error.response?.data.msg}`,
+        title: `${error.response?.data.msg || "Login failed"}`,
         showConfirmButton: false,
         timer: 1500,
       });

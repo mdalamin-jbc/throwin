@@ -2,8 +2,9 @@ import img from "../../assets/images/slider/Group 633190.png";
 import bgImage from "../../assets/images/slider/Rectangle 1.png";
 import effect from "../../assets/images/slider/effect.png";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 // Import Swiper styles
 import "swiper/css";
@@ -13,11 +14,28 @@ import "swiper/css/navigation";
 // Import required Swiper modules
 import { Mousewheel, Pagination, Navigation, Keyboard } from "swiper/modules";
 import ButtonPrimary from "../ButtonPrimary";
+import { useAuth } from "../../hooks/useAuth";
 
 const OnboardingSlider = () => {
+  const [access, setAccess] = useState(null);
   const swiperRef = useRef(null);
   const navigate = useNavigate();
-  const [activeIndex, setActiveIndex] = useState(0); // State to track the active slide index
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const accessToken = Cookies.get("access_token");
+
+  // Set the access token to state if it exists
+  useEffect(() => {
+    if (accessToken) {
+      setAccess(accessToken);
+    }
+  }, [accessToken]);
+
+  console.log(access);
+
+  // const baseUrl = "https://throwin-backend.onrender.com/api/v1/auth/users/me";
+
+  // const response =await axios.get(`${baseUrl}`,)
 
   const handleNext = () => {
     if (swiperRef.current) {
@@ -39,7 +57,6 @@ const OnboardingSlider = () => {
           backgroundSize: "cover",
           backgroundPosition: "center",
           width: "100%",
-          
         }}
       >
         <div className="pt-[157px] md:pt-0 md:mt-20">
@@ -134,8 +151,8 @@ const OnboardingSlider = () => {
             </SwiperSlide>
           </Swiper>
           <div
-            className="custom-pagination absolute inset-x-0 flex justify-center bottom-[120px]"
-            style={{ bottom: "120px" }} 
+            className="custom-pagination absolute inset-x-0 flex justify-center "
+            style={{ bottom: "120px" }}
           ></div>
 
           {/* Next Button with conditional text */}
