@@ -12,10 +12,13 @@ import team7 from "../../assets/images/team/team.png";
 import team8 from "../../assets/images/team/team.png";
 import { useForm } from "react-hook-form";
 import TitleBar from "../../components/TitleBar";
+import { useLocation } from "react-router-dom";
 
 const MemberList = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [isScannerOpen, setIsScannerOpen] = useState(false);
+  const location = useLocation();
+  const { stuffData } = location.state || {};
+  console.log(stuffData);
 
   const {
     register,
@@ -51,9 +54,10 @@ const MemberList = () => {
           icon={
             <img className="w-[110px] items-center" src={logo} alt="logo " />
           }
-        ></TitleBar>
+          title="" // Pass the required title prop
+        />
       </div>
-      <div className="flex flex-col justify-center">
+      <div className="flex flex-col justify-center mt-4">
         <form className="flex flex-col w-[342px] mx-auto">
           <div className="relative flex items-center w-full">
             <input
@@ -97,8 +101,8 @@ const MemberList = () => {
               alt={member.title}
               className="w-full h-full object-cover rounded-lg"
             />
-            <div className="absolute bottom-2 left-2  py-1  rounded-b-lg">
-              <p className="text-white font-boldtext-sm">{member.title}</p>
+            <div className="absolute bottom-2 left-2 py-1 rounded-b-lg">
+              <p className="text-white font-bold text-sm">{member.title}</p>
             </div>
           </div>
         ))}

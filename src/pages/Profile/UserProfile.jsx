@@ -5,8 +5,10 @@ import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const UserProfile = () => {
-  const { logout, user } = useAuth();
+  const { logout, userDetails } = useAuth();
   const navigate = useNavigate();
+
+  console.log(userDetails);
 
   const handleLogout = () => {
     logout();
@@ -28,8 +30,8 @@ const UserProfile = () => {
         </h3>
         {/* Display name */}
         <Link to={"display_name"}>
-          <div className="flex justify-between border-b-[1.5px] my-5">
-            <h4>表示名</h4>
+          <div className="flex justify-between  border-b-[1.5px] my-5">
+            <h4>{userDetails?.name}</h4>
             <h4 className="flex items-center text-[#9F9999] mb-5">
               <span className="text-sm font-semibold"> たろう</span>
               <GoChevronRight className="text-3xl " />
@@ -41,8 +43,10 @@ const UserProfile = () => {
         <Link to={"Change_email"}>
           <div className="flex justify-between border-b-[1.5px] my-5">
             <h4>メールアドレス</h4>
-            <h4 className="flex items-center text-[#9F9999] mb-5">
-              <span className="text-sm font-semibold"> abcde@gmail.com</span>
+            <h4 className="flex items-center text-[#9F9999] mb-5 ">
+              <span className="text-sm font-semibold pb-1">
+                {userDetails?.email}
+              </span>
               <GoChevronRight className="text-3xl " />
             </h4>
           </div>
@@ -52,7 +56,7 @@ const UserProfile = () => {
           <div className="flex justify-between border-b-[1.5px] my-5">
             <h4>パスワードの変更</h4>
             <h4 className="flex items-center text-[#9F9999] mb-5">
-              <span className="text-sm font-semibold"> *******</span>
+              <span className="text-sm font-semibold"> ******* </span>
               <GoChevronRight className="text-3xl " />
             </h4>
           </div>

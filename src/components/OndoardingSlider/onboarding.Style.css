@@ -1,0 +1,11 @@
+@media (max-height: 900px) {
+  .custom-padding {
+    padding-top: 1rem; /* pt-4 */
+  }
+}
+
+@media (min-height: 901px) {
+  .custom-padding {
+    padding-top: 10rem; /* pt-40 */
+  }
+}

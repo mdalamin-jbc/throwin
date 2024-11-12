@@ -2,27 +2,49 @@
 import { createContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Cookies from "js-cookie";
+import useAxiosPublic from "../hooks/axiosPublic";
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [userDetails, setUserDetails] = useState();
   const [loading, setLoading] = useState(true);
-  
+  const axiosPublic = useAxiosPublic();
 
   useEffect(() => {
     const checkUser = () => {
       const email = Cookies.get("email");
       const accessToken = Cookies.get("access_token");
-      
+
       if (email && accessToken) {
         setUser({ email, access: accessToken });
       }
-      setLoading(false); 
+      setLoading(false);
     };
 
     checkUser();
   }, []);
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const res = await axiosPublic.get(`/auth/users/me`, {
+          headers: user?.access
+            ? { Authorization: `Bearer ${user?.access}` }
+            : {},
+          withCredentials: user?.access ? true : false,
+        });
+        setUserDetails(res.data);
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
+    };
+
+    if (user?.access) {
+      fetchUserDetails();
+    }
+  }, [user, axiosPublic]);
 
   const login = (userData) => {
     setUser(userData);
@@ -43,6 +65,7 @@ export const AuthProvider = ({ children }) => {
     loading,
     login,
     logout,
+    userDetails,
   };
 
   return (
@@ -54,6 +77,5 @@ export const AuthProvider = ({ children }) => {
 AuthProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
-
 
 export default AuthContext;

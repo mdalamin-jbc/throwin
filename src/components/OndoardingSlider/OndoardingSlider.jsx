@@ -14,32 +14,15 @@ import "swiper/css/navigation";
 // Import required Swiper modules
 import { Mousewheel, Pagination, Navigation, Keyboard } from "swiper/modules";
 import ButtonPrimary from "../ButtonPrimary";
-import { useAuth } from "../../hooks/useAuth";
+import { Helmet } from "react-helmet";
 
 const OnboardingSlider = () => {
-  const [access, setAccess] = useState(null);
   const swiperRef = useRef(null);
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const accessToken = Cookies.get("access_token");
-
-  // Set the access token to state if it exists
-  useEffect(() => {
-    if (accessToken) {
-      setAccess(accessToken);
-    }
-  }, [accessToken]);
-
-  console.log(access);
-
-  // const baseUrl = "https://throwin-backend.onrender.com/api/v1/auth/users/me";
-
-  // const response =await axios.get(`${baseUrl}`,)
-
   const handleNext = () => {
     if (swiperRef.current) {
-      // Navigate to "login" if the active index is 2 (third slide)
       if (activeIndex === 2) {
         navigate("/login");
       } else {
@@ -49,121 +32,121 @@ const OnboardingSlider = () => {
   };
 
   return (
-    <div className="relative h-screen w-full flex justify-center items-center">
+    <div className="relative min-h-screen w-full flex justify-center items-center">
+      <Helmet>
+        <title>Throwin | Onboarding</title>
+      </Helmet>
       <div
-        className="shadow-xl text-center relative h-full lg:h-[130%]"
+        className="shadow-xl text-center relative w-full min-h-screen"
         style={{
           backgroundImage: `url(${bgImage})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          width: "100%",
+          backgroundSize: "cover", // Ensure the image always covers the container fully
+          backgroundPosition: "center", // Center the background image
+          backgroundAttachment: "fixed", // Parallax effect (optional)
+          height: "100vh", // Ensure full height of the viewport
+          minHeight: "full", // Make sure it covers in case 100vh fails on mobile
         }}
       >
-        <div className="pt-[157px] md:pt-0 md:mt-20">
-          <Swiper
-            cssMode={true}
-            pagination={{
-              clickable: true,
-              el: ".custom-pagination",
-            }}
-            mousewheel={true}
-            keyboard={true}
-            modules={[Navigation, Pagination, Mousewheel, Keyboard]}
-            className="mySwiper"
-            onSwiper={(swiper) => {
-              swiperRef.current = swiper;
-            }}
-            onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)} // Update active index on slide change
-          >
-            <SwiperSlide className="flex justify-center items-center h-full w-full px-16">
-              <div>
-                <div className="flex justify-center">
+        <div className="">
+          <div className="pt-6 md:pt-0 md:mt-20 relative">
+            <Swiper
+              cssMode={true}
+              pagination={{
+                clickable: true,
+                el: ".custom-pagination",
+              }}
+              mousewheel={true}
+              keyboard={true}
+              modules={[Navigation, Pagination, Mousewheel, Keyboard]}
+              className="mySwiper"
+              onSwiper={(swiper) => {
+                swiperRef.current = swiper;
+              }}
+              onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
+            >
+              <SwiperSlide className="flex justify-center items-center h-full w-full px-6 md:px-16">
+                <div className="relative">
                   <img
                     src={effect}
-                    alt=""
+                    alt="Effect"
                     className="absolute w-full md:w-auto -mt-3"
                   />
+                  <div className="mt-6">
+                    <h2 className="font-hiragino font-medium text-lg text-[#49BBDF] flex gap-3 justify-center mb-3">
+                      \ <span>はじめに</span> /
+                    </h2>
+                    <h3 className="grid font-hiragino font-semibold text-[19px] text-[#44495B] leading-8 mb-11">
+                      <span>Throwinは</span>活躍するスタッフとお客様を <br />
+                      繋ぐ投げ銭サービスです
+                    </h3>
+                    <img
+                      src={img}
+                      alt="Slide 1"
+                      className="object-contain w-[250px] sm:w-[350px] lg:w-auto mx-auto"
+                    />
+                  </div>
                 </div>
-                <div className="mt-6">
-                  <h2 className="font-hiragino font-medium text-lg text-[#49BBDF] flex gap-3 justify-center mb-3">
-                    \ <span>はじめに</span> /
-                  </h2>
-                  <h3 className="grid font-hiragino font-semibold text-[19px] text-[#44495B] leading-8 mb-11">
-                    <span>Throwinは</span>活躍するスタッフとお客様を <br />
-                    繋ぐ投げ銭サービスです
-                  </h3>
-                  <img
-                    src={img}
-                    alt="Slide 1"
-                    className="object-contain w-[450px] lg:w-auto"
-                  />
-                </div>
-              </div>
-            </SwiperSlide>
-            <SwiperSlide className="flex justify-center items-center h-full w-full px-16 mt-[10px]">
-              <div>
-                <div className="flex justify-center">
-                  <img
-                    src={effect}
-                    alt=""
-                    className="absolute w-full md:w-auto -mt-3"
-                  />
-                </div>
-                <div className="mt-6">
-                  <h3 className="grid font-hiragino font-semibold text-[19px] text-[#44495B] leading-8 mb-11">
-                    元気や、感動を
-                    <br /> 与えてくれたスタッフに
-                    <br />
-                    お礼をカタチ（投げ銭）にして
-                    <br />
-                    伝えることができます。
-                  </h3>
-                  <img
-                    src={img}
-                    alt="Slide 2"
-                    className="object-contain w-[450px] lg:w-auto"
-                  />
-                </div>
-              </div>
-            </SwiperSlide>
-            <SwiperSlide className="flex justify-center items-center h-full w-full px-16 mt-[39px]">
-              <div>
-                <div className="flex justify-center">
-                  <img
-                    src={effect}
-                    alt=""
-                    className="absolute w-full md:w-auto -mt-3"
-                  />
-                </div>
-                <div className="mt-6">
-                  <h3 className="grid font-hiragino font-semibold text-[19px] text-[#44495B] leading-8 mb-11">
-                    まずはあなたの <br />
-                    イチオシのスタッフを <br />
-                    見つけてください！
-                  </h3>
-                  <img
-                    src={img}
-                    alt="Slide 3"
-                    className="object-contain w-[450px] lg:w-auto"
-                  />
-                </div>
-              </div>
-            </SwiperSlide>
-          </Swiper>
-          <div
-            className="custom-pagination absolute inset-x-0 flex justify-center "
-            style={{ bottom: "120px" }}
-          ></div>
+              </SwiperSlide>
 
-          {/* Next Button with conditional text */}
-          <button onClick={handleNext} className="next-button mt-12">
-            <ButtonPrimary
-              style={
-                "rounded-full bg-gradient-to-r from-[#65D0F2] to-[#2399F4]"
-              }
-              btnText={activeIndex === 2 ? "始める" : "次へ"}
-            />
-          </button>
+              <SwiperSlide className="flex justify-center items-center h-full w-full px-6 md:px-16 mt-[10px]">
+                <div className="relative">
+                  <img
+                    src={effect}
+                    alt="Effect"
+                    className="absolute w-full md:w-auto -mt-3"
+                  />
+                  <div className="mt-6">
+                    <h3 className="grid font-hiragino font-semibold text-[19px] text-[#44495B] leading-8 mb-11">
+                      元気や、感動を
+                      <br /> 与えてくれたスタッフに
+                      <br />
+                      お礼をカタチ（投げ銭）にして
+                      <br />
+                      伝えることができます。
+                    </h3>
+                    <img
+                      src={img}
+                      alt="Slide 2"
+                      className="object-contain w-[250px] sm:w-[350px] lg:w-auto mx-auto"
+                    />
+                  </div>
+                </div>
+              </SwiperSlide>
+
+              <SwiperSlide className="flex justify-center items-center h-full w-full px-6 md:px-16 mt-[39px]">
+                <div className="relative">
+                  <img
+                    src={effect}
+                    alt="Effect"
+                    className="absolute w-full md:w-auto -mt-3"
+                  />
+                  <div className="mt-6">
+                    <h3 className="grid font-hiragino font-semibold text-[19px] text-[#44495B] leading-8 mb-11">
+                      まずはあなたの <br />
+                      イチオシのスタッフを <br />
+                      見つけてください！
+                    </h3>
+                    <img
+                      src={img}
+                      alt="Slide 3"
+                      className="object-contain w-[250px] sm:w-[350px] lg:w-auto mx-auto"
+                    />
+                  </div>
+                </div>
+              </SwiperSlide>
+            </Swiper>
+
+            {/* Pagination dots positioned between image and button */}
+            <div className="custom-pagination inset-x-0 flex justify-center mt-3"></div>
+
+            {/* Next Button positioned below pagination */}
+            <button onClick={handleNext} className="next-button mt-4">
+              <ButtonPrimary
+                style="rounded-full bg-gradient-to-r from-[#65D0F2] to-[#2399F4]"
+                btnText={activeIndex === 2 ? "始める" : "次へ"}
+              />
+            </button>
+          </div>
         </div>
       </div>
     </div>

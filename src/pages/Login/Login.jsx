@@ -1,7 +1,6 @@
 import Swal from "sweetalert2";
-
 import { useForm } from "react-hook-form";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import closeIcon from "../../assets/icons/close.png";
 import logo from "../../assets/images/socialLogin/logo2.png";
 import socialBg from "../../assets/images/socialLogin/social bg.jpeg";
@@ -12,12 +11,12 @@ import AuthContext from "../../contexts/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+
   const axiosPublic = useAxiosPublic();
   const { login, user } = useContext(AuthContext);
   // console.log(user.access);
 
-  const { email = "" } = location.state || {};
+  // const { email = "" } = location.state || {};
 
   const handleClose = () => {
     navigate("/");
@@ -26,7 +25,7 @@ const Login = () => {
   const {
     register,
     handleSubmit,
-    reset,
+
     formState: { errors },
   } = useForm();
 
@@ -63,7 +62,7 @@ const Login = () => {
 
         if (res.status === 200) {
           if (res.data.name) {
-            navigate("/gacha");
+            navigate("/search");
           } else {
             navigate("/myPage/display_name");
           }

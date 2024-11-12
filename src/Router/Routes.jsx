@@ -110,7 +110,7 @@ export const Routes = createBrowserRouter([
         element: <BillingScreen />,
       },
       {
-        path: "/member_list",
+        path: "/stuff_list",
         element: <MemberList />,
       },
       // Profile
