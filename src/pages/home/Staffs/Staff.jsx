@@ -4,12 +4,18 @@ import { IoMdStar } from "react-icons/io";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import ButtonPrimary from "../../../components/ButtonPrimary";
 import throws from "../../../assets/icons/Throw .png";
+import useAxiosPublic from "../../../hooks/axiosPublic";
+import UseGetByStaffName from "../../../hooks/UseGetByStaffName";
 
 const Staff = () => {
   const [data, setData] = useState([]);
   const [staffMember, setStaffMember] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
-  const { id } = useParams();
+  const { id, username } = useParams();
+
+  const { staff, refetch, isLoading, isError } = UseGetByStaffName(username);
+
+  console.log(staff);
 
   useEffect(() => {
     fetch("/stores.json")

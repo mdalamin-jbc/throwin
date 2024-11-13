@@ -3,10 +3,13 @@ import TitleBar from "../../components/TitleBar";
 import { useAuth } from "../../hooks/useAuth";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import UseUserDetails from "../../hooks/UseUserDetails";
+import { Helmet } from "react-helmet";
 
 const UserProfile = () => {
-  const { logout, userDetails } = useAuth();
+  const { logout } = useAuth();
   const navigate = useNavigate();
+  const { userDetails, refetch } = UseUserDetails();
 
   console.log(userDetails);
 
@@ -23,6 +26,9 @@ const UserProfile = () => {
   };
   return (
     <div className="w-full  mx-auto mb-[120px]">
+      <Helmet>
+        <title>Throwin | My Page</title>
+      </Helmet>
       <TitleBar title={"スタッフを探す"} />
       <div className="w-full max-w-[380px] mx-auto">
         <h3 className="mt-7 font-hiragino font-semibold text-lg text-[#44495B]">

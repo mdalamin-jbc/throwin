@@ -25,6 +25,9 @@ import ChangePassword from "../pages/Profile/ChangePassword";
 import Staff from "../pages/home/Staffs/Staff";
 import RegComplete from "../pages/RegComplete/RegComplete";
 import BillingScreen from "../pages/BillingScreen/BillingScreen";
+import DisplayName from "../pages/DisplayName/DisplayName";
+import ForgetPassword from "../pages/Login/forgetPassword";
+import ResetPassword from "../pages/Login/ResetPassword";
 
 export const Routes = createBrowserRouter([
   {
@@ -50,6 +53,22 @@ export const Routes = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "forget_password",
+        element: <ForgetPassword />,
+      },
+      {
+        path: "/reset-password/:userId/:token",
+        element: <ResetPassword />,
+      },
+      {
+        path: "/nickName_reg",
+        element: <NickNameReg />,
+      },
+      {
+        path: "/reg_complete",
+        element: <RegComplete />,
       },
       {
         path: "/onboarding",
@@ -85,7 +104,7 @@ export const Routes = createBrowserRouter([
         element: <NewReg />,
       },
       {
-        path: "/new_reg/mail_check",
+        path: "/mail_check",
         element: <CheckMail />,
       },
       {
@@ -94,15 +113,11 @@ export const Routes = createBrowserRouter([
       },
 
       {
-        path: "/reg_complete",
-        element: <RegComplete />,
-      },
-      {
         path: "/store",
         element: <IndividualStores />,
       },
       {
-        path: "/staff/:id",
+        path: "/staff/:username",
         element: <Staff />,
       },
       {
@@ -122,10 +137,7 @@ export const Routes = createBrowserRouter([
           </PrivateRoute>
         ),
       },
-      {
-        path: "/myPage/display_name",
-        element: <NickNameReg />,
-      },
+
       {
         path: "/myPage/Change_email",
         element: (
@@ -133,6 +145,10 @@ export const Routes = createBrowserRouter([
             <ChangeEmail />
           </PrivateRoute>
         ),
+      },
+      {
+        path: "myPage/display_name",
+        element: <DisplayName />,
       },
       {
         path: "/myPage/change_password",

@@ -8,7 +8,7 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [userDetails, setUserDetails] = useState();
+  
   const [loading, setLoading] = useState(true);
   const axiosPublic = useAxiosPublic();
 
@@ -26,25 +26,7 @@ export const AuthProvider = ({ children }) => {
     checkUser();
   }, []);
 
-  useEffect(() => {
-    const fetchUserDetails = async () => {
-      try {
-        const res = await axiosPublic.get(`/auth/users/me`, {
-          headers: user?.access
-            ? { Authorization: `Bearer ${user?.access}` }
-            : {},
-          withCredentials: user?.access ? true : false,
-        });
-        setUserDetails(res.data);
-      } catch (error) {
-        console.error("Error fetching user details:", error);
-      }
-    };
-
-    if (user?.access) {
-      fetchUserDetails();
-    }
-  }, [user, axiosPublic]);
+  
 
   const login = (userData) => {
     setUser(userData);
@@ -65,7 +47,7 @@ export const AuthProvider = ({ children }) => {
     loading,
     login,
     logout,
-    userDetails,
+    
   };
 
   return (

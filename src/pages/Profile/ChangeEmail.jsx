@@ -1,8 +1,10 @@
 import { useForm } from "react-hook-form";
 import TitleBar from "../../components/TitleBar";
 import ButtonPrimary from "../../components/ButtonPrimary";
+import UseUserDetails from "../../hooks/UseUserDetails";
 
 const ChangeEmail = () => {
+  const { userDetails, refetch } = UseUserDetails();
   const {
     register,
     handleSubmit,
@@ -19,10 +21,10 @@ const ChangeEmail = () => {
       <TitleBar title={"マイページ"}></TitleBar>
       <div className="w-full max-w-[380px] mx-auto">
         <h3 className="text-center font-hiragino font-bold text-lg text-[#44495B] mt-[59px] ">
-          パスワードの変更
+        メールアドレスの変更
         </h3>
         <p className="my-[22px] text-center text-[#9F9999] text-sm font-semibold">
-          現在のアドレス：abcde@gmail.com
+          現在のアドレス：{userDetails.email}
         </p>
 
         <div className="flex flex-col justify-center">

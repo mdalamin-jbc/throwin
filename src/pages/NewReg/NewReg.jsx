@@ -49,7 +49,7 @@ const NewReg = () => {
         response.data.msg ===
         "User Created Successfully, Please check your email to activate your account in 48 hours."
       ) {
-        navigate("/new_reg/mail_check");
+        navigate("/mail_check");
       } else {
         setErrorMessage("Registration failed. Please try again.");
       }

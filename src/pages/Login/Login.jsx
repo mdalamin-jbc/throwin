@@ -14,7 +14,6 @@ const Login = () => {
 
   const axiosPublic = useAxiosPublic();
   const { login, user } = useContext(AuthContext);
-  // console.log(user.access);
 
   // const { email = "" } = location.state || {};
 
@@ -50,21 +49,23 @@ const Login = () => {
           showConfirmButton: false,
           timer: 1500,
         });
+        // console.log(response.data.data.access);
 
         // Fetch user details
         const res = await axiosPublic.get(`/auth/users/me`, {
-          headers: user?.access
-            ? { Authorization: `Bearer ${user.access}` }
+          headers: response.data.data.access
+            ? { Authorization: `Bearer ${response.data.data.access}` }
             : {},
-          ...(user?.access && { withCredentials: true }),
+          ...(response.data.data.access && { withCredentials: true }),
         });
-        console.log(res);
 
         if (res.status === 200) {
-          if (res.data.name) {
-            navigate("/search");
+          // Check if the user has a name or not
+          if (res.data.name === null || res.data.name === "Anonymous user") {
+            navigate("/nickName_reg");
           } else {
-            navigate("/myPage/display_name");
+            console.log(res);
+            navigate("/search");
           }
         }
       } else {
@@ -134,7 +135,10 @@ const Login = () => {
                 <span className="label-text font-bold text-sm font-Noto">
                   パスワード
                 </span>
-                <Link className="label-text text-[10px] font-hiragino text-[#5297FF]">
+                <Link
+                  to="/forget_password"
+                  className="label-text text-[10px] font-hiragino text-[#5297FF]"
+                >
                   パスワードをお忘れですか？
                 </Link>
               </label>

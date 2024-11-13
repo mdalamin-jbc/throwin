@@ -8,8 +8,8 @@ import useAxiosPublic from "../../hooks/axiosPublic";
 import { useNavigate } from "react-router-dom";
 
 const Search = () => {
-  const [searchTermMember, setSearchTermMember] = useState("");
-  const [searchTermStore, setSearchTermStore] = useState("");
+  const [searchByStuffName, setSearchByStuffName] = useState("");
+  const [searchStore, setSeararchStore] = useState("");
   const [isScannerOpen, setIsScannerOpen] = useState(false);
   const [storeData, setStoreData] = useState(null);
   const [stuffData, setStuffData] = useState(null);
@@ -27,16 +27,17 @@ const Search = () => {
     setIsScannerOpen(true);
   };
 
-  // Handle member search
-  const handleSearchMember = async () => {
-    if (!searchTermMember) {
+  // Handle stuff search
+  const handleSearchStuff = async () => {
+    // navigate("/stuff_list");
+    if (!searchByStuffName) {
       setErrorMessage("メンバー名は必須です");
       return;
     }
 
     try {
       const response = await axiosPublic.get(
-        `/store/${searchTermMember}/stuff/list`
+        `/auth/users/stuff/${searchByStuffName}`
       );
 
       // Check if there are results
@@ -46,9 +47,9 @@ const Search = () => {
         setErrorMessage(""); // Clear any previous error message
 
         // Redirect to stuff_list page with response data as state
-        navigate("/stuff_list", {
-          state: { stuffData: response.data.results },
-        });
+        // navigate("/stuff_list", {
+        //   state: { stuffData: response.data.results },
+        // });
       } else {
         setErrorMessage("No members found.");
       }
@@ -60,14 +61,19 @@ const Search = () => {
 
   // Handle store search
   const handleSearchStore = async () => {
-    if (!searchTermStore) {
+    if (!searchStore) {
       setErrorMessage("店舗コードは必須です");
       return;
     }
     try {
-      const response = await axiosPublic.get(`/store${searchTermStore}`);
+      const response = await axiosPublic.get(`/stores/${searchStore}`);
       setStoreData(response.data);
       setErrorMessage("");
+
+      console.log(response);
+
+      // Redirect to the store page and send store data
+      navigate(`/store`, { state: { storeData: response.data } });
     } catch (error) {
       setErrorMessage("Store not found or an error occurred.");
       console.error("Error fetching store:", error);
@@ -106,11 +112,11 @@ const Search = () => {
             type="text"
             placeholder="メンバー名を入力"
             className="w-full rounded-[8px] py-3 pl-4 pr-10 border border-[#D9D9D9] text-[#44495B] text-sm placeholder-gray-400 focus:outline-none focus:border-[#707070] shadow-sm"
-            value={searchTermMember}
-            onChange={(e) => setSearchTermMember(e.target.value)}
+            value={searchByStuffName}
+            onChange={(e) => setSearchByStuffName(e.target.value)}
           />
           <div
-            onClick={handleSearchMember}
+            onClick={handleSearchStuff}
             className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
           >
             <img
@@ -141,8 +147,8 @@ const Search = () => {
             type="text"
             placeholder="店舗コードを入力"
             className="w-full rounded-[8px] py-3 pl-4 pr-10 border border-[#D9D9D9] text-[#44495B] text-sm placeholder-gray-400 focus:outline-none focus:border-[#707070] shadow-sm"
-            value={searchTermStore}
-            onChange={(e) => setSearchTermStore(e.target.value)}
+            value={searchStore}
+            onChange={(e) => setSeararchStore(e.target.value)}
           />
           <div
             onClick={handleSearchStore}
@@ -161,13 +167,6 @@ const Search = () => {
           )}
         </div>
         {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
-        {storeData && (
-          <div className="mt-4 p-4 border rounded bg-gray-100 ">
-            <h5 className="font-bold">{storeData.name}</h5>
-            <p>Code: {storeData.code}</p>
-            <p>Description: {storeData.description || "No description"}</p>
-          </div>
-        )}
       </div>
     </div>
   );

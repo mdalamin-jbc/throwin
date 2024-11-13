@@ -8,6 +8,7 @@ import throws from "../../assets/icons/Throw .png";
 import throw_wh from "../../assets/icons/throw_white.png";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import TitleBar from "../../components/TitleBar";
+import { useForm } from "react-hook-form";
 
 const BillingScreen = () => {
   const [data, setData] = useState([]);
@@ -15,6 +16,7 @@ const BillingScreen = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
   const { id } = useParams();
+  const [selectedAmount, setSelectedAmount] = useState(null);
 
   useEffect(() => {
     fetch("/stores.json")
@@ -43,11 +45,24 @@ const BillingScreen = () => {
       : "bg-gray-400 text-gray-700"
   }`;
 
+  const amounts = ["1,000円", "3,000円", "5,000円", "10,000円"];
+  const handleClick = (amount) => {
+    setSelectedAmount(amount);
+    console.log(`Selected Amount: ${amount}`); // This logs the selected amount
+  };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
+
   return (
     <div>
       <div>
         <TitleBar
-          style="mb-0"
+          style="mb-0 w-full"
           icon={
             <img className="w-[110px] items-center " src={logo} alt="logo " />
           }
@@ -93,16 +108,20 @@ const BillingScreen = () => {
           </div>
 
           <div className="flex gap-[14px] overflow-x-auto scrollbar-hide font-semibold text-sm text-[#49BBDF]">
-            {["1,000円", "3,000円", "5,000円", "10,000円"].map(
-              (amount, index) => (
-                <h4
-                  key={index}
-                  className="border border-[#49BBDF] rounded-lg mt-[22px] px-4 py-2 whitespace-nowrap"
-                >
-                  {amount}
-                </h4>
-              )
-            )}
+            {amounts.map((amount, index) => (
+              <h4
+                key={index}
+                onClick={() => handleClick(amount)}
+                className={`border rounded-lg mt-[22px] px-4 py-2 whitespace-nowrap cursor-pointer 
+            ${
+              selectedAmount === amount
+                ? "bg-[#49BBDF] text-white"
+                : "border-[#49BBDF] text-[#49BBDF]"
+            }`}
+              >
+                {amount}
+              </h4>
+            ))}
           </div>
 
           <div className="mt-7">
@@ -171,6 +190,118 @@ const BillingScreen = () => {
                 新規クレジットカード
               </label>
             </div>
+
+            {/* Conditionally render the form when "new-card" is selected */}
+            {selectedPaymentMethod === "new-card" && (
+              <div className="mt-4">
+                {/* credit card details */}
+
+                <div className="mt-6">
+                  {/* Enter your credit card number */}
+                  <div className="form-control">
+                    <h4 className="mb-2">クレジットカード番号入力</h4>
+                    <input
+                      {...register("name", { required: "Name is required" })}
+                      name="name"
+                      type="text"
+                      placeholder=""
+                      className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
+                    />
+                    {errors.name && (
+                      <span className="text-[#F43C3C]  text-sm mt-2">
+                        {errors.name.message}
+                      </span>
+                    )}
+                    {/* {error?.name && (
+<span className="text-[#F43C3C] text-sm mt-2">{error.name}</span>
+)} */}
+                  </div>
+
+                  {/* date of expiry */}
+                  <h4 className="mb-2">有効期限</h4>
+                  <div className="flex items-center gap-3">
+                    <div className="form-control">
+                      <input
+                        {...register("name", { required: "Name is required" })}
+                        name="name"
+                        type="text"
+                        placeholder=""
+                        className="input rounded-[5px] py-4 mt-1 mb-[9px] w-[68px] pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
+                      />
+                      {errors.name && (
+                        <span className="text-[#F43C3C]  text-sm mt-2">
+                          {errors.name.message}
+                        </span>
+                      )}
+                      {/* {error?.name && (
+<span className="text-[#F43C3C] text-sm mt-2">{error.name}</span>
+)} */}
+                    </div>
+                    <p>月</p>
+                    <div className="form-control">
+                      <input
+                        {...register("name", { required: "Name is required" })}
+                        name="name"
+                        type="text"
+                        placeholder=""
+                        className="input rounded-[5px] py-4 mt-1 mb-[9px] w-[94px] pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
+                      />
+                      {errors.name && (
+                        <span className="text-[#F43C3C]  text-sm mt-2">
+                          {errors.name.message}
+                        </span>
+                      )}
+                      {/* {error?.name && (
+<span className="text-[#F43C3C] text-sm mt-2">{error.name}</span>
+)} */}
+                    </div>
+                    <p>月</p>
+                  </div>
+                </div>
+
+                {/* Security Code */}
+
+                <div className="form-control">
+                  <h4 className="mb-2">セキュリティコード</h4>
+                  <input
+                    {...register("name", { required: "Name is required" })}
+                    name="name"
+                    type="text"
+                    placeholder=""
+                    className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
+                  />
+                  {errors.name && (
+                    <span className="text-[#F43C3C]  text-sm mt-2">
+                      {errors.name.message}
+                    </span>
+                  )}
+                  {/* {error?.name && (
+<span className="text-[#F43C3C] text-sm mt-2">{error.name}</span>
+)} */}
+                </div>
+
+                {/* Credit card holder name */}
+
+                <div className="form-control">
+                  <h4 className="mb-2">クレジットカード名義</h4>
+                  <input
+                    {...register("name", { required: "Name is required" })}
+                    name="name"
+                    type="text"
+                    placeholder=""
+                    className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
+                  />
+                  {errors.name && (
+                    <span className="text-[#F43C3C]  text-sm mt-2">
+                      {errors.name.message}
+                    </span>
+                  )}
+                  {/* {error?.name && (
+                    <span className="text-[#F43C3C] text-sm mt-2">{error.name}</span>
+                    )} */}
+                </div>
+              </div>
+            )}
           </div>
 
           <button className="mt-6 w-full">
