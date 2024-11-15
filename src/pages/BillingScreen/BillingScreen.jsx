@@ -9,14 +9,18 @@ import throw_wh from "../../assets/icons/throw_white.png";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import TitleBar from "../../components/TitleBar";
 import { useForm } from "react-hook-form";
+import UseGetByStaffName from "../../hooks/UseGetByStaffName";
 
 const BillingScreen = () => {
   const [data, setData] = useState([]);
   const [staffMember, setStaffMember] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
-  const { id } = useParams();
+  const { id, username } = useParams();
   const [selectedAmount, setSelectedAmount] = useState(null);
+  const { staff, refetch, isLoading, isError } = UseGetByStaffName(username);
+
+  console.log(staff)
 
   useEffect(() => {
     fetch("/stores.json")
@@ -72,18 +76,18 @@ const BillingScreen = () => {
         <div className="w-[416px] mx-auto">
           <div className="relative">
             <img
-              src={staffMember?.image}
-              alt={`${staffMember?.staff_name} image`}
+              src="https://shorturl.at/XqwIr"
+              alt={`${staffMember?.name} image`}
               className="object-cover rounded-lg w-[416px] h-[277px]"
             />
             <div className="absolute bottom-0 left-0 w-[416px] px-6 mb-[22px] p-2 text-white rounded-b-lg">
               <div className="flex justify-between items-center">
                 <div className="bg-white text-[#F06464] flex items-center gap-1 px-2 py-1 rounded-full shadow-md">
                   <IoMdStar />
-                  {staffMember?.rating}
+                  {staff?.score}
                 </div>
                 <h3 className="text-2xl font-bold">
-                  {staffMember?.staff_name}
+                  {staff?.name}
                 </h3>
                 <div
                   className="text-2xl font-bold cursor-pointer"
@@ -98,7 +102,7 @@ const BillingScreen = () => {
           <div className="bg-[#80D0E91A] pt-5 pb-[17px] px-[26px] w-[416px]">
             <h2 className="font-semibold text-lg mb-2">自己紹介</h2>
             <p className="font-light text-sm">
-              {staffMember?.self_introduction}
+              {staff?.introduction}
             </p>
           </div>
 

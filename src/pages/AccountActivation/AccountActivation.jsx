@@ -21,8 +21,12 @@ const AccountActivation = () => {
         const response = await axiosPublic.get(
           `/auth/users/acivate/${userId}/${token}`
         );
+        console.log(response.data);
 
-        if (response.data.detail === "Account Activated Successfully") {
+        if (
+          response.data.detail === "User Activated Successfully" ||
+          response.status === 200
+        ) {
           Swal.fire({
             title: "Success",
             text: response.data.detail || "Your account has been activated!",

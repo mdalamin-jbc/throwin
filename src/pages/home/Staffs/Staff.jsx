@@ -44,8 +44,8 @@ const Staff = () => {
       <div className="w-[416px] mx-auto">
         <div className="relative">
           <img
-            src={staffMember?.image}
-            alt={`${staffMember?.staff_name} image`}
+            src="https://shorturl.at/XqwIr"
+            alt={`${staffMember?.name} image`}
             className="object-cover rounded-lg w-[416px] h-[277px]"
           />
 
@@ -53,9 +53,9 @@ const Staff = () => {
             <div className="flex justify-between items-center">
               <div className="bg-white text-[#F06464] flex items-center gap-1 px-2 py-1 rounded-full shadow-md">
                 <IoMdStar />
-                {staffMember?.rating}
+                {staff?.score}
               </div>
-              <h3 className="text-2xl font-bold">{staffMember?.staff_name}</h3>
+              <h3 className="text-2xl font-bold">{staff?.name}</h3>
               <div
                 className="text-2xl font-bold cursor-pointer"
                 onClick={handleHeartToggle}
@@ -68,7 +68,7 @@ const Staff = () => {
 
         <div className="bg-[#80D0E91A]  pt-5 pb-[17px] px-[26px] w-[416px] ">
           <h2 className="font-semibold text-lg mb-2">自己紹介</h2>
-          <p className="font-light text-sm">{staffMember?.self_introduction}</p>
+          <p className="font-light text-sm">{staff?.introduction}</p>
         </div>
         <div className="w-[342px] mx-auto">
           <div className="mt-10  border-b-[2px] border-[#E0EAED]">
@@ -90,7 +90,7 @@ const Staff = () => {
               いつも頑張っている姿に感動してます！
             </h2>
           </div>
-          <Link to={`/staff/${id}/billing_screen`}>
+          <Link to={`/staff/${username}/billing_screen`}>
             <button className="mt-6">
               <ButtonPrimary
                 icon={<img className="mr-4" src={throws} alt="search icon" />}

@@ -28,6 +28,7 @@ import BillingScreen from "../pages/BillingScreen/BillingScreen";
 import DisplayName from "../pages/DisplayName/DisplayName";
 import ForgetPassword from "../pages/Login/forgetPassword";
 import ResetPassword from "../pages/Login/ResetPassword";
+import TermsAndConditions from "../pages/TermsAndConditions/TermsAndConditions";
 
 export const Routes = createBrowserRouter([
   {
@@ -121,7 +122,7 @@ export const Routes = createBrowserRouter([
         element: <Staff />,
       },
       {
-        path: "/staff/:id/billing_screen",
+        path: "/staff/:username/billing_screen",
         element: <BillingScreen />,
       },
       {
@@ -157,6 +158,10 @@ export const Routes = createBrowserRouter([
             <ChangePassword />
           </PrivateRoute>
         ),
+      },
+      {
+        path: "/terms",
+        element: <TermsAndConditions />,
       },
     ],
   },

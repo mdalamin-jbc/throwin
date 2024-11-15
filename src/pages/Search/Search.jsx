@@ -6,6 +6,7 @@ import ButtonPrimary from "../../components/ButtonPrimary";
 import { useState } from "react";
 import useAxiosPublic from "../../hooks/axiosPublic";
 import { useNavigate } from "react-router-dom";
+import UseGetByStaffName from "../../hooks/UseGetByStaffName";
 
 const Search = () => {
   const [searchByStuffName, setSearchByStuffName] = useState("");
@@ -14,6 +15,8 @@ const Search = () => {
   const [storeData, setStoreData] = useState(null);
   const [stuffData, setStuffData] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const { staff, isLoading, isError, refetch } =
+    UseGetByStaffName(searchByStuffName);
 
   const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
@@ -27,35 +30,23 @@ const Search = () => {
     setIsScannerOpen(true);
   };
 
-  // Handle stuff search
   const handleSearchStuff = async () => {
-    // navigate("/stuff_list");
     if (!searchByStuffName) {
       setErrorMessage("メンバー名は必須です");
       return;
     }
 
-    try {
-      const response = await axiosPublic.get(
-        `/auth/users/stuff/${searchByStuffName}`
-      );
+    refetch(); 
 
-      // Check if there are results
-      if (response.data && response.data.count > 0) {
-        console.log(response.data);
-        setStuffData(response.data.results); // Update state with stuff data
-        setErrorMessage(""); // Clear any previous error message
+    if (!isLoading && !isError) {
+      setStuffData(staff);
+      setErrorMessage("");
+      console.log("Fetched staff data:", staff);
 
-        // Redirect to stuff_list page with response data as state
-        // navigate("/stuff_list", {
-        //   state: { stuffData: response.data.results },
-        // });
-      } else {
-        setErrorMessage("No members found.");
-      }
-    } catch (error) {
-      setErrorMessage("Store not found or an error occurred.");
-      console.error("Error fetching store:", error);
+      // Navigate to the detail page with the staff data
+      navigate(`/staff/${staff.username}`);
+    } else if (isError) {
+      setErrorMessage("スタッフが見つかりませんでした。");
     }
   };
 

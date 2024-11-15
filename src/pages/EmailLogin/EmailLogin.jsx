@@ -87,7 +87,9 @@ const EmailLogin = () => {
           </form>
 
           <div className="flex font-hiragino text-xs text-[#626262A6] justify-center gap-2 mt-6 mb-2">
-            <button>利用規約</button>
+            <button>
+              <Link to="/terms">利用規約</Link>{" "}
+            </button>
             <p>|</p>
             <button>プライバシーポリシー</button>
           </div>

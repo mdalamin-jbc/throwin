@@ -65,9 +65,7 @@ const IndividualStores = () => {
                 {/* Name and Type in the bottom left corner */}
                 <div className="absolute bottom-0 left-0 bg-gradient-to-t from-black via-transparent to-transparent w-full p-2 text-white rounded-b-lg">
                   <h3 className="text-sm font-semibold">{staff.username}</h3>
-                  <p className="text-xs">
-                    {staff.introduction}食べることや笑うことが...
-                  </p>
+                  <p className="text-xs">{staff.introduction}</p>
                 </div>
               </div>
             </Link>

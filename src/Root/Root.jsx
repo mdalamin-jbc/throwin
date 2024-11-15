@@ -18,6 +18,7 @@ const Root = () => {
     "staff",
     "stuff_list",
     "displayName",
+    "terms",
   ].some((path) => location.pathname.includes(path));
 
   return (

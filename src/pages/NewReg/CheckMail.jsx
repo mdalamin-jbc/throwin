@@ -13,7 +13,7 @@ const CheckMail = () => {
             </h3>
             <p className="text-center w-[80%] mx-auto">
               Please check your email inbox and click on the provided link to
-              reset your password. If you don't recive email,
+              activate your account. If you don't recive email,
               <Link className="text-[#5297FF]">Click here to resend</Link>
             </p>
             <Link className="mt-6 text-[#5297FF]" to={"/login"}>
