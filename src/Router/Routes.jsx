@@ -29,6 +29,8 @@ import DisplayName from "../pages/DisplayName/DisplayName";
 import ForgetPassword from "../pages/Login/forgetPassword";
 import ResetPassword from "../pages/Login/ResetPassword";
 import TermsAndConditions from "../pages/TermsAndConditions/TermsAndConditions";
+import ChargeCompleted from "../pages/BillingScreen/ChargeCompleted";
+import History from "../pages/History/History";
 
 export const Routes = createBrowserRouter([
   {
@@ -126,8 +128,17 @@ export const Routes = createBrowserRouter([
         element: <BillingScreen />,
       },
       {
+        path: "/staff/:username/chargeCompleted",
+        element: <ChargeCompleted />,
+      },
+      {
         path: "/stuff_list",
         element: <MemberList />,
+      },
+      // History
+      {
+        path: "/history",
+        element: <History />,
       },
       // Profile
       {

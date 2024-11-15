@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import logo from "../../assets/images/home/logo.png";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { IoMdStar } from "react-icons/io";
 import { FaRegHeart, FaHeart, FaApple } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
@@ -10,6 +10,7 @@ import ButtonPrimary from "../../components/ButtonPrimary";
 import TitleBar from "../../components/TitleBar";
 import { useForm } from "react-hook-form";
 import UseGetByStaffName from "../../hooks/UseGetByStaffName";
+import { Helmet } from "react-helmet";
 
 const BillingScreen = () => {
   const [data, setData] = useState([]);
@@ -20,7 +21,7 @@ const BillingScreen = () => {
   const [selectedAmount, setSelectedAmount] = useState(null);
   const { staff, refetch, isLoading, isError } = UseGetByStaffName(username);
 
-  console.log(staff)
+  console.log(staff);
 
   useEffect(() => {
     fetch("/stores.json")
@@ -64,6 +65,9 @@ const BillingScreen = () => {
 
   return (
     <div>
+      <Helmet>
+        <title>Throwin | Billing Page</title>
+      </Helmet>
       <div>
         <TitleBar
           style="mb-0 w-full"
@@ -86,9 +90,7 @@ const BillingScreen = () => {
                   <IoMdStar />
                   {staff?.score}
                 </div>
-                <h3 className="text-2xl font-bold">
-                  {staff?.name}
-                </h3>
+                <h3 className="text-2xl font-bold">{staff?.name}</h3>
                 <div
                   className="text-2xl font-bold cursor-pointer"
                   onClick={handleHeartToggle}
@@ -101,9 +103,7 @@ const BillingScreen = () => {
 
           <div className="bg-[#80D0E91A] pt-5 pb-[17px] px-[26px] w-[416px]">
             <h2 className="font-semibold text-lg mb-2">自己紹介</h2>
-            <p className="font-light text-sm">
-              {staff?.introduction}
-            </p>
+            <p className="font-light text-sm">{staff?.introduction}</p>
           </div>
 
           <div className="flex justify-between items-center px-5 mt-[51px] border-b-2 pb-2 text-[#C0C0C0]">
@@ -308,20 +308,34 @@ const BillingScreen = () => {
             )}
           </div>
 
-          <button className="mt-6 w-full">
-            <ButtonPrimary
-              disabled={!selectedPaymentMethod}
-              icon={
-                <img
-                  className="mr-4"
-                  src={selectedPaymentMethod ? throws : throw_wh}
-                  alt="search icon"
-                />
-              }
-              btnText="スローインする！"
-              style={buttonStyle}
-            />
-          </button>
+          {selectedPaymentMethod ? (
+            <Link
+              to={`/staff/${username}/chargeCompleted`}
+              className="mt-6 w-full"
+              style={{ textDecoration: "none" }}
+            >
+              <ButtonPrimary
+                icon={
+                  <img
+                    className="mr-4"
+                    src={selectedPaymentMethod ? throws : throw_wh}
+                    alt="search icon"
+                  />
+                }
+                btnText="スローインする！"
+                style={buttonStyle}
+              />
+            </Link>
+          ) : (
+            <button className="mt-6 w-full" disabled>
+              <ButtonPrimary
+                disabled
+                icon={<img className="mr-4" src={throw_wh} alt="search icon" />}
+                btnText="スローインする！"
+                style={buttonStyle}
+              />
+            </button>
+          )}
         </div>
       </div>
     </div>
