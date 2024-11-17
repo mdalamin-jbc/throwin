@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import Root from "../Root/Root";
 import Home from "../pages/home/Home";
-import SocialLogin from "../pages/socialLogin/socialLogin";
+import SocialLogin from "../pages/SocialLogin/SocialLogin";
 import EmailLogin from "../pages/EmailLogin/EmailLogin";
 import Password from "../pages/Password/Password";
 import Onboarding from "../pages/Onboarding/Onboarding";
@@ -26,7 +26,7 @@ import Staff from "../pages/home/Staffs/Staff";
 import RegComplete from "../pages/RegComplete/RegComplete";
 import BillingScreen from "../pages/BillingScreen/BillingScreen";
 import DisplayName from "../pages/DisplayName/DisplayName";
-import ForgetPassword from "../pages/Login/forgetPassword";
+import ForgetPassword from "../pages/Login/ForgetPassword";
 import ResetPassword from "../pages/Login/ResetPassword";
 import TermsAndConditions from "../pages/TermsAndConditions/TermsAndConditions";
 import ChargeCompleted from "../pages/BillingScreen/ChargeCompleted";

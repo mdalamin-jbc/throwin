@@ -2,7 +2,7 @@ import axios from "axios";
 import { useAuth } from "./useAuth";
 
 const axiosPrivate = axios.create({
-  baseURL: "https://throwin-backend.onrender.com/api/v1",
+  baseURL: "https://throwin-backend.onrender.com",
   headers: {
     "Content-Type": "application/json",
   },
