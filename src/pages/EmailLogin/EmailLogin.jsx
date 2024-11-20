@@ -7,9 +7,11 @@ import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import useAxiosPublic from "../../hooks/axiosPublic";
 
+
 const EmailLogin = () => {
   const navigate = useNavigate();
   const axiosPublic = useAxiosPublic();
+  
 
   const handleClose = () => {
     navigate("/socialLogin");

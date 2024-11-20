@@ -4,39 +4,74 @@ import { IoMdStar } from "react-icons/io";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import ButtonPrimary from "../../../components/ButtonPrimary";
 import throws from "../../../assets/icons/Throw .png";
-import useAxiosPublic from "../../../hooks/axiosPublic";
 import UseGetByStaffName from "../../../hooks/UseGetByStaffName";
+import UseGetFavorite_stuff from "../../../hooks/UseGetFavorite_stuff";
+import useAxiosPrivate from "../../../hooks/axiousPrivate";
 
 const Staff = () => {
   const [data, setData] = useState([]);
   const [staffMember, setStaffMember] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
-  const { id, username } = useParams();
+  const [isProcessing, setIsProcessing] = useState(false); // Prevent rapid toggling
+  const { username } = useParams();
+  const { staff } = UseGetByStaffName(username);
+  const { favoriteStuffs, refetch } = UseGetFavorite_stuff();
 
-  const { staff, refetch, isLoading, isError } = UseGetByStaffName(username);
+  const axiosPrivate = useAxiosPrivate();
 
-  console.log(staff);
-
+  // Log favoriteStuffs for debugging
+  // console.log(staff);
+  // console.log(favoriteStuffs);
   useEffect(() => {
-    fetch("/stores.json")
-      .then((res) => {
-        if (!res.ok) throw new Error("Network response was not ok");
-        return res.json();
-      })
-      .then((data) => {
-        setData(data);
+    if (staff && favoriteStuffs.length > 0) {
+      const isStaffLiked = favoriteStuffs.some(
+        (favorite) => favorite.uid === staff.uid
+      );
+      setIsLiked(isStaffLiked);
+      // console.log(isStaffLiked);
+    }
+  }, [staff, favoriteStuffs]);
 
-        const matchedStaff = data
-          .flatMap((store) => store.items)
-          .find((item) => item._id === id);
+  // Set initial isLiked state based on whether the staff is already favorited
+  useEffect(() => {
+    if (favoriteStuffs?.some((item) => item.uid === staff?.uid)) {
+      setIsLiked(true);
+    }
+  }, [favoriteStuffs, staff]);
 
-        setStaffMember(matchedStaff);
-      })
-      .catch((error) => console.error("Error fetching JSON data:", error));
-  }, [id]);
+  // Toggle like state and send appropriate API requests
+  const handleHeartToggle = async () => {
+    if (isProcessing) return; // Prevent duplicate requests
+    setIsProcessing(true);
 
-  const handleHeartToggle = () => {
-    setIsLiked((prevIsLiked) => !prevIsLiked);
+    try {
+      const endpoint = `/auth/users/stuff/${staff.uid}/like`;
+      const response = isLiked
+        ? await axiosPrivate.delete(endpoint) // DELETE if currently liked
+        : await axiosPrivate.post(endpoint);
+      refetch();
+
+      console.log("API Response:", response);
+
+      if (
+        response.status === 200 ||
+        response.status === 201 ||
+        response.status === 204
+      ) {
+        setIsLiked((prev) => !prev); // Toggle the like state
+
+        await refetch(); // Ensure refetch is awaited to refresh data properly
+      } else {
+        throw new Error("Failed to update like status");
+      }
+    } catch (error) {
+      console.error(
+        "Error updating like status:",
+        error.response?.data?.detail || error.message
+      );
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return (
@@ -57,8 +92,10 @@ const Staff = () => {
               </div>
               <h3 className="text-2xl font-bold">{staff?.name}</h3>
               <div
-                className="text-2xl font-bold cursor-pointer"
-                onClick={handleHeartToggle}
+                className={`text-2xl font-bold cursor-pointer ${
+                  isProcessing ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+                onClick={!isProcessing ? handleHeartToggle : undefined}
               >
                 {isLiked ? <FaHeart color="red" /> : <FaRegHeart />}
               </div>
@@ -66,12 +103,12 @@ const Staff = () => {
           </div>
         </div>
 
-        <div className="bg-[#80D0E91A]  pt-5 pb-[17px] px-[26px] w-[416px] ">
+        <div className="bg-[#80D0E91A] pt-5 pb-[17px] px-[26px] w-[416px]">
           <h2 className="font-semibold text-lg mb-2">自己紹介</h2>
           <p className="font-light text-sm">{staff?.introduction}</p>
         </div>
         <div className="w-[342px] mx-auto">
-          <div className="mt-10  border-b-[2px] border-[#E0EAED]">
+          <div className="mt-10 border-b-[2px] border-[#E0EAED]">
             <h2 className="font-semibold text-lg text-[#49BBDF]">
               応援メッセージ
             </h2>
@@ -82,7 +119,7 @@ const Staff = () => {
               いつも頑張っている姿に感動してます！
             </h2>
           </div>
-          <div className="mt-4  border-b-[2px] border-[#E0EAED]">
+          <div className="mt-4 border-b-[2px] border-[#E0EAED]">
             <h4 className="flex justify-between mt-4 font-medium text-xs text-[#9C9C9C]">
               <span>ユーザーネーム：BDdD</span> <span>2024/2/1</span>
             </h4>

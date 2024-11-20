@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import logo from "../../assets/images/home/logo.png";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { IoMdStar } from "react-icons/io";
 import { FaRegHeart, FaHeart, FaApple } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
@@ -11,38 +11,84 @@ import TitleBar from "../../components/TitleBar";
 import { useForm } from "react-hook-form";
 import UseGetByStaffName from "../../hooks/UseGetByStaffName";
 import { Helmet } from "react-helmet";
+import useGetFavoriteStuff from "../../hooks/UseGetFavorite_stuff";
+import useAxiosPrivate from "../../hooks/axiousPrivate";
+import UseUserDetails from "../../hooks/UseUserDetails";
 
 const BillingScreen = () => {
   const [data, setData] = useState([]);
-  const [staffMember, setStaffMember] = useState(null);
+
   const [isLiked, setIsLiked] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false); // Prevent rapid toggling
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
-  const { id, username } = useParams();
-  const [selectedAmount, setSelectedAmount] = useState(null);
-  const { staff, refetch, isLoading, isError } = UseGetByStaffName(username);
+  const { username } = useParams();
+  const { staff } = UseGetByStaffName(username);
+  const { favoriteStuffs, refetch: favRefetch } = useGetFavoriteStuff();
+  const axiosPrivate = useAxiosPrivate();
 
-  console.log(staff);
+  const { userDetails } = UseUserDetails();
 
+  // console.log(userDetails);
+
+  // billing data
+  const [billingData, setBillingData] = useState({});
+  const [selectedAmount, setSelectedAmount] = useState("0");
+  const [message, setMessage] = useState("");
+
+  // console.log(staff);
+  const handleHeartToggle = async () => {
+    if (isProcessing) return; // Prevent duplicate requests
+    setIsProcessing(true);
+
+    try {
+      const endpoint = `/auth/users/stuff/${staff.uid}/like`;
+      const response = isLiked
+        ? await axiosPrivate.delete(endpoint) // DELETE if currently liked
+        : await axiosPrivate.post(endpoint);
+      favRefetch();
+
+      console.log("API Response:", response);
+
+      if (
+        response.status === 200 ||
+        response.status === 201 ||
+        response.status === 204
+      ) {
+        setIsLiked((prev) => !prev); // Toggle the like state
+
+        await favRefetch(); // Ensure refetch is awaited to refresh data properly
+      } else {
+        throw new Error("Failed to update like status");
+      }
+    } catch (error) {
+      console.error(
+        "Error updating like status:",
+        error.response?.data?.detail || error.message
+      );
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  // console.log(favoriteStuffs);
   useEffect(() => {
-    fetch("/stores.json")
-      .then((res) => {
-        if (!res.ok) throw new Error("Network response was not ok");
-        return res.json();
-      })
-      .then((data) => {
-        setData(data);
-        const matchedStaff = data
-          .flatMap((store) => store.items)
-          .find((item) => item._id === id);
-        setStaffMember(matchedStaff);
-      })
-      .catch((error) => console.error("Error fetching JSON data:", error));
-  }, [id]);
-
-  const handleHeartToggle = () => setIsLiked((prev) => !prev);
+    if (staff && favoriteStuffs.length > 0) {
+      const isStaffLiked = favoriteStuffs.some(
+        (favorite) => favorite.uid === staff.uid
+      );
+      setIsLiked(isStaffLiked);
+      // console.log(isStaffLiked);
+    }
+  }, [staff, favoriteStuffs]);
 
   const handlePaymentMethodChange = (event) =>
     setSelectedPaymentMethod(event.target.value);
+
+  const {
+    register,
+
+    formState: { errors },
+  } = useForm();
 
   const buttonStyle = `flex justify-center w-full rounded-full font-hiragino py-[12px] font-bold text-white ${
     selectedPaymentMethod
@@ -50,18 +96,64 @@ const BillingScreen = () => {
       : "bg-gray-400 text-gray-700"
   }`;
 
-  const amounts = ["1,000円", "3,000円", "5,000円", "10,000円"];
+  const amounts = ["1,000", "3,000", "5,000", "10,000"];
   const handleClick = (amount) => {
     setSelectedAmount(amount);
-    console.log(`Selected Amount: ${amount}`); // This logs the selected amount
+    // console.log(`Selected Amount: ${amount}`);
   };
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm();
+  const handleMessage = (event) => {
+    setMessage(event.target.value);
+    // console.log(event.target.value);
+  };
+
+  const persAmount = parseInt(selectedAmount.replace(/,/g, ""), 10);
+
+  useEffect(() => {
+    setBillingData({
+      staff: 145,
+      amount: persAmount,
+      user_nick_name: userDetails?.name || "Guest",
+      anonymous: false,
+    });
+  }, [persAmount, userDetails]);
+
+  const handlePayment = async () => {
+    try {
+      // Validate required fields before sending the request
+      if (!billingData.amount || billingData.amount <= 0) {
+        throw new Error("Payment amount must be greater than zero.");
+      }
+
+      if (!billingData.staff) {
+        throw new Error("Staff ID is required.");
+      }
+
+      console.log("Sending Billing Data:", billingData);
+
+      // Send the POST request
+      const response = await axiosPrivate.post(
+        `/payment_service/payments/`,
+        billingData
+      );
+      console.log(response);
+
+      // Check if the request succeeded
+      if (response.status === 200 || response.status === 201) {
+        console.log("Payment successful:", response.data);
+        alert("Payment processed successfully!");
+      } else {
+        throw new Error(`Unexpected response: ${response.status}`);
+      }
+    } catch (error) {
+      // Extract error details
+      const errorDetail = error.response?.data?.detail || error.message;
+
+      // Log and alert the error for better debugging
+      console.error("Error processing payment:", errorDetail);
+      alert(`Payment failed: ${errorDetail}`);
+    }
+  };
 
   return (
     <div>
@@ -71,6 +163,7 @@ const BillingScreen = () => {
       <div>
         <TitleBar
           style="mb-0 w-full"
+          title=""
           icon={
             <img className="w-[110px] items-center " src={logo} alt="logo " />
           }
@@ -81,7 +174,7 @@ const BillingScreen = () => {
           <div className="relative">
             <img
               src="https://shorturl.at/XqwIr"
-              alt={`${staffMember?.name} image`}
+              alt={`${staff?.name} `}
               className="object-cover rounded-lg w-[416px] h-[277px]"
             />
             <div className="absolute bottom-0 left-0 w-[416px] px-6 mb-[22px] p-2 text-white rounded-b-lg">
@@ -108,9 +201,10 @@ const BillingScreen = () => {
 
           <div className="flex justify-between items-center px-5 mt-[51px] border-b-2 pb-2 text-[#C0C0C0]">
             <h4 className="font-semibold text-sm">金額</h4>
-            <h3 className="font-semibold text-[28px]">0円</h3>
+            <h3 className="font-semibold text-[28px]">{selectedAmount}円</h3>
           </div>
 
+          {/* amount */}
           <div className="flex gap-[14px] overflow-x-auto scrollbar-hide font-semibold text-sm text-[#49BBDF]">
             {amounts.map((amount, index) => (
               <h4
@@ -123,7 +217,7 @@ const BillingScreen = () => {
                 : "border-[#49BBDF] text-[#49BBDF]"
             }`}
               >
-                {amount}
+                {amount}円
               </h4>
             ))}
           </div>
@@ -132,7 +226,10 @@ const BillingScreen = () => {
             <h2 className="font-semibold text-lg text-[#44495B] mb-2">
               応援メッセージ
             </h2>
+            {/* Message of Support */}
             <textarea
+              onChange={handleMessage}
+              value={message} // Bind state to the textarea
               className="border-[1px] rounded-md w-full h-[200px] px-5 py-3 text-[#C0C0C0] font-light text-sm"
               placeholder="メッセージを書く..."
             />
@@ -142,7 +239,7 @@ const BillingScreen = () => {
             <h2 className="font-semibold text-lg">決済方法</h2>
             <h2 className="font-bold text-sm my-4">スマホ決済</h2>
           </div>
-
+          {/* google pay and apple pay */}
           <div className="flex gap-[9px] text-3xl font-semibold">
             <h3 className="flex items-center border rounded px-3 py-2 gap-1">
               <FaApple />
@@ -196,121 +293,136 @@ const BillingScreen = () => {
             </div>
 
             {/* Conditionally render the form when "new-card" is selected */}
-            {selectedPaymentMethod === "new-card" && (
-              <div className="mt-4">
-                {/* credit card details */}
-
-                <div className="mt-6">
-                  {/* Enter your credit card number */}
-                  <div className="form-control">
-                    <h4 className="mb-2">クレジットカード番号入力</h4>
-                    <input
-                      {...register("name", { required: "Name is required" })}
-                      name="name"
-                      type="text"
-                      placeholder=""
-                      className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
-                    />
-                    {errors.name && (
-                      <span className="text-[#F43C3C]  text-sm mt-2">
-                        {errors.name.message}
-                      </span>
-                    )}
-                    {/* {error?.name && (
-<span className="text-[#F43C3C] text-sm mt-2">{error.name}</span>
-)} */}
-                  </div>
-
-                  {/* date of expiry */}
-                  <h4 className="mb-2">有効期限</h4>
-                  <div className="flex items-center gap-3">
+            <div>
+              {selectedPaymentMethod === "new-card" && (
+                <div className="mt-4">
+                  {/* Credit Card Details */}
+                  <div className="mt-6">
+                    {/* Credit Card Number */}
                     <div className="form-control">
+                      <h4 className="mb-2">クレジットカード番号入力</h4>
                       <input
-                        {...register("name", { required: "Name is required" })}
-                        name="name"
+                        {...register("cardNumber", {
+                          required: "カード番号は必須です",
+                          pattern: {
+                            value: /^[0-9]{16}$/,
+                            message: "有効な16桁のカード番号を入力してください",
+                          },
+                        })}
+                        name="cardNumber"
                         type="text"
-                        placeholder=""
-                        className="input rounded-[5px] py-4 mt-1 mb-[9px] w-[68px] pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
+                        placeholder="1234 5678 1234 5678"
+                        className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
                       />
-                      {errors.name && (
-                        <span className="text-[#F43C3C]  text-sm mt-2">
-                          {errors.name.message}
+                      {errors.cardNumber && (
+                        <span className="text-[#F43C3C] text-sm mt-2">
+                          {errors.cardNumber.message}
                         </span>
                       )}
-                      {/* {error?.name && (
-<span className="text-[#F43C3C] text-sm mt-2">{error.name}</span>
-)} */}
                     </div>
-                    <p>月</p>
+
+                    {/* Expiry Date */}
+                    <h4 className="mb-2">有効期限</h4>
+                    <div className="flex items-center gap-3">
+                      <div className="form-control">
+                        <input
+                          {...register("expiryMonth", {
+                            required: "月は必須です",
+                            pattern: {
+                              value: /^(0[1-9]|1[0-2])$/,
+                              message: "有効な月 (01-12) を入力してください",
+                            },
+                          })}
+                          name="expiryMonth"
+                          type="text"
+                          placeholder="MM"
+                          className="input rounded-[5px] py-4 mt-1 mb-[9px] w-[68px] pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
+                        />
+                        {errors.expiryMonth && (
+                          <span className="text-[#F43C3C] text-sm mt-2">
+                            {errors.expiryMonth.message}
+                          </span>
+                        )}
+                      </div>
+                      <p>月</p>
+                      <div className="form-control">
+                        <input
+                          {...register("expiryYear", {
+                            required: "年は必須です",
+                            pattern: {
+                              value: /^[0-9]{2}$/,
+                              message: "有効な年 (YY) を入力してください",
+                            },
+                          })}
+                          name="expiryYear"
+                          type="text"
+                          placeholder="YY"
+                          className="input rounded-[5px] py-4 mt-1 mb-[9px] w-[94px] pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
+                        />
+                        {errors.expiryYear && (
+                          <span className="text-[#F43C3C] text-sm mt-2">
+                            {errors.expiryYear.message}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Security Code */}
                     <div className="form-control">
+                      <h4 className="mb-2">セキュリティコード</h4>
                       <input
-                        {...register("name", { required: "Name is required" })}
-                        name="name"
+                        {...register("securityCode", {
+                          required: "セキュリティコードは必須です",
+                          pattern: {
+                            value: /^[0-9]{3,4}$/,
+                            message:
+                              "有効なセキュリティコードを入力してください",
+                          },
+                        })}
+                        name="securityCode"
                         type="text"
-                        placeholder=""
-                        className="input rounded-[5px] py-4 mt-1 mb-[9px] w-[94px] pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
+                        placeholder="123"
+                        className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
                       />
-                      {errors.name && (
-                        <span className="text-[#F43C3C]  text-sm mt-2">
-                          {errors.name.message}
+                      {errors.securityCode && (
+                        <span className="text-[#F43C3C] text-sm mt-2">
+                          {errors.securityCode.message}
                         </span>
                       )}
-                      {/* {error?.name && (
-<span className="text-[#F43C3C] text-sm mt-2">{error.name}</span>
-)} */}
                     </div>
-                    <p>月</p>
+
+                    {/* Cardholder Name */}
+                    <div className="form-control">
+                      <h4 className="mb-2">クレジットカード名義</h4>
+                      <input
+                        {...register("cardHolder", {
+                          required: "カード名義は必須です",
+                          pattern: {
+                            value: /^[a-zA-Z\s]+$/,
+                            message: "英文字で名前を入力してください",
+                          },
+                        })}
+                        name="cardHolder"
+                        type="text"
+                        placeholder="名前"
+                        className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
+                      />
+                      {errors.cardHolder && (
+                        <span className="text-[#F43C3C] text-sm mt-2">
+                          {errors.cardHolder.message}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
-
-                {/* Security Code */}
-
-                <div className="form-control">
-                  <h4 className="mb-2">セキュリティコード</h4>
-                  <input
-                    {...register("name", { required: "Name is required" })}
-                    name="name"
-                    type="text"
-                    placeholder=""
-                    className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
-                  />
-                  {errors.name && (
-                    <span className="text-[#F43C3C]  text-sm mt-2">
-                      {errors.name.message}
-                    </span>
-                  )}
-                  {/* {error?.name && (
-<span className="text-[#F43C3C] text-sm mt-2">{error.name}</span>
-)} */}
-                </div>
-
-                {/* Credit card holder name */}
-
-                <div className="form-control">
-                  <h4 className="mb-2">クレジットカード名義</h4>
-                  <input
-                    {...register("name", { required: "Name is required" })}
-                    name="name"
-                    type="text"
-                    placeholder=""
-                    className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
-                  />
-                  {errors.name && (
-                    <span className="text-[#F43C3C]  text-sm mt-2">
-                      {errors.name.message}
-                    </span>
-                  )}
-                  {/* {error?.name && (
-                    <span className="text-[#F43C3C] text-sm mt-2">{error.name}</span>
-                    )} */}
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
           {selectedPaymentMethod ? (
-            <Link
-              to={`/staff/${username}/chargeCompleted`}
+            <button
+              onClick={handlePayment}
+              // to={`/staff/${username}/chargeCompleted`}
               className="mt-6 w-full"
               style={{ textDecoration: "none" }}
             >
@@ -325,7 +437,7 @@ const BillingScreen = () => {
                 btnText="スローインする！"
                 style={buttonStyle}
               />
-            </Link>
+            </button>
           ) : (
             <button className="mt-6 w-full" disabled>
               <ButtonPrimary

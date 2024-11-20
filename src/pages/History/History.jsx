@@ -1,7 +1,10 @@
 import { Helmet } from "react-helmet";
 import TitleBar from "../../components/TitleBar";
+import UseGetPaymentHistory from "../../hooks/UseGetPaymentHistory";
 
 const History = () => {
+  const { paymentHistory } = UseGetPaymentHistory();
+  console.log(paymentHistory);
   return (
     <div>
       <div>
@@ -25,7 +28,6 @@ const History = () => {
               </p>
             </div>
             <div className="flex flex-col items-end">
-              
               <h3 className="font-bold text-sm ">5,000円</h3>
             </div>
           </div>
@@ -44,7 +46,6 @@ const History = () => {
               </p>
             </div>
             <div className="flex flex-col items-end">
-              
               <h3 className="font-bold text-sm ">5,000円</h3>
             </div>
           </div>
@@ -63,7 +64,6 @@ const History = () => {
               </p>
             </div>
             <div className="flex flex-col items-end">
-              
               <h3 className="font-bold text-sm ">5,000円</h3>
             </div>
           </div>

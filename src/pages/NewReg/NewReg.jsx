@@ -35,21 +35,22 @@ const NewReg = () => {
       password: data.password,
       confirm_password: data.confirmPassword,
     };
-
+  
     console.log("Request data:", requestData);
-
+  
     try {
       const response = await axiosReg.post(
         "/auth/register/consumer",
         requestData
       );
       console.log("Response data:", response.data);
-
+  
       if (
         response.data.msg ===
         "User Created Successfully, Please check your email to activate your account in 48 hours."
       ) {
-        navigate("/mail_check");
+        // Passing the email to the mail_check page
+        navigate("/mail_check", { state: { email: email } });
       } else {
         setErrorMessage("Registration failed. Please try again.");
       }
@@ -71,6 +72,7 @@ const NewReg = () => {
       console.error("Registration error:", error);
     }
   };
+  
 
   return (
     <div

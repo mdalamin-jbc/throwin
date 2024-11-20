@@ -99,16 +99,7 @@ const UserProfile = () => {
           </div>
         </Link>
         {/* Logout */}
-        {/* <div
-          onClick={handleLogout}
-          className="flex justify-between border-b-[1.5px] my-5 hover:cursor-pointer"
-        >
-          <h4>ログアウト</h4>
-          <h4 className="flex items-center text-[#9F9999] mb-5">
-            <span className="text-sm font-semibold"> </span>
-            <GoChevronRight className="text-3xl " />
-          </h4>
-        </div> */}
+        
 
         {/* -------------------------------------------------------------------------------------- */}
 

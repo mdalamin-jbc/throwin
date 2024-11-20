@@ -31,7 +31,8 @@ const ForgetPassword = () => {
         },
         {
           headers: {
-            "X-CSRFTOKEN": "FxK7D1PMlrToHLyOS8xXkTp0mJfDZLfGub7UfeaNcPh6j32wUWHYtmksXTazlM0f", // CSRF Token
+            "X-CSRFTOKEN":
+              "FxK7D1PMlrToHLyOS8xXkTp0mJfDZLfGub7UfeaNcPh6j32wUWHYtmksXTazlM0f", // CSRF Token
           },
         }
       );
@@ -39,7 +40,8 @@ const ForgetPassword = () => {
       // Display success message from API response
       Swal.fire({
         title: "Success",
-        text: response.data.detail || "Password reset request sent successfully!",
+        text:
+          response.data.detail || "Password reset request sent successfully!",
         icon: "success",
         confirmButtonText: "OK",
       }).then(() => {

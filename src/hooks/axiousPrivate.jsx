@@ -6,18 +6,19 @@ const axiosPrivate = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, 
+  withCredentials: true,
 });
 
 const useAxiosPrivate = () => {
-  const { user } = useAuth(); 
-  const accessToken = user?.access;  
+  const { user } = useAuth();
+  // console.log(user)
+  const accessToken = user?.access;
 
   // Interceptor to add Authorization header
   axiosPrivate.interceptors.request.use(
     (config) => {
       if (accessToken) {
-        config.headers.Authorization = `Bearer ${accessToken}`;  
+        config.headers.Authorization = `Bearer ${accessToken}`;
       }
       return config;
     },

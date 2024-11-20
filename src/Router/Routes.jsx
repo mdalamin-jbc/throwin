@@ -31,6 +31,7 @@ import ResetPassword from "../pages/Login/ResetPassword";
 import TermsAndConditions from "../pages/TermsAndConditions/TermsAndConditions";
 import ChargeCompleted from "../pages/BillingScreen/ChargeCompleted";
 import History from "../pages/History/History";
+import VerifyEmail from "../pages/Profile/VerifyEmail";
 
 export const Routes = createBrowserRouter([
   {
@@ -157,6 +158,10 @@ export const Routes = createBrowserRouter([
             <ChangeEmail />
           </PrivateRoute>
         ),
+      },
+      {
+        path: "verify-email/:token",
+        element: <VerifyEmail />,
       },
       {
         path: "myPage/display_name",
