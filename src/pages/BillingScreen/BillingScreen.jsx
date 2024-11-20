@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import logo from "../../assets/images/home/logo.png";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { IoMdStar } from "react-icons/io";
 import { FaRegHeart, FaHeart, FaApple } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
@@ -14,6 +14,7 @@ import { Helmet } from "react-helmet";
 import useGetFavoriteStuff from "../../hooks/UseGetFavorite_stuff";
 import useAxiosPrivate from "../../hooks/axiousPrivate";
 import UseUserDetails from "../../hooks/UseUserDetails";
+import Swal from "sweetalert2";
 
 const BillingScreen = () => {
   const [data, setData] = useState([]);
@@ -28,6 +29,8 @@ const BillingScreen = () => {
 
   const { userDetails } = UseUserDetails();
 
+  const navigate = useNavigate();
+
   // console.log(userDetails);
 
   // billing data
@@ -35,7 +38,7 @@ const BillingScreen = () => {
   const [selectedAmount, setSelectedAmount] = useState("0");
   const [message, setMessage] = useState("");
 
-  // console.log(staff);
+  console.log(staff);
   const handleHeartToggle = async () => {
     if (isProcessing) return; // Prevent duplicate requests
     setIsProcessing(true);
@@ -141,7 +144,15 @@ const BillingScreen = () => {
       // Check if the request succeeded
       if (response.status === 200 || response.status === 201) {
         console.log("Payment successful:", response.data);
-        alert("Payment processed successfully!");
+
+        // Show success message with SweetAlert
+        Swal.fire({
+          icon: "success",
+          title: "Payment Successful!",
+          text: `Your Transaction Id is : ${response.data.transaction_id}`,
+          confirmButtonText: "OK",
+        });
+        navigate(`/staff/${username}/chargeCompleted`);
       } else {
         throw new Error(`Unexpected response: ${response.status}`);
       }
@@ -151,10 +162,16 @@ const BillingScreen = () => {
 
       // Log and alert the error for better debugging
       console.error("Error processing payment:", errorDetail);
-      alert(`Payment failed: ${errorDetail}`);
+
+      // Show error message with SweetAlert
+      Swal.fire({
+        icon: "error",
+        title: "Payment Failed!",
+        text: errorDetail,
+        confirmButtonText: "OK",
+      });
     }
   };
-
   return (
     <div>
       <Helmet>
@@ -420,24 +437,68 @@ const BillingScreen = () => {
           </div>
 
           {selectedPaymentMethod ? (
-            <button
-              onClick={handlePayment}
-              // to={`/staff/${username}/chargeCompleted`}
-              className="mt-6 w-full"
-              style={{ textDecoration: "none" }}
-            >
-              <ButtonPrimary
-                icon={
-                  <img
-                    className="mr-4"
-                    src={selectedPaymentMethod ? throws : throw_wh}
-                    alt="search icon"
+            <>
+              {/* ------------------------------------- */}
+              <div className="text-[#44495B] p-0">
+                {/* Open the modal using document.getElementById('ID').showModal() method */}
+                <button
+                  className="w-full"
+                  onClick={() =>
+                    document.getElementById("my_modal_1").showModal()
+                  }
+                >
+                  <ButtonPrimary
+                    icon={
+                      <img
+                        className="mr-4"
+                        src={selectedPaymentMethod ? throws : throw_wh}
+                        alt="search icon"
+                      />
+                    }
+                    btnText="スローインする！"
+                    style={buttonStyle}
                   />
-                }
-                btnText="スローインする！"
-                style={buttonStyle}
-              />
-            </button>
+                </button>
+
+                <dialog
+                  id="my_modal_1"
+                  className="modal max-w-[343px] mx-auto "
+                >
+                  <div className="modal-box p-0 ">
+                    <div className="px-10 pt-10 pb-6">
+                      <p className=" text-lg  ">
+                        <span className="underline ">{staff.name}</span>{" "}
+                        に、スローインします。 よろしいですか？
+                      </p>
+                      <p>金額 : {selectedAmount}円</p>
+                      <div className="flex gap-1">
+                        <p>決済方法 : VISA </p>
+                        <p>下4桁 : 1111 </p>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-center gap-4 border-t-2">
+                      <form method="dialog">
+                        <button className="px-4 py-4  border-r-2 border-gray-300 flex items-center justify-center">
+                          <span className="mr-10">キャンセル</span>{" "}
+                        </button>
+                      </form>
+                      <form method="dialog">
+                        <button
+                          // onClick={handleLogout}
+                          className="px-4 py-4 text-blue-500 flex items-center justify-center"
+                        >
+                          <span onClick={handlePayment} className="ml-8">
+                            確定
+                          </span>{" "}
+                          {/* Add some spacing between text and border */}
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </dialog>
+              </div>
+            </>
           ) : (
             <button className="mt-6 w-full" disabled>
               <ButtonPrimary
