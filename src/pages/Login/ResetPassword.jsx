@@ -6,6 +6,7 @@ import socialBg from "../../assets/images/socialLogin/social bg.jpeg";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import useAxiosReg from "../../hooks/axiosReg";
 import { useState } from "react";
+import Swal from "sweetalert2";
 
 const ResetPassword = () => {
   const { userId, token } = useParams();
@@ -41,7 +42,15 @@ const ResetPassword = () => {
 
       // Success response handling
       if (response.data.detail === "Password reset successful") {
-        navigate("/login"); // Redirect to login page after successful reset
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Your password has been reset successfully!",
+          confirmButtonText: "OK",
+        }).then(() => {
+          console.log(response);
+          navigate("/login"); // Redirect to login page after the alert
+        });
       } else {
         setErrorMessage("Password reset failed. Please try again.");
       }
