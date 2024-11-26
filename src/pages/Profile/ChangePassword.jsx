@@ -7,6 +7,7 @@ import { Helmet } from "react-helmet";
 import UseUserDetails from "../../hooks/UseUserDetails";
 import useAxiosPrivate from "../../hooks/axiousPrivate";
 import { useNavigate } from "react-router-dom";
+import { RiArrowLeftSLine } from "react-icons/ri";
 
 const ChangePassword = () => {
   const { userDetails } = UseUserDetails();
@@ -64,8 +65,16 @@ const ChangePassword = () => {
       <Helmet>
         <title>Throwin | Change Password</title>
       </Helmet>
-      <TitleBar title={"マイページ"} />
-      <div className="w-full max-w-[380px] mx-auto">
+      <TitleBar
+        back={
+          <RiArrowLeftSLine
+            onClick={() => navigate(-1)}
+            style={{ cursor: "pointer" }}
+          />
+        }
+        title={"マイページ"}
+      />
+      <div className="w-full max-w-[430px] mx-auto">
         <h3 className="text-center font-hiragino font-bold text-lg text-[#44495B] mt-[59px] ">
           パスワードの変更
         </h3>

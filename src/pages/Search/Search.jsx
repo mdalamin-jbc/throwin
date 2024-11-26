@@ -72,7 +72,7 @@ const Search = () => {
   };
 
   return (
-    <div className="w-[390px] mx-auto  mb-[120px]">
+    <div className="min-w-[375px] mx-auto  mb-[120px]">
       <TitleBar title={"スタッフを探す"} />
 
       {/* QR Scanner Section */}

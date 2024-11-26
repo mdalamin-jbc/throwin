@@ -25,8 +25,8 @@ const IndividualStores = () => {
   }, []);
 
   return (
-    <div className="w-[430px] mx-auto mb-28">
-      <div className="mb-8 relative">
+    <div className="min-w-[375px] mx-auto mb-28">
+      <div className="max-w-[430px] mx-auto mb-8 relative">
         {/* Store Image with Gradient Overlay and Store Name */}
         <div className="relative">
           <img

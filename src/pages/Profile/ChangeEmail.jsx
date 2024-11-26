@@ -3,10 +3,13 @@ import TitleBar from "../../components/TitleBar";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import UseUserDetails from "../../hooks/UseUserDetails";
 import useAxiosPrivate from "../../hooks/axiousPrivate";
+import { RiArrowLeftSLine } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
 
 const ChangeEmail = () => {
   const { userDetails } = UseUserDetails();
   const axiosPrivate = useAxiosPrivate();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -30,7 +33,15 @@ const ChangeEmail = () => {
 
   return (
     <div>
-      <TitleBar title={"マイページ"} />
+      <TitleBar
+        back={
+          <RiArrowLeftSLine
+            onClick={() => navigate(-1)}
+            style={{ cursor: "pointer" }}
+          />
+        }
+        title={"マイページ"}
+      />
       <div className="w-full max-w-[380px] mx-auto">
         <h3 className="text-center font-hiragino font-bold text-lg text-[#44495B] mt-[59px]">
           メールアドレスの変更

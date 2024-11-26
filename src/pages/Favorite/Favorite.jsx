@@ -2,10 +2,46 @@ import TitleBar from "../../components/TitleBar";
 import { FaHeart } from "react-icons/fa";
 import useGetFavoriteStuff from "../../hooks/UseGetFavorite_stuff";
 import Staff from "../home/Staffs/Staff";
+import useAxiosPrivate from "../../hooks/axiousPrivate";
 
 const Favorite = () => {
   const { favoriteStuffs } = useGetFavoriteStuff();
+  const axiosPrivate = useAxiosPrivate();
   console.log(favoriteStuffs);
+
+  const handleHeartToggle = async () => {
+    if (isProcessing) return; // Prevent duplicate requests
+    setIsProcessing(true);
+
+    try {
+      const endpoint = `/auth/users/stuff/${staff.uid}/like`;
+      const response = isLiked
+        ? await axiosPrivate.delete(endpoint) // DELETE if currently liked
+        : await axiosPrivate.post(endpoint);
+      refetch();
+
+      console.log("API Response:", response);
+
+      if (
+        response.status === 200 ||
+        response.status === 201 ||
+        response.status === 204
+      ) {
+        setIsLiked((prev) => !prev); // Toggle the like state
+
+        await refetch(); // Ensure refetch is awaited to refresh data properly
+      } else {
+        throw new Error("Failed to update like status");
+      }
+    } catch (error) {
+      console.error(
+        "Error updating like status:",
+        error.response?.data?.detail || error.message
+      );
+    } finally {
+      setIsProcessing(false);
+    }
+  };
   return (
     <div className="mb-[120px] ">
       <div>

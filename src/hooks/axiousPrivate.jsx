@@ -11,8 +11,8 @@ const axiosPrivate = axios.create({
 
 const useAxiosPrivate = () => {
   const { user } = useAuth();
-  // console.log(user)
   const accessToken = user?.access;
+  // console.log(accessToken)
 
   // Interceptor to add Authorization header
   axiosPrivate.interceptors.request.use(

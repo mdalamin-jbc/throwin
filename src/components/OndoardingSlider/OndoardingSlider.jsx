@@ -2,9 +2,8 @@ import img from "../../assets/images/slider/Group 633190.png";
 import bgImage from "../../assets/images/slider/Rectangle 1.png";
 import effect from "../../assets/images/slider/effect.png";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
 
 // Import Swiper styles
 import "swiper/css";
@@ -15,6 +14,9 @@ import "swiper/css/navigation";
 import { Mousewheel, Pagination, Navigation, Keyboard } from "swiper/modules";
 import ButtonPrimary from "../ButtonPrimary";
 import { Helmet } from "react-helmet";
+
+import useWindowSize from "react-use/lib/useWindowSize";
+import Confetti from "react-confetti";
 
 const OnboardingSlider = () => {
   const swiperRef = useRef(null);
@@ -30,6 +32,7 @@ const OnboardingSlider = () => {
       }
     }
   };
+  const { width, height } = useWindowSize();
 
   return (
     <div className="relative min-h-screen w-full flex justify-center items-center">
@@ -48,6 +51,7 @@ const OnboardingSlider = () => {
         }}
       >
         <div className="">
+          <Confetti width={width} height={height} />
           <div className="pt-6 md:pt-0 md:mt-20 relative">
             <Swiper
               cssMode={true}
@@ -64,13 +68,10 @@ const OnboardingSlider = () => {
               }}
               onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
             >
-              <SwiperSlide className="flex justify-center items-center h-full w-full px-6 md:px-16">
+              <SwiperSlide className="flex justify-center items-center h-full w-full px-1 md:px-16">
                 <div className="relative">
-                  <img
-                    src={effect}
-                    alt="Effect"
-                    className="absolute w-full md:w-auto -mt-3"
-                  />
+                  {/* <img src={effect} alt="Effect" className="absolute w-full " /> */}
+
                   <div className="mt-6">
                     <h2 className="font-hiragino font-medium text-lg text-[#49BBDF] flex gap-3 justify-center mb-3">
                       \ <span>はじめに</span> /
@@ -90,11 +91,11 @@ const OnboardingSlider = () => {
 
               <SwiperSlide className="flex justify-center items-center h-full w-full px-6 md:px-16 mt-[10px]">
                 <div className="relative">
-                  <img
+                  {/* <img
                     src={effect}
                     alt="Effect"
                     className="absolute w-full md:w-auto -mt-3"
-                  />
+                  /> */}
                   <div className="mt-6">
                     <h3 className="grid font-hiragino font-semibold text-[19px] text-[#44495B] leading-8 mb-11">
                       元気や、感動を
@@ -115,11 +116,11 @@ const OnboardingSlider = () => {
 
               <SwiperSlide className="flex justify-center items-center h-full w-full px-6 md:px-16 mt-[39px]">
                 <div className="relative">
-                  <img
+                  {/* <img
                     src={effect}
                     alt="Effect"
                     className="absolute w-full md:w-auto -mt-3"
-                  />
+                  /> */}
                   <div className="mt-6">
                     <h3 className="grid font-hiragino font-semibold text-[19px] text-[#44495B] leading-8 mb-11">
                       まずはあなたの <br />

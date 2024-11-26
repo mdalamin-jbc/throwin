@@ -75,16 +75,16 @@ const Staff = () => {
   };
 
   return (
-    <div className="w-[430px] mx-auto mb-[120px]">
-      <div className="w-[416px] mx-auto">
+    <div className="min-w-[375px] mx-auto mb-[120px]">
+      <div className="max-w-[416px] mx-auto">
         <div className="relative">
           <img
             src="https://shorturl.at/XqwIr"
             alt={`${staffMember?.name} image`}
-            className="object-cover rounded-lg w-[416px] h-[277px]"
+            className="object-cover rounded-lg w-full h-[277px]"
           />
 
-          <div className="absolute bottom-0 left-0 w-[416px] px-6 mb-[22px] p-2 text-white rounded-b-lg">
+          <div className="absolute bottom-0 left-0 w-full px-6 mb-[22px] p-2 text-white rounded-b-lg">
             <div className="flex justify-between items-center">
               <div className="bg-white text-[#F06464] flex items-center gap-1 px-2 py-1 rounded-full shadow-md">
                 <IoMdStar />
@@ -103,7 +103,7 @@ const Staff = () => {
           </div>
         </div>
 
-        <div className="bg-[#80D0E91A] pt-5 pb-[17px] px-[26px] w-[416px]">
+        <div className="bg-[#80D0E91A] pt-5 pb-[17px] px-[26px] max-w-[416px]">
           <h2 className="font-semibold text-lg mb-2">自己紹介</h2>
           <p className="font-light text-sm">{staff?.introduction}</p>
         </div>
