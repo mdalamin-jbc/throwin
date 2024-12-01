@@ -3,9 +3,11 @@ import { FaHeart } from "react-icons/fa";
 import useGetFavoriteStuff from "../../hooks/UseGetFavorite_stuff";
 import Staff from "../home/Staffs/Staff";
 import useAxiosPrivate from "../../hooks/axiousPrivate";
+import { useState } from "react";
 
 const Favorite = () => {
-  const { favoriteStuffs } = useGetFavoriteStuff();
+  const [isLiked, setIsLiked] = useState(false);
+  const { favoriteStuffs,refetch } = useGetFavoriteStuff();
   const axiosPrivate = useAxiosPrivate();
   console.log(favoriteStuffs);
 
@@ -14,7 +16,7 @@ const Favorite = () => {
     setIsProcessing(true);
 
     try {
-      const endpoint = `/auth/users/stuff/${staff.uid}/like`;
+      const endpoint = `/auth/users/stuff/${favoriteStuffs.uid}/like`;
       const response = isLiked
         ? await axiosPrivate.delete(endpoint) // DELETE if currently liked
         : await axiosPrivate.post(endpoint);

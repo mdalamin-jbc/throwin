@@ -32,7 +32,7 @@ const BillingScreen = () => {
 
   const navigate = useNavigate();
 
-  // console.log(userDetails);
+  console.log(userDetails);
 
   // billing data
   const [billingData, setBillingData] = useState({});

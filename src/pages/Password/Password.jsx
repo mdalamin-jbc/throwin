@@ -30,7 +30,7 @@ const RegistrationForm = () => {
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
-        'https://throwin-backend.onrender.com/api/v1/auth/register/consumer',
+        'http://54.238.181.96:8000/api/v1/auth/register/consumer',
         {
           email: formData.email,
           password: formData.password,

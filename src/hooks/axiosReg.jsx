@@ -1,11 +1,10 @@
 // axiosReg.js
 import axios from "axios";
-import Cookies from "js-cookie";
 
 const axiosReg = axios.create({
-  baseURL: "https://throwin-backend.onrender.com",
+  baseURL: "http://54.238.181.96:8000",
   headers: {
-    'Accept': 'application/json',
+    Accept: "application/json",
     "Content-Type": "application/json",
   },
   withCredentials: true,

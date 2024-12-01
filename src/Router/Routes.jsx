@@ -32,6 +32,7 @@ import TermsAndConditions from "../pages/TermsAndConditions/TermsAndConditions";
 import ChargeCompleted from "../pages/BillingScreen/ChargeCompleted";
 import History from "../pages/History/History";
 import VerifyEmail from "../pages/Profile/VerifyEmail";
+import Dashboard from "../pages/Dashboard/Dashboard";
 
 export const Routes = createBrowserRouter([
   {
@@ -178,6 +179,11 @@ export const Routes = createBrowserRouter([
       {
         path: "/terms",
         element: <TermsAndConditions />,
+      },
+      // -------------------------------------dashboard
+      {
+        path: "dashboard",
+        element: <Dashboard />,
       },
     ],
   },
