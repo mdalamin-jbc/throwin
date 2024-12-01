@@ -109,13 +109,16 @@ const UserProfile = () => {
           コンテンツとサポート
         </h3>
         {/* Content and Support options */}
-        <div className="flex justify-between border-b-[1.5px] my-5">
-          <h4>表示名</h4>
-          <h4 className="flex items-center text-[#9F9999] mb-5">
-            <span className="text-sm font-semibold"></span>
-            <GoChevronRight className="text-3xl " />
-          </h4>
-        </div>
+        <Link to="notice">
+          <div className="flex justify-between border-b-[1.5px] my-5 ">
+            <h4>お知らせ</h4>
+            <h4 className="flex items-center text-[#9F9999] mb-5">
+              <span className="text-sm font-semibold"></span>
+              <GoChevronRight className="text-3xl " />
+            </h4>
+          </div>
+        </Link>
+
         {/* Report an issue */}
         <div className="flex justify-between border-b-[1.5px] my-5">
           <h4>問題を報告</h4>

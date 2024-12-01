@@ -33,6 +33,7 @@ import ChargeCompleted from "../pages/BillingScreen/ChargeCompleted";
 import History from "../pages/History/History";
 import VerifyEmail from "../pages/Profile/VerifyEmail";
 import Dashboard from "../pages/Dashboard/Dashboard";
+import Notification from "../pages/Notification/Notification";
 
 export const Routes = createBrowserRouter([
   {
@@ -175,6 +176,10 @@ export const Routes = createBrowserRouter([
             <ChangePassword />
           </PrivateRoute>
         ),
+      },
+      {
+        path: "myPage/notice",
+        element: <Notification />,
       },
       {
         path: "/terms",
