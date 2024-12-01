@@ -1,81 +1,73 @@
 import TitleBar from "../../components/TitleBar";
 import { FaHeart } from "react-icons/fa";
 import useGetFavoriteStuff from "../../hooks/UseGetFavorite_stuff";
-import Staff from "../home/Staffs/Staff";
 import useAxiosPrivate from "../../hooks/axiousPrivate";
 import { useState } from "react";
 
 const Favorite = () => {
-  const [isLiked, setIsLiked] = useState(false);
-  const { favoriteStuffs,refetch } = useGetFavoriteStuff();
+  const { favoriteStuffs, refetch } = useGetFavoriteStuff();
   const axiosPrivate = useAxiosPrivate();
-  console.log(favoriteStuffs);
+  const [isProcessing, setIsProcessing] = useState(false);
 
-  const handleHeartToggle = async () => {
+  const handleLikeDelete = async (id) => {
     if (isProcessing) return; // Prevent duplicate requests
     setIsProcessing(true);
 
     try {
-      const endpoint = `/auth/users/stuff/${favoriteStuffs.uid}/like`;
-      const response = isLiked
-        ? await axiosPrivate.delete(endpoint) // DELETE if currently liked
-        : await axiosPrivate.post(endpoint);
-      refetch();
-
+      const response = await axiosPrivate.delete(`/auth/users/stuff/${id}/like`);
       console.log("API Response:", response);
 
-      if (
-        response.status === 200 ||
-        response.status === 201 ||
-        response.status === 204
-      ) {
-        setIsLiked((prev) => !prev); // Toggle the like state
-
-        await refetch(); // Ensure refetch is awaited to refresh data properly
+      if ([200, 201, 204].includes(response.status)) {
+        await refetch(); // Refresh the list after deletion
       } else {
         throw new Error("Failed to update like status");
       }
     } catch (error) {
       console.error(
         "Error updating like status:",
-        error.response?.data?.detail || error.message
+        error?.response?.data?.detail || error?.message || "Unknown error"
       );
     } finally {
       setIsProcessing(false);
     }
   };
+
   return (
-    <div className="mb-[120px] ">
+    <div className="mb-[120px]">
       <div>
-        <TitleBar title="お気に入り"></TitleBar>
+        <TitleBar title="お気に入り" />
       </div>
-      {favoriteStuffs.map((stuff) => (
-        <div
-          key={stuff.uid}
-          className="min-w-[375px] max-w-[430px] mx-auto px-[25px] mt-7 text-[#44495B] grid gap-5"
-        >
-          <div className="flex items-center">
-            <img
-              className="w-[49px] rounded-full"
-              src="https://shorturl.at/aBtj9"
-              alt=""
-            />
-            <div className="flex-1 flex justify-between  items-center">
-              <div className="ml-[13px]">
-                <h3 className="font-bold text-sm">{stuff.name}</h3>
-                <p className="font-normal text-sm text-[#9C9C9C]">
-                  {stuff.introduction}
-                </p>
-              </div>
-              <div className="flex flex-col items-end">
-                <h3 className="font-bold text-sm ">
-                  <FaHeart className="text-[#F24E1E] text-[20px] mt-4"></FaHeart>
-                </h3>
+      {favoriteStuffs.length === 0 ? (
+        <p className="text-center mt-10">No favorite items found.</p>
+      ) : (
+        favoriteStuffs.map((stuff) => (
+          <div
+            key={stuff.uid}
+            className="min-w-[375px] max-w-[430px] mx-auto px-[25px] mt-7 grid gap-5"
+          >
+            <div className="flex items-center">
+              <img
+                className="w-[49px] rounded-full"
+                src="https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
+                alt=""
+              />
+              <div className="flex-1 flex justify-between items-center">
+                <div className="ml-[13px]">
+                  <h3 className="font-bold text-sm">{stuff.name}</h3>
+                  <p className="font-normal text-sm text-[#9C9C9C]">
+                    {stuff.introduction}
+                  </p>
+                </div>
+                <div className="flex flex-col items-end">
+                  <button onClick={() => handleLikeDelete(stuff.uid)}>
+                    <FaHeart className="text-[#F24E1E] text-[20px] mt-4" />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))
+      )}
     </div>
   );
 };

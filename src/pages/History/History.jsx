@@ -32,7 +32,7 @@ const History = () => {
           <div key={payment.id} className="flex items-center">
             <img
               className="w-[49px] rounded-full"
-              src="https://shorturl.at/aBtj9" // Placeholder image
+              src="https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg" // Placeholder image
               alt="user"
             />
             <div className="flex-1 flex justify-between items-center">

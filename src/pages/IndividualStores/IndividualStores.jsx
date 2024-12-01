@@ -30,7 +30,7 @@ const IndividualStores = () => {
         {/* Store Image with Gradient Overlay and Store Name */}
         <div className="relative">
           <img
-            src="https://shorturl.at/Wzc2X"
+            src="https://i.postimg.cc/W455mjgq/277cc67ba2f22b5bc0996cea559fc8af.png"
             alt={`${storeData.name} `}
             className="w-full rounded-lg"
           />
