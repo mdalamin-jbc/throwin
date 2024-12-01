@@ -32,14 +32,14 @@ const BillingScreen = () => {
 
   const navigate = useNavigate();
 
-  console.log(userDetails);
+  // console.log(userDetails);
+  // console.log(staff);
 
   // billing data
   const [billingData, setBillingData] = useState({});
   const [selectedAmount, setSelectedAmount] = useState("0");
   const [message, setMessage] = useState("");
 
-  // console.log(staff);
   const handleHeartToggle = async () => {
     if (isProcessing) return; // Prevent duplicate requests
     setIsProcessing(true);
@@ -115,6 +115,7 @@ const BillingScreen = () => {
 
   useEffect(() => {
     setBillingData({
+      id: userDetails?.id,
       staff: 145,
       amount: persAmount,
       user_nick_name: userDetails?.name || "Guest",
@@ -179,20 +180,20 @@ const BillingScreen = () => {
         <title>Throwin | Billing Page</title>
       </Helmet>
       <div>
-      <TitleBar
-        style="mb-0 w-full"
-        back={
-          <RiArrowLeftSLine 
-            onClick={() => navigate(-1)} 
-            style={{ cursor: "pointer" }} 
-          />
-        }
-        title=""
-        icon={
-          <img className="w-[110px] items-center" src={logo} alt="logo" />
-        }
-      ></TitleBar>
-    </div>
+        <TitleBar
+          style="mb-0 w-full"
+          back={
+            <RiArrowLeftSLine
+              onClick={() => navigate(-1)}
+              style={{ cursor: "pointer" }}
+            />
+          }
+          title=""
+          icon={
+            <img className="w-[110px] items-center" src={logo} alt="logo" />
+          }
+        ></TitleBar>
+      </div>
       <div className="max-w-[430px] mx-auto mb-[120px] text-[#44495B]">
         <div className="py-4 text-center">
           <h2 className="font-bold text-[25px]">{staff.name}</h2>

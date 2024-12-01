@@ -53,7 +53,7 @@ const IndividualStores = () => {
             <Link to={`/staff/${staff.username}`}>
               <div className="relative">
                 <img
-                  src="https://shorturl.at/XqwIr"
+                  src="https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
                   alt={`${staff.username} image`}
                   className="object-cover rounded-lg w-[170px] h-[170px]"
                 />
