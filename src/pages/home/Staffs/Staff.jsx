@@ -79,7 +79,7 @@ const Staff = () => {
       <div className="max-w-[416px] mx-auto">
         <div className="relative">
           <img
-            src="https://shorturl.at/XqwIr"
+            src="https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
             alt={`${staffMember?.name} image`}
             className="object-cover rounded-lg w-full h-[277px]"
           />
