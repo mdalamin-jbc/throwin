@@ -5,6 +5,7 @@ import UseUserDetails from "../../hooks/UseUserDetails";
 import useAxiosPrivate from "../../hooks/axiousPrivate";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const ChangeEmail = () => {
   const { userDetails } = UseUserDetails();
@@ -25,9 +26,26 @@ const ChangeEmail = () => {
         { password, new_email }
       );
       console.log(response);
+
+      // Show success alert
+      Swal.fire({
+        icon: "success",
+        title: "Success!",
+        text: "A verification email has been sent.",
+        confirmButtonText: "OK",
+      });
+
       reset();
     } catch (error) {
       console.log(error);
+
+      // Show error alert
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong. Please try again.",
+        confirmButtonText: "OK",
+      });
     }
   };
 
