@@ -124,7 +124,7 @@ const Login = () => {
                 name="mail"
                 type="mail"
                 placeholder="メールアドレス"
-                className="input border rounded-[3px] py-4 mt-1 mb-[9px] w-[253px] pl-4 font-Noto text-[#44495B80] text-sm"
+                className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
               />
               {errors.mail && (
                 <span className="text-red-500 mt-1">{errors.mail.message}</span>
@@ -147,7 +147,7 @@ const Login = () => {
                 name="password"
                 type="password"
                 placeholder="パスワード"
-                className="input border rounded-[3px] font-Noto py-4 mt-1 mb-[9px] w-[253px] pl-4 text-[#44495B80] text-sm"
+                className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
               />
               {errors.password && (
                 <span className="text-red-500 my-1 font-Noto">

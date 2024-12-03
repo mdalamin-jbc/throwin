@@ -103,7 +103,7 @@ const NewReg = () => {
                 {...register("password", { required: "Password is required" })}
                 type="password"
                 placeholder="パスワード"
-                className="input border rounded-[3px] py-4 mt-4 mb-[9px] w-[253px] pl-4 font-Noto text-[#44495B80] text-sm"
+                className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
               />
               {errors.password && (
                 <span className="text-red-500 mt-1">
@@ -120,7 +120,7 @@ const NewReg = () => {
                 })}
                 type="password"
                 placeholder="パスワード（確認用）"
-                className="input border rounded-[3px] py-4 mb-[9px] w-[253px] pl-4 font-Noto text-[#44495B80] text-sm"
+                className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
               />
               {errors.confirmPassword && (
                 <span className="text-red-500 my-1">
