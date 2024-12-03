@@ -1,3 +1,4 @@
+import SideMenu from "../pages/Dashboard/SideMenu";
 import NavMenu from "../Shared/NavMenu/NavMenu";
 import { Outlet, useLocation } from "react-router-dom";
 
@@ -22,9 +23,13 @@ const Root = () => {
     "history",
   ].some((path) => location.pathname.includes(path));
 
+  // Check if the current path is within the dashboard
+  const isDashboardPath = location.pathname.startsWith("/dashboard");
+
   return (
     <div>
       {shouldRenderNavMenu && <NavMenu />}
+      {isDashboardPath && <SideMenu />}
       <Outlet />
     </div>
   );

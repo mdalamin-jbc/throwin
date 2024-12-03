@@ -34,6 +34,8 @@ import History from "../pages/History/History";
 import VerifyEmail from "../pages/Profile/VerifyEmail";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import Notification from "../pages/Notification/Notification";
+import AdminLogin from "../pages/Dashboard/AdminLogin/AdminLogin";
+import Account from "../pages/Dashboard/Account/Account";
 
 export const Routes = createBrowserRouter([
   {
@@ -187,9 +189,20 @@ export const Routes = createBrowserRouter([
       },
       // -------------------------------------dashboard
       {
-        path: "dashboard",
+        path: "/dashboard",
         element: <Dashboard />,
+        children: [
+          {
+            path: "account",
+            element: <Account />,
+          },
+          {
+            path: "adminLogin",
+            element: <AdminLogin />,
+          },
+        ],
       },
+      
     ],
   },
 ]);

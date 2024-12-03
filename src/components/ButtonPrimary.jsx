@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 const ButtonPrimary = ({ style, btnText, icon }) => {
   return (
     <div
-      className={`${style} w-[253px] text-center py-3 font-bold min-w-[253px]  font-hiragino text-white `}
+      className={`${style} w-[253px] text-center py-3 font-bold  font-hiragino text-white `}
     >
       <div className="flex items-center justify-center"> 
         {icon} 
