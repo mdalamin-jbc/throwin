@@ -49,7 +49,7 @@ const VerifyEmail = () => {
             confirmButtonText: "OK",
           }).then(() => {
             logout();
-            navigate("/login"); 
+            navigate("/login");
           });
         }
       } catch (error) {
@@ -73,7 +73,7 @@ const VerifyEmail = () => {
     return () => {
       isMounted = false; // Cleanup on unmount
     };
-  }, [token, axiosPrivate, navigate, accessToken]); // Added accessToken as a dependency
+  }, [token, axiosPrivate, navigate, accessToken, logout]); // Added accessToken as a dependency
 
   if (loading) {
     return (
