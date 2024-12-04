@@ -4,6 +4,7 @@ import useGetFavoriteStuff from "../../hooks/UseGetFavorite_stuff";
 import useAxiosPrivate from "../../hooks/axiousPrivate";
 import { useState } from "react";
 import Swal from "sweetalert2";
+import { Circles } from "react-loader-spinner";
 
 const Favorite = () => {
   const { favoriteStuffs, refetch, isLoading } = useGetFavoriteStuff();
@@ -25,7 +26,7 @@ const Favorite = () => {
         Swal.fire({
           icon: "success",
           title: "Success!",
-          text: "You have unliked this item.",
+          text: "You have liked removed this staff.",
           timer: 1500,
           showConfirmButton: false,
         });
@@ -46,8 +47,13 @@ const Favorite = () => {
     <>
       {isLoading ? (
         <div className="flex justify-center items-center h-screen">
-          {/* Replace this with your loading spinner or text */}
-          <div className="text-lg font-bold text-gray-600">Loading...</div>
+          <Circles
+            height="80"
+            width="80"
+            color="#4fa94d"
+            ariaLabel="circles-loading"
+            visible={true}
+          />
         </div>
       ) : (
         <div className="mb-[120px]">

@@ -21,6 +21,7 @@ const Root = () => {
     "displayName",
     "terms",
     "history",
+    "nickName_reg",
   ].some((path) => location.pathname.includes(path));
 
   // Check if the current path is within the dashboard

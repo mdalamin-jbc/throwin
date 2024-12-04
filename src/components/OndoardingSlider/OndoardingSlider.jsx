@@ -1,4 +1,5 @@
 import img from "../../assets/images/slider/Group 633190.png";
+import img2 from "../../assets/images/slider/img2.png";
 import bgImage from "../../assets/images/slider/Rectangle 1.png";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -107,7 +108,7 @@ const OnboardingSlider = () => {
                         伝えることができます。
                       </h3>
                       <img
-                        src={img}
+                        src={img2}
                         alt="Slide 2"
                         className="object-contain w-[250px] sm:w-[350px] lg:w-auto mx-auto"
                       />
@@ -127,7 +128,7 @@ const OnboardingSlider = () => {
                         ガチャ機能の説明
                       </h3>
                       <img
-                        src={img}
+                        src={img2}
                         alt="Slide 3"
                         className="object-contain w-[250px] sm:w-[350px] lg:w-auto mx-auto"
                       />

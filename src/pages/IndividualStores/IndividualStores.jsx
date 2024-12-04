@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { IoMdStar } from "react-icons/io";
 import { Link, useLocation } from "react-router-dom";
 import useGetStuffsByStoreCode from "../../hooks/UseGetStuffsByStoreCode";
+import { Circles } from "react-loader-spinner";
 
 const IndividualStores = () => {
   const location = useLocation();
@@ -23,6 +24,19 @@ const IndividualStores = () => {
       .then((data) => setData(data))
       .catch((error) => console.error("Error fetching JSON data:", error));
   }, []);
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Circles
+          height="80"
+          width="80"
+          color="#4fa94d"
+          ariaLabel="circles-loading"
+          visible={true}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="min-w-[375px] mx-auto mb-28">

@@ -8,6 +8,7 @@ import UseGetByStaffName from "../../../hooks/UseGetByStaffName";
 import UseGetFavorite_stuff from "../../../hooks/UseGetFavorite_stuff";
 import useAxiosPrivate from "../../../hooks/axiousPrivate";
 import Swal from "sweetalert2";
+import { Circles } from "react-loader-spinner";
 
 const Staff = () => {
   const [isLiked, setIsLiked] = useState(false);
@@ -60,9 +61,12 @@ const Staff = () => {
 
         Swal.fire({
           icon: "success",
-          title: isLiked ? "Removed from favorites!" : "Added to favorites!",
-          showConfirmButton: false,
+          title: "Success!",
+          text: isLiked
+            ? "You have liked removed this staff."
+            : "You have liked this staff.",
           timer: 1500,
+          showConfirmButton: false,
         });
       } else {
         throw new Error("Failed to update like status");
@@ -89,9 +93,14 @@ const Staff = () => {
     <>
       {isLoading ? (
         <div className="flex justify-center items-center h-screen">
-          {/* Replace this with your loading spinner or text */}
-          <div className="text-lg font-bold text-gray-600">Loading...</div>
-        </div>
+        <Circles
+          height="80"
+          width="80"
+          color="#4fa94d"
+          ariaLabel="circles-loading"
+          visible={true}
+        />
+      </div>
       ) : (
         <div className="min-w-[375px] mx-auto mb-[120px]">
           <div className="max-w-[416px] mx-auto">

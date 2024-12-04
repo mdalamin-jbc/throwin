@@ -16,6 +16,7 @@ import useAxiosPrivate from "../../hooks/axiousPrivate";
 import UseUserDetails from "../../hooks/UseUserDetails";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import Swal from "sweetalert2";
+import { Circles } from "react-loader-spinner";
 
 const BillingScreen = () => {
   const [data, setData] = useState([]);
@@ -70,8 +71,8 @@ const BillingScreen = () => {
           icon: "success",
           title: "Success!",
           text: isLiked
-            ? "You have unliked this item."
-            : "You have liked this item.",
+            ? "You have liked removed this staff."
+            : "You have liked this staff.",
           timer: 1500,
           showConfirmButton: false,
         });
@@ -199,8 +200,13 @@ const BillingScreen = () => {
     <>
       {isLoading ? (
         <div className="flex justify-center items-center h-screen">
-          {/* Replace this with your loading spinner or text */}
-          <div className="text-lg font-bold text-gray-600">Loading...</div>
+          <Circles
+            height="80"
+            width="80"
+            color="#4fa94d"
+            ariaLabel="circles-loading"
+            visible={true}
+          />
         </div>
       ) : (
         <div>
