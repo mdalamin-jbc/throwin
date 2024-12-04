@@ -1,6 +1,6 @@
 import img from "../../assets/images/slider/Group 633190.png";
 import bgImage from "../../assets/images/slider/Rectangle 1.png";
-import effect from "../../assets/images/slider/effect.png";
+
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -43,17 +43,17 @@ const OnboardingSlider = () => {
         className="shadow-xl text-center relative w-full min-h-screen"
         style={{
           backgroundImage: `url(${bgImage})`,
-          backgroundSize: "cover", 
-          backgroundPosition: "center", 
-          backgroundAttachment: "fixed", 
-          height: "100vh", 
-          minHeight: "full", 
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
+          height: "100vh",
+          minHeight: "full",
         }}
       >
         <div className=" ">
           <div className="">
             <Confetti width={width} height={height} />
-            <div className="pt-6  relative">
+            <div className="pt-6  relative mt-[90px] md:mt-0">
               <Swiper
                 cssMode={true}
                 pagination={{
@@ -70,11 +70,11 @@ const OnboardingSlider = () => {
                 onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
               >
                 <SwiperSlide className="flex justify-center items-center h-full w-full px-1 md:px-16">
-                  <div className="relative">
+                  <div className="relative w-full px-[68px]">
                     {/* <img src={effect} alt="Effect" className="absolute w-full " /> */}
 
-                    <div className="mt-6">
-                      <h2 className="font-hiragino font-medium text-lg text-[#49BBDF] flex gap-3 justify-center mb-3">
+                    <div className="mt-[70px] md:mt-0">
+                      <h2 className="font-hiragino font-medium text-lg  text-[#49BBDF] flex gap-3 justify-center mb-3">
                         \ <span>はじめに</span> /
                       </h2>
                       <h3 className="grid font-hiragino font-semibold text-[19px] text-[#44495B] leading-8 mb-11">
@@ -84,7 +84,7 @@ const OnboardingSlider = () => {
                       <img
                         src={img}
                         alt="Slide 1"
-                        className="object-contain w-[250px] sm:w-[350px] lg:w-auto mx-auto"
+                        className="object-contain w-full md:w-[256px] mx-auto"
                       />
                     </div>
                   </div>
@@ -97,7 +97,7 @@ const OnboardingSlider = () => {
                     alt="Effect"
                     className="absolute w-full md:w-auto -mt-3"
                   /> */}
-                    <div className="mt-6">
+                    <div className="mt-20 md:mt-0">
                       <h3 className="grid font-hiragino font-semibold text-[19px] text-[#44495B] leading-8 mb-11">
                         元気や、感動を
                         <br /> 与えてくれたスタッフに
@@ -122,11 +122,9 @@ const OnboardingSlider = () => {
                     alt="Effect"
                     className="absolute w-full md:w-auto -mt-3"
                   /> */}
-                    <div className="mt-6">
+                    <div className="mt-[145px] md:mt-0">
                       <h3 className="grid font-hiragino font-semibold text-[19px] text-[#44495B] leading-8 mb-11">
-                        まずはあなたの <br />
-                        イチオシのスタッフを <br />
-                        見つけてください！
+                        ガチャ機能の説明
                       </h3>
                       <img
                         src={img}
@@ -139,12 +137,15 @@ const OnboardingSlider = () => {
               </Swiper>
 
               {/* Pagination dots positioned between image and button */}
-              <div className="custom-pagination inset-x-0 flex justify-center mt-3"></div>
+              <div className="custom-pagination inset-x-0 flex justify-center my-8 "></div>
 
               {/* Next Button positioned below pagination */}
-              <button onClick={handleNext} className="next-button mt-4">
+              <button
+                onClick={handleNext}
+                className="next-button fixed bottom-5 left-1/2 transform -translate-x-1/2 mb-9"
+              >
                 <ButtonPrimary
-                  style="rounded-full bg-gradient-to-r from-[#65D0F2] to-[#2399F4]"
+                  style="rounded-full bg-gradient-to-r from-[#65D0F2] to-[#2399F4] w-[342px]"
                   btnText={activeIndex === 2 ? "始める" : "次へ"}
                 />
               </button>

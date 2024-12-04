@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const axiosReg = axios.create({
-  baseURL: "http://54.238.181.96:8000",
+  baseURL: "http://176.34.7.102:8000",
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
