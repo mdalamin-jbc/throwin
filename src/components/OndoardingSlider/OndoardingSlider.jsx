@@ -98,7 +98,7 @@ const OnboardingSlider = () => {
                     alt="Effect"
                     className="absolute w-full md:w-auto -mt-3"
                   /> */}
-                    <div className="mt-20 md:mt-0">
+                    <div className="mt-28 md:mt-0">
                       <h3 className="grid font-hiragino font-semibold text-[19px] text-[#44495B] leading-8 mb-11">
                         元気や、感動を
                         <br /> 与えてくれたスタッフに
@@ -123,7 +123,7 @@ const OnboardingSlider = () => {
                     alt="Effect"
                     className="absolute w-full md:w-auto -mt-3"
                   /> */}
-                    <div className="mt-[145px] md:mt-0">
+                    <div className="mt-[180px] md:mt-0">
                       <h3 className="grid font-hiragino font-semibold text-[19px] text-[#44495B] leading-8 mb-11">
                         ガチャ機能の説明
                       </h3>

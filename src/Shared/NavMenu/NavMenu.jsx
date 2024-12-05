@@ -73,7 +73,9 @@ const NavMenu = () => {
           {({ isActive }) => (
             <div className="flex flex-col items-center gap-2  relative">
               <img
-                className={`transition-all ${isActive ? "" : ""}`}
+                className={`transition-all ${
+                  isActive ? "w-[24px]" : "w-[18px]"
+                }`}
                 src={gacha}
                 alt=""
               />
