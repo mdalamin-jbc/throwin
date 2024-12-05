@@ -2,8 +2,10 @@ import { FaHome, FaUser, FaFileInvoice, FaSignOutAlt } from "react-icons/fa";
 import { NavLink, useLocation } from "react-router-dom"; // Import necessary hooks/components
 import logo from "../../assets/images/socialLogin/logo2.png";
 import search from "../../assets/icons/search.png";
+import { motion } from "motion/react";
+import { Children } from "react";
 
-const SideMenu = () => {
+const SideMenu = (children) => {
   const location = useLocation();
 
   const links = (
@@ -85,6 +87,7 @@ const SideMenu = () => {
         <FaSignOutAlt className="text-blue-500 text-xl mr-4" />
         <span className="text-gray-700 text-lg">ログアウト</span>
       </div>
+      <main></main>
     </div>
   );
 };

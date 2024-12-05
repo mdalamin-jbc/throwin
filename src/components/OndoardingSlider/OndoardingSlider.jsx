@@ -108,7 +108,7 @@ const OnboardingSlider = () => {
                         伝えることができます。
                       </h3>
                       <img
-                        src={img}
+                        src={img2}
                         alt="Slide 2"
                         className="object-contain w-[250px] sm:w-[350px] lg:w-auto mx-auto"
                       />
@@ -128,7 +128,7 @@ const OnboardingSlider = () => {
                         ガチャ機能の説明
                       </h3>
                       <img
-                        src={img}
+                        src={img2}
                         alt="Slide 3"
                         className="object-contain w-[250px] sm:w-[350px] lg:w-auto mx-auto"
                       />
