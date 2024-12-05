@@ -7,6 +7,7 @@ import { useAuth } from "../../hooks/useAuth";
 import useAxiosPrivate from "../../hooks/axiousPrivate";
 import { useState } from "react";
 import { Helmet } from "react-helmet";
+import { RiArrowLeftSLine } from "react-icons/ri";
 
 const DisplayName = () => {
   const [error, setError] = useState();
@@ -67,7 +68,12 @@ const DisplayName = () => {
       <Helmet>
         <title>Throwin | Display Name</title>
       </Helmet>
-      <TitleBar title={"スタッフを探す"} />
+      <TitleBar back={
+          <RiArrowLeftSLine
+            onClick={() => navigate(-1)}
+            style={{ cursor: "pointer" }}
+          />
+        } title={"スタッフを探す"} />
       <h4 className="mt-4 mb-4 font-semibold font-hiragino text-center">
         ニックネーム（表示名）をご登録ください
       </h4>
