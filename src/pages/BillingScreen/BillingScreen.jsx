@@ -73,8 +73,8 @@ const BillingScreen = () => {
           text: isLiked
             ? "You have liked removed this staff."
             : "You have liked this staff.",
-          timer: 1500,
-          showConfirmButton: false,
+          
+          showConfirmButton: true,
         });
       } else {
         throw new Error("Failed to update like status");

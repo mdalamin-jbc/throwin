@@ -65,8 +65,8 @@ const Staff = () => {
           text: isLiked
             ? "You have liked removed this staff."
             : "You have liked this staff.",
-          timer: 1500,
-          showConfirmButton: false,
+            confirmButtonText: "OK",
+          
         });
       } else {
         throw new Error("Failed to update like status");
