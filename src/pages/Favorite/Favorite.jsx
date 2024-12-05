@@ -70,7 +70,7 @@ const Favorite = () => {
               >
                 <div className="flex items-center">
                   <img
-                    className="w-[49px] rounded-full"
+                    className="w-[49px] h-[49px] rounded-full"
                     src="https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
                     alt=""
                   />
