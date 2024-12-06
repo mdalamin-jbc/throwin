@@ -21,7 +21,7 @@ const VerifyEmail = () => {
     if (!token) {
       Swal.fire({
         title: "無効なトークン",
-        text: "トークンが missing または無効です。",
+        text: "トークンが欠落しているか、無効です",
         icon: "error",
         confirmButtonText: "はい",
       });
@@ -40,13 +40,11 @@ const VerifyEmail = () => {
             },
           }
         );
-
+        console.log(response);
         if (isMounted) {
           Swal.fire({
             title: "成功 ",
-            text:
-              response.data.detail ||
-              "あなたのメールアドレスが確認されました！",
+            text: "あなたのメールアドレスが確認されました！",
             icon: "success",
             confirmButtonText: "はい",
           }).then(() => {
@@ -55,12 +53,11 @@ const VerifyEmail = () => {
           });
         }
       } catch (error) {
+        console.log(error);
         if (isMounted) {
           Swal.fire({
             title: "確認に失敗しました",
-            text:
-              error.response?.data?.detail ||
-              "エラーが発生しました。後でもう一度お試しください。",
+            text: "エラーが発生しました。後でもう一度お試しください。",
             icon: "error",
             confirmButtonText: "はい",
           });

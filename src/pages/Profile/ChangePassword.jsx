@@ -33,7 +33,7 @@ const ChangePassword = () => {
           new_password: data.password,
           confirm_password: data.confirmPassword,
         });
-
+        console.log(response);
         // Show SweetAlert success notification
         Swal.fire({
           icon: "success",
@@ -54,7 +54,7 @@ const ChangePassword = () => {
         Swal.fire({
           icon: "error",
           title: "パスワードの変更に失敗しました",
-          text: error.response?.data?.message || "再試行してください",
+          text: "再試行してください",
         });
       }
     }

@@ -39,7 +39,7 @@ const ForgetPassword = () => {
 
       // Display success message from API response
       Swal.fire({
-        title: "Success",
+        title: "成功 ",
         text:
           response.data.detail || "パスワードリセットのリクエストが正常に送信されました！",
         icon: "success",
@@ -52,7 +52,7 @@ const ForgetPassword = () => {
         error.response?.data?.message ||
         "エラーが発生しました。後で再試行してください。";
       Swal.fire({
-        title: "Error",
+        title: "エラー",
         text: errorMsg,
         icon: "error",
         confirmButtonText: "はい",
@@ -78,10 +78,10 @@ const ForgetPassword = () => {
               </label>
               <input
                 {...register("mail", {
-                  required: "Email is required",
+                  required: "メールアドレスは必須です。",
                   pattern: {
                     value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    message: "Invalid email format",
+                    message: "無効なメール形式です。",
                   },
                 })}
                 name="mail"

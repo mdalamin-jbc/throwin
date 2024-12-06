@@ -27,11 +27,11 @@ const DisplayName = () => {
       const response = await axiosPrivate.post(`auth/users/name`, {
         name: data.name,
       });
-
+      console.log(response);
       Swal.fire({
         position: "top",
         icon: "success",
-        title: `${response.data.detail}`,
+        title: `名前が正常に変更されました。`,
         showConfirmButton: false,
         timer: 1500,
       }).then(() => {
@@ -56,7 +56,7 @@ const DisplayName = () => {
       Swal.fire({
         position: "top",
         icon: "error",
-        title: errorMessage,
+        title: "すでに使用されているニックネームです",
         showConfirmButton: false,
         timer: 1500,
       });
@@ -68,12 +68,15 @@ const DisplayName = () => {
       <Helmet>
         <title>Throwin | Display Name</title>
       </Helmet>
-      <TitleBar back={
+      <TitleBar
+        back={
           <RiArrowLeftSLine
             onClick={() => navigate(-1)}
             style={{ cursor: "pointer" }}
           />
-        } title={"スタッフを探す"} />
+        }
+        title={"スタッフを探す"}
+      />
       <h4 className="mt-4 mb-4 font-semibold font-hiragino text-center">
         ニックネーム（表示名）をご登録ください
       </h4>

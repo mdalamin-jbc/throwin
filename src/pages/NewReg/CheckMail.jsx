@@ -23,7 +23,7 @@ const CheckMail = () => {
       if (response.status === 200) {
         // Show SweetAlert for success
         Swal.fire({
-          title: "Success!",
+          title: "成功!",
           text: "アクティベーションメールが正常に再送信されました！",
           icon: "success",
           confirmButtonText: "はい ",
@@ -32,12 +32,10 @@ const CheckMail = () => {
         throw new Error("Unexpected response status");
       }
     } catch (error) {
-      // Show SweetAlert for error
+      console.log(error);
       Swal.fire({
-        title: "Error!",
-        text:
-          error.response?.data?.email?.[0] ||
-          "メールの再送信中にエラーが発生しました。",
+        title: "エラー!",
+        text: "このメールアドレスはすでにアクティブ化されています。",
         icon: "error",
         confirmButtonText: "はい",
       });
@@ -53,23 +51,24 @@ const CheckMail = () => {
           <div className="flex flex-col justify-center items-center">
             <img className="w-[150px]" src={mail} alt="Mail Icon" />
             <h3 className="text-center mt-8 mb-2 font-hiragino font-semibold text-lg">
-              Check Email
+              メールを確認してください
             </h3>
             <p className="text-center w-[80%] mx-auto">
-              Please check your email inbox and click on the provided link to
-              activate your account. If you don't receive the email,
+              メールボックスを確認し、提供されたリンクをクリックしてアカウントをアクティブ化してください。メールが届かない場合は、
               <button
                 onClick={handleResendMail}
                 className="text-[#5297FF] underline ml-1"
                 disabled={isLoading} // Disable button while loading
               >
-                {isLoading ? "Resending..." : "Click here to resend"}
+                {isLoading
+                  ? "再送信中..."
+                  : "ここをクリックして再送信してください"}
               </button>
             </p>
 
             <Link className="mt-6 text-[#5297FF]" to="/login">
               <button>
-                <p>Back to login</p>
+                <p>ログインに戻る</p>
               </button>
             </Link>
           </div>

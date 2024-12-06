@@ -51,7 +51,7 @@ const RegistrationForm = () => {
         setError("登録に失敗しました。もう一度お試しください。");
       }
     } catch (error) {
-      setError(error.response ? error.response.data.detail : "An error occurred.");
+      setError(error.response ? error.response.data.detail : "エラーが発生しました");
     }
   };
 

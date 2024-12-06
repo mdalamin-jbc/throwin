@@ -35,11 +35,12 @@ const EmailLogin = () => {
       const errorMsg =
         error.response?.data?.email?.[0] ||
         "エラーが発生しました。後で再試行してください。";
+      console.log(errorMsg);
       Swal.fire({
-        title: "Error",
-        text: errorMsg,
+        title: "エラー",
+        text: "すでにアカウントがあります。アカウントをアクティベートしてください。",
         icon: "error",
-        confirmButtonText: "OK",
+        confirmButtonText: "はい",
       });
     }
   };
@@ -62,10 +63,10 @@ const EmailLogin = () => {
               </label>
               <input
                 {...register("mail", {
-                  required: "Email is required",
+                  required: "メールアドレスは必須です。",
                   pattern: {
                     value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    message: "Invalid email format",
+                    message: "無効なメール形式です。",
                   },
                 })}
                 name="mail"

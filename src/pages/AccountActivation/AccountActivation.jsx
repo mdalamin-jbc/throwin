@@ -1,4 +1,3 @@
-
 import { useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -29,17 +28,17 @@ const AccountActivation = () => {
         ) {
           Swal.fire({
             title: "成功",
-            text: response.data.detail || "あなたのアカウントはアクティブ化されました！",
+            text: "あなたのアカウントはアクティブ化されました！",
             icon: "success",
             confirmButtonText: "はい",
           }).then(() => navigate("/onboarding"));
+          console.log(response.data.detail);
         }
       } catch (error) {
+        console.log(error.response);
         Swal.fire({
           title: "アクティベーションに失敗しました",
-          text: error.response
-            ? error.response.data.detail
-            : "エラーが発生しました。後でもう一度お試しください。",
+          text: "エラーが発生しました。後でもう一度お試しください。",
           icon: "error",
           confirmButtonText: "はい",
         });

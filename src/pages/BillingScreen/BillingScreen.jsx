@@ -84,7 +84,7 @@ const BillingScreen = () => {
       Swal.fire({
         icon: "error",
         title: "おっと!",
-        text: error.response?.data?.detail || "何かがうまくいきませんでした",
+        text: "何かがうまくいきませんでした",
       });
 
       console.error(
@@ -172,9 +172,9 @@ const BillingScreen = () => {
         // Show success message with SweetAlert
         Swal.fire({
           icon: "success",
-          title: "Payment Successful!",
-          text: `Your Transaction Id is : ${response.data.transaction_id}`,
-          confirmButtonText: "OK",
+          title: "支払いが成功しました！",
+          text: `あなたの取引IDは : ${response.data.transaction_id}`,
+          confirmButtonText: "はい",
         });
         navigate(`/staff/${username}/chargeCompleted`);
       } else {
@@ -190,9 +190,9 @@ const BillingScreen = () => {
       // Show error message with SweetAlert
       Swal.fire({
         icon: "error",
-        title: "Payment Failed!",
+        title: "支払いに失敗しました！",
         text: errorDetail,
-        confirmButtonText: "OK",
+        confirmButtonText: "はい",
       });
     }
   };

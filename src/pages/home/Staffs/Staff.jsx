@@ -63,8 +63,8 @@ const Staff = () => {
           icon: "Success",
           title: "成功!",
           text: isLiked
-            ? "You have liked removed this staff."
-            : "You have liked this staff.",
+            ? "あなたはこのスタッフをいいねから削除しました。"
+            : "あなたはこのスタッフをいいねしました。",
           confirmButtonText: "はい",
         });
       } else {
@@ -75,8 +75,7 @@ const Staff = () => {
         icon: "error",
         title: "エラー!",
         text:
-          error.response?.data?.detail ||
-          "Something went wrong. Please try again.",
+          "何かがうまくいきませんでした。もう一度お試しください。",
         confirmButtonText: "はい",
       });
       console.error(

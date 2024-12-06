@@ -25,11 +25,11 @@ const NickNameReg = () => {
       const response = await axiosPrivate.post(`auth/users/name`, {
         name: data.name,
       });
-
+      console.log(response);
       Swal.fire({
         position: "top",
         icon: "success",
-        title: `${response.data.detail}`,
+        title: `ニックネームが正常に設定されました。`,
         showConfirmButton: false,
         timer: 1500,
       }).then(() => {
@@ -67,7 +67,7 @@ const NickNameReg = () => {
       <h4 className="mt-4 mb-4 font-semibold font-hiragino text-center">
         ニックネーム（表示名）をご登録ください
       </h4>
-      <div >
+      <div>
         <div className="flex flex-col justify-center">
           <form
             className="flex flex-col w-[342px] mx-auto"

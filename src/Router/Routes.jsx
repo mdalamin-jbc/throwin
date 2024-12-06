@@ -10,7 +10,7 @@ import Gacha from "../pages/Gacha/Gacha";
 import Search from "../pages/Search/Search";
 import Favorite from "../pages/Favorite/Favorite";
 import NewReg from "../pages/NewReg/NewReg";
-import Notice from "../pages/Notice/Notice";
+
 import Setting from "../pages/Setting/Setting";
 import NickNameReg from "../pages/NickNameReg/NickNameReg";
 import CheckMail from "../pages/NewReg/CheckMail";
@@ -99,7 +99,7 @@ export const Routes = createBrowserRouter([
           </PrivateRoute>
         ),
       },
-      
+
       {
         path: "setting",
         element: <Setting />,
@@ -199,7 +199,6 @@ export const Routes = createBrowserRouter([
           },
         ],
       },
-      
     ],
   },
 ]);

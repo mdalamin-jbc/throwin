@@ -45,7 +45,7 @@ const Login = () => {
         Swal.fire({
           position: "top",
           icon: "success",
-          title: `${response.data.msg}`,
+          title: `ログインに成功しました。`,
           showConfirmButton: false,
           timer: 1500,
         });
@@ -90,7 +90,7 @@ const Login = () => {
       Swal.fire({
         position: "top",
         icon: "error",
-        title: `${error.response?.data.msg || "パスワードが間違っています。"}`,
+        title: `メールアドレスまたはパスワードが間違っています。`,
         showConfirmButton: false,
         timer: 1500,
       });
