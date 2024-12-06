@@ -45,14 +45,14 @@ const ResetPassword = () => {
         Swal.fire({
           icon: "success",
           title: "Success",
-          text: "Your password has been reset successfully!",
-          confirmButtonText: "OK",
+          text: "パスワードが正常にリセットされました！",
+          confirmButtonText: "はい ",
         }).then(() => {
           console.log(response);
           navigate("/login"); // Redirect to login page after the alert
         });
       } else {
-        setErrorMessage("Password reset failed. Please try again.");
+        setErrorMessage("パスワードのリセットに失敗しました。もう一度お試しください。");
       }
     } catch (error) {
       if (error.response && error.response.data.new_password) {
@@ -62,7 +62,7 @@ const ResetPassword = () => {
         });
       } else {
         setErrorMessage(
-          error.response ? error.response.data.detail : "An error occurred."
+          error.response ? error.response.data.detail : "エラーが発生しました。"
         );
       }
     }

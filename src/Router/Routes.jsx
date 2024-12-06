@@ -99,10 +99,7 @@ export const Routes = createBrowserRouter([
           </PrivateRoute>
         ),
       },
-      {
-        path: "/notice",
-        element: <Notice />,
-      },
+      
       {
         path: "setting",
         element: <Setting />,

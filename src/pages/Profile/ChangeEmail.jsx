@@ -30,9 +30,9 @@ const ChangeEmail = () => {
       // Show success alert
       Swal.fire({
         icon: "success",
-        title: "Success!",
-        text: "A verification email has been sent.",
-        confirmButtonText: "OK",
+        title: "成功 !",
+        text: "確認メールが送信されました。",
+        confirmButtonText: "はい",
       });
 
       reset();
@@ -42,9 +42,9 @@ const ChangeEmail = () => {
       // Show error alert
       Swal.fire({
         icon: "error",
-        title: "Oops...",
-        text: "Something went wrong. Please try again.",
-        confirmButtonText: "OK",
+        title: "おっと。。。",
+        text: "何かがうまくいきませんでした。もう一度お試しください。.",
+        confirmButtonText: "はい",
       });
     }
   };

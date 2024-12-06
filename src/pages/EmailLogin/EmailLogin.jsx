@@ -34,7 +34,7 @@ const EmailLogin = () => {
     } catch (error) {
       const errorMsg =
         error.response?.data?.email?.[0] ||
-        "An error occurred. Please try again later.";
+        "エラーが発生しました。後で再試行してください。";
       Swal.fire({
         title: "Error",
         text: errorMsg,

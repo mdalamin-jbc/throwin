@@ -69,22 +69,22 @@ const BillingScreen = () => {
         // Show success alert
         Swal.fire({
           icon: "success",
-          title: "Success!",
+          title: "成功 !",
           text: isLiked
-            ? "You have liked removed this staff."
-            : "You have liked this staff.",
-          
-          showConfirmButton: true,
+            ? "あなたはこのスタッフをいいねから削除しました。"
+            : "あなたはこのスタッフをいいねしました。",
+
+          confirmButtonText: "はい",
         });
       } else {
-        throw new Error("Failed to update like status");
+        throw new Error("いいねのステータスの更新に失敗しました。");
       }
     } catch (error) {
       // Show error alert
       Swal.fire({
         icon: "error",
-        title: "Oops!",
-        text: error.response?.data?.detail || "Something went wrong.",
+        title: "おっと!",
+        text: error.response?.data?.detail || "何かがうまくいきませんでした",
       });
 
       console.error(

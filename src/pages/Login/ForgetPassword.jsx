@@ -41,21 +41,21 @@ const ForgetPassword = () => {
       Swal.fire({
         title: "Success",
         text:
-          response.data.detail || "Password reset request sent successfully!",
+          response.data.detail || "パスワードリセットのリクエストが正常に送信されました！",
         icon: "success",
-        confirmButtonText: "OK",
+        confirmButtonText: "はい",
       }).then(() => {
         navigate("/mail_check"); // Redirect to email check confirmation page
       });
     } catch (error) {
       const errorMsg =
         error.response?.data?.message ||
-        "An error occurred. Please try again later.";
+        "エラーが発生しました。後で再試行してください。";
       Swal.fire({
         title: "Error",
         text: errorMsg,
         icon: "error",
-        confirmButtonText: "OK",
+        confirmButtonText: "はい",
       });
     }
   };

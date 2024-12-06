@@ -27,12 +27,12 @@ const Favorite = () => {
         Swal.fire({
           icon: "success",
           title: "Success!",
-          text: "You have liked removed this staff.",
+          text: "このスタッフへの「いいね」を取り消しました。",
           // timer: 1500,
           showConfirmButton: true,
         });
       } else {
-        throw new Error("Failed to update like status");
+        throw new Error("「いいね」のステータスの更新に失敗しました。");
       }
     } catch (error) {
       console.error(

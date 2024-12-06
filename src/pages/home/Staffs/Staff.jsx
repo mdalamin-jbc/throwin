@@ -60,13 +60,12 @@ const Staff = () => {
         await refetch(); // Ensure refetch is awaited to refresh data properly
 
         Swal.fire({
-          icon: "success",
-          title: "Success!",
+          icon: "Success",
+          title: "成功!",
           text: isLiked
             ? "You have liked removed this staff."
             : "You have liked this staff.",
-            confirmButtonText: "OK",
-          
+          confirmButtonText: "はい",
         });
       } else {
         throw new Error("Failed to update like status");
@@ -74,11 +73,11 @@ const Staff = () => {
     } catch (error) {
       Swal.fire({
         icon: "error",
-        title: "Error!",
+        title: "エラー!",
         text:
           error.response?.data?.detail ||
           "Something went wrong. Please try again.",
-        confirmButtonText: "OK",
+        confirmButtonText: "はい",
       });
       console.error(
         "Error updating like status:",
@@ -93,14 +92,14 @@ const Staff = () => {
     <>
       {isLoading ? (
         <div className="flex justify-center items-center h-screen">
-        <Circles
-          height="80"
-          width="80"
-          color="#4fa94d"
-          ariaLabel="circles-loading"
-          visible={true}
-        />
-      </div>
+          <Circles
+            height="80"
+            width="80"
+            color="#4fa94d"
+            ariaLabel="circles-loading"
+            visible={true}
+          />
+        </div>
       ) : (
         <div className="min-w-[375px] mx-auto mb-[120px]">
           <div className="max-w-[416px] mx-auto">

@@ -24,9 +24,9 @@ const CheckMail = () => {
         // Show SweetAlert for success
         Swal.fire({
           title: "Success!",
-          text: "Activation email has been resent successfully!",
+          text: "アクティベーションメールが正常に再送信されました！",
           icon: "success",
-          confirmButtonText: "OK",
+          confirmButtonText: "はい ",
         });
       } else {
         throw new Error("Unexpected response status");
@@ -37,9 +37,9 @@ const CheckMail = () => {
         title: "Error!",
         text:
           error.response?.data?.email?.[0] ||
-          "An error occurred while resending the email.",
+          "メールの再送信中にエラーが発生しました。",
         icon: "error",
-        confirmButtonText: "OK",
+        confirmButtonText: "はい",
       });
     } finally {
       setIsLoading(false); // Hide loading indicator

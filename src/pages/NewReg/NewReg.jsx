@@ -52,7 +52,7 @@ const NewReg = () => {
         // Passing the email to the mail_check page
         navigate("/mail_check", { state: { email: email } });
       } else {
-        setErrorMessage("Registration failed. Please try again.");
+        setErrorMessage("登録に失敗しました。もう一度お試しください。");
       }
     } catch (error) {
       if (error.response && error.response.data.password) {
@@ -66,7 +66,7 @@ const NewReg = () => {
         });
       } else {
         setErrorMessage(
-          error.response ? error.response.data.msg : "An error occurred."
+          error.response ? error.response.data.msg : "エラーが発生しました。"
         );
       }
       console.error("Registration error:", error);

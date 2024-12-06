@@ -23,7 +23,7 @@ const RegistrationForm = () => {
     } else if (step === 2 && formData.password && formData.confirmPassword) {
       handleSubmit();
     } else {
-      setError("Please fill in all fields.");
+      setError("すべてのフィールドに記入してください。");
     }
   };
 
@@ -48,7 +48,7 @@ const RegistrationForm = () => {
       if (response.data.detail === "User Created Successfully") {
         navigate('/mail_check');
       } else {
-        setError("Registration failed. Please try again.");
+        setError("登録に失敗しました。もう一度お試しください。");
       }
     } catch (error) {
       setError(error.response ? error.response.data.detail : "An error occurred.");

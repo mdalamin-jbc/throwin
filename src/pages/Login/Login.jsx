@@ -90,7 +90,7 @@ const Login = () => {
       Swal.fire({
         position: "top",
         icon: "error",
-        title: `${error.response?.data.msg || "Incorrect Password"}`,
+        title: `${error.response?.data.msg || "パスワードが間違っています。"}`,
         showConfirmButton: false,
         timer: 1500,
       });
