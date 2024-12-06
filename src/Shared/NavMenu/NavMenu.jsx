@@ -3,7 +3,7 @@ import search from "../../assets/icons/search.png";
 import favorite from "../../assets/icons/favorite.png";
 import gacha from "../../assets/icons/Gacha.png";
 import notice from "../../assets/icons/notice.png";
-import history from "../../assets/icons//history.png";
+import history from "../../assets/icons/history.png";
 import user from "../../assets/icons/user.png";
 
 const NavMenu = () => {
@@ -71,15 +71,19 @@ const NavMenu = () => {
           })}
         >
           {({ isActive }) => (
-            <div className="flex flex-col items-center gap-2  relative">
+            <div
+              className={`flex flex-col items-center gap-3 relative ${
+                isActive ? "scale-110" : "scale-100"
+              } transition-transform`}
+            >
               <img
                 className={`transition-all ${
-                  isActive ? "w-[24px]" : "w-[18px]"
+                  isActive ? "w-[46px]" : "w-[35px]"
                 }`}
                 src={gacha}
                 alt=""
               />
-              <p>ガチャ</p>
+              <p className="text-lg font-bold">ガチャ</p>
             </div>
           )}
         </NavLink>
@@ -139,14 +143,14 @@ const NavMenu = () => {
 
   return (
     <footer
-      className="z-40 bg-white text-[#44495B] fixed bottom-0  w-full lg:w-full"
+      className="z-40 bg-white text-[#44495B] fixed bottom-0 w-full lg:w-full h-[80px]"
       style={{
         boxShadow:
           "0 -30px 30px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, -0.1)",
       }}
     >
-      <div className="flex justify-center items-center py-5 ">
-        <ul className="flex gap-6">{links}</ul>
+      <div className="flex justify-center items-center py-5 h-full">
+        <ul className="flex gap-6 items-center h-full">{links}</ul>
       </div>
     </footer>
   );
