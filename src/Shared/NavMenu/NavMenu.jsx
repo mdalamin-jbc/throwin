@@ -59,35 +59,32 @@ const NavMenu = () => {
           )}
         </NavLink>
       </li>
-      <li className="relative" style={{ top: "-10px" }}>
-  <NavLink
-    to="/gacha"
-    style={({ isActive, isTransitioning }) => ({
-      fontWeight: isActive ? "" : "",
-      color: isActive ? "#49BBDF" : "",
-      viewTransitionName: isTransitioning ? "slide" : "",
-      background: "transparent",
-      marginTop: isActive ? "-15px" : "",
-    })}
-  >
-    {({ isActive }) => (
-      <div
-        className={`flex flex-col items-center gap-3 relative ${
-          isActive ? "scale-110" : "scale-100"
-        } transition-transform`}
-      >
-        <img
-          className={`transition-all ${
-            isActive ? "w-[40px]" : "w-[35px]"
-          }`}
-          src={gacha}
-          alt=""
-        />
-        <p className="text-lg font-bold">ガチャ</p>
-      </div>
-    )}
-  </NavLink>
-</li>
+      <li className="relative" style={{ top: "-14px" }}>
+        <NavLink
+          to="/gacha"
+          style={({ isActive, isTransitioning }) => ({
+            fontWeight: isActive ? "" : "",
+            color: isActive ? "#49BBDF" : "",
+            viewTransitionName: isTransitioning ? "slide" : "",
+            background: "transparent",
+            marginTop: isActive ? "-15px" : "",
+          })}
+        >
+          {({ isActive }) => (
+            <div
+              className={`flex flex-col items-center gap-0 relative ${
+                isActive ? "scale-100" : "scale-100"
+              } transition-transform`}
+            >
+              <div className="bg-[#49BBDF] w-[29px] h-[29px] rounded-full absolute -right-1 -top-4">
+                <h2 className="text-center mr-1 text-white mt-[1px]">1</h2>
+              </div>
+              <img src={gacha} alt="" />
+              <p className="text-lg ">ガチャ</p>
+            </div>
+          )}
+        </NavLink>
+      </li>
 
       <li>
         <NavLink
