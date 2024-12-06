@@ -59,35 +59,36 @@ const NavMenu = () => {
           )}
         </NavLink>
       </li>
-      <li>
-        <NavLink
-          to="/gacha"
-          style={({ isActive, isTransitioning }) => ({
-            fontWeight: isActive ? "" : "",
-            color: isActive ? "#49BBDF" : "",
-            viewTransitionName: isTransitioning ? "slide" : "",
-            background: "transparent",
-            marginTop: isActive ? "-15px" : "",
-          })}
-        >
-          {({ isActive }) => (
-            <div
-              className={`flex flex-col items-center gap-3 relative ${
-                isActive ? "scale-110" : "scale-100"
-              } transition-transform`}
-            >
-              <img
-                className={`transition-all ${
-                  isActive ? "w-[46px]" : "w-[35px]"
-                }`}
-                src={gacha}
-                alt=""
-              />
-              <p className="text-lg font-bold">ガチャ</p>
-            </div>
-          )}
-        </NavLink>
-      </li>
+      <li className="relative" style={{ top: "-10px" }}>
+  <NavLink
+    to="/gacha"
+    style={({ isActive, isTransitioning }) => ({
+      fontWeight: isActive ? "" : "",
+      color: isActive ? "#49BBDF" : "",
+      viewTransitionName: isTransitioning ? "slide" : "",
+      background: "transparent",
+      marginTop: isActive ? "-15px" : "",
+    })}
+  >
+    {({ isActive }) => (
+      <div
+        className={`flex flex-col items-center gap-3 relative ${
+          isActive ? "scale-110" : "scale-100"
+        } transition-transform`}
+      >
+        <img
+          className={`transition-all ${
+            isActive ? "w-[40px]" : "w-[35px]"
+          }`}
+          src={gacha}
+          alt=""
+        />
+        <p className="text-lg font-bold">ガチャ</p>
+      </div>
+    )}
+  </NavLink>
+</li>
+
       <li>
         <NavLink
           to="/history"
