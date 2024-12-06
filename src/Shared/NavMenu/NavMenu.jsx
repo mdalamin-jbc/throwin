@@ -24,12 +24,12 @@ const NavMenu = () => {
             <div className="flex flex-col items-center gap-2">
               <img
                 className={`transition-all ${
-                  isActive ? "w-[29px]" : "w-[24px]"
+                  isActive ? "w-[29px]" : "w-[29px]"
                 }`}
                 src={search}
                 alt=""
               />
-              <p>探す</p>
+              <p className=" ">探す</p>
             </div>
           )}
         </NavLink>
@@ -49,7 +49,7 @@ const NavMenu = () => {
             <div className="flex flex-col items-center gap-2">
               <img
                 className={`transition-all ${
-                  isActive ? "w-[33px]" : "w-[28px]"
+                  isActive ? "w-[29px]" : "w-[29px]"
                 }`}
                 src={favorite}
                 alt=""
@@ -76,10 +76,10 @@ const NavMenu = () => {
                 isActive ? "scale-100" : "scale-100"
               } transition-transform`}
             >
-              <div className="bg-[#49BBDF] w-[29px] h-[29px] rounded-full absolute -right-1 -top-4">
-                <h2 className="text-center mr-1 text-white mt-[1px]">1</h2>
+              <div className="bg-[#49BBDF] w-[30px] h-[29px] rounded-full absolute -right-1 -top-4">
+                <h2 className="text-center mr-[1px] text-white mt-[1px]">1</h2>
               </div>
-              <img src={gacha} alt="" />
+              <img src={gacha} alt="" className="" />
               <p className="text-lg ">ガチャ</p>
             </div>
           )}
@@ -98,15 +98,15 @@ const NavMenu = () => {
           })}
         >
           {({ isActive }) => (
-            <div className="flex flex-col items-center gap-2">
+            <div className="flex flex-col items-center gap-2 ml-3">
               <img
                 className={`transition-all ${
-                  isActive ? "w-[28px]" : "w-[23px]"
+                  isActive ? "w-[30px]" : "w-[30px]"
                 }`}
                 src={history}
                 alt=""
               />
-              <p>履歴</p>
+              <p className="text-[13px]">履歴</p>
             </div>
           )}
         </NavLink>
@@ -126,7 +126,7 @@ const NavMenu = () => {
             <div className="flex flex-col items-center gap-2">
               <img
                 className={`transition-all ${
-                  isActive ? "w-[28px]" : "w-[23px]"
+                  isActive ? "w-[29px]" : "w-[29px]"
                 }`}
                 src={user}
                 alt=""
