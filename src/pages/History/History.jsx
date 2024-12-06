@@ -5,6 +5,8 @@ import useAxiosPrivate from "../../hooks/axiousPrivate";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../../hooks/useAuth";
 import { Circles } from "react-loader-spinner";
+import img from "../../assets/images/store&staff/image.png";
+
 
 const History = () => {
   const axiosPrivate = useAxiosPrivate();
@@ -46,7 +48,7 @@ const History = () => {
           <div key={payment.id} className="flex items-center">
             <img
               className="w-[49px] h-[49px] rounded-full"
-              src="https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg" // Placeholder image
+              src={img} // Placeholder image
               alt="user"
             />
             <div className="flex-1 flex justify-between items-center">

@@ -86,7 +86,7 @@ const NavMenu = () => {
         </NavLink>
       </li>
 
-      <li>
+      <li className="">
         <NavLink
           to="/history"
           style={({ isActive, isTransitioning }) => ({

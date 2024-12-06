@@ -5,6 +5,7 @@ import useAxiosPrivate from "../../hooks/axiousPrivate";
 import { useState } from "react";
 import Swal from "sweetalert2";
 import { Circles } from "react-loader-spinner";
+import img from "../../assets/images/store&staff/image.png";
 
 const Favorite = () => {
   const { favoriteStuffs, refetch, isLoading } = useGetFavoriteStuff();
@@ -71,7 +72,7 @@ const Favorite = () => {
                 <div className="flex items-center">
                   <img
                     className="w-[49px] h-[49px] rounded-full"
-                    src="https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
+                    src={img}
                     alt=""
                   />
                   <div className="flex-1 flex justify-between items-center">
