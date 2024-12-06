@@ -20,10 +20,10 @@ const VerifyEmail = () => {
     // Validate token
     if (!token) {
       Swal.fire({
-        title: "Invalid Token",
-        text: "The token is missing or invalid.",
+        title: "無効なトークン",
+        text: "トークンが missing または無効です。",
         icon: "error",
-        confirmButtonText: "OK",
+        confirmButtonText: "はい",
       });
       setLoading(false);
       return;
@@ -43,10 +43,12 @@ const VerifyEmail = () => {
 
         if (isMounted) {
           Swal.fire({
-            title: "Success",
-            text: response.data.detail || "Your email has been verified!",
+            title: "成功 ",
+            text:
+              response.data.detail ||
+              "あなたのメールアドレスが確認されました！",
             icon: "success",
-            confirmButtonText: "OK",
+            confirmButtonText: "はい",
           }).then(() => {
             logout();
             navigate("/login");
@@ -55,12 +57,12 @@ const VerifyEmail = () => {
       } catch (error) {
         if (isMounted) {
           Swal.fire({
-            title: "Verification Failed",
+            title: "確認に失敗しました",
             text:
               error.response?.data?.detail ||
-              "An error occurred. Please try again later.",
+              "エラーが発生しました。後でもう一度お試しください。",
             icon: "error",
-            confirmButtonText: "OK",
+            confirmButtonText: "はい",
           });
         }
       } finally {
