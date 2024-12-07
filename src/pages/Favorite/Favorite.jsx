@@ -26,8 +26,9 @@ const Favorite = () => {
         await refetch();
         Swal.fire({
           icon: "success",
-          title: "Success!",
+          title: "成功！",
           text: "このスタッフへの「いいね」を取り消しました。",
+          confirmButtonText: "はい",
           // timer: 1500,
           showConfirmButton: true,
         });

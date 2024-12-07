@@ -23,8 +23,8 @@ const UserProfile = () => {
     logout();
     Swal.fire({
       icon: "success",
-      title: "Logout Successful",
-      text: "You have been logged out successfully.",
+      title: "ログアウト成功",
+      text: "正常にログアウトされました",
       confirmButtonText: "OK",
     }).then(() => {
       navigate("/login");

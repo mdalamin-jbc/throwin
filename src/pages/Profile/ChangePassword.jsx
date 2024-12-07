@@ -134,7 +134,7 @@ const ChangePassword = () => {
                       validate: (value) =>
                         value ===
                           document.querySelector("input[name='password']")
-                            .value || "Passwords do not match",
+                            .value || "パスワードが一致しません",
                     })}
                     name="confirmPassword"
                     type="password"

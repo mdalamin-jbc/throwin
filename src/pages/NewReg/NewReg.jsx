@@ -116,7 +116,7 @@ const NewReg = () => {
                 {...register("confirmPassword", {
                   required: "Confirmation is required",
                   validate: (value) =>
-                    value === password || "Passwords do not match",
+                    value === password || "パスワードが一致しません",
                 })}
                 type="password"
                 placeholder="パスワード（確認用）"

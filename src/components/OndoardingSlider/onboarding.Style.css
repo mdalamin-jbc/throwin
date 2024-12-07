@@ -1,11 +1,14 @@
-@media (max-height: 900px) {
-  .custom-padding {
-    padding-top: 1rem; /* pt-4 */
+@media (max-width: 375px) {
+  .swiper-slide {
+    height: 100vh; /* Ensure the swiper takes up the full height on iPhone SE */
   }
-}
 
-@media (min-height: 901px) {
-  .custom-padding {
-    padding-top: 10rem; /* pt-40 */
+  .next-button {
+    bottom: 20px; /* Adjust button positioning */
+  }
+
+  /* Adjust margin-top for smaller devices */
+  .pt-6 {
+    padding-top: 0;
   }
 }
