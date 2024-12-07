@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import TitleBar from "../../components/TitleBar";
 import useAxiosPrivate from "../../hooks/axiousPrivate";
@@ -7,6 +6,16 @@ import { useAuth } from "../../hooks/useAuth";
 import { Circles } from "react-loader-spinner";
 import img from "../../assets/images/store&staff/image.png";
 
+// Helper function to format date
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  return `${year}/${day}/${month} ${hours}:${minutes}`;
+};
 
 const History = () => {
   const axiosPrivate = useAxiosPrivate();
@@ -21,6 +30,8 @@ const History = () => {
     },
     enabled: !!accessToken, // Only fetch if accessToken is present
   });
+
+  console.log(payments);
 
   if (isLoading) {
     return (
@@ -57,7 +68,7 @@ const History = () => {
                   {payment.customer_username} 店舗名
                 </h3>
                 <p className="font-normal text-sm text-[#9C9C9C]">
-                  {payment.created_at}
+                  {formatDate(payment.created_at)}
                 </p>
               </div>
               <div className="flex flex-col items-end">
