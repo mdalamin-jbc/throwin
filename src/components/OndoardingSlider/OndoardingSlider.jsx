@@ -18,6 +18,7 @@ import { Helmet } from "react-helmet";
 
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
+import "./onboarding.Style.css"
 
 const OnboardingSlider = () => {
   const swiperRef = useRef(null);
@@ -53,7 +54,7 @@ const OnboardingSlider = () => {
       >
         <div>
           <Confetti width={width} height={height} />
-          <div className="pt-6 relative mt-[90px] md:mt-0">
+          <div className="p-8 relative min-[411px]:mt-[90px] max-[900px]:mt-[90px]  min-[475px]:mt-[0px] max-[667px]:mt-[0px] md:mt-0">
             <Swiper
               cssMode={true}
               pagination={{
@@ -70,14 +71,14 @@ const OnboardingSlider = () => {
               onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
             >
               <SwiperSlide className="flex justify-center items-center h-full w-full px-1 md:px-16">
-                <div className="relative w-full px-[68px]">
+                <div className="relative w-full px-9">
                   <div className="mt-[70px] md:mt-0">
                     <h2 className="font-hiragino font-medium text-lg text-[#49BBDF] flex gap-3 justify-center mb-3">
                       \ <span>はじめに</span> /
                     </h2>
-                    <h3 className="grid font-hiragino font-semibold text-[19px] text-[#44495B] leading-8 mb-11">
-                      <span>Throwinは</span>活躍するスタッフとお客様を <br />
-                      繋ぐ投げ銭サービスです
+                    <h3 className="grid font-hiragino font-semibold min-[411px]:text-[19px] max-[900px]:text-[19px]  min-[375px]:text-[15px] max-[667px]:text-[15px] text-[#44495B] leading-8 mb-11">
+                      <span>Throwinは</span>あなたの応援をカタチにできる <br />
+                      投げ銭サービスです
                     </h3>
                     <img
                       src={img}
@@ -91,13 +92,11 @@ const OnboardingSlider = () => {
               <SwiperSlide className="flex justify-center items-center h-full w-full px-6 md:px-16 mt-[10px]">
                 <div className="relative">
                   <div className="mt-28 md:mt-0">
-                    <h3 className="grid font-hiragino font-semibold text-[19px] text-[#44495B] leading-8 mb-11">
-                      元気や、感動を
-                      <br /> 与えてくれたスタッフに
+                    <h3 className="grid font-hiragino font-semibold min-[411px]:text-[19px] max-[900px]:text-[19px]  min-[475px]:text-[15px] max-[667px]:text-[15px] text-[#44495B] leading-8 mb-11">
+                    元気や、感動を
+                      <br /> 与えてくれた人に、
                       <br />
-                      お礼をカタチ（投げ銭）にして
-                      <br />
-                      伝えることができます。
+                      スローインしましょう！
                     </h3>
                     <img
                       src={img2}
@@ -108,10 +107,10 @@ const OnboardingSlider = () => {
                 </div>
               </SwiperSlide>
 
-              <SwiperSlide className="flex justify-center items-center h-full w-full px-6 md:px-16 mt-[39px]">
+              <SwiperSlide className="flex justify-center items-center h-full w-full px-6 md:px-16 mt-[3px]">
                 <div className="relative">
                   <div className="mt-[180px] md:mt-0">
-                    <h3 className="grid font-hiragino font-semibold text-[19px] text-[#44495B] leading-8 mb-11">
+                    <h3 className="grid font-hiragino font-semibold min-[411px]:text-[19px] max-[900px]:text-[19px]  min-[475px]:text-[15px] max-[667px]:text-[15px] text-[#44495B] leading-8 mb-11">
                       ガチャ機能の説明
                     </h3>
                     <img
@@ -124,7 +123,7 @@ const OnboardingSlider = () => {
               </SwiperSlide>
             </Swiper>
 
-            <div className="custom-pagination inset-x-0 flex justify-center my-8 "></div>
+            <div className="custom-pagination inset-x-0 flex justify-center min-[411px]:my-8   min-[375px]:my-4  min-[330px]:my-4"></div>
 
             <button
               onClick={handleNext}
