@@ -1,10 +1,12 @@
 
-import { Link } from "react-router-dom"; // Import Link for navigation
+import { Link, useNavigate } from "react-router-dom"; // Import Link for navigation
 import TitleBar from "../../components/TitleBar";
 import throw_wh from "../../assets/images/home/logo.png";
 import { GoDotFill } from "react-icons/go";
+import { RiArrowLeftSLine } from "react-icons/ri";
 
 const Notification = () => {
+  const navigate = useNavigate();
   const notifications = [
     {
       id: 1,
@@ -35,13 +37,18 @@ const Notification = () => {
   return (
     <div className="mb-[120px]">
       <div>
-        <TitleBar title="お気に入り"></TitleBar>
+        <TitleBar back={
+          <RiArrowLeftSLine
+            onClick={() => navigate(-1)}
+            style={{ cursor: "pointer" }}
+          />
+        } title="お気に入り"></TitleBar>
       </div>
       <div className="min-w-[375px] max-w-[430px] mx-auto px-[25px] mt-7 text-[#44495B] grid gap-5">
         {notifications.map((notification) => (
           <Link
             key={notification.id}
-            to={`/notification/${notification.id}`} // Dynamic route
+            to={`/myPage/notice/${notification.id}`} 
             className="flex items-center"
           >
             <div className="w-[49px] h-[49px] bg-[#49BBDF] rounded-full flex items-center justify-center">

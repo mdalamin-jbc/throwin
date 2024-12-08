@@ -37,6 +37,7 @@ import Notification from "../pages/Notification/Notification";
 import AdminLogin from "../pages/Dashboard/AdminLogin/AdminLogin";
 import Account from "../pages/Dashboard/Account/Account";
 import ForgetMailCheck from "../pages/Login/ForgetMailCheck";
+import NotificationDetails from "../pages/Notification/NotificationDetails";
 
 export const Routes = createBrowserRouter([
   {
@@ -184,6 +185,10 @@ export const Routes = createBrowserRouter([
       {
         path: "myPage/notice",
         element: <Notification />,
+      },
+      {
+        path: "myPage/notice/:id",
+        element: <NotificationDetails />,
       },
       {
         path: "/terms",
