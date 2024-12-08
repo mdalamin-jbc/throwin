@@ -28,7 +28,7 @@ const History = () => {
       const res = await axiosPrivate.get("/payment_service/payments/");
       return res.data.results;
     },
-    enabled: !!accessToken, // Only fetch if accessToken is present
+    enabled: !!accessToken, 
   });
 
   console.log(payments);
@@ -39,7 +39,7 @@ const History = () => {
         <Circles
           height="80"
           width="80"
-          color="#4fa94d"
+          color="#49BBDF"
           ariaLabel="circles-loading"
           visible={true}
         />

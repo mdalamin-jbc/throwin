@@ -94,7 +94,7 @@ const Staff = () => {
           <Circles
             height="80"
             width="80"
-            color="#4fa94d"
+            color="#49BBDF"
             ariaLabel="circles-loading"
             visible={true}
           />

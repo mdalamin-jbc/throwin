@@ -5,12 +5,26 @@ import effect from "../../assets/images/billing/billingEffect.png";
 import UseGetByStaffName from "../../hooks/UseGetByStaffName";
 import { Link, useParams } from "react-router-dom";
 import ButtonPrimary from "../../components/ButtonPrimary";
+import { Circles } from "react-loader-spinner";
 
 const ChargeCompleted = () => {
   const { username } = useParams();
-  const { staff, refetch, isLoading, isError } = UseGetByStaffName(username);
-  console.log(staff);
+  const { staff, isLoading, isError } = UseGetByStaffName(username);
+  console.log(isError);
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Circles
+          height="80"
+          width="80"
+          color="#49BBDF"
+          ariaLabel="circles-loading"
+          visible={true}
+        />
+      </div>
+    );
+  }
   return (
     <div className="mb-[120px] ">
       <Helmet>

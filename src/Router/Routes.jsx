@@ -36,6 +36,7 @@ import Dashboard from "../pages/Dashboard/Dashboard";
 import Notification from "../pages/Notification/Notification";
 import AdminLogin from "../pages/Dashboard/AdminLogin/AdminLogin";
 import Account from "../pages/Dashboard/Account/Account";
+import ForgetMailCheck from "../pages/Login/ForgetMailCheck";
 
 export const Routes = createBrowserRouter([
   {
@@ -65,6 +66,10 @@ export const Routes = createBrowserRouter([
       {
         path: "forget_password",
         element: <ForgetPassword />,
+      },
+      {
+        path: "forget_mail_check",
+        element: <ForgetMailCheck />,
       },
       {
         path: "/reset-password/:userId/:token",

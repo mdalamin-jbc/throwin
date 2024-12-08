@@ -15,7 +15,7 @@ const VerifyEmail = () => {
   const { logout } = useAuth();
 
   useEffect(() => {
-    let isMounted = true; // Prevent state updates if the component is unmounted
+    let isMounted = true; 
 
     // Validate token
     if (!token) {
@@ -80,7 +80,7 @@ const VerifyEmail = () => {
         <Circles
           height="80"
           width="80"
-          color="#4fa94d"
+          color="#49BBDF"
           ariaLabel="circles-loading"
           visible={true}
         />

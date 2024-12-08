@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import Swal from "sweetalert2"; // Import SweetAlert2
-import mail from "../../assets/icons/mail-icon-3.svg";
+import mailImg from "../../assets/icons/mail-icon-3.svg";
 import useAxiosPublic from "../../hooks/axiosPublic";
 
 const CheckMail = () => {
@@ -49,7 +49,7 @@ const CheckMail = () => {
       <div className="card bg-base-100 w-96 shadow-xl">
         <div className="card-body">
           <div className="flex flex-col justify-center items-center">
-            <img className="w-[150px]" src={mail} alt="Mail Icon" />
+            <img className="w-[150px]" src={mailImg} alt="Mail Icon" />
             <h3 className="text-center mt-8 mb-2 font-hiragino font-semibold text-lg">
               メールを確認してください
             </h3>
