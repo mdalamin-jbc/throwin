@@ -50,7 +50,7 @@ const BillingScreen = () => {
     setIsProcessing(true);
 
     try {
-      const endpoint = `/auth/users/stuff/${staff.uid}/like`;
+      const endpoint = `/auth/users/staff/${staff.uid}/like`;
       const response = isLiked
         ? await axiosPrivate.delete(endpoint) // DELETE if currently liked
         : await axiosPrivate.post(endpoint);
