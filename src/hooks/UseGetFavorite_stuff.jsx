@@ -15,7 +15,7 @@ const useGetFavoriteStuff = () => {
     queryKey: ["favoriteStuff"], // Query key should still be an array or string
     queryFn: async () => {
       try {
-        const res = await AxiosPrivate.get("auth/users/favorite-stuff");
+        const res = await AxiosPrivate.get("auth/users/favorite-staff");
         return res.data;
       } catch (error) {
         console.error("Error fetching favorite stuff:", error.response?.data || error.message);

@@ -60,7 +60,7 @@ const Staff = () => {
         await refetch(); // Ensure refetch is awaited to refresh data properly
 
         Swal.fire({
-          icon: "Success",
+          icon: "success",
           title: "成功!",
           text: isLiked
             ? "あなたはこのスタッフをいいねから削除しました。"
