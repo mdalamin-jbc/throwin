@@ -12,7 +12,7 @@ const useGetStuffsByStoreCode = (storeData) => {
   } = useQuery({
     queryKey: ["stuffs", storeData?.code],
     queryFn: async () => {
-      const res = await axiosPublic.get(`stores/${storeData.code}/stuff/list`);
+      const res = await axiosPublic.get(`stores/${storeData.code}/staff/list`);
       return res.data;
     },
     enabled: !!storeData?.code, // Only run the query if storeCode is provided

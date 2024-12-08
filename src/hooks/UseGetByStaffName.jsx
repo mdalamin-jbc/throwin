@@ -12,7 +12,7 @@ const UseGetByStaffName = (username) => {
   } = useQuery({
     queryKey: ["staff", username],
     queryFn: async () => {
-      const res = await axiosPublic.get(`/auth/users/stuff/${username}`);
+      const res = await axiosPublic.get(`/auth/users/staff/${username}`);
       return res.data;
     },
     enabled: !!username, // Only run if username is provided
