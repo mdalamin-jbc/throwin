@@ -44,7 +44,7 @@ const ResetPassword = () => {
       if (response.data.detail === "Password reset successful") {
         Swal.fire({
           icon: "success",
-          title: "Success",
+          title: "成功",
           text: "パスワードが正常にリセットされました！",
           confirmButtonText: "はい ",
         }).then(() => {
