@@ -18,7 +18,7 @@ const Favorite = () => {
 
     try {
       const response = await axiosPrivate.delete(
-        `/auth/users/stuff/${id}/like`
+        `/auth/users/staff/${id}/like`
       );
       console.log("API Response:", response);
 
