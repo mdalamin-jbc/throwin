@@ -52,7 +52,7 @@ const History = () => {
       <Helmet>
         <title>Throwin | History</title>
       </Helmet>
-      <TitleBar style="mb-0 w-full" title="履歴" icon=""></TitleBar>
+      <TitleBar style="mb-0 w-full" title="履歴" icon={null}></TitleBar>
 
       <div className="min-w-[375px] max-w-[430px] mx-auto px-[25px] mt-7 text-[#44495B] grid gap-5">
         {payments.map((payment) => (
