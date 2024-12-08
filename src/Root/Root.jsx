@@ -11,7 +11,7 @@ const Root = () => {
     "favorite",
     "gacha",
     "notice",
-    "setting",
+
     "member_list",
     "myPage",
     "store",
@@ -25,12 +25,11 @@ const Root = () => {
   ].some((path) => location.pathname.includes(path));
 
   // Check if the current path is within the dashboard
-  const isDashboardPath = location.pathname.startsWith("/dashboard");
 
   return (
     <div>
       {shouldRenderNavMenu && <NavMenu />}
-      {isDashboardPath && <SideMenu />}
+
       <Outlet />
     </div>
   );

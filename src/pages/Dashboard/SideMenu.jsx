@@ -1,58 +1,26 @@
 import { FaHome, FaUser, FaFileInvoice, FaSignOutAlt } from "react-icons/fa";
-import { NavLink, useLocation } from "react-router-dom"; // Import necessary hooks/components
+import { NavLink, useLocation } from "react-router-dom"; 
 import logo from "../../assets/images/socialLogin/logo2.png";
 import search from "../../assets/icons/search.png";
-import { motion } from "motion/react";
-import { Children } from "react";
 
-const SideMenu = (children) => {
+const SideMenu = () => {
   const location = useLocation();
-
-  const links = (
-    <>
-      <li>
-        <NavLink
-          to="dashboard/account"
-          style={({ isActive, isTransitioning }) => ({
-            fontWeight: isActive ? "" : "",
-            color: isActive ? "#49BBDF" : "",
-            viewTransitionName: isTransitioning ? "slide" : "",
-            background: "transparent",
-            marginTop: isActive ? "-15px" : "",
-          })}
-        >
-          {({ isActive }) => (
-            <div className="flex flex-col items-center gap-2">
-              <img
-                className={`transition-all ${
-                  isActive ? "w-[29px]" : "w-[24px]"
-                }`}
-                src={search}
-                alt=""
-              />
-              <p>アカウント</p>
-            </div>
-          )}
-        </NavLink>
-      </li>
-    </>
-  );
 
   const menuItems = [
     {
       label: "アカウント",
       icon: <FaHome className="text-xl mr-4" />,
-      path: "dashboard/account",
+      path: "/dashboard/account", // Make sure this path matches with the route in your router
     },
     {
       label: "設定",
       icon: <FaUser className="text-xl mr-4" />,
-      path: "/settings",
+      path: "settings", // Same for this
     },
     {
       label: "ご利用状況・請求",
       icon: <FaFileInvoice className="text-xl mr-4" />,
-      path: "/billing",
+      path: "/dashboard/billing", // Same for this
     },
   ];
 
@@ -87,7 +55,6 @@ const SideMenu = (children) => {
         <FaSignOutAlt className="text-blue-500 text-xl mr-4" />
         <span className="text-gray-700 text-lg">ログアウト</span>
       </div>
-      <main></main>
     </div>
   );
 };

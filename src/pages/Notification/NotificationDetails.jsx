@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 const NotificationDetails = () => {
   const navigate = useNavigate();
 
-  const { id } = useParams(); // Get the notification ID from the route
+  const { id } = useParams(); 
 
   const notifications = [
     {
@@ -32,7 +32,7 @@ const NotificationDetails = () => {
     },
   ];
 
-  // Find the notification by ID
+ 
   const notification = notifications.find((notif) => notif.id === parseInt(id));
 
   if (!notification) {
@@ -74,7 +74,7 @@ const NotificationDetails = () => {
         </div>
       </div>
       <div className="min-w-[375px] max-w-[430px] mx-auto fixed bottom-[85px] left-0 right-0">
-        <h4 className="font-light bg-[#F0F3F4] mx-[23px] py-3 px-[18px] rounded-full">
+        <h4 className="font-light bg-[#F0F3F4] mx-[23px] py-3 px-[20px] rounded-full">
           こちらのメッセージに返答はできません
         </h4>
       </div>
