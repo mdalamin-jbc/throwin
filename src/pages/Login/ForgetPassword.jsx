@@ -36,22 +36,19 @@ const ForgetPassword = () => {
           },
         }
       );
-
+      console.log(response);
       // Display success message from API response
       Swal.fire({
         title: "成功 ",
-        text:
-          response.data.detail ||
-          "パスワードリセットのリクエストが正常に送信されました！",
+        text: "パスワードリセットのリクエストが正常に送信されました！",
         icon: "success",
         confirmButtonText: "はい",
       }).then(() => {
         navigate("/forget_mail_check");
       });
     } catch (error) {
-      const errorMsg =
-        error.response?.data?.message ||
-        "エラーが発生しました。後で再試行してください。";
+      console.log(error);
+      const errorMsg = "エラーが発生しました。後で再試行してください。";
       Swal.fire({
         title: "エラー",
         text: errorMsg,
