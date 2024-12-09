@@ -1,5 +1,5 @@
 import { FaHome, FaUser, FaFileInvoice, FaSignOutAlt } from "react-icons/fa";
-import { NavLink, useLocation } from "react-router-dom"; 
+import { NavLink, useLocation } from "react-router-dom";
 import logo from "../../assets/images/socialLogin/logo2.png";
 import search from "../../assets/icons/search.png";
 
@@ -20,12 +20,12 @@ const SideMenu = () => {
     {
       label: "ご利用状況・請求",
       icon: <FaFileInvoice className="text-xl mr-4" />,
-      path: "/dashboard/billing", // Same for this
+      path: "billing", // Same for this
     },
   ];
 
   return (
-    <div className="w-[311px] h-screen shadow-lg flex flex-col justify-between">
+    <div className="w-[311px] h-screen shadow-lg flex flex-col justify-between bg-white">
       {/* Logo Section */}
       <div className="mt-6 ml-9 border-gray-300 text-center">
         <img src={logo} alt="Logo" className="w-[221px] mb-[61px]" />

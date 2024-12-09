@@ -1,4 +1,3 @@
-import SideMenu from "../pages/Dashboard/SideMenu";
 import NavMenu from "../Shared/NavMenu/NavMenu";
 import { Outlet, useLocation } from "react-router-dom";
 

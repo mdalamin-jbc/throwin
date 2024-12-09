@@ -141,7 +141,7 @@ export const Routes = createBrowserRouter([
         element: <ChargeCompleted />,
       },
       {
-        path: "/stuff_list",
+        path: "/member_list/:staffName",
         element: <MemberList />,
       },
       // History

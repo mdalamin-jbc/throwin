@@ -7,6 +7,7 @@ import { useState } from "react";
 import useAxiosPublic from "../../hooks/axiosPublic";
 import { useNavigate } from "react-router-dom";
 import UseGetByStaffName from "../../hooks/UseGetByStaffName";
+import UseGetStaffListByStaffName from "../../hooks/UseGetStaffListByStaffName";
 
 const Search = () => {
   const [searchByStuffName, setSearchByStuffName] = useState("");
@@ -15,8 +16,8 @@ const Search = () => {
   const [storeData, setStoreData] = useState(null);
   const [stuffData, setStuffData] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
-  const { staff, isLoading, isError, refetch } =
-    UseGetByStaffName(searchByStuffName);
+  const { staffs, isLoading, isError, refetch } =
+    UseGetStaffListByStaffName(searchByStuffName);
 
   const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
@@ -36,15 +37,15 @@ const Search = () => {
       return;
     }
 
-    refetch(); 
+    refetch();
 
     if (!isLoading && !isError) {
-      setStuffData(staff);
+      setStuffData(staffs);
       setErrorMessage("");
-      console.log("Fetched staff data:", staff);
+      console.log("Fetched staff data:", staffs);
 
       // Navigate to the detail page with the staff data
-      navigate(`/staff/${staff.username}`);
+      navigate(`/member_list/${searchByStuffName}`);
     } else if (isError) {
       setErrorMessage("スタッフが見つかりませんでした。");
     }
