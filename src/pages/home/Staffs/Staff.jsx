@@ -21,12 +21,12 @@ const Staff = () => {
   const axiosPrivate = useAxiosPrivate();
 
   // Log favoriteStuffs for debugging
-  // console.log(staff);
+  console.log(staff);
   // console.log(favoriteStuffs);
   useEffect(() => {
     if (staff && favoriteStuffs.length > 0) {
       const isStaffLiked = favoriteStuffs.some(
-        (favorite) => favorite.uid === staff.uid
+        (favorite) => favorite.uid === staff?.uid
       );
       setIsLiked(isStaffLiked);
       // console.log(isStaffLiked);
@@ -48,7 +48,7 @@ const Staff = () => {
     try {
       const endpoint = `/auth/users/staff/${staff.uid}/like`;
       const response = isLiked
-        ? await axiosPrivate.delete(endpoint) // DELETE if currently liked
+        ? await axiosPrivate.delete(endpoint)
         : await axiosPrivate.post(endpoint);
 
       if (
@@ -56,8 +56,9 @@ const Staff = () => {
         response.status === 201 ||
         response.status === 204
       ) {
-        setIsLiked((prev) => !prev); // Toggle the like state
-        await refetch(); // Ensure refetch is awaited to refresh data properly
+        setIsLiked((prev) => !prev);
+        await refetch();
+        console.log(response);
 
         Swal.fire({
           icon: "success",
@@ -74,8 +75,7 @@ const Staff = () => {
       Swal.fire({
         icon: "error",
         title: "エラー!",
-        text:
-          "何かがうまくいきませんでした。もう一度お試しください。",
+        text: "何かがうまくいきませんでした。もう一度お試しください。",
         confirmButtonText: "はい",
       });
       console.error(

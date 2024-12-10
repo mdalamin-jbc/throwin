@@ -39,6 +39,7 @@ import Account from "../pages/Dashboard/Account/Account";
 import ForgetMailCheck from "../pages/Login/ForgetMailCheck";
 import NotificationDetails from "../pages/Notification/NotificationDetails";
 import DeSeetings from "../pages/Dashboard/Seetings/DeSeetings";
+import QrCreation from "../pages/Dashboard/QrCreation/QrCreation";
 
 export const Routes = createBrowserRouter([
   {
@@ -211,6 +212,10 @@ export const Routes = createBrowserRouter([
           {
             path: "adminLogin",
             element: <AdminLogin />,
+          },
+          {
+            path: "qr_creation",
+            element: <QrCreation />,
           },
         ],
       },

@@ -1,5 +1,9 @@
 import axios from "axios";
 import { useAuth } from "./useAuth";
+import Cookies from "js-cookie";
+
+
+// ----------------------------
 
 const axiosPrivate = axios.create({
   baseURL: "http://176.34.7.102:8000",

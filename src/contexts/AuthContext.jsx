@@ -2,7 +2,7 @@
 import { createContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Cookies from "js-cookie";
-import useAxiosPublic from "../hooks/axiosPublic";
+
 
 const AuthContext = createContext(null);
 
@@ -10,12 +10,16 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   const [loading, setLoading] = useState(true);
-  const axiosPublic = useAxiosPublic();
+
 
   useEffect(() => {
     const checkUser = () => {
       const email = Cookies.get("email");
       const accessToken = Cookies.get("access_token");
+      const sessionid = Cookies.get("sessionid");
+
+      console.log(sessionid)
+      
 
       if (email && accessToken) {
         setUser({ email, access: accessToken });
