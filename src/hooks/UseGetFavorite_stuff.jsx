@@ -12,7 +12,7 @@ const useGetFavoriteStuff = () => {
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["favoriteStuff"], // Query key should still be an array or string
+    queryKey: ["favoriteStuff"], 
     queryFn: async () => {
       try {
         const res = await AxiosPrivate.get("auth/users/favorite-staff");
@@ -22,7 +22,7 @@ const useGetFavoriteStuff = () => {
         throw error;
       }
     },
-    enabled: Boolean(user?.access), // Only run the query if user has access
+    enabled: Boolean(user?.access), 
   });
 
   const favoriteStuffs = data;
