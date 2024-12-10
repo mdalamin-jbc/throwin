@@ -8,7 +8,7 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  
+
   const [loading, setLoading] = useState(true);
   const axiosPublic = useAxiosPublic();
 
@@ -25,8 +25,6 @@ export const AuthProvider = ({ children }) => {
 
     checkUser();
   }, []);
-
-  
 
   const login = (userData) => {
     setUser(userData);
@@ -47,7 +45,6 @@ export const AuthProvider = ({ children }) => {
     loading,
     login,
     logout,
-    
   };
 
   return (
