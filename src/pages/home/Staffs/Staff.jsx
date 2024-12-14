@@ -59,6 +59,7 @@ const Staff = () => {
         setIsLiked((prev) => !prev);
         await refetch();
         console.log(response);
+        console.log("Headers:", response.headers);
 
         Swal.fire({
           icon: "success",

@@ -40,6 +40,7 @@ import ForgetMailCheck from "../pages/Login/ForgetMailCheck";
 import NotificationDetails from "../pages/Notification/NotificationDetails";
 import DeSeetings from "../pages/Dashboard/Seetings/DeSeetings";
 import QrCreation from "../pages/Dashboard/QrCreation/QrCreation";
+import SalesManagement from "../pages/Dashboard/SalesManagement/SalesManagement";
 
 export const Routes = createBrowserRouter([
   {
@@ -208,6 +209,10 @@ export const Routes = createBrowserRouter([
           {
             path: "settings",
             element: <DeSeetings />,
+          },
+          {
+            path: "sales_management",
+            element: <SalesManagement />,
           },
           {
             path: "adminLogin",

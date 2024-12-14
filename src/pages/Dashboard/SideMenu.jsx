@@ -23,7 +23,7 @@ const SideMenu = () => {
     {
       label: "ご利用状況・請求",
       icon: <img src={streamline} alt=""  className="mr-4 w-6"/>,
-      path: "billing",
+      path: "/dashboard/sales_management",
     },
   ];
 

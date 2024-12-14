@@ -3,7 +3,6 @@ import { createContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Cookies from "js-cookie";
 
-
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
@@ -11,15 +10,13 @@ export const AuthProvider = ({ children }) => {
 
   const [loading, setLoading] = useState(true);
 
-
   useEffect(() => {
     const checkUser = () => {
       const email = Cookies.get("email");
       const accessToken = Cookies.get("access_token");
-      const sessionid = Cookies.get("sessionid");
+      const sessionid = Cookies.get("ajs_anonymous_id");
 
-      console.log(sessionid)
-      
+      console.log(sessionid);
 
       if (email && accessToken) {
         setUser({ email, access: accessToken });

@@ -1,10 +1,10 @@
 import { useForm } from "react-hook-form";
 import { BiSolidDownArrow } from "react-icons/bi";
-import { useState } from "react"; // Import useState for managing the dynamic data
+import { useState } from "react";
 import logo from "../../../assets/images/socialLogin/logo2.png";
-
+// import QRCode from "react-qr-code";
 const QrCreation = () => {
-  const [qrData, setQrData] = useState(""); // State to store the data for QR code
+  const [qrData, setQrData] = useState("");
 
   const {
     register,
@@ -32,7 +32,7 @@ const QrCreation = () => {
     };
 
     // Create a string representation of the selected values and set it as QR data
-    setQrData(JSON.stringify(data)); 
+    setQrData(JSON.stringify(data));
   };
 
   return (
@@ -126,12 +126,17 @@ const QrCreation = () => {
                 <img src={logo} alt="Logo" />
               </div>
             </div>
+            <div>{qrData}</div>
             {/* QR Code Display */}
-            {qrData && (
-              <div className="flex justify-center mt-6">
-                {/* <QRCode value={qrData} size={200} /> */}
-              </div>
-            )}
+            {/* {qrData ? (
+              <QRCode
+                value={qrData}
+                size={256}
+                style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+              />
+            ) : (
+              <p>No QR code data available</p>
+            )} */}
           </div>
         </div>
       </div>
