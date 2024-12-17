@@ -1,5 +1,29 @@
 import { useState } from "react";
 import Datepicker from "react-tailwindcss-datepicker";
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+// Register Chart.js components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const SalesManagement = () => {
   const START_FROM = new Date();
@@ -11,14 +35,72 @@ const SalesManagement = () => {
   });
 
   const handleClick = () => {
-    // Log the selected date range when the button is clicked
     console.log("Selected Date Range:", value);
+  };
+
+  // Chart Data
+  const data = {
+    labels: [
+      "1 火",
+      "2 水",
+      "3 木",
+      "4 金",
+      "5 土",
+      "6 日",
+      "7 月",
+      "8 火",
+      "9 水",
+      "10 木",
+      "11 木",
+      "12 木",
+      "13 木",
+      "14 木",
+    ],
+    datasets: [
+        {
+            type: "line",
+            label: "客数",
+            borderColor: "#9E9E9E",
+            borderWidth: 2,
+            pointRadius: 4,
+            fill: false,
+            data: [3, 4, 5, 2.5, 0, 4, 5, 4, 3, 0],
+            yAxisID: "y1",
+          },
+      {
+        type: "bar",
+        label: "売上",
+        backgroundColor: "#49BBDF",
+        data: [10, 12, 15, 8, 0, 14, 18, 13, 9, 0],
+        yAxisID: "y",
+      },
+      
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    scales: {
+      y: {
+        type: "linear",
+        display: true,
+        position: "left",
+      },
+      y1: {
+        type: "linear",
+        display: true,
+        position: "right",
+        grid: {
+          drawOnChartArea: false, // Prevent overlap of grid lines
+        },
+      },
+    },
   };
 
   return (
     <div>
       <h2 className="font-semibold text-[27px] text-[#73879C]">売上管理</h2>
-      <div className="bg-white mt-[27px] rounded-xl pb-8 mr-[54px] h-screen">
+      <div className="bg-white mt-[27px] rounded-xl pb-8 mr-[54px] ">
         <div className="flex">
           <h4 className="font-semibold text-[18px] text-[#73879C] pt-[30px] pl-[33px] pb-[21px]">
             全体の数字
@@ -52,6 +134,8 @@ const SalesManagement = () => {
               集計
             </button>
           </div>
+
+          {/* Metrics Cards */}
           <div className="mt-[33px] grid grid-cols-3 gap-[17px]">
             <div className="bg-[#F9F9F9] py-[47px] text-center rounded-[20px]">
               <p className="font-light text-base">売上</p>
@@ -79,6 +163,11 @@ const SalesManagement = () => {
                 </h3>
               </div>
             </div>
+          </div>
+
+          {/* Chart Section */}
+          <div className="mt-[27px]">
+            <Bar data={data} options={options} />
           </div>
         </div>
       </div>

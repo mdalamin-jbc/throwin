@@ -41,6 +41,7 @@ import NotificationDetails from "../pages/Notification/NotificationDetails";
 import DeSeetings from "../pages/Dashboard/Seetings/DeSeetings";
 import QrCreation from "../pages/Dashboard/QrCreation/QrCreation";
 import SalesManagement from "../pages/Dashboard/SalesManagement/SalesManagement";
+import CreatANewTeam from "../pages/Dashboard/CreatANewTeam/CreatANewTeam";
 
 export const Routes = createBrowserRouter([
   {
@@ -205,6 +206,10 @@ export const Routes = createBrowserRouter([
           {
             path: "account",
             element: <Account />,
+          },
+          {
+            path: "creat_a_new_team",
+            element: <CreatANewTeam />,
           },
           {
             path: "settings",
