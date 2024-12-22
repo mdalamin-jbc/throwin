@@ -14,9 +14,8 @@ export const AuthProvider = ({ children }) => {
     const checkUser = () => {
       const email = Cookies.get("email");
       const accessToken = Cookies.get("access_token");
-      const sessionid = Cookies.get("ajs_anonymous_id");
+      
 
-      console.log(sessionid);
 
       if (email && accessToken) {
         setUser({ email, access: accessToken });

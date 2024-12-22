@@ -30,7 +30,7 @@ const RegistrationForm = () => {
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
-        'http://176.34.7.102:8000/api/v1/auth/register/consumer',
+        'https://api-dev.throwin-glow.com/api/v1/auth/register/consumer',
         {
           email: formData.email,
           password: formData.password,

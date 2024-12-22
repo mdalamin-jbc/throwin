@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const axiosReg = axios.create({
-  baseURL: "http://176.34.7.102:8000",
+  baseURL: "https://api-dev.throwin-glow.com",
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
