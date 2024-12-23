@@ -46,10 +46,9 @@ const Staff = () => {
     setIsProcessing(true);
 
     try {
-      const endpoint = `/auth/users/staff/${staff.uid}/like`;
-      const response = isLiked
-        ? await axiosPrivate.delete(endpoint)
-        : await axiosPrivate.post(endpoint);
+      const response = await axiosPrivate.post(
+        `/auth/users/staff/${staff.uid}/like`
+      );
 
       if (
         response.status === 200 ||

@@ -17,9 +17,7 @@ const Favorite = () => {
     setIsProcessing(true);
 
     try {
-      const response = await axiosPrivate.delete(
-        `/auth/users/staff/${id}/like`
-      );
+      const response = await axiosPrivate.post(`/auth/users/staff/${id}/like`);
       console.log("API Response:", response);
 
       if ([200, 201, 204].includes(response.status)) {
