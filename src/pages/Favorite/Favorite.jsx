@@ -81,9 +81,9 @@ const Favorite = () => {
                         {stuff.introduction}
                       </p>
                     </div>
-                    <div className="flex flex-col items-end">
+                    <div className="flex flex-col items-center">
                       <button onClick={() => handleLikeDelete(stuff.uid)}>
-                        <FaHeart className="text-[#F24E1E] text-[20px] mt-4" />
+                        <FaHeart className="text-[#F24E1E] text-[20px] " />
                       </button>
                     </div>
                   </div>
