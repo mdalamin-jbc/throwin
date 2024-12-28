@@ -46,10 +46,9 @@ const Staff = () => {
     setIsProcessing(true);
 
     try {
-      const endpoint = `/auth/users/staff/${staff.uid}/like`;
-      const response = isLiked
-        ? await axiosPrivate.delete(endpoint) // DELETE if currently liked
-        : await axiosPrivate.post(endpoint);
+      const response = await axiosPrivate.post(
+        `/auth/users/staff/${staff.uid}/like`
+      );
 
       if (
         response.status === 200 ||
@@ -74,8 +73,7 @@ const Staff = () => {
       Swal.fire({
         icon: "error",
         title: "エラー!",
-        text:
-          "何かがうまくいきませんでした。もう一度お試しください。",
+        text: "何かがうまくいきませんでした。もう一度お試しください。",
         confirmButtonText: "はい",
       });
       console.error(
