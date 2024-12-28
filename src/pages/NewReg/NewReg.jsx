@@ -8,7 +8,7 @@ import useAxiosReg from "../../hooks/axiosReg";
 import { useState } from "react";
 
 const NewReg = () => {
-  const [error, setError] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   const axiosReg = useAxiosReg();
@@ -25,6 +25,7 @@ const NewReg = () => {
     handleSubmit,
     watch,
     formState: { errors },
+    setError,
   } = useForm();
   const password = watch("password");
 
@@ -34,55 +35,80 @@ const NewReg = () => {
       password: data.password,
       confirm_password: data.confirmPassword,
     };
-
+  
     console.log("Request data:", requestData);
-
+  
     try {
       const response = await axiosReg.post(
         "/auth/register/consumer",
         requestData
       );
       console.log("Response data:", response.data);
-
+  
       if (
         response.data.msg ===
         "User Created Successfully, Please check your email to activate your account in 48 hours."
       ) {
-        navigate("/new_reg/mail_check");
+        // Passing the email to the mail_check page
+        navigate("/mail_check", { state: { email: email } });
       } else {
-        setError("Registration failed. Please try again.");
+        setErrorMessage("登録に失敗しました。もう一度お試しください。");
       }
     } catch (error) {
-      setError(error.response ? error.response.data.msg : "An error occurred.");
+      if (error.response && error.response.data.password) {
+        console.log(
+          "Password validation errors:",
+          error.response.data.password
+        );
+        setError("password", {
+          type: "manual",
+          message: error.response.data.password.join(" "),
+        });
+      } else {
+        setErrorMessage(
+          error.response ? error.response.data.msg : "エラーが発生しました。"
+        );
+      }
       console.error("Registration error:", error);
     }
   };
+  
 
   return (
     <div
-      className="flex flex-col justify-center items-center h-screen bg-cover bg-center p-4"
+      className="flex flex-col justify-center items-center min-h-screen overflow-auto bg-cover bg-center p-4"
       style={{ backgroundImage: `url(${socialBg})` }}
     >
-      <div className="absolute inset-0 bg-[#072233fb]"></div>
+      <div className="fixed inset-0 bg-[#072233fb] min-h-screen overflow-auto"></div>
 
-      <div className="bg-white p-6 rounded-[10px] shadow-xl text-center relative w-[291px] h-[490px]">
+      <div
+        className={`bg-white p-6 rounded-[10px] shadow-xl text-center relative w-[291px] ${
+          errors.password ? "h-[545px]" : "h-[490px]"
+        }`}
+      >
         <img src={logo} alt="Logo" className="w-[150px] h-auto mx-auto mb-4" />
 
         <div className="flex flex-col justify-center">
           <form onSubmit={handleSubmit(onSubmit)}>
+            {/* General error message */}
+            {errorMessage && (
+              <div className="text-red-500 text-sm mb-2">{errorMessage}</div>
+            )}
+
             <div className="form-control">
               <label className="label font-bold text-sm">
                 <span className="label-text font-hiragino">パスワード設定</span>
               </label>
               <input
-                {...register("password", { required: true })}
-                name="password"
+                {...register("password", { required: "Password is required" })}
                 type="password"
                 placeholder="パスワード"
-                className="input border rounded-[3px] py-4 mt-4 mb-[9px] w-[253px] pl-4 font-Noto text-[#44495B80] text-sm"
+                className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
               />
               {errors.password && (
-                <span className="text-red-500 mt-1">{error}</span>
+                <span className="text-red-500 mt-1">
+                  {errors.password.message}
+                </span>
               )}
             </div>
             <div className="form-control">
@@ -90,12 +116,11 @@ const NewReg = () => {
                 {...register("confirmPassword", {
                   required: "Confirmation is required",
                   validate: (value) =>
-                    value === password || "Passwords do not match",
+                    value === password || "パスワードが一致しません",
                 })}
-                name="confirmPassword"
                 type="password"
                 placeholder="パスワード（確認用）"
-                className="input border rounded-[3px] py-4 mb-[9px] w-[253px] pl-4 font-Noto text-[#44495B80] text-sm"
+                className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
               />
               {errors.confirmPassword && (
                 <span className="text-red-500 my-1">

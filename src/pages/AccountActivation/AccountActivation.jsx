@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -21,23 +20,27 @@ const AccountActivation = () => {
         const response = await axiosPublic.get(
           `/auth/users/acivate/${userId}/${token}`
         );
+        console.log(response.data);
 
-        if (response.data.detail === "Account Activated Successfully") {
+        if (
+          response.data.detail === "User Activated Successfully" ||
+          response.status === 200
+        ) {
           Swal.fire({
-            title: "Success",
-            text: response.data.detail || "Your account has been activated!",
+            title: "成功",
+            text: "あなたのアカウントはアクティブ化されました！",
             icon: "success",
-            confirmButtonText: "OK",
+            confirmButtonText: "はい",
           }).then(() => navigate("/onboarding"));
+          console.log(response.data.detail);
         }
       } catch (error) {
+        console.log(error.response);
         Swal.fire({
-          title: "Activation Failed",
-          text: error.response
-            ? error.response.data.detail
-            : "An error occurred. Please try again later.",
+          title: "アクティベーションに失敗しました",
+          text: "エラーが発生しました。後でもう一度お試しください。",
           icon: "error",
-          confirmButtonText: "OK",
+          confirmButtonText: "はい",
         });
       }
     };

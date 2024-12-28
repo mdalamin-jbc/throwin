@@ -1,0 +1,4 @@
+/* Custom Modal Backdrop Styling */
+dialog::backdrop {
+  background-color: rgba(255, 0, 0, 0.8); /* Red with 30% opacity */
+}

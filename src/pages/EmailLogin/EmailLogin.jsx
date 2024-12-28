@@ -34,12 +34,13 @@ const EmailLogin = () => {
     } catch (error) {
       const errorMsg =
         error.response?.data?.email?.[0] ||
-        "An error occurred. Please try again later.";
+        "エラーが発生しました。後で再試行してください。";
+      console.log(errorMsg);
       Swal.fire({
-        title: "Error",
-        text: errorMsg,
+        title: "エラー",
+        text: "すでにアカウントがあります。アカウントをアクティベートしてください。",
         icon: "error",
-        confirmButtonText: "OK",
+        confirmButtonText: "はい",
       });
     }
   };
@@ -62,17 +63,18 @@ const EmailLogin = () => {
               </label>
               <input
                 {...register("mail", {
-                  required: "Email is required",
+                  required: "メールアドレスは必須です。",
                   pattern: {
                     value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    message: "Invalid email format",
+                    message: "無効なメール形式です。",
                   },
                 })}
                 name="mail"
                 type="text"
                 placeholder="メールアドレス"
-                className="input border rounded-[3px] py-4 mt-1 mb-[9px] w-[253px] pl-4 font-Noto text-[#44495B80] text-sm"
+                className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
               />
+
               {errors.mail && (
                 <span className="text-red-500 mt-1">{errors.mail.message}</span>
               )}
@@ -87,7 +89,9 @@ const EmailLogin = () => {
           </form>
 
           <div className="flex font-hiragino text-xs text-[#626262A6] justify-center gap-2 mt-6 mb-2">
-            <button>利用規約</button>
+            <button>
+              <Link to="/terms">利用規約</Link>{" "}
+            </button>
             <p>|</p>
             <button>プライバシーポリシー</button>
           </div>

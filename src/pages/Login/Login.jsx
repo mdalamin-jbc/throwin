@@ -1,7 +1,6 @@
 import Swal from "sweetalert2";
-import Cookies from "js-cookie";
 import { useForm } from "react-hook-form";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import closeIcon from "../../assets/icons/close.png";
 import logo from "../../assets/images/socialLogin/logo2.png";
 import socialBg from "../../assets/images/socialLogin/social bg.jpeg";
@@ -12,11 +11,11 @@ import AuthContext from "../../contexts/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const axiosPublic = useAxiosPublic();
-  const { login } = useContext(AuthContext); 
 
-  const { email = "" } = location.state || {};
+  const axiosPublic = useAxiosPublic();
+  const { login } = useContext(AuthContext);
+
+  // const { email = "" } = location.state || {};
 
   const handleClose = () => {
     navigate("/");
@@ -25,7 +24,7 @@ const Login = () => {
   const {
     register,
     handleSubmit,
-    reset,
+
     formState: { errors },
   } = useForm();
 
@@ -35,23 +34,44 @@ const Login = () => {
         email: data.mail,
         password: data.password,
       });
-
+      console.log(response);
       if (response.data.msg === "Login Successful") {
         console.log("Login successful!", response.data);
 
         // Use the login function from context
         login(response.data.data);
+
+        // Show success message
         Swal.fire({
           position: "top",
           icon: "success",
-          title: `${response.data.msg}`,
+          title: `ログインに成功しました。`,
           showConfirmButton: false,
           timer: 1500,
         });
-        navigate("/gacha"); // Use navigate to redirect
+        // console.log(response.data.data.access);
+
+        // Fetch user details
+        const res = await axiosPublic.get(`/auth/users/me`, {
+          headers: response.data.data.access
+            ? { Authorization: `Bearer ${response.data.data.access}` }
+            : {},
+          ...(response.data.data.access && { withCredentials: true }),
+        });
+
+        if (res.status === 200) {
+          // Check if the user has a name or not
+          if (res.data.name === null || res.data.name === "Anonymous user") {
+            navigate("/nickName_reg");
+          } else {
+            console.log(res);
+            navigate("/search");
+          }
+        }
       } else {
         console.error("Login failed:", response.data.msg);
 
+        // Show error message
         Swal.fire({
           position: "top",
           icon: "error",
@@ -65,10 +85,12 @@ const Login = () => {
         "Error logging in:",
         error.response ? error.response.data : error
       );
+
+      // Show error message
       Swal.fire({
         position: "top",
         icon: "error",
-        title: `${error.response?.data.msg}`,
+        title: `メールアドレスまたはパスワードが間違っています。`,
         showConfirmButton: false,
         timer: 1500,
       });
@@ -102,7 +124,7 @@ const Login = () => {
                 name="mail"
                 type="mail"
                 placeholder="メールアドレス"
-                className="input border rounded-[3px] py-4 mt-1 mb-[9px] w-[253px] pl-4 font-Noto text-[#44495B80] text-sm"
+                className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
               />
               {errors.mail && (
                 <span className="text-red-500 mt-1">{errors.mail.message}</span>
@@ -113,7 +135,10 @@ const Login = () => {
                 <span className="label-text font-bold text-sm font-Noto">
                   パスワード
                 </span>
-                <Link className="label-text text-[10px] font-hiragino text-[#5297FF]">
+                <Link
+                  to="/forget_password"
+                  className="label-text text-[10px] font-hiragino text-[#5297FF]"
+                >
                   パスワードをお忘れですか？
                 </Link>
               </label>
@@ -122,7 +147,7 @@ const Login = () => {
                 name="password"
                 type="password"
                 placeholder="パスワード"
-                className="input border rounded-[3px] font-Noto py-4 mt-1 mb-[9px] w-[253px] pl-4 text-[#44495B80] text-sm"
+                className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
               />
               {errors.password && (
                 <span className="text-red-500 my-1 font-Noto">

@@ -7,17 +7,18 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const checkUser = () => {
       const email = Cookies.get("email");
       const accessToken = Cookies.get("access_token");
-      
+
       if (email && accessToken) {
         setUser({ email, access: accessToken });
       }
-      setLoading(false); 
+      setLoading(false);
     };
 
     checkUser();
@@ -53,6 +54,5 @@ export const AuthProvider = ({ children }) => {
 AuthProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
-
 
 export default AuthContext;

@@ -10,17 +10,25 @@ const Root = () => {
     "favorite",
     "gacha",
     "notice",
-    "setting",
+
     "member_list",
     "myPage",
     "store",
     "reg_complete",
-    "staff"
+    "staff",
+    "stuff_list",
+    "displayName",
+    "terms",
+    "history",
+    "nickName_reg",
   ].some((path) => location.pathname.includes(path));
+
+  // Check if the current path is within the dashboard
 
   return (
     <div>
       {shouldRenderNavMenu && <NavMenu />}
+
       <Outlet />
     </div>
   );

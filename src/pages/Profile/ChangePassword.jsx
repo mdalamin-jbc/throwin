@@ -1,10 +1,20 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import Swal from "sweetalert2";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import TitleBar from "../../components/TitleBar";
+import { Helmet } from "react-helmet";
+import UseUserDetails from "../../hooks/UseUserDetails";
+import useAxiosPrivate from "../../hooks/axiousPrivate";
+import { useNavigate } from "react-router-dom";
+import { RiArrowLeftSLine } from "react-icons/ri";
 
 const ChangePassword = () => {
-  const [isNextStep, setIsNextStep] = useState(false); // State to toggle between steps
+  const { userDetails } = UseUserDetails();
+  const [isNextStep, setIsNextStep] = useState(false);
+  const axiosPrivate = useAxiosPrivate();
+
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -14,22 +24,62 @@ const ChangePassword = () => {
 
   const onSubmit = async (data) => {
     if (!isNextStep) {
-      setIsNextStep(true); // Move to next step when "次へ" is clicked
+      setIsNextStep(true); // Go to next step
     } else {
-      console.log(data); // Log data on final submission
-      // Perform password change logic here
+      try {
+        // Make the PATCH request to change the password
+        const response = await axiosPrivate.patch("/auth/password/change", {
+          old_password: data.current_pass,
+          new_password: data.password,
+          confirm_password: data.confirmPassword,
+        });
+        console.log(response);
+        // Show SweetAlert success notification
+        Swal.fire({
+          icon: "success",
+          title: "パスワードが正常に変更されました",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
+        navigate("/myPage");
+      } catch (error) {
+        // Handle error feedback
+        console.error(
+          "Error changing password:",
+          error.response?.data || error.message
+        );
+
+        // Show SweetAlert error notification
+        Swal.fire({
+          icon: "error",
+          title: "パスワードの変更に失敗しました",
+          text: "再試行してください",
+        });
+      }
     }
   };
 
   return (
     <div>
-      <TitleBar title={"マイページ"} />
-      <div className="w-full max-w-[380px] mx-auto">
+      <Helmet>
+        <title>Throwin | Change Password</title>
+      </Helmet>
+      <TitleBar
+        back={
+          <RiArrowLeftSLine
+            onClick={() => navigate(-1)}
+            style={{ cursor: "pointer" }}
+          />
+        }
+        title={"マイページ"}
+      />
+      <div className="w-full max-w-[430px] mx-auto">
         <h3 className="text-center font-hiragino font-bold text-lg text-[#44495B] mt-[59px] ">
           パスワードの変更
         </h3>
         <p className="my-[22px] text-center text-[#9F9999] text-sm font-semibold">
-          abcde@gmail.com
+          {userDetails.email}
         </p>
 
         <div className="flex flex-col justify-center">
@@ -38,15 +88,14 @@ const ChangePassword = () => {
             onSubmit={handleSubmit(onSubmit)}
           >
             {!isNextStep ? (
-              // Step 1: Email Input
               <div className="form-control">
                 <input
                   {...register("current_pass", {
-                    required: "Email is required",
+                    required: "Current password is required",
                   })}
                   name="current_pass"
                   type="password"
-                  placeholder="メールアドレス"
+                  placeholder="現在のパスワード"
                   className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
                 />
                 {errors.current_pass && (
@@ -56,12 +105,11 @@ const ChangePassword = () => {
                 )}
               </div>
             ) : (
-              // Step 2: Password and Confirm Password Inputs
               <>
                 <div className="form-control">
                   <input
                     {...register("password", {
-                      required: "Password is required",
+                      required: "新しいパスワードを入力してください",
                       minLength: {
                         value: 6,
                         message: "Password must be at least 6 characters",
@@ -69,7 +117,7 @@ const ChangePassword = () => {
                     })}
                     name="password"
                     type="password"
-                    placeholder="新しいパスワード"
+                    placeholder="新しいパスワードを入力してください"
                     className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
                   />
                   {errors.password && (
@@ -82,15 +130,15 @@ const ChangePassword = () => {
                 <div className="form-control">
                   <input
                     {...register("confirmPassword", {
-                      required: "Please confirm your password",
+                      required: "新しいパスワードを入力してください（確認用）",
                       validate: (value) =>
                         value ===
                           document.querySelector("input[name='password']")
-                            .value || "Passwords do not match",
+                            .value || "パスワードが一致しません",
                     })}
                     name="confirmPassword"
                     type="password"
-                    placeholder="パスワードを認証する"
+                    placeholder="新しいパスワードを入力してください（確認用）"
                     className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
                   />
                   {errors.confirmPassword && (

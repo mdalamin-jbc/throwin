@@ -1,0 +1,11 @@
+.nav-item {
+  position: relative;
+  padding: 5px;
+}
+
+.active-gacha {
+  border: 2px solid #49BBDF; /* Blue border */
+  border-radius: 8px; /* Rounded edges */
+  background-color: #f0f8ff; /* Optional: light background for emphasis */
+  transition: all 0.3s ease; /* Smooth effect */
+}

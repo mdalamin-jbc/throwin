@@ -2,20 +2,19 @@ import { useState } from "react";
 import search from "../../assets/icons/search2.png";
 import logo from "../../assets/images/home/logo.png";
 import team from "../../assets/images/team/team.png";
-import team1 from "../../assets/images/team/team.png";
-import team2 from "../../assets/images/team/team.png";
-import team3 from "../../assets/images/team/team.png";
-import team4 from "../../assets/images/team/team.png";
-import team5 from "../../assets/images/team/team.png";
-import team6 from "../../assets/images/team/team.png";
-import team7 from "../../assets/images/team/team.png";
-import team8 from "../../assets/images/team/team.png";
 import { useForm } from "react-hook-form";
 import TitleBar from "../../components/TitleBar";
+import { Link, useParams } from "react-router-dom";
+import UseGetStaffListByStaffName from "../../hooks/UseGetStaffListByStaffName";
+import { Circles } from "react-loader-spinner";
+import { IoMdStar } from "react-icons/io";
 
 const MemberList = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [isScannerOpen, setIsScannerOpen] = useState(false);
+  const { staffName } = useParams();
+  const { staffs, isLoading } = UseGetStaffListByStaffName(staffName);
+  const staffmembers = staffs.results;
+  console.log(staffmembers);
 
   const {
     register,
@@ -31,17 +30,20 @@ const MemberList = () => {
   };
 
   // Array of team images
-  const teamMembers = [
-    { image: team, title: "旬菜鮮魚と旨い酒 わらび" },
-    { image: team1, title: "バスケチームA" },
-    { image: team2, title: "野球チームB" },
-    { image: team3, title: "BAR abc" },
-    { image: team4, title: "福井バスケ" },
-    { image: team5, title: "大阪バスケ" },
-    { image: team6, title: "野球チームB" },
-    { image: team7, title: "旬菜鮮魚と旨い酒 わらび" },
-    { image: team8, title: "バスケチームA" },
-  ];
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Circles
+          height="80"
+          width="80"
+          color="#49BBDF"
+          ariaLabel="circles-loading"
+          visible={true}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="mb-28">
@@ -51,9 +53,10 @@ const MemberList = () => {
           icon={
             <img className="w-[110px] items-center" src={logo} alt="logo " />
           }
-        ></TitleBar>
+          title="" // Pass the required title prop
+        />
       </div>
-      <div className="flex flex-col justify-center">
+      <div className="flex flex-col justify-center mt-4">
         <form className="flex flex-col w-[342px] mx-auto">
           <div className="relative flex items-center w-full">
             <input
@@ -85,21 +88,32 @@ const MemberList = () => {
         </form>
       </div>
       <h2 className="flex justify-end font-normal text-xs w-[342px] m-[14px] mx-auto">
-        チーム・店舗の一覧({teamMembers.length})
+        チーム・店舗の一覧({staffmembers.length})
       </h2>
 
       {/* Team Images */}
       <div className="grid grid-cols-2 gap-3 w-[342px] mx-auto ">
-        {teamMembers.map((member, index) => (
+        {staffmembers.map((staff, index) => (
           <div key={index} className="relative w-[170px] h-[170px]">
-            <img
-              src={member.image}
-              alt={member.title}
-              className="w-full h-full object-cover rounded-lg"
-            />
-            <div className="absolute bottom-2 left-2  py-1  rounded-b-lg">
-              <p className="text-white font-boldtext-sm">{member.title}</p>
-            </div>
+            <Link to={`/staff/${staff.username}`}>
+              <div className="relative">
+                <img
+                  src="https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
+                  alt={`${staff.username} image`}
+                  className="object-cover rounded-lg w-[170px] h-[170px]"
+                />
+                {/* Rating in the top right corner */}
+                <div className="absolute top-[6px] right-[6px] bg-white text-[#49BBDF] flex items-center gap-1 px-2 py-1 rounded-[4px] shadow-md">
+                  <IoMdStar />
+                  {staff.score}
+                </div>
+                {/* Name and Type in the bottom left corner */}
+                <div className="absolute bottom-0 left-0 bg-gradient-to-t from-black via-transparent to-transparent w-full p-2 text-white rounded-b-lg">
+                  <h3 className="text-sm font-semibold">{staff.username}</h3>
+                  <p className="text-xs">{staff.introduction}</p>
+                </div>
+              </div>
+            </Link>
           </div>
         ))}
       </div>

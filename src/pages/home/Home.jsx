@@ -16,7 +16,7 @@ const Home = () => {
 
   return (
     <div
-      className="relative bg-[#49BBDF] h-screen overflow-auto pt-[70px] md:pt-5 border-white"
+      className="relative bg-[#49BBDF] h-screen overflow-hidden pt-[70px] md:pt-5 border-white"
       style={{
         backgroundImage: `url(${bg})`,
         backgroundSize: "cover",
