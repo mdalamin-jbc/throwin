@@ -19,8 +19,6 @@ import Swal from "sweetalert2";
 import { Circles } from "react-loader-spinner";
 
 const BillingScreen = () => {
-  const [data, setData] = useState([]);
-
   const [isLiked, setIsLiked] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false); // Prevent rapid toggling
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
