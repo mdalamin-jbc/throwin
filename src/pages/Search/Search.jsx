@@ -6,7 +6,6 @@ import ButtonPrimary from "../../components/ButtonPrimary";
 import { useState } from "react";
 import useAxiosPublic from "../../hooks/axiosPublic";
 import { useNavigate } from "react-router-dom";
-import UseGetByStaffName from "../../hooks/UseGetByStaffName";
 import UseGetStaffListByStaffName from "../../hooks/UseGetStaffListByStaffName";
 
 const Search = () => {

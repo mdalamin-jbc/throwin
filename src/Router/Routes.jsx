@@ -39,6 +39,10 @@ import Account from "../pages/Dashboard/Account/Account";
 import ForgetMailCheck from "../pages/Login/ForgetMailCheck";
 import NotificationDetails from "../pages/Notification/NotificationDetails";
 import DeSeetings from "../pages/Dashboard/Seetings/DeSeetings";
+import GachaTwo from "../pages/Gacha/GachaTwo";
+import UseTicket from "../pages/Gacha/UseTicket";
+import Processing from "../pages/Gacha/Processing";
+import GotTicket from "../pages/Gacha/GotTicket";
 
 export const Routes = createBrowserRouter([
   {
@@ -106,7 +110,22 @@ export const Routes = createBrowserRouter([
           </PrivateRoute>
         ),
       },
-
+      {
+        path: "/gacha2",
+        element: <GachaTwo />,
+      },
+      {
+        path: "/gacha2/ticket/:id",
+        element: <UseTicket />,
+      },
+      {
+        path: "/gacha2/ticket/:id/processing",
+        element: <Processing />,
+      },
+      {
+        path: "/gacha2/ticket/:id/processing/got-ticket",
+        element: <GotTicket />,
+      },
       {
         path: "setting",
         element: <Setting />,
