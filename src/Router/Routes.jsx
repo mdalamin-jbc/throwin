@@ -43,6 +43,7 @@ import GachaTwo from "../pages/Gacha/GachaTwo";
 import UseTicket from "../pages/Gacha/UseTicket";
 import Processing from "../pages/Gacha/Processing";
 import GotTicket from "../pages/Gacha/GotTicket";
+import TicketTermsAndConditons from "../pages/Gacha/TicketTermsAndConditons";
 
 export const Routes = createBrowserRouter([
   {
@@ -125,6 +126,10 @@ export const Routes = createBrowserRouter([
       {
         path: "/gacha2/ticket/:id/processing/got-ticket",
         element: <GotTicket />,
+      },
+      {
+        path: "/gacha2/ticket/:id/processing/got-ticket/ticket-terms",
+        element: <TicketTermsAndConditons />,
       },
       {
         path: "setting",
