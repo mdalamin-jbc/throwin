@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import gold_ticket from "../../assets/images/gacha/gold-ticket.png";
 import ButtonSecondary from "../../components/ButtonSecondary";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { CgLogOut } from "react-icons/cg";
 
 const TicketTermsAndConditons = () => {
   const navigate = useNavigate();
@@ -39,13 +40,54 @@ const TicketTermsAndConditons = () => {
           使用済みのTICKETはいかなる場合も再利用は不可です。必ず店員・スタッフに
           こちらの画面をご提示の上で使用をお願いします。
         </p>
-        <Link className="" to={`ticket-terms`}>
-          <ButtonSecondary
-            icon={<MdOutlineKeyboardArrowRight />}
-            btnText="TICKETを使用する"
-            style="font-hiragino bg-gradient-to-r from-[#65D0F2] to-[#2399F4] max-w-[342px] mx-auto rounded-full text-center py-[10px] font-bold text-white"
-          />
-        </Link>
+
+        {/* -------------------------------------- */}
+        <div className="text-[#44495B] p-0">
+          {/* Open the modal using document.getElementById('ID').showModal() method */}
+          <button
+            className="w-full"
+            onClick={() => document.getElementById("my_modal_1").showModal()}
+          >
+            <Link className="">
+              <ButtonSecondary
+                icon={<MdOutlineKeyboardArrowRight />}
+                btnText="TICKETを使用する"
+                style="font-hiragino bg-gradient-to-r from-[#65D0F2] to-[#2399F4] max-w-[342px] mx-auto rounded-full text-center py-[10px] font-bold text-white"
+              />
+            </Link>
+          </button>
+
+          <dialog id="my_modal_1" className="modal max-w-[400px] mx-auto ">
+            <div className="modal-box p-0 pt-7">
+              <div className="px-10">
+                <p className="text-center font-bold ">
+                  TICKETを使用済みにしますか？
+                </p>
+                <p className="text-center font-bold text-[13px] mt-6 leading-7 mb-[30px]">
+                  この操作は取り消せません。規約をご確認f <br />
+                  の上、使用済みにしてください。
+                </p>
+              </div>
+              <div className="flex justify-center gap-4 border-t-2">
+                <form method="dialog">
+                  <button className="px-4 py-4  border-r-2 border-gray-300 flex items-center justify-center">
+                    <span className="mr-10">キャンセル</span>{" "}
+                  </button>
+                </form>
+                <form method="dialog">
+                  <button
+                    // onClick={handleLogout}
+                    className="px-4 py-4  flex items-center justify-center"
+                  >
+                    <span className="ml-8 text-blue-500">使用済みにする</span>{" "}
+                    {/* Add some spacing between text and border */}
+                  </button>
+                </form>
+              </div>
+            </div>
+          </dialog>
+        </div>
+        {/* -------------------------------------- */}
       </div>
     </div>
   );
