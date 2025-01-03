@@ -57,7 +57,7 @@ const TicketTermsAndConditons = () => {
             </Link>
           </button>
 
-          <dialog id="my_modal_1" className="modal max-w-[400px] mx-auto ">
+          <dialog id="my_modal_4" className="modal max-w-[400px] mx-auto ">
             <div className="modal-box p-0 pt-7">
               <div className="px-10">
                 <p className="text-center font-bold ">

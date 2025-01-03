@@ -25,7 +25,7 @@ const Search = () => {
     register,
     formState: { errors },
   } = useForm();
-
+  // Handle stuff search
   const handleOpenScanner = () => {
     setIsScannerOpen(true);
   };
