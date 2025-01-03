@@ -6,7 +6,7 @@ import TitleBar from "../../components/TitleBar";
 import camera from "../../assets/icons/camera.png";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import { useState, useRef, useEffect } from "react";
-import { BrowserQRCodeReader } from "@zxing/library";
+import { BrowserMultiFormatReader } from "@zxing/library"; // New QR reader
 import useAxiosPublic from "../../hooks/axiosPublic";
 import { useNavigate } from "react-router-dom";
 import UseGetStaffListByStaffName from "../../hooks/UseGetStaffListByStaffName";
@@ -36,46 +36,62 @@ const Search = () => {
     };
   }, []);
 
-  const handleOpenScanner = async () => {
-    try {
-      // Reset any existing scanner
-      if (codeReaderRef.current) {
-        codeReaderRef.current.reset();
-      }
+ // Inside your handleOpenScanner function:
 
-      const codeReader = new BrowserQRCodeReader();
-      codeReaderRef.current = codeReader;
-
-      const devices = await codeReader.listVideoInputDevices();
-
-      if (devices.length === 0) {
-        setErrorMessage("カメラが見つかりませんでした。");
-        return;
-      }
-
-      setIsScannerOpen(true);
-      setErrorMessage("");
-
-      // Wait for video element to be ready
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      if (videoRef.current) {
-        try {
-          const result = await codeReader.decodeOnceFromVideoDevice(devices[0].deviceId, videoRef.current);
-          setSearchStore(result.text);
-          setIsScannerOpen(false);
-          // Automatically trigger store search after successful scan
-          handleSearchStore(result.text);
-        } catch (err) {
-          console.error("QR code scan failed", err);
-          setErrorMessage("QRコードのスキャンに失敗しました。");
-        }
-      }
-    } catch (error) {
-      console.error("Error initializing camera:", error);
-      setErrorMessage("カメラの初期化にエラーが発生しました。");
+const handleOpenScanner = async () => {
+  try {
+    if (codeReaderRef.current) {
+      codeReaderRef.current.reset();
     }
-  };
+
+    const codeReader = new BrowserMultiFormatReader(); // Updated reader
+    codeReaderRef.current = codeReader;
+
+    const devices = await codeReader.listVideoInputDevices();
+
+    if (devices.length === 0) {
+      setErrorMessage("カメラが見つかりませんでした。");
+      return;
+    }
+
+    setIsScannerOpen(true);
+    setErrorMessage("");
+
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    if (videoRef.current) {
+      try {
+        const result = await codeReader.decodeOnceFromVideoDevice(devices[0].deviceId, videoRef.current);
+        const scannedText = result.text;
+        
+        // Try to handle as a store code first
+        try {
+          const response = await axiosPublic.get(`/stores/${scannedText}`);
+          setSearchStore(scannedText);
+          setStoreData(response.data);
+          setIsScannerOpen(false);
+          navigate(`/store`, { state: { storeData: response.data } });
+        } catch (error) {
+          setSearchByStuffName(scannedText);
+          refetch();
+          if (!isLoading && !isError) {
+            setStuffData(staffs);
+            setIsScannerOpen(false);
+            navigate(`/member_list/${scannedText}`);
+          } else {
+            setErrorMessage("有効な店舗コードまたはメンバー名ではありません。");
+          }
+        }
+      } catch (err) {
+        console.error("QR code scan failed", err);
+        setErrorMessage("QRコードのスキャンに失敗しました。");
+      }
+    }
+  } catch (error) {
+    console.error("Error initializing camera:", error);
+    setErrorMessage("カメラの初期化にエラーが発生しました。");
+  }
+};
 
   const handleCloseScanner = () => {
     if (codeReaderRef.current) {
