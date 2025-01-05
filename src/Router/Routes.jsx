@@ -10,7 +10,6 @@ import Gacha from "../pages/Gacha/Gacha";
 import Search from "../pages/Search/Search";
 import Favorite from "../pages/Favorite/Favorite";
 import NewReg from "../pages/NewReg/NewReg";
-
 import Setting from "../pages/Setting/Setting";
 import NickNameReg from "../pages/NickNameReg/NickNameReg";
 import CheckMail from "../pages/NewReg/CheckMail";
@@ -44,6 +43,9 @@ import UseTicket from "../pages/Gacha/UseTicket";
 import Processing from "../pages/Gacha/Processing";
 import GotTicket from "../pages/Gacha/GotTicket";
 import TicketTermsAndConditons from "../pages/Gacha/TicketTermsAndConditons";
+import CreateANewTeam from "../pages/Dashboard/CreatANewTeam/CreatANewTeam";
+import SalesManagement from "../pages/Dashboard/SalesManagement/SalesManagement";
+import QrCreation from "../pages/Dashboard/QrCreation/QrCreation";
 
 export const Routes = createBrowserRouter([
   {
@@ -229,12 +231,24 @@ export const Routes = createBrowserRouter([
             element: <Account />,
           },
           {
+            path: "creat_a_new_team",
+            element: <CreateANewTeam />,
+          },
+          {
             path: "settings",
             element: <DeSeetings />,
           },
           {
+            path: "sales_management",
+            element: <SalesManagement />,
+          },
+          {
             path: "adminLogin",
             element: <AdminLogin />,
+          },
+          {
+            path: "qr_creation",
+            element: <QrCreation />,
           },
         ],
       },

@@ -6,15 +6,14 @@ const axiosPrivate = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true,
+  withCredentials: true,  // Ensure cookies are sent with requests
 });
 
 const useAxiosPrivate = () => {
   const { user } = useAuth();
   const accessToken = user?.access;
-  // console.log(accessToken)
 
-  // Interceptor to add Authorization header
+  // Interceptor to add Authorization header for logged-in users
   axiosPrivate.interceptors.request.use(
     (config) => {
       if (accessToken) {

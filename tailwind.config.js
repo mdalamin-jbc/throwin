@@ -1,6 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/react-tailwindcss-datepicker/dist/index.esm.{js,ts}",
+  ],
   theme: {
     extend: {
       fontFamily: {
@@ -8,13 +12,13 @@ export default {
         hiragino: ["Hiragino Sans GB", "sans-serif"],
       },
       animation: {
-        'move-effect': 'move 3s ease-in-out infinite', // Animation name
+        "move-effect": "move 3s ease-in-out infinite",
       },
       keyframes: {
         move: {
-          '0%': { transform: 'translateX(-50%)' }, // Start from left
-          '50%': { transform: 'translateX(0)' },    // Move to center
-          '100%': { transform: 'translateX(50%)' }, // End at right
+          "0%": { transform: "translateX(-50%)" }, 
+          "50%": { transform: "translateX(0)" }, 
+          "100%": { transform: "translateX(50%)" }, 
         },
       },
     },
