@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Helmet } from "react-helmet";
 import {
   useNavigate,
@@ -18,66 +18,60 @@ import useAxiosPrivate from "../../hooks/axiousPrivate";
 const ChargeCompleted = () => {
   const { username } = useParams();
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
-
   const { staff, isLoading: staffLoading } = UseGetByStaffName(username);
   const [isValidating, setIsValidating] = useState(true);
-  const [isPaymentValidated, setIsPaymentValidated] = useState(false); // Prevent revalidation
+
+  const validatePayment = useCallback(async () => {
+    const paymentId = searchParams.get("paymentId");
+    const payerId = searchParams.get("PayerID");
+
+    if (!paymentId || !payerId) {
+      await Swal.fire({
+        icon: "error",
+        title: "支払いが無効です。",
+        text: "有効な支払いIDまたは支払者IDが見つかりません。",
+        confirmButtonText: "はい",
+      });
+      setIsValidating(false);
+      return;
+    }
+
+    try {
+      const response = await axiosPrivate.get(
+        "/payment_service/paypal-success/",
+        {
+          params: { paymentId, PayerID: payerId },
+        }
+      );
+
+      if (response.status === 200) {
+        setIsValidating(false);
+        await Swal.fire({
+          icon: "success",
+          title: "支払いが成功しました！",
+          text: `取引ID: ${response.data.transaction_id}`,
+          confirmButtonText: "はい",
+        }).then(() => {
+          return;
+        });
+      }
+    } catch (error) {
+      setIsValidating(false);
+      await Swal.fire({
+        icon: "error",
+        title: "支払いの検証に失敗しました！",
+        text: error.response?.data?.detail || error.message,
+        confirmButtonText: "はい",
+      });
+    }
+  }, [searchParams, axiosPrivate]);
 
   useEffect(() => {
-    const validatePayment = async () => {
-      const paymentId = searchParams.get("paymentId");
-      const payerId = searchParams.get("PayerID");
-
-      if (!paymentId || !payerId) {
-        Swal.fire({
-          icon: "error",
-          title: "支払いが無効です。",
-          text: "有効な支払いIDまたは支払者IDが見つかりません。",
-          confirmButtonText: "はい",
-        });
-        setIsValidating(false);
-        return;
-      }
-
-      try {
-        const response = await axiosPrivate.get(
-          "/payment_service/paypal-success/",
-          {
-            params: { paymentId, PayerID: payerId },
-          }
-        );
-
-        if (response.status === 200) {
-          Swal.fire({
-            icon: "success",
-            title: "支払いが成功しました！",
-            text: `取引ID: ${response.data.transaction_id}`,
-            confirmButtonText: "はい",
-          });
-          navigate("/history"); // Redirect after success
-        } else {
-          throw new Error("Unexpected response during payment validation.");
-        }
-      } catch (error) {
-        Swal.fire({
-          icon: "error",
-          title: "支払いの検証に失敗しました！",
-          text: error.response?.data?.detail || error.message,
-          confirmButtonText: "はい",
-        });
-      } finally {
-        setIsValidating(false);
-        setIsPaymentValidated(true); // Mark as validated
-      }
-    };
-
-    // Only run the validation if it hasn't been validated yet
-    if (!isPaymentValidated) {
+    if (isValidating) {
       validatePayment();
     }
-  }, [searchParams, navigate, axiosPrivate, isPaymentValidated]);
+  }, [validatePayment, isValidating]);
 
   if (isValidating || staffLoading) {
     return (
@@ -88,51 +82,53 @@ const ChargeCompleted = () => {
   }
 
   return (
-    <div className="mb-[120px]">
+    <div className="relative min-h-screen pb-32">
       <Helmet>
         <title>Throwin | Billing Page</title>
       </Helmet>
-      <div>
+
+      <header>
         <TitleBar
           title=""
           style="mb-0 w-full"
-          icon={
-            <img className="w-[110px] items-center" src={logo} alt="logo" />
-          }
+          icon={<img className="w-28" src={logo} alt="Throwin Logo" />}
         />
-        {/* Effect image */}
         <div className="absolute left-0 right-0 flex justify-center">
           <img
             src={effect}
-            alt="effect"
-            className="min-w-[375px] max-w-[100%]"
+            alt="Billing Effect"
+            className="min-w-[375px] max-w-full"
+            loading="eager"
           />
         </div>
-      </div>
-      <div className="min-w-[375px] mx-auto text-[#44495B] mt-[43px]">
+      </header>
+
+      <main className="min-w-[375px] mx-auto text-[#44495B] mt-11">
         <div className="text-center">
-          <h3 className="font-bold text-[28px]">{staff.name}</h3>
+          <h3 className="font-bold text-2xl">{staff?.name}</h3>
           <img
-            className="rounded-full w-[163px] mx-auto mt-3"
+            className="rounded-full w-40 h-40 mx-auto mt-3 object-cover"
             src="https://shorturl.at/XqwIr"
-            alt=""
+            alt={`${staff?.name}'s profile`}
+            loading="eager"
           />
-          <h3 className="font-bold text-[28px] w-[85%] mx-auto mt-6 mb-4">
+          <h3 className="font-bold text-2xl w-[85%] mx-auto mt-6 mb-4">
             ありがとうございます！ スローインしました
           </h3>
-          <Link className="text-[#5297FF] font-bold text-sm" to="/history">
+          <Link
+            className="text-[#5297FF] font-bold text-sm hover:underline"
+            to="/history"
+          >
             <p>履歴を見る</p>
           </Link>
         </div>
-      </div>
-      {/* Button at the bottom */}
-      <Link to="/history">
-        <div className="absolute bottom-[114px] w-full px-6">
-          <ButtonPrimary
-            style="flex justify-center w-full rounded-full font-hiragino py-[12px] font-bold text-white bg-gradient-to-r from-[#65D0F2] to-[#2399F4]"
-            btnText="他のメンバーを探す"
-          />
-        </div>
+      </main>
+
+      <Link to="/history" className="fixed bottom-28 left-0 w-full px-6">
+        <ButtonPrimary
+          style="flex justify-center w-full rounded-full font-hiragino py-3 font-bold text-white bg-gradient-to-r from-[#65D0F2] to-[#2399F4] hover:opacity-90 transition-opacity"
+          btnText="他のメンバーを探す"
+        />
       </Link>
     </div>
   );
