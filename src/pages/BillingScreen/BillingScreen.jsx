@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import logo from "../../assets/images/home/logo.png";
 import { useNavigate, useParams } from "react-router-dom";
-import { IoMdStar } from "react-icons/io";
-import { FaRegHeart, FaHeart, FaApple } from "react-icons/fa";
+import { FaApple, FaCcPaypal, FaPaypal } from "react-icons/fa";
+import { SlPaypal } from "react-icons/sl";
 import { FcGoogle } from "react-icons/fc";
 import throws from "../../assets/icons/Throw .png";
 import throw_wh from "../../assets/icons/throw_white.png";
@@ -17,6 +17,7 @@ import UseUserDetails from "../../hooks/UseUserDetails";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import Swal from "sweetalert2";
 import { Circles } from "react-loader-spinner";
+import StaffProfileCard from "../../components/StaffProfileCard/StaffProfileCard";
 
 const BillingScreen = () => {
   const [isLiked, setIsLiked] = useState(false);
@@ -136,17 +137,17 @@ const BillingScreen = () => {
     setBillingData({
       staff_uid: staff?.uid,
       nickname: userDetails?.name || "Guest",
-      amount: persAmount,
+      // amount: persAmount,
+      amount: 50,
       currency: "USD",
       payment_method: "paypal",
-      return_url: "http://frontend.com/payment-success/",
+      return_url: "http://localhost:5173/staff/HW7S3qYskT/chargeCompleted",
       cancel_url: "http://frontend.com/payment-cancel/",
     });
   }, [persAmount, userDetails, staff?.uid]);
 
   const handlePayment = async () => {
     try {
-      // Validate required fields before sending the request
       if (!billingData.amount || billingData.amount <= 0) {
         throw new Error("Payment amount must be greater than zero.");
       }
@@ -157,40 +158,31 @@ const BillingScreen = () => {
 
       console.log("Sending Billing Data:", billingData);
 
-      // Send the POST request
       const response = await axiosPrivate.post(
         `/payment_service/make-payment/`,
         billingData
       );
+
       console.log(response);
-
-      // Check if the request succeeded
       if (response.status === 200 || response.status === 201) {
-        console.log("Payment successful:", response.data);
+        const approvalUrl = response.data.approval_url;
+        console.log("Redirecting to PayPal Approval URL:", approvalUrl);
 
-        // Show success message with SweetAlert
-        Swal.fire({
-          icon: "success",
-          title: "支払いが成功しました！",
-          text: `あなたの取引IDは : ${response.data.transaction_id}`,
-          confirmButtonText: "はい",
-        });
-        navigate(`/staff/${username}/chargeCompleted`);
+        // Redirect to PayPal for user approval
+        window.location.href = approvalUrl;
       } else {
-        throw new Error(`Unexpected response: ${response.status}`);
+        throw new Error("Failed to create payment. Please try again.");
       }
     } catch (error) {
-      // Extract error details
-      const errorDetail = error.response?.data?.detail || error.message;
+      console.error(
+        "Error creating payment:",
+        error.response?.data?.detail || error.message
+      );
 
-      // Log and alert the error for better debugging
-      console.error("Error processing payment:", errorDetail);
-
-      // Show error message with SweetAlert
       Swal.fire({
         icon: "error",
-        title: "支払いに失敗しました！",
-        text: errorDetail,
+        title: "支払いの作成に失敗しました！",
+        text: error.response?.data?.detail || error.message,
         confirmButtonText: "はい",
       });
     }
@@ -234,34 +226,12 @@ const BillingScreen = () => {
               <p className="font-bold text-[10px]">{staff?.introduction}</p>
             </div>
             <div className="max-w-[416px] mx-auto">
-              <div className="relative">
-                <img
-                  src="https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
-                  alt={`${staff?.name} `}
-                  className="object-cover rounded-lg w-full h-[277px]"
-                />
-                <div className="absolute bottom-0 left-0 w-full px-6 mb-[22px] p-2 text-white rounded-b-lg">
-                  <div className="flex justify-between items-center">
-                    <div className="bg-white text-[#F06464] flex items-center gap-1 px-2 py-1 rounded-full shadow-md">
-                      <IoMdStar />
-                      {staff?.score}
-                    </div>
-                    <h3 className="text-2xl font-bold">{staff?.name}</h3>
-                    <div
-                      className="text-2xl font-bold cursor-pointer"
-                      onClick={handleHeartToggle}
-                    >
-                      {isLiked ? <FaHeart color="red" /> : <FaRegHeart />}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-[#80D0E91A] pt-5 pb-[17px] px-[26px] max-w-[416px]">
-                <h2 className="font-semibold text-lg mb-2">自己紹介</h2>
-                <p className="font-light text-sm">{staff?.introduction}</p>
-              </div>
-
+              <StaffProfileCard
+                staff={staff}
+                isLiked={isLiked}
+                isProcessing={isProcessing}
+                handleHeartToggle={handleHeartToggle}
+              />
               <div className="px-3">
                 <div className="flex justify-between items-center px-5 mt-[51px] border-b-2 pb-2 text-[#C0C0C0]">
                   <h4 className="font-semibold text-sm">金額</h4>
@@ -313,6 +283,10 @@ const BillingScreen = () => {
                   </h3>
                   <h3 className="flex items-center border rounded px-3 gap-1">
                     <FcGoogle />
+                    <span>Pay</span>
+                  </h3>
+                  <h3 className="flex items-center border rounded px-3 gap-1">
+                    <SlPaypal />
                     <span>Pay</span>
                   </h3>
                 </div>

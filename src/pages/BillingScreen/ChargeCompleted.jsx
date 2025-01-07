@@ -8,7 +8,7 @@ import ButtonPrimary from "../../components/ButtonPrimary";
 import { Circles } from "react-loader-spinner";
 
 const ChargeCompleted = () => {
-  const { username } = useParams();
+  const { username, } = useParams();
   const { staff, isLoading, isError } = UseGetByStaffName(username);
   console.log(isError);
 
