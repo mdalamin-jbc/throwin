@@ -46,7 +46,6 @@ import TicketTermsAndConditons from "../pages/Gacha/TicketTermsAndConditons";
 import CreateANewTeam from "../pages/Dashboard/CreatANewTeam/CreatANewTeam";
 import SalesManagement from "../pages/Dashboard/SalesManagement/SalesManagement";
 import QrCreation from "../pages/Dashboard/QrCreation/QrCreation";
-import BillingDemo from "../pages/BillingScreen/BillingDemo";
 
 export const Routes = createBrowserRouter([
   {
@@ -254,7 +253,6 @@ export const Routes = createBrowserRouter([
           },
         ],
       },
-      
     ],
   },
 ]);

@@ -138,7 +138,7 @@ const BillingScreen = () => {
       staff_uid: staff?.uid,
       nickname: userDetails?.name || "Guest",
       // amount: persAmount,
-      amount: 50,
+      amount: 40,
       currency: "USD",
       payment_method: "paypal",
       return_url: "http://localhost:5173/staff/HW7S3qYskT/chargeCompleted",
