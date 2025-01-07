@@ -134,11 +134,13 @@ const BillingScreen = () => {
 
   useEffect(() => {
     setBillingData({
-      customer: userDetails?.id,
-      staff: staff?.uid,
+      staff_uid: staff?.uid,
+      nickname: userDetails?.name || "Guest",
       amount: persAmount,
-      user_nick_name: userDetails?.name || "Guest",
-      anonymous: false,
+      currency: "USD",
+      payment_method: "paypal",
+      return_url: "http://frontend.com/payment-success/",
+      cancel_url: "http://frontend.com/payment-cancel/",
     });
   }, [persAmount, userDetails, staff?.uid]);
 
@@ -149,7 +151,7 @@ const BillingScreen = () => {
         throw new Error("Payment amount must be greater than zero.");
       }
 
-      if (!billingData.staff) {
+      if (!billingData.staff_uid) {
         throw new Error("Staff ID is required.");
       }
 
@@ -157,7 +159,7 @@ const BillingScreen = () => {
 
       // Send the POST request
       const response = await axiosPrivate.post(
-        `/payment_service/payments/`,
+        `/payment_service/make-payment/`,
         billingData
       );
       console.log(response);
@@ -193,6 +195,7 @@ const BillingScreen = () => {
       });
     }
   };
+
   return (
     <>
       {isLoading ? (
