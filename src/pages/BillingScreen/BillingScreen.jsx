@@ -142,7 +142,7 @@ const BillingScreen = () => {
       currency: "USD",
       payment_method: "paypal",
       return_url: "http://localhost:5173/staff/HW7S3qYskT/chargeCompleted",
-      cancel_url: "http://frontend.com/payment-cancel/",
+      cancel_url: "http://localhost:5173/payment-cancle",
     });
   }, [persAmount, userDetails, staff?.uid]);
 
@@ -335,7 +335,7 @@ const BillingScreen = () => {
                     <button
                       className="w-full"
                       onClick={() =>
-                        document.getElementById("my_modal_1").showModal()
+                        document.getElementById("my_modal_6").showModal()
                       }
                     >
                       <button className="flex items-center border rounded px-3 py-2 gap-1">
@@ -345,32 +345,32 @@ const BillingScreen = () => {
                     </button>
 
                     <dialog
-                      id="my_modal_1"
+                      id="my_modal_6"
                       className="modal max-w-[343px] mx-auto "
                     >
                       <div className="modal-box p-0 ">
                         <div className="px-10 pt-10 pb-6">
-                          <p className=" text-lg  ">
-                            <span className="underline ">{staff.name}</span>{" "}
+                          <p className="text-base  ">
+                            <span className="">{staff.name}</span>{" "}
                             に、スローインします。 よろしいですか？
                           </p>
-                          <p>金額 : {selectedAmount}円</p>
+                          <p className="text-base">金額 : {selectedAmount}円</p>
                           <div className="flex gap-1">
-                            <p>決済方法 : VISA </p>
-                            <p>下4桁 : 1111 </p>
+                            <p className="text-base  ">決済方法 : Paypal </p>
+                            
                           </div>
                         </div>
 
-                        <div className="flex justify-center gap-4 border-t-2">
+                        <div className="flex justify-center gap-4 border-t-2 text-base">
                           <form method="dialog">
                             <button className="px-1 py-4  border-r-2 border-gray-300 flex items-center justify-center">
-                              <span className="mr-1">キャンセル</span>{" "}
+                              <span className="mr-10">キャンセル</span>
                             </button>
                           </form>
                           <form method="dialog">
                             <button
                               // onClick={handleLogout}
-                              className="px-1 py-4 text-blue-500 flex items-center justify-center"
+                              className="px-10 py-4 text-blue-500 flex items-center justify-center"
                             >
                               <span
                                 onClick={handlePaypalPayment}
