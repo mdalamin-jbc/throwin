@@ -37,7 +37,7 @@ const BillingScreen = () => {
   const navigate = useNavigate();
 
   // console.log(userDetails);
-  // console.log(staff);
+  console.log(staff);
 
   // billing data
   const [billingData, setBillingData] = useState({});
@@ -139,7 +139,7 @@ const BillingScreen = () => {
       nickname: userDetails?.name || "Guest",
       // amount: persAmount,
       amount: 10,
-      currency: "USD",
+      currency: "JPY",
       payment_method: "paypal",
       return_url: "http://localhost:5173/staff/HW7S3qYskT/chargeCompleted",
       cancel_url: "http://frontend.com/payment-cancel/",
@@ -202,7 +202,7 @@ const BillingScreen = () => {
       console.log("Sending Billing Data:", billingData);
 
       const response = await axiosPrivate.post(
-        `/payment_service/make-payment/`,
+        `/payment_service/make-payment/`, 
         billingData
       );
 
@@ -383,7 +383,7 @@ const BillingScreen = () => {
       </form>
       <form method="dialog" className="w-1/2">
         <button
-          onClick={handlePayment}
+          onClick={handlePaypalPayment}
           className="px-4 py-3 w-full text-blue-600 text-[15px]	 text-center"
         >
           確定

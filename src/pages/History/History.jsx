@@ -23,7 +23,7 @@ const History = () => {
   const { data: payments = [], isLoading } = useQuery({
     queryKey: ["payments data"],
     queryFn: async () => {
-      const res = await axiosPrivate.get("/payment_service/customer-payments/");
+      const res = await axiosPrivate.get("/payment_service/payment-histories/");
       return res.data.results.map((payment) => ({
         ...payment,
         created_at: payment.payment_date, // Map payment_date to created_at
