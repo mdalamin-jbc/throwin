@@ -146,6 +146,49 @@ const BillingScreen = () => {
     });
   }, [persAmount, userDetails, staff?.uid]);
 
+  // paypal payment
+  const handlePaypalPayment = async () => {
+    try {
+      if (!billingData.amount || billingData.amount <= 0) {
+        throw new Error("Payment amount must be greater than zero.");
+      }
+
+      if (!billingData.staff_uid) {
+        throw new Error("Staff ID is required.");
+      }
+
+      console.log("Sending Billing Data:", billingData);
+
+      const response = await axiosPrivate.post(
+        `/payment_service/make-payment/`,
+        billingData
+      );
+
+      console.log(response);
+      if (response.status === 200 || response.status === 201) {
+        const approvalUrl = response.data.approval_url;
+        console.log("Redirecting to PayPal Approval URL:", approvalUrl);
+
+        // Redirect to PayPal for user approval
+        window.location.href = approvalUrl;
+      } else {
+        throw new Error("Failed to create payment. Please try again.");
+      }
+    } catch (error) {
+      console.error(
+        "Error creating payment:",
+        error.response?.data?.detail || error.message
+      );
+
+      Swal.fire({
+        icon: "error",
+        title: "支払いの作成に失敗しました！",
+        text: error.response?.data?.detail || error.message,
+        confirmButtonText: "はい",
+      });
+    }
+  };
+
   const handlePayment = async () => {
     try {
       if (!billingData.amount || billingData.amount <= 0) {
@@ -281,14 +324,68 @@ const BillingScreen = () => {
                     <FaApple />
                     <span>Pay</span>
                   </h3>
-                  <h3 className="flex items-center border rounded px-3 gap-1">
+                  <h3 className="flex items-center border rounded px-3 py-2 gap-1">
                     <FcGoogle />
                     <span>Pay</span>
                   </h3>
-                  <h3 className="flex items-center border rounded px-3 gap-1">
-                    <SlPaypal />
-                    <span>Pay</span>
-                  </h3>
+
+                  {/* ------------------------------- */}
+                  <div className="text-[#44495B] p-0">
+                    {/* Open the modal using document.getElementById('ID').showModal() method */}
+                    <button
+                      className="w-full"
+                      onClick={() =>
+                        document.getElementById("my_modal_1").showModal()
+                      }
+                    >
+                      <button className="flex items-center border rounded px-3 py-2 gap-1">
+                        <SlPaypal />
+                        <span>Pay</span>
+                      </button>
+                    </button>
+
+                    <dialog
+                      id="my_modal_1"
+                      className="modal max-w-[343px] mx-auto "
+                    >
+                      <div className="modal-box p-0 ">
+                        <div className="px-10 pt-10 pb-6">
+                          <p className=" text-lg  ">
+                            <span className="underline ">{staff.name}</span>{" "}
+                            に、スローインします。 よろしいですか？
+                          </p>
+                          <p>金額 : {selectedAmount}円</p>
+                          <div className="flex gap-1">
+                            <p>決済方法 : VISA </p>
+                            <p>下4桁 : 1111 </p>
+                          </div>
+                        </div>
+
+                        <div className="flex justify-center gap-4 border-t-2">
+                          <form method="dialog">
+                            <button className="px-1 py-4  border-r-2 border-gray-300 flex items-center justify-center">
+                              <span className="mr-1">キャンセル</span>{" "}
+                            </button>
+                          </form>
+                          <form method="dialog">
+                            <button
+                              // onClick={handleLogout}
+                              className="px-1 py-4 text-blue-500 flex items-center justify-center"
+                            >
+                              <span
+                                onClick={handlePaypalPayment}
+                                className="ml-4"
+                              >
+                                確定
+                              </span>{" "}
+                              {/* Add some spacing between text and border */}
+                            </button>
+                          </form>
+                        </div>
+                      </div>
+                    </dialog>
+                  </div>
+                  {/* ------------------------------- */}
                 </div>
 
                 <div className="p-4">
