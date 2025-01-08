@@ -6,7 +6,7 @@ import ButtonPrimary from "../../components/ButtonPrimary";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import useAxiosPublic from "../../hooks/axiosPublic";
-import { motion } from "framer-motion";  // Import motion from Framer Motion
+import { motion } from "framer-motion";  
 
 const EmailLogin = () => {
   const navigate = useNavigate();
