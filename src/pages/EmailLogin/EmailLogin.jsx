@@ -6,6 +6,7 @@ import ButtonPrimary from "../../components/ButtonPrimary";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import useAxiosPublic from "../../hooks/axiosPublic";
+import { motion } from "framer-motion";  // Import motion from Framer Motion
 
 const EmailLogin = () => {
   const navigate = useNavigate();
@@ -52,8 +53,21 @@ const EmailLogin = () => {
     >
       <div className="absolute inset-0 bg-[#072233fb] h-screen"></div>
 
-      <div className="bg-white p-6 rounded-[10px] shadow-xl text-center relative w-[291px] h-[336px]">
-        <img src={logo} alt="Logo" className="w-[150px] h-auto mx-auto mb-4" />
+      {/* Apply Framer Motion to animate the form container */}
+      <motion.div
+        className="bg-white p-6 rounded-[10px] shadow-xl text-center relative w-[291px] h-[336px]"
+        initial={{ opacity: 0, y: 20 }}   // Initial state
+        animate={{ opacity: 1, y: 0 }}    // Animated state
+        transition={{ duration: 1 }}    // Transition duration
+      >
+        <motion.img
+          src={logo}
+          alt="Logo"
+          className="w-[150px] h-auto mx-auto mb-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+        />
 
         <div className="flex flex-col justify-center">
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -80,20 +94,25 @@ const EmailLogin = () => {
               )}
             </div>
 
-            <button type="submit">
+            <motion.button
+              type="submit"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1 }}
+            >
               <ButtonPrimary
                 btnText="新規登録"
                 style="bg-gradient-to-r from-[#65D0F2] to-[#2399F4] min-w-[253px] rounded-full font-hiragino text-center py-[10px] font-bold text-white"
               />
-            </button>
+            </motion.button>
           </form>
 
           <div className="flex font-hiragino text-xs text-[#626262A6] justify-center gap-2 mt-6 mb-2">
-            <button>
-              <Link to="/terms">利用規約</Link>{" "}
-            </button>
+            <Link to="/terms" className="hover:text-blue-500">
+              利用規約
+            </Link>{" "}
             <p>|</p>
-            <button>プライバシーポリシー</button>
+            <button className="hover:text-blue-500">プライバシーポリシー</button>
           </div>
           <Link
             to="/login"
@@ -102,15 +121,22 @@ const EmailLogin = () => {
             ログイン画面へ
           </Link>
         </div>
-      </div>
+      </motion.div>
 
-      <button className="mt-24 p-2 relative" onClick={handleClose}>
+      {/* Close Button with Framer Motion animation */}
+      <motion.button
+        className="mt-24 p-2 relative"
+        onClick={handleClose}
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1 }}
+      >
         <img
           src={closeIcon}
           alt="Close"
           className="w-[17px] h-[17px] text-gray-500 hover:text-gray-700"
         />
-      </button>
+      </motion.button>
     </div>
   );
 };
