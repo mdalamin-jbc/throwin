@@ -1,11 +1,6 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { Helmet } from "react-helmet";
-import {
-  useNavigate,
-  useParams,
-  useSearchParams,
-  Link,
-} from "react-router-dom";
+import { useNavigate, useParams, useSearchParams, Link } from "react-router-dom";
 import TitleBar from "../../components/TitleBar";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import { Circles } from "react-loader-spinner";
@@ -20,9 +15,15 @@ const ChargeCompleted = () => {
   const [searchParams] = useSearchParams();
   const axiosPrivate = useAxiosPrivate();
   const { staff, isLoading: staffLoading } = UseGetByStaffName(username);
-  const [isValidating, setIsValidating] = useState(true);
+  
+  const [paymentStatus, setPaymentStatus] = useState(null); // Track payment validation result
+  const validatedRef = useRef(false); // Track if validation has already occurred
 
   const validatePayment = useCallback(async () => {
+    // Only proceed if validation hasn't been done before
+    if (validatedRef.current) return;
+    validatedRef.current = true;
+
     const paymentId = searchParams.get("paymentId");
     const payerId = searchParams.get("PayerID");
 
@@ -33,31 +34,26 @@ const ChargeCompleted = () => {
         text: "有効な支払いIDまたは支払者IDが見つかりません。",
         confirmButtonText: "はい",
       });
-      setIsValidating(false);
+      setPaymentStatus("failed");
       return;
     }
 
     try {
-      const response = await axiosPrivate.get(
-        "/payment_service/paypal-success/",
-        {
-          params: { paymentId, PayerID: payerId },
-        }
-      );
+      const response = await axiosPrivate.get("/payment_service/paypal-success/", {
+        params: { paymentId, PayerID: payerId },
+      });
 
       if (response.status === 200) {
-        setIsValidating(false);
+        setPaymentStatus("success");
         await Swal.fire({
           icon: "success",
           title: "支払いが成功しました！",
           text: `取引ID: ${response.data.transaction_id}`,
           confirmButtonText: "はい",
-        }).then(() => {
-          return;
         });
       }
     } catch (error) {
-      setIsValidating(false);
+      setPaymentStatus("failed");
       await Swal.fire({
         icon: "error",
         title: "支払いの検証に失敗しました！",
@@ -68,12 +64,13 @@ const ChargeCompleted = () => {
   }, [searchParams, axiosPrivate]);
 
   useEffect(() => {
-    if (isValidating) {
+    // Trigger payment validation only if status is null (not yet validated)
+    if (paymentStatus === null) {
       validatePayment();
     }
-  }, [validatePayment, isValidating]);
+  }, [validatePayment, paymentStatus]);
 
-  if (isValidating || staffLoading) {
+  if (staffLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <Circles height="80" width="80" color="#49BBDF" ariaLabel="loading" />
