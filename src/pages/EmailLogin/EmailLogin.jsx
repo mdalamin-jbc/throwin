@@ -127,14 +127,14 @@ const EmailLogin = () => {
       <motion.button
         className="mt-24 p-2 relative"
         onClick={handleClose}
-        initial={{ opacity: 0, scale: 0.8 }}
+        initial={{ opacity: 0, scale: 0.3 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1 }}
+        transition={{ duration: 1.3 }}
       >
         <img
           src={closeIcon}
           alt="Close"
-          className="w-[17px] h-[17px] text-gray-500 hover:text-gray-700"
+          className="w-[17px] h-[17px] text-white hover:text-gray-700"
         />
       </motion.button>
     </div>
