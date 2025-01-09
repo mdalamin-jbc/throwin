@@ -8,6 +8,7 @@ import useAxiosPrivate from "../../../hooks/axiousPrivate";
 import Swal from "sweetalert2";
 import { Circles } from "react-loader-spinner";
 import StaffProfileCard from "../../../components/StaffProfileCard/StaffProfileCard";
+import UseStaffDetailsWithStoreId from "../../../hooks/UseStaffDetailsWithStoreId";
 
 const Staff = () => {
   const [isLiked, setIsLiked] = useState(false);
@@ -15,6 +16,8 @@ const Staff = () => {
   const { username } = useParams();
 
   const { staff } = UseGetByStaffName(username);
+  const { storeId } = UseStaffDetailsWithStoreId(staff.name);
+  console.log(storeId);
   const { favoriteStuffs, refetch, isLoading } = UseGetFavorite_stuff();
 
   const axiosPrivate = useAxiosPrivate();
