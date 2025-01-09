@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { IoMdStar } from "react-icons/io";
 import { Link, useLocation } from "react-router-dom";
 import useGetStuffsByStoreCode from "../../hooks/UseGetStuffsByStoreCode";
@@ -7,23 +6,11 @@ import { Circles } from "react-loader-spinner";
 const IndividualStores = () => {
   const location = useLocation();
   const { storeData } = location.state || {};
-  const { stuffs, refetch, isLoading, isError } =
-    useGetStuffsByStoreCode(storeData);
+  const { stuffs, isLoading } = useGetStuffsByStoreCode(storeData);
 
   console.log(storeData);
   console.log(stuffs);
-  // change this data after get final data
-  const [data, setData] = useState([]);
 
-  useEffect(() => {
-    fetch("/stores.json")
-      .then((res) => {
-        if (!res.ok) throw new Error("Network response was not ok");
-        return res.json();
-      })
-      .then((data) => setData(data))
-      .catch((error) => console.error("Error fetching JSON data:", error));
-  }, []);
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -64,7 +51,12 @@ const IndividualStores = () => {
       <div className="grid grid-cols-2 gap-4 w-[342px] mx-auto ">
         {stuffs.map((staff, uid) => (
           <div key={uid}>
-            <Link to={`/staff/${staff.username}`}>
+            <Link
+              to={{
+                pathname: `/staff/${staff.username}`,
+                state: { staffData: staff }, // Pass the staff data as state
+              }}
+            >
               <div className="relative">
                 <img
                   src="https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"

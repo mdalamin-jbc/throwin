@@ -20,11 +20,15 @@ const Search = () => {
   const videoRef = useRef(null);
   const codeReaderRef = useRef(null);
 
-  const { staffs, isLoading, isError, refetch } = UseGetStaffListByStaffName(searchByStuffName);
+  const { staffs, isLoading, isError, refetch } =
+    UseGetStaffListByStaffName(searchByStuffName);
   const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
 
-  const { register, formState: { errors } } = useForm();
+  const {
+    register,
+    formState: { errors },
+  } = useForm();
 
   useEffect(() => {
     return () => {
@@ -36,7 +40,7 @@ const Search = () => {
 
   const handleQRCodeResult = (result) => {
     console.log("QR Code Result:", result.text);
-  
+
     // Check if result.text is a valid URL
     try {
       const url = new URL(result.text);
@@ -46,8 +50,6 @@ const Search = () => {
       console.error("Invalid URL in QR Code:", result.text);
     }
   };
-  
-  
 
   const handleOpenScanner = async () => {
     try {
@@ -68,11 +70,14 @@ const Search = () => {
       setIsScannerOpen(true);
       setErrorMessage("");
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
       if (videoRef.current) {
         try {
-          const result = await codeReader.decodeOnceFromVideoDevice(devices[0].deviceId, videoRef.current);
+          const result = await codeReader.decodeOnceFromVideoDevice(
+            devices[0].deviceId,
+            videoRef.current
+          );
           await handleQRCodeResult(result);
           setIsScannerOpen(false);
         } catch (err) {
@@ -96,7 +101,7 @@ const Search = () => {
 
   const handleSearchStuff = async (staffName = null) => {
     const searchValue = staffName || searchByStuffName;
-    
+
     if (!searchValue) {
       setErrorMessage("メンバー名は必須です");
       return;
@@ -120,7 +125,7 @@ const Search = () => {
 
   const handleSearchStore = async (storeCode = null) => {
     const searchValue = storeCode || searchStore;
-    
+
     if (!searchValue) {
       setErrorMessage("店舗コードは必須です");
       return;
@@ -128,6 +133,10 @@ const Search = () => {
 
     try {
       const response = await axiosPublic.get(`/stores/${searchValue}`);
+
+      // Save data to localStorage
+      localStorage.setItem("storeData", JSON.stringify(response.data));
+
       setStoreData(response.data);
       setErrorMessage("");
       navigate(`/store`, { state: { storeData: response.data } });
@@ -146,21 +155,20 @@ const Search = () => {
         <h4 className="font-hiragino font-semibold text-lg mt-8 mb-4">
           QRコードで探す
         </h4>
-        <button 
-          onClick={handleOpenScanner}
-          disabled={isScannerOpen}
-        >
+        <button onClick={handleOpenScanner} disabled={isScannerOpen}>
           <ButtonPrimary
             icon={<img className="mr-4" src={camera} alt="search icon" />}
             btnText="QRコードをスキャン"
-            style={`flex justify-center bg-gradient-to-r from-[#65D0F2] to-[#2399F4] w-[342px] rounded-[10px] font-hiragino py-[12px] font-bold text-white ${isScannerOpen ? 'opacity-50 cursor-not-allowed' : ''}`}
+            style={`flex justify-center bg-gradient-to-r from-[#65D0F2] to-[#2399F4] w-[342px] rounded-[10px] font-hiragino py-[12px] font-bold text-white ${
+              isScannerOpen ? "opacity-50 cursor-not-allowed" : ""
+            }`}
           />
         </button>
 
         {isScannerOpen && (
           <div className="relative mt-4">
-            <video 
-              ref={videoRef} 
+            <video
+              ref={videoRef}
               className="w-full rounded-lg shadow-lg"
               autoPlay
               playsInline
@@ -197,7 +205,11 @@ const Search = () => {
             onClick={() => handleSearchStuff()}
             className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
           >
-            <img className="w-5 h-5 opacity-70" src={search} alt="search icon" />
+            <img
+              className="w-5 h-5 opacity-70"
+              src={search}
+              alt="search icon"
+            />
           </div>
           {errors.searchMember && (
             <span className="text-red-500 mt-1">
@@ -228,7 +240,11 @@ const Search = () => {
             onClick={() => handleSearchStore()}
             className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
           >
-            <img className="w-5 h-5 opacity-70" src={search} alt="search icon" />
+            <img
+              className="w-5 h-5 opacity-70"
+              src={search}
+              alt="search icon"
+            />
           </div>
           {errors.searchStore && (
             <span className="text-red-500 mt-1">

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import ButtonPrimary from "../../../components/ButtonPrimary";
 import throws from "../../../assets/icons/Throw .png";
 import UseGetByStaffName from "../../../hooks/UseGetByStaffName";

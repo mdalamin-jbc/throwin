@@ -44,6 +44,14 @@ const BillingScreen = () => {
   const [selectedAmount, setSelectedAmount] = useState("0");
   const [message, setMessage] = useState("");
 
+  // store id and resturent uid
+  const storedData = JSON.parse(localStorage.getItem("storeData"));
+  if (storedData) {
+    console.log("Retrieved store data:", storedData);
+  } else {
+    console.log("No store data found in localStorage.");
+  }
+
   const handleHeartToggle = async () => {
     if (isProcessing) return; // Prevent duplicate requests
     setIsProcessing(true);
@@ -137,14 +145,22 @@ const BillingScreen = () => {
     setBillingData({
       staff_uid: staff?.uid,
       nickname: userDetails?.name || "Guest",
-      // amount: persAmount,
-      amount: 10,
+      restaurant_uid: storedData?.restaurant_uid,
+      store_uid: storedData?.uid,
+      amount: persAmount,
+      // amount: 1000,
       currency: "JPY",
       payment_method: "paypal",
       return_url: "http://localhost:5173/staff/HW7S3qYskT/chargeCompleted",
       cancel_url: "http://frontend.com/payment-cancel/",
     });
-  }, [persAmount, userDetails, staff?.uid]);
+  }, [
+    persAmount,
+    userDetails,
+    staff?.uid,
+    storedData?.restaurant_uid,
+    storedData?.uid,
+  ]);
 
   // paypal payment
   const handlePaypalPayment = async () => {
@@ -202,7 +218,7 @@ const BillingScreen = () => {
       console.log("Sending Billing Data:", billingData);
 
       const response = await axiosPrivate.post(
-        `/payment_service/make-payment/`, 
+        `/payment_service/make-payment/`,
         billingData
       );
 
@@ -345,53 +361,54 @@ const BillingScreen = () => {
                     </button>
 
                     <dialog
-  id="my_modal_1"
-  className="modal max-w-[343px] mx-auto rounded-lg shadow-lg"
->
-  <div className="modal-box p-0 rounded-lg overflow-hidden">
-    {/* Header with PayPal branding */}
-    <div className="bg-blue-600 text-white flex items-center justify-center py-4">
-      <img
-        src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_111x69.jpg"
-        alt="PayPal Logo"
-        className="max-w-[200px] h-12 rounded-[10px]" 
+                      id="my_modal_1"
+                      className="modal max-w-[343px] mx-auto rounded-lg shadow-lg"
+                    >
+                      <div className="modal-box p-0 rounded-lg overflow-hidden">
+                        {/* Header with PayPal branding */}
+                        <div className="bg-blue-600 text-white flex items-center justify-center py-4">
+                          <img
+                            src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_111x69.jpg"
+                            alt="PayPal Logo"
+                            className="max-w-[200px] h-12 rounded-[10px]"
+                          />
+                        </div>
 
-      />
-    </div>
+                        {/* Modal Content */}
+                        <div className="px-6 pt-6 pb-4">
+                          <p className="text-base font-medium mb-4">
+                            <span className="underline font-semibold">
+                              {staff.name}
+                            </span>{" "}
+                            に、スローインします。 よろしいですか？
+                          </p>
+                          <p className="text-sm font-medium mb-2">
+                            金額 : {selectedAmount}円
+                          </p>
+                          <div className="flex justify-between items-center text-sm mb-6">
+                            <p>決済方法 : PayPal</p>
+                            <p>下4桁: 6467</p>
+                          </div>
+                        </div>
 
-    {/* Modal Content */}
-    <div className="px-6 pt-6 pb-4">
-      <p className="text-base font-medium mb-4">
-        <span className="underline font-semibold">{staff.name}</span> に、スローインします。
-        よろしいですか？
-      </p>
-      <p className="text-sm font-medium mb-2">金額 : {selectedAmount}円</p>
-      <div className="flex justify-between items-center text-sm mb-6">
-        <p>決済方法 : PayPal</p>
-        <p>下4桁: 6467</p>
-      </div>
-    </div>
-
-    {/* Action Buttons */}
-    <div className="flex justify-center gap-4 border-t border-gray-200">
-      <form method="dialog" className="w-1/2">
-        <button
-          className="px-4 py-3 w-full text-red-600	 border-r border-gray-300 text-center text-[15px]	"
-        >
-          キャンセル
-        </button>
-      </form>
-      <form method="dialog" className="w-1/2">
-        <button
-          onClick={handlePaypalPayment}
-          className="px-4 py-3 w-full text-blue-600 text-[15px]	 text-center"
-        >
-          確定
-        </button>
-      </form>
-    </div>
-  </div>
-</dialog>
+                        {/* Action Buttons */}
+                        <div className="flex justify-center gap-4 border-t border-gray-200">
+                          <form method="dialog" className="w-1/2">
+                            <button className="px-4 py-3 w-full text-red-600	 border-r border-gray-300 text-center text-[15px]	">
+                              キャンセル
+                            </button>
+                          </form>
+                          <form method="dialog" className="w-1/2">
+                            <button
+                              onClick={handlePaypalPayment}
+                              className="px-4 py-3 w-full text-blue-600 text-[15px]	 text-center"
+                            >
+                              確定
+                            </button>
+                          </form>
+                        </div>
+                      </div>
+                    </dialog>
                   </div>
                   {/* ------------------------------- */}
                 </div>
