@@ -8,6 +8,7 @@ import { Link, useParams } from "react-router-dom";
 import UseGetStaffListByStaffName from "../../hooks/UseGetStaffListByStaffName";
 import { Circles } from "react-loader-spinner";
 import { IoMdStar } from "react-icons/io";
+import UseStaffDetailsWithStoreId from "../../hooks/UseStaffDetailsWithStoreId";
 
 const MemberList = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -15,6 +16,9 @@ const MemberList = () => {
   const { staffs, isLoading } = UseGetStaffListByStaffName(staffName);
   const staffmembers = staffs.results;
   console.log(staffmembers);
+
+  const { storeId } = UseStaffDetailsWithStoreId(staffName);
+  console.log(storeId);
 
   const {
     register,
