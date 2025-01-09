@@ -48,7 +48,7 @@ const ChargeCompleted = () => {
         await Swal.fire({
           icon: "success",
           title: "支払いが成功しました！",
-          text: `取引ID: ${response.data.transaction_id}`,
+          text: `取引ID: ${paymentId}`,
           confirmButtonText: "はい",
         });
       }
