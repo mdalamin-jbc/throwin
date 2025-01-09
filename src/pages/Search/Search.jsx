@@ -134,9 +134,6 @@ const Search = () => {
     try {
       const response = await axiosPublic.get(`/stores/${searchValue}`);
 
-      // Save data to localStorage
-      localStorage.setItem("storeData", JSON.stringify(response.data));
-
       setStoreData(response.data);
       setErrorMessage("");
       navigate(`/store`, { state: { storeData: response.data } });

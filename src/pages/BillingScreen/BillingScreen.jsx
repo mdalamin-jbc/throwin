@@ -18,6 +18,7 @@ import { RiArrowLeftSLine } from "react-icons/ri";
 import Swal from "sweetalert2";
 import { Circles } from "react-loader-spinner";
 import StaffProfileCard from "../../components/StaffProfileCard/StaffProfileCard";
+import UseStaffDetailsWithStoreId from "../../hooks/UseStaffDetailsWithStoreId";
 
 const BillingScreen = () => {
   const [isLiked, setIsLiked] = useState(false);
@@ -25,6 +26,8 @@ const BillingScreen = () => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
   const { username } = useParams();
   const { staff } = UseGetByStaffName(username);
+  const { storeId } = UseStaffDetailsWithStoreId(staff.name);
+  console.log(storeId);
   const {
     favoriteStuffs,
     refetch: favRefetch,
@@ -43,14 +46,6 @@ const BillingScreen = () => {
   const [billingData, setBillingData] = useState({});
   const [selectedAmount, setSelectedAmount] = useState("0");
   const [message, setMessage] = useState("");
-
-  // store id and resturent uid
-  const storedData = JSON.parse(localStorage.getItem("storeData"));
-  if (storedData) {
-    console.log("Retrieved store data:", storedData);
-  } else {
-    console.log("No store data found in localStorage.");
-  }
 
   const handleHeartToggle = async () => {
     if (isProcessing) return; // Prevent duplicate requests
@@ -143,10 +138,10 @@ const BillingScreen = () => {
 
   useEffect(() => {
     setBillingData({
-      staff_uid: staff?.uid,
       nickname: userDetails?.name || "Guest",
-      restaurant_uid: storedData?.restaurant_uid,
-      store_uid: storedData?.uid,
+      staff_uid: staff?.uid,
+      restaurant_uid: storeId?.restaurant_uid,
+      store_uid: storeId?.uid,
       amount: persAmount,
       // amount: 1000,
       currency: "JPY",
@@ -158,8 +153,8 @@ const BillingScreen = () => {
     persAmount,
     userDetails,
     staff?.uid,
-    storedData?.restaurant_uid,
-    storedData?.uid,
+    storeId?.restaurant_uid,
+    storeId?.uid,
   ]);
 
   // paypal payment
