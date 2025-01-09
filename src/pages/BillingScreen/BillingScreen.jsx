@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import logo from "../../assets/images/home/logo.png";
-import { useNavigate, useParams } from "react-router-dom";
-import { FaApple, FaCcPaypal, FaPaypal } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { FaApple } from "react-icons/fa";
 import { SlPaypal } from "react-icons/sl";
 import { FcGoogle } from "react-icons/fc";
 import throws from "../../assets/icons/Throw .png";
@@ -9,7 +9,6 @@ import throw_wh from "../../assets/icons/throw_white.png";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import TitleBar from "../../components/TitleBar";
 import { useForm } from "react-hook-form";
-import UseGetByStaffName from "../../hooks/UseGetByStaffName";
 import { Helmet } from "react-helmet";
 import useGetFavoriteStuff from "../../hooks/UseGetFavorite_stuff";
 import useAxiosPrivate from "../../hooks/axiousPrivate";
@@ -18,16 +17,15 @@ import { RiArrowLeftSLine } from "react-icons/ri";
 import Swal from "sweetalert2";
 import { Circles } from "react-loader-spinner";
 import StaffProfileCard from "../../components/StaffProfileCard/StaffProfileCard";
-import UseStaffDetailsWithStoreId from "../../hooks/UseStaffDetailsWithStoreId";
 
 const BillingScreen = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false); // Prevent rapid toggling
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
-  const { username } = useParams();
-  const { staff } = UseGetByStaffName(username);
-  const { storeId } = UseStaffDetailsWithStoreId(staff.name);
-  console.log(storeId);
+
+  const staff = JSON.parse(localStorage.getItem("staff"));
+
+  console.log(staff);
   const {
     favoriteStuffs,
     refetch: favRefetch,
@@ -140,8 +138,8 @@ const BillingScreen = () => {
     setBillingData({
       nickname: userDetails?.name || "Guest",
       staff_uid: staff?.uid,
-      restaurant_uid: storeId?.restaurant_uid,
-      store_uid: storeId?.store_uid,
+      restaurant_uid: staff?.restaurant_uid,
+      store_uid: staff?.store_uid,
       amount: persAmount,
       // amount: 1000,
       currency: "JPY",
@@ -153,8 +151,8 @@ const BillingScreen = () => {
     persAmount,
     userDetails,
     staff?.uid,
-    storeId?.restaurant_uid,
-    storeId?.store_uid,
+    staff?.restaurant_uid,
+    staff?.store_uid,
   ]);
 
   // paypal payment

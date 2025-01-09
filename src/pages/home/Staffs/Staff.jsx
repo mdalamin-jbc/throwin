@@ -14,10 +14,9 @@ const Staff = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const { username } = useParams();
-
   const { staff } = UseGetByStaffName(username);
   const { storeId } = UseStaffDetailsWithStoreId(staff.name);
-  console.log(storeId);
+  console.log(staff);
   const { favoriteStuffs, refetch, isLoading } = UseGetFavorite_stuff();
 
   const axiosPrivate = useAxiosPrivate();

@@ -26,9 +26,9 @@ const UseStaffDetailsWithStoreId = (name) => {
   }
 
   // If the array has at least one item, return the first item
-  const storeId = staffStoreId[0] || null;
+  const storeId = staffStoreId || null;
 
-  console.log(storeId);
+  // console.log(storeId);
 
   return { storeId, name, refetch, isLoading, isError };
 };

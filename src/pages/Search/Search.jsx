@@ -9,6 +9,7 @@ import { BrowserQRCodeReader } from "@zxing/library";
 import useAxiosPublic from "../../hooks/axiosPublic";
 import { useNavigate } from "react-router-dom";
 import UseGetStaffListByStaffName from "../../hooks/UseGetStaffListByStaffName";
+import UseStaffDetailsWithStoreId from "../../hooks/UseStaffDetailsWithStoreId";
 
 const Search = () => {
   const [searchByStuffName, setSearchByStuffName] = useState("");
@@ -19,9 +20,9 @@ const Search = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const videoRef = useRef(null);
   const codeReaderRef = useRef(null);
+  const { storeId,isLoading, isError, refetch } = UseStaffDetailsWithStoreId(searchByStuffName);
 
-  const { staffs, isLoading, isError, refetch } =
-    UseGetStaffListByStaffName(searchByStuffName);
+  
   const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
 
@@ -99,8 +100,12 @@ const Search = () => {
     setErrorMessage("");
   };
 
+  // search by staff name
   const handleSearchStuff = async (staffName = null) => {
     const searchValue = staffName || searchByStuffName;
+
+    console.log(storeId);
+    
 
     if (!searchValue) {
       setErrorMessage("メンバー名は必須です");
@@ -115,7 +120,7 @@ const Search = () => {
     refetch();
 
     if (!isLoading && !isError) {
-      setStuffData(staffs);
+      setStuffData(storeId);
       setErrorMessage("");
       navigate(`/member_list/${searchValue}`);
     } else if (isError) {
