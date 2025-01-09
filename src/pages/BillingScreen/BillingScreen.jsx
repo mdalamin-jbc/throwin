@@ -152,7 +152,7 @@ const BillingScreen = () => {
       currency: "JPY",
       payment_method: "paypal",
       return_url: "http://localhost:5173/staff/HW7S3qYskT/chargeCompleted",
-      cancel_url: "http://frontend.com/payment-cancel/",
+      cancel_url: "http://localhost:5173/payment-cancle",
     });
   }, [
     persAmount,
