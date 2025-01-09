@@ -45,7 +45,9 @@ const PaymentCancel = () => {
         Swal.fire({
           icon: "error",
           title: "キャンセル処理に失敗しました。",
-          text: error.response?.data?.detail || "サーバーとの通信中にエラーが発生しました。",
+          text:
+            error.response?.data?.detail ||
+            "サーバーとの通信中にエラーが発生しました。",
           confirmButtonText: "戻る",
         });
       }

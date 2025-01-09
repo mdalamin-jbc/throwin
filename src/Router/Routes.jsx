@@ -46,6 +46,7 @@ import TicketTermsAndConditons from "../pages/Gacha/TicketTermsAndConditons";
 import CreateANewTeam from "../pages/Dashboard/CreatANewTeam/CreatANewTeam";
 import SalesManagement from "../pages/Dashboard/SalesManagement/SalesManagement";
 import QrCreation from "../pages/Dashboard/QrCreation/QrCreation";
+import PaymentCancel from "../pages/BillingScreen/PaymentCancle";
 
 export const Routes = createBrowserRouter([
   {
@@ -166,6 +167,10 @@ export const Routes = createBrowserRouter([
       {
         path: "/staff/:username/chargeCompleted",
         element: <ChargeCompleted />,
+      },
+      {
+        path: "payment-cancle",
+        element: <PaymentCancel />,
       },
       {
         path: "/member_list/:staffName",
