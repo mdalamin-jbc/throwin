@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import logo from "../../assets/images/home/logo.png";
-import { useNavigate, useParams } from "react-router-dom";
-import { FaApple, FaCcPaypal, FaPaypal } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { FaApple } from "react-icons/fa";
 import { SlPaypal } from "react-icons/sl";
 import { FcGoogle } from "react-icons/fc";
 import throws from "../../assets/icons/Throw .png";
@@ -9,7 +9,6 @@ import throw_wh from "../../assets/icons/throw_white.png";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import TitleBar from "../../components/TitleBar";
 import { useForm } from "react-hook-form";
-import UseGetByStaffName from "../../hooks/UseGetByStaffName";
 import { Helmet } from "react-helmet";
 import useGetFavoriteStuff from "../../hooks/UseGetFavorite_stuff";
 import useAxiosPrivate from "../../hooks/axiousPrivate";
@@ -23,8 +22,10 @@ const BillingScreen = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false); // Prevent rapid toggling
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
-  const { username } = useParams();
-  const { staff } = UseGetByStaffName(username);
+
+  const staff = JSON.parse(localStorage.getItem("staff"));
+
+  console.log(staff);
   const {
     favoriteStuffs,
     refetch: favRefetch,
@@ -43,14 +44,6 @@ const BillingScreen = () => {
   const [billingData, setBillingData] = useState({});
   const [selectedAmount, setSelectedAmount] = useState("0");
   const [message, setMessage] = useState("");
-
-  // store id and resturent uid
-  const storedData = JSON.parse(localStorage.getItem("storeData"));
-  if (storedData) {
-    console.log("Retrieved store data:", storedData);
-  } else {
-    console.log("No store data found in localStorage.");
-  }
 
   const handleHeartToggle = async () => {
     if (isProcessing) return; // Prevent duplicate requests
@@ -143,10 +136,10 @@ const BillingScreen = () => {
 
   useEffect(() => {
     setBillingData({
-      staff_uid: staff?.uid,
       nickname: userDetails?.name || "Guest",
-      restaurant_uid: storedData?.restaurant_uid,
-      store_uid: storedData?.uid,
+      staff_uid: staff?.uid,
+      restaurant_uid: staff?.restaurant_uid,
+      store_uid: staff?.store_uid,
       amount: persAmount,
       // amount: 1000,
       currency: "JPY",
@@ -158,8 +151,8 @@ const BillingScreen = () => {
     persAmount,
     userDetails,
     staff?.uid,
-    storedData?.restaurant_uid,
-    storedData?.uid,
+    staff?.restaurant_uid,
+    staff?.store_uid,
   ]);
 
   // paypal payment

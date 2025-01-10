@@ -19,9 +19,9 @@ const useGetStuffsByStoreCode = (storeData) => {
   });
 
   // Access the results array directly from data
-  const stuffs = data.results;
+  const store = data.results;
 
-  return { stuffs, refetch, isLoading, isError };
+  return { store, refetch, isLoading, isError };
 };
 
 export default useGetStuffsByStoreCode;

@@ -6,10 +6,10 @@ import { Circles } from "react-loader-spinner";
 const IndividualStores = () => {
   const location = useLocation();
   const { storeData } = location.state || {};
-  const { stuffs, isLoading } = useGetStuffsByStoreCode(storeData);
+  const { store, isLoading } = useGetStuffsByStoreCode(storeData);
 
   console.log(storeData);
-  console.log(stuffs);
+  console.log(store);
 
   if (isLoading) {
     return (
@@ -49,7 +49,7 @@ const IndividualStores = () => {
       </div>
 
       <div className="grid grid-cols-2 gap-4 w-[342px] mx-auto ">
-        {stuffs.map((staff, uid) => (
+        {store.map((staff, uid) => (
           <div key={uid}>
             <Link
               to={{

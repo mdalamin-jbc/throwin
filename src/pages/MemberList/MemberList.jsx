@@ -1,20 +1,19 @@
 import { useState } from "react";
 import search from "../../assets/icons/search2.png";
 import logo from "../../assets/images/home/logo.png";
-import team from "../../assets/images/team/team.png";
 import { useForm } from "react-hook-form";
 import TitleBar from "../../components/TitleBar";
 import { Link, useParams } from "react-router-dom";
-import UseGetStaffListByStaffName from "../../hooks/UseGetStaffListByStaffName";
 import { Circles } from "react-loader-spinner";
 import { IoMdStar } from "react-icons/io";
+import UseStaffDetailsWithStoreId from "../../hooks/UseStaffDetailsWithStoreId";
 
 const MemberList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const { staffName } = useParams();
-  const { staffs, isLoading } = UseGetStaffListByStaffName(staffName);
-  const staffmembers = staffs.results;
-  console.log(staffmembers);
+  const { storeId, isLoading } = UseStaffDetailsWithStoreId(staffName);
+
+  console.log(storeId);
 
   const {
     register,
@@ -88,14 +87,22 @@ const MemberList = () => {
         </form>
       </div>
       <h2 className="flex justify-end font-normal text-xs w-[342px] m-[14px] mx-auto">
-        チーム・店舗の一覧({staffmembers.length})
+        チーム・店舗の一覧({storeId.length})
       </h2>
 
       {/* Team Images */}
       <div className="grid grid-cols-2 gap-3 w-[342px] mx-auto ">
-        {staffmembers.map((staff, index) => (
+        {storeId.map((staff, index) => (
           <div key={index} className="relative w-[170px] h-[170px]">
-            <Link to={`/staff/${staff.username}`}>
+            <Link
+              to={{
+                pathname: `/staff/${staff.username}`,
+                state: { staffData: staff },
+              }}
+              onClick={() =>
+                localStorage.setItem("staff", JSON.stringify(staff))
+              }
+            >
               <div className="relative">
                 <img
                   src="https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
