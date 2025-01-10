@@ -38,7 +38,7 @@ const GotTicket = () => {
             居酒屋あ_A店で使用可能
           </p>
         </div>
-        <Link className="mt-5 mb-3" to={`processing`}>
+        <Link className="mt-5 mb-3" to={`ticket-terms`}>
           <ButtonSecondary
             icon={<MdOutlineKeyboardArrowRight />}
             btnText="もう一度回す"

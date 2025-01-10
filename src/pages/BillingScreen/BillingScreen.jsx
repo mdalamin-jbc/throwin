@@ -144,7 +144,7 @@ const BillingScreen = () => {
       // amount: 1000,
       currency: "JPY",
       payment_method: "paypal",
-      return_url: "http://localhost:5173/staff/HW7S3qYskT/chargeCompleted",
+      return_url: `http://localhost:5173/staff/${staff.username}/chargeCompleted`,
       cancel_url: "http://localhost:5173/payment-cancle",
     });
   }, [
@@ -153,6 +153,7 @@ const BillingScreen = () => {
     staff?.uid,
     staff?.restaurant_uid,
     staff?.store_uid,
+    staff.username,
   ]);
 
   // paypal payment
@@ -299,11 +300,11 @@ const BillingScreen = () => {
                       key={index}
                       onClick={() => handleClick(amount)}
                       className={`border rounded-lg mt-[22px] px-4 py-2 whitespace-nowrap cursor-pointer 
-            ${
-              selectedAmount === amount
-                ? "bg-[#49BBDF] text-white"
-                : "border-[#49BBDF] text-[#49BBDF]"
-            }`}
+                      ${
+                        selectedAmount === amount
+                          ? "bg-[#49BBDF] text-white"
+                          : "border-[#49BBDF] text-[#49BBDF]"
+                      }`}
                     >
                       {amount}円
                     </h4>
@@ -344,7 +345,7 @@ const BillingScreen = () => {
                     <button
                       className="w-full"
                       onClick={() =>
-                        document.getElementById("my_modal_1").showModal()
+                        document.getElementById("my_modal_6").showModal()
                       }
                     >
                       <button className="flex items-center border rounded px-3 py-2 gap-1">
@@ -354,33 +355,33 @@ const BillingScreen = () => {
                     </button>
 
                     <dialog
-                      id="my_modal_1"
+                      id="my_modal_6"
                       className="modal max-w-[343px] mx-auto rounded-lg shadow-lg"
                     >
                       <div className="modal-box p-0 rounded-lg overflow-hidden">
                         {/* Header with PayPal branding */}
-                        <div className="bg-blue-600 text-white flex items-center justify-center py-4">
+                        <div className="bg-[#49BBDF] text-white flex items-center justify-center py-4">
                           <img
                             src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_111x69.jpg"
                             alt="PayPal Logo"
-                            className="max-w-[200px] h-12 rounded-[10px]"
+                            className=" h-14 rounded-[10px]"
                           />
                         </div>
 
                         {/* Modal Content */}
-                        <div className="px-6 pt-6 pb-4">
-                          <p className="text-base font-medium mb-4">
+                        <div className="px-6 pt-4 pb-4">
+                          <p className="text-base font-medium ">
                             <span className="underline font-semibold">
                               {staff.name}
                             </span>{" "}
                             に、スローインします。 よろしいですか？
                           </p>
-                          <p className="text-sm font-medium mb-2">
-                            金額 : {selectedAmount}円
-                          </p>
-                          <div className="flex justify-between items-center text-sm mb-6">
+
+                          <div className="flex justify-between items-center text-sm mt-4">
+                            <p className="text-sm font-medium ">
+                              金額 : {selectedAmount}円
+                            </p>
                             <p>決済方法 : PayPal</p>
-                            <p>下4桁: 6467</p>
                           </div>
                         </div>
 

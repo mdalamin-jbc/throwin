@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import ButtonPrimary from "../../../components/ButtonPrimary";
 import throws from "../../../assets/icons/Throw .png";
 import UseGetByStaffName from "../../../hooks/UseGetByStaffName";
@@ -8,14 +8,13 @@ import useAxiosPrivate from "../../../hooks/axiousPrivate";
 import Swal from "sweetalert2";
 import { Circles } from "react-loader-spinner";
 import StaffProfileCard from "../../../components/StaffProfileCard/StaffProfileCard";
-import UseStaffDetailsWithStoreId from "../../../hooks/UseStaffDetailsWithStoreId";
 
 const Staff = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const { username } = useParams();
   const { staff } = UseGetByStaffName(username);
-  const { storeId } = UseStaffDetailsWithStoreId(staff.name);
+
   console.log(staff);
   const { favoriteStuffs, refetch, isLoading } = UseGetFavorite_stuff();
 
@@ -83,7 +82,7 @@ const Staff = () => {
         </div>
       ) : (
         <div className="min-w-[375px] mx-auto mb-[120px]">
-          <div className="max-w-[416px] mx-auto">
+          <div className="max-w-[430px] mx-auto">
             <StaffProfileCard
               staff={staff}
               isLiked={isLiked}

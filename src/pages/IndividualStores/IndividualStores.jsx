@@ -44,7 +44,7 @@ const IndividualStores = () => {
         </div>
         <div className="w-[342px] mx-auto flex justify-between mt-8 mb-5 text-[#44495B] items-center">
           <h5 className="font-bold  ">わらび高木店のメンバー</h5>
-          <p className="font-normal text-xs">メンバーの一覧(1)</p>
+          <p className="font-normal text-xs">メンバーの一覧({store.length})</p>
         </div>
       </div>
 

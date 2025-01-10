@@ -1,4 +1,5 @@
 
+import PropTypes from "prop-types";
 import { IoMdStar } from "react-icons/io";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 
@@ -14,7 +15,7 @@ const StaffProfileCard = ({
         <img
           src="https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
           alt={`${staff?.name} image`}
-          className="object-cover rounded-lg w-full h-[277px]"
+          className="object-cover  w-full h-[277px]"
         />
 
         <div className="absolute bottom-0 left-0 w-full px-6 mb-[22px] p-2 text-white rounded-b-lg">
@@ -43,5 +44,13 @@ const StaffProfileCard = ({
     </>
   );
 };
+
+StaffProfileCard.propTypes = {
+  staff: PropTypes.string,
+  isLiked: PropTypes.string,
+  isProcessing: PropTypes.element,
+  handleHeartToggle: PropTypes.element,
+};
+
 
 export default StaffProfileCard;

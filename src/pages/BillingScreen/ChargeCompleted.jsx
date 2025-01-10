@@ -121,7 +121,7 @@ const ChargeCompleted = () => {
         </div>
       </main>
 
-      <Link to="/history" className="fixed bottom-28 left-0 w-full px-6">
+      <Link to="/search" className="fixed bottom-28 left-0 w-full px-6">
         <ButtonPrimary
           style="flex justify-center w-full rounded-full font-hiragino py-3 font-bold text-white bg-gradient-to-r from-[#65D0F2] to-[#2399F4] hover:opacity-90 transition-opacity"
           btnText="他のメンバーを探す"
