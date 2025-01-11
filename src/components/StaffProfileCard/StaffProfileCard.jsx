@@ -37,7 +37,7 @@ const StaffProfileCard = ({
         </div>
       </div>
 
-      <div className="bg-[#80D0E91A] pt-5 pb-[17px] px-[26px] max-w-[416px]">
+      <div className="bg-[#80D0E91A] pt-5 pb-[17px] px-[26px] max-w-[430px]">
         <h2 className="font-semibold text-lg mb-2">自己紹介</h2>
         <p className="font-light text-sm">{staff?.introduction}</p>
       </div>

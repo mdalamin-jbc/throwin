@@ -1,6 +1,11 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { Helmet } from "react-helmet";
-import { useNavigate, useParams, useSearchParams, Link } from "react-router-dom";
+import {
+  useNavigate,
+  useParams,
+  useSearchParams,
+  Link,
+} from "react-router-dom";
 import TitleBar from "../../components/TitleBar";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import { Circles } from "react-loader-spinner";
@@ -15,7 +20,7 @@ const ChargeCompleted = () => {
   const [searchParams] = useSearchParams();
   const axiosPrivate = useAxiosPrivate();
   const { staff, isLoading: staffLoading } = UseGetByStaffName(username);
-  
+
   const [paymentStatus, setPaymentStatus] = useState(null); // Track payment validation result
   const validatedRef = useRef(false); // Track if validation has already occurred
 
@@ -39,9 +44,12 @@ const ChargeCompleted = () => {
     }
 
     try {
-      const response = await axiosPrivate.get("/payment_service/paypal-success/", {
-        params: { paymentId, PayerID: payerId },
-      });
+      const response = await axiosPrivate.get(
+        "/payment_service/paypal-success/",
+        {
+          params: { paymentId, PayerID: payerId },
+        }
+      );
 
       if (response.status === 200) {
         setPaymentStatus("success");
@@ -105,7 +113,7 @@ const ChargeCompleted = () => {
           <h3 className="font-bold text-2xl">{staff?.name}</h3>
           <img
             className="rounded-full w-40 h-40 mx-auto mt-3 object-cover"
-            src="https://shorturl.at/XqwIr"
+            src="https://i.postimg.cc/Fzf19nfb/5e3ca18b58c181ccc105ca95163e891c.jpg"
             alt={`${staff?.name}'s profile`}
             loading="eager"
           />

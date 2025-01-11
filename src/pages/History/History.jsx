@@ -49,6 +49,7 @@ const History = () => {
     );
   }
 
+  // Render the history page
   return (
     <div className="mb-[120px]">
       <Helmet>
@@ -57,33 +58,39 @@ const History = () => {
       <TitleBar style="mb-0 w-full" title="履歴" icon={null}></TitleBar>
 
       <div className="min-w-[375px] max-w-[430px] mx-auto px-[25px] mt-7 text-[#44495B] grid gap-5">
-        {payments.map((payment) => (
-          <div key={payment.transaction_id} className="flex items-center">
-            <img
-              className="w-[49px] h-[49px] rounded-full"
-              src={img} // Placeholder image
-              alt="user"
-            />
-            <div className="flex-1 flex justify-between items-center">
-              <div className="ml-[13px]">
-                <h3 className="font-bold text-sm">
-                  {payment.customer_name} 店舗名
-                </h3>
-                <p className="font-normal text-sm text-[#9C9C9C]">
-                  {formatDate(payment.created_at)}
-                </p>
-              </div>
-              <div className="flex flex-col items-end">
-                <h3 className="font-bold text-sm">
-                  {payment.amount.toLocaleString()}円
-                </h3>
-                <p className="text-sm text-[#9C9C9C]">
-                  Status: {payment.status}
-                </p>
+        {payments.length > 0 ? (
+          payments.map((payment) => (
+            <div key={payment.transaction_id} className="flex items-center">
+              <img
+                className="w-[49px] h-[49px] rounded-full"
+                src={img} // Placeholder image
+                alt="user"
+              />
+              <div className="flex-1 flex justify-between items-center">
+                <div className="ml-[13px]">
+                  <h3 className="font-bold text-sm">
+                    {payment.customer_name} 店舗名
+                  </h3>
+                  <p className="font-normal text-sm text-[#9C9C9C]">
+                    {formatDate(payment.created_at)}
+                  </p>
+                </div>
+                <div className="flex flex-col items-end">
+                  <h3 className="font-bold text-sm">
+                    {payment.amount.toLocaleString()}円
+                  </h3>
+                  <p className="text-sm text-[#9C9C9C]">
+                    Status: {payment.status}
+                  </p>
+                </div>
               </div>
             </div>
+          ))
+        ) : (
+          <div className="text-center mt-10 text-[#9C9C9C]">
+            <p>No history available</p>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
