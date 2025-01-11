@@ -47,6 +47,7 @@ import CreateANewTeam from "../pages/Dashboard/CreatANewTeam/CreatANewTeam";
 import SalesManagement from "../pages/Dashboard/SalesManagement/SalesManagement";
 import QrCreation from "../pages/Dashboard/QrCreation/QrCreation";
 import PaymentCancel from "../pages/BillingScreen/PaymentCancle";
+import GachaTickets from "../pages/Gacha/GachaTickets";
 
 export const Routes = createBrowserRouter([
   {
@@ -105,12 +106,19 @@ export const Routes = createBrowserRouter([
         path: "/favorite",
         element: <Favorite />,
       },
-
       {
         path: "/gacha",
         element: (
           <PrivateRoute>
             <Gacha />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/gacha/tickets",
+        element: (
+          <PrivateRoute>
+            <GachaTickets />
           </PrivateRoute>
         ),
       },

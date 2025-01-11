@@ -108,6 +108,16 @@ const UserProfile = () => {
         <h3 className="font-semibold text-lg mt-[53px]">
           コンテンツとサポート
         </h3>
+        {/* gacha tickets */}
+        <Link className="hover:cursor-pointer" to="/gacha/tickets">
+          <div className="flex justify-between border-b-[1.5px] my-5">
+            <h4>景品BOXを見る</h4>
+            <h4 className="flex items-center text-[#9F9999] mb-5">
+              <span className="text-sm font-semibold"> </span>
+              <GoChevronRight className="text-3xl " />
+            </h4>
+          </div>
+        </Link>
         {/* Content and Support options */}
         <Link to="notice">
           <div className="flex justify-between border-b-[1.5px] my-5 ">
@@ -127,6 +137,7 @@ const UserProfile = () => {
             <GoChevronRight className="text-3xl " />
           </h4>
         </div>
+
         {/* Terms and Policies */}
         <Link className="hover:cursor-pointer" to="/terms">
           <div className="flex justify-between border-b-[1.5px] my-5">
