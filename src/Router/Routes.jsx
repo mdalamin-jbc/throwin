@@ -56,7 +56,7 @@ export const Routes = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home></Home>,
+        element: <Home/>,
       },
       {
         path: "/socialLogin",
