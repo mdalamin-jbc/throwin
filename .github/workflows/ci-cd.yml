@@ -35,7 +35,7 @@ jobs:
 
       # Step 4: Install dependencies
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
+        run: npm cache clean --force rm -rf node_modules package-lock.json npm install --legacy-peer-deps
 
       # Step 5: Build the project
       - name: Build the project
