@@ -16,7 +16,6 @@
     "@zxing/library": "^0.21.3",
     "axios": "^1.7.7",
     "chart.js": "^4.4.7",
-    "dayjs": "^1.11.13",
     "dotenv": "^16.4.5",
     "framer-motion": "^11.16.0",
     "js-cookie": "^3.0.5",
@@ -36,10 +35,9 @@
     "react-loader-spinner": "^6.1.6",
     "react-qr-code": "^2.0.15",
     "react-router-dom": "^6.27.0",
-    "react-tailwindcss-datepicker": "^1.7.2",
     "react-use": "^17.5.1",
-    "sort-by": "^1.2.0",
-    "sweetalert2": "^11.14.4",
+    "sort-by": "^0.0.2",
+    "sweetalert2": "^11.6.13",
     "swiper": "^11.1.14"
   },
   "devDependencies": {
@@ -57,5 +55,8 @@
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14",
     "vite": "^5.4.10"
+  },
+  "resolutions": {
+    "dayjs": "1.11.13"
   }
 }

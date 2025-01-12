@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Datepicker from "react-tailwindcss-datepicker";
+
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
