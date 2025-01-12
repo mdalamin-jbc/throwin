@@ -5,7 +5,6 @@ import { Link, useNavigate } from "react-router-dom";
 import gold_ticket from "../../assets/images/gacha/gold-ticket.png";
 import ButtonSecondary from "../../components/ButtonSecondary";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
-import { CgLogOut } from "react-icons/cg";
 
 const TicketTermsAndConditons = () => {
   const navigate = useNavigate();
@@ -48,7 +47,7 @@ const TicketTermsAndConditons = () => {
             className="w-full"
             onClick={() => document.getElementById("my_modal_1").showModal()}
           >
-            <Link className="">
+            <Link className="" to="/gacha/tickets">
               <ButtonSecondary
                 icon={<MdOutlineKeyboardArrowRight />}
                 btnText="TICKETを使用する"
@@ -56,36 +55,6 @@ const TicketTermsAndConditons = () => {
               />
             </Link>
           </button>
-
-          <dialog id="my_modal_4" className="modal max-w-[400px] mx-auto ">
-            <div className="modal-box p-0 pt-7">
-              <div className="px-10">
-                <p className="text-center font-bold ">
-                  TICKETを使用済みにしますか？
-                </p>
-                <p className="text-center font-bold text-[13px] mt-6 leading-7 mb-[30px]">
-                  この操作は取り消せません。規約をご確認f <br />
-                  の上、使用済みにしてください。
-                </p>
-              </div>
-              <div className="flex justify-center gap-4 border-t-2">
-                <form method="dialog">
-                  <button className="px-4 py-4  border-r-2 border-gray-300 flex items-center justify-center">
-                    <span className="mr-10">キャンセル</span>{" "}
-                  </button>
-                </form>
-                <form method="dialog">
-                  <button
-                    // onClick={handleLogout}
-                    className="px-4 py-4  flex items-center justify-center"
-                  >
-                    <span className="ml-8 text-blue-500">使用済みにする</span>{" "}
-                    {/* Add some spacing between text and border */}
-                  </button>
-                </form>
-              </div>
-            </div>
-          </dialog>
         </div>
         {/* -------------------------------------- */}
       </div>
