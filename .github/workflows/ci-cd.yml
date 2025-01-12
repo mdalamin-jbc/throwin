@@ -48,7 +48,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: build
-          path: build/ # Ensure this matches your actual output directory
+          path: dist/ # Ensure this matches your actual output directory
 
   cd:
     name: Continuous Deployment
