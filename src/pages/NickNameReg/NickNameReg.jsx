@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import Swal from "sweetalert2";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import TitleBar from "../../components/TitleBar";
@@ -62,48 +63,78 @@ const NickNameReg = () => {
   };
 
   return (
-    <div className="">
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
       <TitleBar title={"スタッフを探す"} />
-      <h4 className="mt-4 mb-4 font-semibold font-hiragino text-center">
+      <motion.h4
+        className="mt-4 mb-4 font-semibold font-hiragino text-center"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
         ニックネーム（表示名）をご登録ください
-      </h4>
+      </motion.h4>
       <div>
         <div className="flex flex-col justify-center">
           <form
             className="flex flex-col w-[342px] mx-auto"
             onSubmit={handleSubmit(onSubmit)}
           >
-            <div className="form-control">
-              <input
+            <motion.div
+              className="form-control"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7 }}
+            >
+              <motion.input
                 {...register("name", { required: "Name is required" })}
                 name="name"
                 type="text"
                 placeholder="名前"
                 className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
                 defaultValue={user?.name}
+                whileFocus={{ scale: 1.05, borderColor: "#65D0F2" }}
+                whileHover={{ scale: 1.02 }}
               />
               {errors.name && (
-                <span className="text-[#F43C3C]  text-sm mt-2">
+                <motion.span
+                  className="text-[#F43C3C] text-sm mt-2"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
                   {errors.name.message}
-                </span>
+                </motion.span>
               )}
               {error?.name && (
-                <span className="text-[#F43C3C] text-sm mt-2">
+                <motion.span
+                  className="text-[#F43C3C] text-sm mt-2"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
                   {error.name}
-                </span>
+                </motion.span>
               )}
-            </div>
+            </motion.div>
 
-            <button className="fixed bottom-[130px]">
+            <motion.button
+              className="fixed bottom-[130px]"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
               <ButtonPrimary
                 btnText="新規登録"
                 style="bg-gradient-to-r from-[#65D0F2] to-[#2399F4] w-[342px] rounded-full font-hiragino text-center py-[12px] font-bold text-white"
               />
-            </button>
+            </motion.button>
           </form>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

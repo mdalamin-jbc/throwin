@@ -8,8 +8,8 @@ import { useState, useRef, useEffect } from "react";
 import { BrowserQRCodeReader } from "@zxing/library";
 import useAxiosPublic from "../../hooks/axiosPublic";
 import { useNavigate } from "react-router-dom";
-import UseGetStaffListByStaffName from "../../hooks/UseGetStaffListByStaffName";
 import UseStaffDetailsWithStoreId from "../../hooks/UseStaffDetailsWithStoreId";
+import { motion } from "framer-motion";  // Import motion from framer-motion
 
 const Search = () => {
   const [searchByStuffName, setSearchByStuffName] = useState("");
@@ -20,9 +20,9 @@ const Search = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const videoRef = useRef(null);
   const codeReaderRef = useRef(null);
-  const { storeId,isLoading, isError, refetch } = UseStaffDetailsWithStoreId(searchByStuffName);
+  const { storeId, isLoading, isError, refetch } =
+    UseStaffDetailsWithStoreId(searchByStuffName);
 
-  
   const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
 
@@ -42,10 +42,8 @@ const Search = () => {
   const handleQRCodeResult = (result) => {
     console.log("QR Code Result:", result.text);
 
-    // Check if result.text is a valid URL
     try {
       const url = new URL(result.text);
-      // Redirect to the URL
       window.location.href = url.href;
     } catch (error) {
       console.error("Invalid URL in QR Code:", result.text);
@@ -100,19 +98,14 @@ const Search = () => {
     setErrorMessage("");
   };
 
-  // search by staff name
   const handleSearchStuff = async (staffName = null) => {
     const searchValue = staffName || searchByStuffName;
-
-    console.log(storeId);
-    
 
     if (!searchValue) {
       setErrorMessage("メンバー名は必須です");
       return;
     }
 
-    // Update the search input if the name came from QR code
     if (staffName) {
       setSearchByStuffName(staffName);
     }
@@ -138,7 +131,6 @@ const Search = () => {
 
     try {
       const response = await axiosPublic.get(`/stores/${searchValue}`);
-
       setStoreData(response.data);
       setErrorMessage("");
       navigate(`/store`, { state: { storeData: response.data } });
@@ -151,9 +143,14 @@ const Search = () => {
   return (
     <div className="min-w-[375px] mx-auto mb-[120px]">
       <TitleBar title={"スタッフを探す"} />
-
-      {/* QR Scanner Section */}
-      <div className="w-[342px] mx-auto">
+  
+      {/* QR Scanner Section with animation */}
+      <motion.div
+        className="w-[342px] mx-auto"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }} // Updated duration to 1 second
+      >
         <h4 className="font-hiragino font-semibold text-lg mt-8 mb-4">
           QRコードで探す
         </h4>
@@ -166,9 +163,14 @@ const Search = () => {
             }`}
           />
         </button>
-
+  
         {isScannerOpen && (
-          <div className="relative mt-4">
+          <motion.div
+            className="relative mt-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }} // Updated duration to 1 second
+          >
             <video
               ref={videoRef}
               className="w-full rounded-lg shadow-lg"
@@ -181,13 +183,18 @@ const Search = () => {
             >
               閉じる
             </button>
-          </div>
+          </motion.div>
         )}
         {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
-      </div>
-
-      {/* Member Search */}
-      <div className="w-[342px] mx-auto">
+      </motion.div>
+  
+      {/* Member Search Section with animation */}
+      <motion.div
+        className="w-[342px] mx-auto"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }} // Updated duration to 1 second
+      >
         <h4 className="mt-8 mb-4 font-semibold font-hiragino">
           メンバー名から探す
         </h4>
@@ -207,22 +214,21 @@ const Search = () => {
             onClick={() => handleSearchStuff()}
             className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
           >
-            <img
-              className="w-5 h-5 opacity-70"
-              src={search}
-              alt="search icon"
-            />
+            <img className="w-5 h-5 opacity-70" src={search} alt="search icon" />
           </div>
           {errors.searchMember && (
-            <span className="text-red-500 mt-1">
-              {errors.searchMember.message}
-            </span>
+            <span className="text-red-500 mt-1">{errors.searchMember.message}</span>
           )}
         </div>
-      </div>
-
-      {/* Store Code Search */}
-      <div className="w-[342px] mx-auto">
+      </motion.div>
+  
+      {/* Store Code Search Section with animation */}
+      <motion.div
+        className="w-[342px] mx-auto"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }} // Updated duration to 1 second
+      >
         <h4 className="mt-8 mb-4 font-semibold font-hiragino">
           店舗コードから探す
         </h4>
@@ -242,21 +248,16 @@ const Search = () => {
             onClick={() => handleSearchStore()}
             className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
           >
-            <img
-              className="w-5 h-5 opacity-70"
-              src={search}
-              alt="search icon"
-            />
+            <img className="w-5 h-5 opacity-70" src={search} alt="search icon" />
           </div>
           {errors.searchStore && (
-            <span className="text-red-500 mt-1">
-              {errors.searchStore.message}
-            </span>
+            <span className="text-red-500 mt-1">{errors.searchStore.message}</span>
           )}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
+  
 };
 
 export default Search;

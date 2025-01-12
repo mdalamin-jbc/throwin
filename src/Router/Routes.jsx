@@ -56,11 +56,15 @@ export const Routes = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home/>,
+        element: <Home />,
       },
       {
         path: "/socialLogin",
         element: <SocialLogin />,
+      },
+      {
+        path: "/new_reg",
+        element: <NewReg />,
       },
       {
         path: "/emailLogin",
@@ -85,6 +89,14 @@ export const Routes = createBrowserRouter([
       {
         path: "/reset-password/:userId/:token",
         element: <ResetPassword />,
+      },
+      {
+        path: "/mail_check",
+        element: <CheckMail />,
+      },
+      {
+        path: "/activate/:userId/:token",
+        element: <AccountActivation />,
       },
       {
         path: "/nickName_reg",
@@ -146,10 +158,7 @@ export const Routes = createBrowserRouter([
         path: "setting",
         element: <Setting />,
       },
-      {
-        path: "/new_reg",
-        element: <NewReg />,
-      },
+
       {
         path: "/mail_check",
         element: <CheckMail />,

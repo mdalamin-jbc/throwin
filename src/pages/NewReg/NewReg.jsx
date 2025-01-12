@@ -6,6 +6,7 @@ import socialBg from "../../assets/images/socialLogin/social bg.jpeg";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import useAxiosReg from "../../hooks/axiosReg";
 import { useState } from "react";
+import { motion } from "framer-motion"; // Import motion
 
 const NewReg = () => {
   const [errorMessage, setErrorMessage] = useState(null);
@@ -35,21 +36,20 @@ const NewReg = () => {
       password: data.password,
       confirm_password: data.confirmPassword,
     };
-  
+
     console.log("Request data:", requestData);
-  
+
     try {
       const response = await axiosReg.post(
         "/auth/register/consumer",
         requestData
       );
       console.log("Response data:", response.data);
-  
+
       if (
         response.data.msg ===
         "User Created Successfully, Please check your email to activate your account in 48 hours."
       ) {
-        // Passing the email to the mail_check page
         navigate("/mail_check", { state: { email: email } });
       } else {
         setErrorMessage("登録に失敗しました。もう一度お試しください。");
@@ -72,7 +72,6 @@ const NewReg = () => {
       console.error("Registration error:", error);
     }
   };
-  
 
   return (
     <div
@@ -81,38 +80,65 @@ const NewReg = () => {
     >
       <div className="fixed inset-0 bg-[#072233fb] min-h-screen overflow-auto"></div>
 
-      <div
+      {/* Animated Form Container */}
+      <motion.div
         className={`bg-white p-6 rounded-[10px] shadow-xl text-center relative w-[291px] ${
           errors.password ? "h-[545px]" : "h-[490px]"
         }`}
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
       >
-        <img src={logo} alt="Logo" className="w-[150px] h-auto mx-auto mb-4" />
+        {/* Animated Logo */}
+        <motion.img
+          src={logo}
+          alt="Logo"
+          className="w-[150px] h-auto mx-auto mb-4"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1 }}
+        />
 
         <div className="flex flex-col justify-center">
           <form onSubmit={handleSubmit(onSubmit)}>
-            {/* General error message */}
+            {/* General Error Message */}
             {errorMessage && (
-              <div className="text-red-500 text-sm mb-2">{errorMessage}</div>
+              <motion.div
+                className="text-red-500 text-sm mb-2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+              >
+                {errorMessage}
+              </motion.div>
             )}
 
             <div className="form-control">
               <label className="label font-bold text-sm">
                 <span className="label-text font-hiragino">パスワード設定</span>
               </label>
-              <input
+              <motion.input
                 {...register("password", { required: "Password is required" })}
                 type="password"
                 placeholder="パスワード"
                 className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
               />
               {errors.password && (
-                <span className="text-red-500 mt-1">
+                <motion.span
+                  className="text-red-500 mt-1"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
                   {errors.password.message}
-                </span>
+                </motion.span>
               )}
             </div>
             <div className="form-control">
-              <input
+              <motion.input
                 {...register("confirmPassword", {
                   required: "Confirmation is required",
                   validate: (value) =>
@@ -121,40 +147,67 @@ const NewReg = () => {
                 type="password"
                 placeholder="パスワード（確認用）"
                 className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
               />
               {errors.confirmPassword && (
-                <span className="text-red-500 my-1">
+                <motion.span
+                  className="text-red-500 my-1"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
                   {errors.confirmPassword.message}
-                </span>
+                </motion.span>
               )}
             </div>
 
-            <button>
+            {/* Animated Button */}
+            <motion.button
+              type="submit"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+            >
               <ButtonPrimary
                 btnText="登録"
                 style="bg-gradient-to-r from-[#65D0F2] to-[#2399F4] min-w-[253px] rounded-full font-hiragino text-center py-[10px] font-bold text-white"
               />
-            </button>
+            </motion.button>
           </form>
 
-          <div className="mt-11 grid gap-4 font-hiragino font-light text-[10px] text-start text-[#6B6969]">
+          {/* Additional Info */}
+          <motion.div
+            className="mt-11 grid gap-4 font-hiragino font-light text-[10px] text-start text-[#6B6969]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+          >
             <p>ご利用情報がSNSに公開されることはありません。</p>
             <p>
               複数アカウントの作成、保有、または利用する行為は
               禁止されており、会員アカウントを停止・永久凍結も
               しくは強制退化させていただきます。
             </p>
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
 
-      <button className="mt-8 relative" onClick={handleClose}>
+      {/* Close Button */}
+      <motion.button
+        className="mt-8 relative"
+        onClick={handleClose}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, delay: 1 }}
+      >
         <img
           src={closeIcon}
           alt="Close"
           className="w-[17px] h-[17px] text-gray-500 hover:text-gray-700"
         />
-      </button>
+      </motion.button>
     </div>
   );
 };
