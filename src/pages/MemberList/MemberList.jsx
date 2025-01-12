@@ -33,7 +33,7 @@ const MemberList = () => {
       setSearchData(storeId);
     } else {
       const filteredData = storeId.filter((staff) =>
-        staff.username.toLowerCase().includes(value)
+        staff.name.toLowerCase().includes(value)
       );
       setSearchData(filteredData);
     }
@@ -129,7 +129,7 @@ const MemberList = () => {
                   </div>
                   {/* Name and Type in the bottom left corner */}
                   <div className="absolute bottom-0 left-0 bg-gradient-to-t from-black via-transparent to-transparent w-full p-2 text-white rounded-b-lg">
-                    <h3 className="text-sm font-semibold">{staff.username}</h3>
+                    <h3 className="text-sm font-semibold">{staff.name}</h3>
                     <p className="text-xs">{staff.introduction}</p>
                   </div>
                 </div>
