@@ -144,8 +144,8 @@ const BillingScreen = () => {
       // amount: 1000,
       currency: "JPY",
       payment_method: "paypal",
-      return_url: `http://throwin-dev-bucket.s3-website-ap-northeast-1.amazonaws.com/staff/${staff.username}/chargeCompleted`,
-      cancel_url: "http://throwin-dev-bucket.s3-website-ap-northeast-1.amazonaws.com/payment-cancle",
+      return_url: `https://dofcy6j1unb52.cloudfront.net/staff/${staff.username}/chargeCompleted`,
+      cancel_url: "https://dofcy6j1unb52.cloudfront.net/payment-cancle",
     });
   }, [
     persAmount,
