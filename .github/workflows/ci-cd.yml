@@ -77,6 +77,8 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ap-northeast-1 # Set your AWS region
+          AWS_S3_ACL: public-read # Add this line for public read access
+
 
       # Step 4: Invalidate CloudFront Cache
       - name: Invalidate CloudFront Cache
