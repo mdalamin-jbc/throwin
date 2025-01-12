@@ -8,6 +8,7 @@ import UseUserDetails from "../../hooks/UseUserDetails";
 import useAxiosPrivate from "../../hooks/axiousPrivate";
 import { useNavigate } from "react-router-dom";
 import { RiArrowLeftSLine } from "react-icons/ri";
+import { motion } from "framer-motion"; // Import Framer Motion
 
 const ChangePassword = () => {
   const { userDetails } = UseUserDetails();
@@ -61,7 +62,11 @@ const ChangePassword = () => {
   };
 
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
+    >
       <Helmet>
         <title>Throwin | Change Password</title>
       </Helmet>
@@ -75,20 +80,33 @@ const ChangePassword = () => {
         title={"マイページ"}
       />
       <div className="w-full max-w-[430px] mx-auto">
-        <h3 className="text-center font-hiragino font-bold text-lg text-[#44495B] mt-[59px] ">
+        <motion.h3
+          className="text-center font-hiragino font-bold text-lg text-[#44495B] mt-[59px]"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
           パスワードの変更
-        </h3>
+        </motion.h3>
         <p className="my-[22px] text-center text-[#9F9999] text-sm font-semibold">
           {userDetails.email}
         </p>
 
         <div className="flex flex-col justify-center">
-          <form
+          <motion.form
             className="flex flex-col w-[342px] mx-auto"
             onSubmit={handleSubmit(onSubmit)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
           >
             {!isNextStep ? (
-              <div className="form-control">
+              <motion.div
+                className="form-control"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6 }}
+              >
                 <input
                   {...register("current_pass", {
                     required: "Current password is required",
@@ -99,14 +117,24 @@ const ChangePassword = () => {
                   className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
                 />
                 {errors.current_pass && (
-                  <span className="text-red-500 mt-1">
+                  <motion.span
+                    className="text-red-500 mt-1"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                  >
                     {errors.current_pass.message}
-                  </span>
+                  </motion.span>
                 )}
-              </div>
+              </motion.div>
             ) : (
               <>
-                <div className="form-control">
+                <motion.div
+                  className="form-control"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.6 }}
+                >
                   <input
                     {...register("password", {
                       required: "新しいパスワードを入力してください",
@@ -121,13 +149,23 @@ const ChangePassword = () => {
                     className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
                   />
                   {errors.password && (
-                    <span className="text-red-500 mt-1">
+                    <motion.span
+                      className="text-red-500 mt-1"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                    >
                       {errors.password.message}
-                    </span>
+                    </motion.span>
                   )}
-                </div>
+                </motion.div>
 
-                <div className="form-control">
+                <motion.div
+                  className="form-control"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.6 }}
+                >
                   <input
                     {...register("confirmPassword", {
                       required: "新しいパスワードを入力してください（確認用）",
@@ -142,24 +180,35 @@ const ChangePassword = () => {
                     className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
                   />
                   {errors.confirmPassword && (
-                    <span className="text-red-500 mt-1">
+                    <motion.span
+                      className="text-red-500 mt-1"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                    >
                       {errors.confirmPassword.message}
-                    </span>
+                    </motion.span>
                   )}
-                </div>
+                </motion.div>
               </>
             )}
 
-            <button className="fixed bottom-[130px]">
+            <motion.button
+              className="fixed bottom-[130px]"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+              type="submit"
+            >
               <ButtonPrimary
                 btnText={isNextStep ? "保存" : "次へ"}
                 style="bg-gradient-to-r from-[#65D0F2] to-[#2399F4] w-[342px] rounded-full font-hiragino text-center py-[12px] font-bold text-white"
               />
-            </button>
-          </form>
+            </motion.button>
+          </motion.form>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

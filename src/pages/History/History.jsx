@@ -4,6 +4,7 @@ import useAxiosPrivate from "../../hooks/axiousPrivate";
 import { useQuery } from "@tanstack/react-query";
 import { Circles } from "react-loader-spinner";
 import img from "../../assets/images/store&staff/image.png";
+import { motion } from "framer-motion";
 
 // Helper function to format date
 const formatDate = (dateString) => {
@@ -51,48 +52,68 @@ const History = () => {
 
   // Render the history page
   return (
-    <div className="mb-[120px]">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1 }}
+    >
       <Helmet>
         <title>Throwin | History</title>
       </Helmet>
-      <TitleBar style="mb-0 w-full" title="履歴" icon={null}></TitleBar>
+      <TitleBar style="mb-0 w-full" title="履歴" icon={null} />
 
       <div className="min-w-[375px] max-w-[430px] mx-auto px-[25px] mt-7 text-[#44495B] grid gap-5">
         {payments.length > 0 ? (
-          payments.map((payment) => (
-            <div key={payment.transaction_id} className="flex items-center">
-              <img
-                className="w-[49px] h-[49px] rounded-full"
-                src={img} // Placeholder image
-                alt="user"
-              />
-              <div className="flex-1 flex justify-between items-center">
-                <div className="ml-[13px]">
-                  <h3 className="font-bold text-sm">
-                    {payment.customer_name} 店舗名
-                  </h3>
-                  <p className="font-normal text-sm text-[#9C9C9C]">
-                    {formatDate(payment.created_at)}
-                  </p>
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
+            }}
+          >
+            {payments.map((payment) => (
+              <motion.div
+                key={payment.transaction_id}
+                className="flex items-center"
+                initial="hidden"
+                animate="visible"
+                variants={{
+                  hidden: { opacity: 0, x: -20 },
+                  visible: { opacity: 1, x: 0, transition: { duration: 0.6 } },
+                }}
+              >
+                <img
+                  className="w-[49px] h-[49px] rounded-full"
+                  src={img} // Placeholder image
+                  alt="user"
+                />
+                <div className="flex-1 flex justify-between items-center">
+                  <div className="ml-[13px]">
+                    <h3 className="font-bold text-sm">{payment.customer_name} 店舗名</h3>
+                    <p className="font-normal text-sm text-[#9C9C9C]">
+                      {formatDate(payment.created_at)}
+                    </p>
+                  </div>
+                  <div className="flex flex-col items-end">
+                    <h3 className="font-bold text-sm">
+                      {payment.amount.toLocaleString()}円
+                    </h3>
+                    <p className="text-sm text-[#9C9C9C]">
+                      Status: {payment.status}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex flex-col items-end">
-                  <h3 className="font-bold text-sm">
-                    {payment.amount.toLocaleString()}円
-                  </h3>
-                  <p className="text-sm text-[#9C9C9C]">
-                    Status: {payment.status}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ))
+              </motion.div>
+            ))}
+          </motion.div>
         ) : (
           <div className="text-center mt-10 text-[#9C9C9C]">
             <p>No history available</p>
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

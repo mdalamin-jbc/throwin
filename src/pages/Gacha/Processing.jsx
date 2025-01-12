@@ -1,26 +1,40 @@
 import { Link, useNavigate } from "react-router-dom";
+import { motion, useAnimation } from "framer-motion";
+import { useState, useEffect } from "react";
 import TitleBar from "../../components/TitleBar";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import logo from "../../assets/images/home/logo.png";
 import img1 from "../../assets/images/gacha/gachaImg1.png";
 import img2 from "../../assets/images/gacha/gachaimg2.png";
-import { useState, useEffect } from "react";
 
 const Processing = () => {
   const navigate = useNavigate();
+  const controls = useAnimation();
   const [showSecondImage, setShowSecondImage] = useState(false);
 
-  // Handle image transition after 10 seconds
   useEffect(() => {
+    // Start animation for the first image
+    controls.start({
+      opacity: 1,
+      scale: 1,
+      transition: { duration: 1 },
+    });
+
+    // Transition to the second image after 2 seconds
     const timer = setTimeout(() => {
       setShowSecondImage(true);
-    }, 2000); // 10 seconds
+    }, 2000);
 
     return () => clearTimeout(timer); // Cleanup timeout if the component unmounts
-  }, []);
+  }, [controls]);
 
   return (
-    <div>
+    <motion.div
+      className="mb-[120px]"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
       <TitleBar
         style="mb-0 w-full"
         back={
@@ -31,20 +45,44 @@ const Processing = () => {
           />
         }
         title=""
-        icon={<img className="w-[110px] items-center" src={logo} alt="logo" />}
+        icon={
+          <motion.img
+            className="w-[110px] items-center"
+            src={logo}
+            alt="logo"
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+          />
+        }
       />
       <div className="max-w-[430px] mx-auto">
         <div className="flex justify-center">
-          {showSecondImage ? (
-            <Link to="got-ticket">
-              <img src={img2} className="w-[300px]" alt="Gacha Result" />
-            </Link>
+          {!showSecondImage ? (
+            <motion.img
+              src={img1}
+              alt="Processing..."
+              className="w-[370px]"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 1 }}
+            />
           ) : (
-            <img src={img1} className="w-[370px]" alt="Processing..." />
+            <Link to="got-ticket">
+              <motion.img
+                src={img2}
+                alt="Gacha Result"
+                className="w-[300px]"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1 }}
+              />
+            </Link>
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

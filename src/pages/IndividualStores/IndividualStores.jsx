@@ -2,6 +2,7 @@ import { IoMdStar } from "react-icons/io";
 import { Link, useLocation } from "react-router-dom";
 import useGetStuffsByStoreCode from "../../hooks/UseGetStuffsByStoreCode";
 import { Circles } from "react-loader-spinner";
+import { motion } from "framer-motion"; // Importing motion
 
 const IndividualStores = () => {
   const location = useLocation();
@@ -29,7 +30,12 @@ const IndividualStores = () => {
     <div className="min-w-[375px] mx-auto mb-28">
       <div className="max-w-[430px] mx-auto mb-8 relative">
         {/* Store Image with Gradient Overlay and Store Name */}
-        <div className="relative">
+        <motion.div 
+          className="relative"
+          initial={{ opacity: 0 }} 
+          animate={{ opacity: 1 }} 
+          transition={{ duration: 1 }}
+        >
           <img
             src="https://s3-alpha-sig.figma.com/img/e5b7/27e5/d85bf08137ca367e755012d701fbcc11?Expires=1737331200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=q9q0UtOHo5kPHHtsn1~ExK5hDVmU7hazSCe--8sH040n1CsRu~VE1y7C9bryOV4UB0NrF0-NE1s4wnc13ZRVrhN~wnSU0KZy1Y8zmx4LXpJBP9Dv7HguG7v9-gSOIM1GQbZKg9fe4z-UMRlAfaHTzXsEBsLCp6BgGs0AVOhVvYHsA5Moquw7gbIf3d7-bUXWRVtHW9rSIbW1LNJhBIvtR8TGNHeSEzcC1G8JN4Nht-tD7k9FD1uroHaWoeSxnuH4T-WP2zo2wEUkNmkCfZYm~AE6sdbezaiJYl76AsNfFQvOzQpXeQzpQnJiDaUIxGE9yrn0OTN6RTN9JR~DN~wZog__"
             alt={`${storeData.name} `}
@@ -41,7 +47,7 @@ const IndividualStores = () => {
           <h2 className="absolute bottom-5 left-0 w-full text-center text-white text-2xl font-bold px-2 py-1">
             {storeData.name}
           </h2>
-        </div>
+        </motion.div>
         <div className="w-[342px] mx-auto flex justify-between mt-8 mb-5 text-[#44495B] items-center">
           <h5 className="font-bold  ">わらび高木店のメンバー</h5>
           <p className="font-normal text-xs">メンバーの一覧({store.length})</p>
@@ -50,11 +56,16 @@ const IndividualStores = () => {
 
       <div className="grid grid-cols-2 gap-4 w-[342px] mx-auto ">
         {store.map((staff, uid) => (
-          <div key={uid}>
+          <motion.div
+            key={uid}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 * uid }} // Delay the animation for each staff member
+          >
             <Link
               to={{
                 pathname: `/staff/${staff.username}`,
-                state: { staffData: staff }, // Pass the staff data as state
+                state: { staffData: staff },
               }}
             >
               <div className="relative">
@@ -75,7 +86,7 @@ const IndividualStores = () => {
                 </div>
               </div>
             </Link>
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>

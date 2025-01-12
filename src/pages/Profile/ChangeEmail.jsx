@@ -44,7 +44,7 @@ const ChangeEmail = () => {
       Swal.fire({
         icon: "error",
         title: "おっと。。。",
-        text: "何かがうまくいきませんでした。もう一度お試しください。. ",
+        text: "何かがうまくいきませんでした。もう一度お試しください。",
         confirmButtonText: "はい",
       });
     }
@@ -100,7 +100,7 @@ const ChangeEmail = () => {
               Password
             </label>
             <motion.input
-              {...register("password", { required: "password is required" })}
+              {...register("password", { required: "Password is required" })}
               id="password"
               name="password"
               type="password"

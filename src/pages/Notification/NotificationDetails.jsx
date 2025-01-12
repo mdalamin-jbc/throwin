@@ -2,11 +2,11 @@ import { RiArrowLeftSLine } from "react-icons/ri";
 import TitleBar from "../../components/TitleBar";
 import logo from "../../assets/logo/logo4.png";
 import { useNavigate, useParams } from "react-router-dom";
+import { motion } from "framer-motion"; // Import Framer Motion for animations
 
 const NotificationDetails = () => {
   const navigate = useNavigate();
-
-  const { id } = useParams(); 
+  const { id } = useParams();
 
   const notifications = [
     {
@@ -28,57 +28,86 @@ const NotificationDetails = () => {
       sender: "Throwin公式",
       message: "【お知らせ】不具合を修正しました",
       details:
-        "報告された問題を解決するために、いくつかのバグ修正を適用しました。これらの修正により、安定性と信頼性が向上し、スムーズなユーザー体験を提供します。報告された問題を解決するために、いくつかのバグ修正を適用しました。これらの修正により、安定性と信頼性が向上し、スムーズなユーザー体験を提供します。報告された問題を解決するために、いくつかのバグ修正を適用しました。これらの修正により、安定性と信頼性が向上し、スムーズなユーザー体験を提供します。報告された問題を解決するために、いくつかのバグ修正を適用しました。これらの修正により、安定性と信頼性が向上し、スムーズなユーザー体験を提供します。報告された問題を解決するために、いくつかのバグ修正を適用しました。これらの修正により、安定性と信頼性が向上し、スムーズなユーザー体験を提供します。報告された問題を解決するために、いくつかのバグ修正を適用しました。これらの修正により、安定性と信頼性が向上し、スムーズなユーザー体験を提供します。報告された問題を解決するために、いくつかのバグ修正を適用しました。これらの修正により、安定性と信頼性が向上し、スムーズなユーザー体験を提供します。",
+        "報告された問題を解決するために、いくつかのバグ修正を適用しました。これらの修正により、安定性と信頼性が向上し、スムーズなユーザー体験を提供します。",
     },
   ];
 
- 
   const notification = notifications.find((notif) => notif.id === parseInt(id));
 
   if (!notification) {
     return <p>Notification not found</p>;
   }
-  console.log(notification);
+
   return (
-    <div>
+    <motion.div
+      className="min-w-[375px] max-w-[430px] mx-auto  text-[#44495B] mb-[160px]"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <div>
-        <TitleBar back={null} icon={null} title="お気に入り"></TitleBar>
-      </div>
-      <div className="min-w-[375px] max-w-[430px] mx-auto  mt-3 text-[#44495B] mb-[160px]">
-        <div className="flex justify-between items-end px-[15px] border-b-[1.5px] pb-2">
-          <div className="flex items-center text-[#9F9F9F] font-medium">
+        <TitleBar
+          back={
             <RiArrowLeftSLine
               onClick={() => navigate(-1)}
-              className="text-2xl cursor-pointer"
+              style={{ cursor: "pointer" }}
             />
-            <p>戻る</p>
-          </div>
-          <div className="flex flex-col items-center gap-1">
-            <div className="bg-[#49BBDF] w-[57px] h-[57px] flex justify-center items-center rounded-full">
-              <img src={logo} alt="" className="" />
-            </div>
-            <h2 className="font-semibold text-base">{notification.sender}</h2>
-          </div>
-          <div></div>
-        </div>
-        <div className="mt-3 px-[23px] flex gap-2">
-          <div className="">
-            <div className="bg-[#49BBDF] w-[40px] h-[40px] flex justify-center items-center rounded-full">
-              <img src={logo} alt="" className="" />
-            </div>
-          </div>
-          <div className="bg-[#F0F3F4] py-4 px-[18px] rounded-[22px] flex-1">
-            <h4 className="font-semibold">{notification.message}</h4>
-            <p className="mt-3">{notification.details}</p>
-          </div>
-        </div>
+          }
+          icon={null}
+          title="お気に入り"
+        />
       </div>
+      <motion.div
+        className="flex justify-between items-end mt-3 px-[15px] border-b-[1.5px] pb-2"
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="flex items-center text-[#9F9F9F] font-medium">
+          <RiArrowLeftSLine
+            onClick={() => navigate(-1)}
+            className="text-2xl cursor-pointer"
+          />
+          <p>戻る</p>
+        </div>
+        <div className="flex flex-col items-center gap-1">
+          <div className="bg-[#49BBDF] w-[57px] h-[57px] flex justify-center items-center rounded-full">
+            <img src={logo} alt="" className="" />
+          </div>
+          <h2 className="font-semibold text-base">{notification.sender}</h2>
+        </div>
+        <div></div>
+      </motion.div>
+
+      <motion.div
+        className="mt-3 px-[23px] flex gap-2"
+        initial={{ opacity: 0, y: 20 }} // Start with some vertical offset and invisible
+        animate={{ opacity: 1, y: 0 }} // Fade in and slide up
+        transition={{ duration: 0.5 }}
+      >
+        <div className="">
+          <div className="bg-[#49BBDF] w-[40px] h-[40px] flex justify-center items-center rounded-full">
+            <img src={logo} alt="" className="" />
+          </div>
+        </div>
+        <div className="bg-[#F0F3F4] py-4 px-[18px] rounded-[22px] flex-1">
+          <h4 className="font-semibold">{notification.message}</h4>
+          <p className="mt-3">{notification.details}</p>
+        </div>
+      </motion.div>
+
       <div className="min-w-[375px] max-w-[430px] mx-auto fixed bottom-[85px] left-0 right-0">
-        <h4 className="font-light bg-[#F0F3F4] mx-[23px] py-3 px-[20px] rounded-full">
+        <motion.h4
+          className="font-light bg-[#F0F3F4] mx-[23px] py-3 px-[20px] rounded-full"
+          initial={{ opacity: 0 }} // Start invisible
+          animate={{ opacity: 1 }} // Fade in
+          transition={{ duration: 0.5 }}
+        >
           こちらのメッセージに返答はできません
-        </h4>
+        </motion.h4>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

@@ -8,6 +8,7 @@ import useAxiosPrivate from "../../hooks/axiousPrivate";
 import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { RiArrowLeftSLine } from "react-icons/ri";
+import { motion } from "framer-motion"; // Import Framer Motion
 
 const DisplayName = () => {
   const [error, setError] = useState();
@@ -51,7 +52,7 @@ const DisplayName = () => {
           ? "すでに使用されているニックネームです"
           : "エラーが発生しました";
 
-      setError({ name: errorMessage }); // Set the error state with the appropriate message
+      setError({ name: errorMessage });
 
       Swal.fire({
         position: "top",
@@ -64,7 +65,11 @@ const DisplayName = () => {
   };
 
   return (
-    <div className="">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
+    >
       <Helmet>
         <title>Throwin | Display Name</title>
       </Helmet>
@@ -77,43 +82,73 @@ const DisplayName = () => {
         }
         title={"スタッフを探す"}
       />
-      <h4 className="mt-4 mb-4 font-semibold font-hiragino text-center">
+
+      <motion.h4
+        className="mt-4 mb-4 font-semibold font-hiragino text-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+      >
         ニックネーム（表示名）をご登録ください
-      </h4>
+      </motion.h4>
 
       <div className="flex flex-col justify-center">
-        <form
+        <motion.form
           className="flex flex-col w-[342px] mx-auto"
           onSubmit={handleSubmit(onSubmit)}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
         >
           <div className="form-control">
-            <input
+            <motion.input
               {...register("name", { required: "Name is required" })}
               name="name"
               type="text"
               placeholder="名前"
               className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
               defaultValue={user?.name}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
             />
             {errors.name && (
-              <span className="text-[#F43C3C]  text-sm mt-2">
+              <motion.span
+                className="text-[#F43C3C]  text-sm mt-2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+              >
                 {errors.name.message}
-              </span>
+              </motion.span>
             )}
             {error?.name && (
-              <span className="text-[#F43C3C] text-sm mt-2">{error.name}</span>
+              <motion.span
+                className="text-[#F43C3C] text-sm mt-2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+              >
+                {error.name}
+              </motion.span>
             )}
           </div>
 
-          <button className="fixed bottom-[130px]">
+          <motion.button
+            className="fixed bottom-[130px]"
+            type="submit"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+          >
             <ButtonPrimary
               btnText="新規登録"
               style="bg-gradient-to-r from-[#65D0F2] to-[#2399F4] w-[342px] rounded-full font-hiragino text-center py-[12px] font-bold text-white"
             />
-          </button>
-        </form>
+          </motion.button>
+        </motion.form>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
