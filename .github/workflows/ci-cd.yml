@@ -33,9 +33,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      # Step 4: Install dependencies
-      - name: Install dependencies
-        run: npm cache clean --force rm -rf node_modules package-lock.json npm install --legacy-peer-deps
+      # Step 4: Clean Cache and Install Dependencies
+      - name: Clean cache and install dependencies
+        run: |
+          npm cache clean --force
+          rm -rf node_modules package-lock.json
+          npm install dayjs --save
+          npm install --legacy-peer-deps
 
       # Step 5: Build the project
       - name: Build the project
@@ -74,7 +78,7 @@ jobs:
           AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ap-northeast-1  # Explicitly set region 
+          AWS_REGION: ap-northeast-1 # Explicitly set region
 
       # Step 4: Invalidate CloudFront Cache
       - name: Invalidate CloudFront Cache
