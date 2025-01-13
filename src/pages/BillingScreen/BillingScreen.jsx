@@ -141,7 +141,6 @@ const BillingScreen = () => {
       restaurant_uid: staff?.restaurant_uid,
       store_uid: staff?.store_uid,
       amount: persAmount,
-      // amount: 1000,
       currency: "JPY",
       payment_method: "paypal",
       return_url: `https://main.d1qin9n9dqg0zp.amplifyapp.com/staff/${staff.username}/chargeCompleted`,
