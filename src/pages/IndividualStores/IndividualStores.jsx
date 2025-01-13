@@ -5,7 +5,7 @@ import { Circles } from "react-loader-spinner";
 
 const IndividualStores = () => {
   const location = useLocation();
-  const { storeData } = location.state || {};
+  const { storeData } = location.state || {}; // Ensure that storeData exists
   const { store, isLoading } = useGetStuffsByStoreCode(storeData);
 
   console.log(storeData);
@@ -25,6 +25,11 @@ const IndividualStores = () => {
     );
   }
 
+  // Check if storeData is available before rendering
+  if (!storeData) {
+    return <div>Error: Store data is missing</div>;
+  }
+
   return (
     <div className="min-w-[375px] mx-auto mb-28">
       <div className="max-w-[430px] mx-auto mb-8 relative">
@@ -32,14 +37,14 @@ const IndividualStores = () => {
         <div className="relative">
           <img
             src="https://s3-alpha-sig.figma.com/img/e5b7/27e5/d85bf08137ca367e755012d701fbcc11?Expires=1737331200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=q9q0UtOHo5kPHHtsn1~ExK5hDVmU7hazSCe--8sH040n1CsRu~VE1y7C9bryOV4UB0NrF0-NE1s4wnc13ZRVrhN~wnSU0KZy1Y8zmx4LXpJBP9Dv7HguG7v9-gSOIM1GQbZKg9fe4z-UMRlAfaHTzXsEBsLCp6BgGs0AVOhVvYHsA5Moquw7gbIf3d7-bUXWRVtHW9rSIbW1LNJhBIvtR8TGNHeSEzcC1G8JN4Nht-tD7k9FD1uroHaWoeSxnuH4T-WP2zo2wEUkNmkCfZYm~AE6sdbezaiJYl76AsNfFQvOzQpXeQzpQnJiDaUIxGE9yrn0OTN6RTN9JR~DN~wZog__"
-            alt={`${storeData.name} `}
-            className="w-full "
+            alt={`${storeData?.name}`}
+            className="w-full"
           />
           {/* Gradient overlay */}
           <div className="absolute inset-0 bg-black opacity-20 "></div>
           {/* Full-width Centered Store Name */}
           <h2 className="absolute bottom-5 left-0 w-full text-center text-white text-2xl font-bold px-2 py-1">
-            {storeData.name}
+            {storeData?.name || "Store Name"}
           </h2>
         </div>
         <div className="w-[342px] mx-auto flex justify-between mt-8 mb-5 text-[#44495B] items-center">
