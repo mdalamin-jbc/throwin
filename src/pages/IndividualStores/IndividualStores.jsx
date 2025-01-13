@@ -30,32 +30,32 @@ const IndividualStores = () => {
     <div className="min-w-[375px] mx-auto mb-28">
       <div className="max-w-[430px] mx-auto mb-8 relative">
         {/* Store Image with Gradient Overlay and Store Name */}
-        <motion.div 
+        <motion.div
           className="relative"
-          initial={{ opacity: 0 }} 
-          animate={{ opacity: 1 }} 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 1 }}
         >
           <img
             src="https://s3-alpha-sig.figma.com/img/e5b7/27e5/d85bf08137ca367e755012d701fbcc11?Expires=1737331200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=q9q0UtOHo5kPHHtsn1~ExK5hDVmU7hazSCe--8sH040n1CsRu~VE1y7C9bryOV4UB0NrF0-NE1s4wnc13ZRVrhN~wnSU0KZy1Y8zmx4LXpJBP9Dv7HguG7v9-gSOIM1GQbZKg9fe4z-UMRlAfaHTzXsEBsLCp6BgGs0AVOhVvYHsA5Moquw7gbIf3d7-bUXWRVtHW9rSIbW1LNJhBIvtR8TGNHeSEzcC1G8JN4Nht-tD7k9FD1uroHaWoeSxnuH4T-WP2zo2wEUkNmkCfZYm~AE6sdbezaiJYl76AsNfFQvOzQpXeQzpQnJiDaUIxGE9yrn0OTN6RTN9JR~DN~wZog__"
-            alt={`${storeData.name} `}
+            alt={`${storeData?.name} `}
             className="w-full "
           />
           {/* Gradient overlay */}
           <div className="absolute inset-0 bg-black opacity-20 "></div>
           {/* Full-width Centered Store Name */}
           <h2 className="absolute bottom-5 left-0 w-full text-center text-white text-2xl font-bold px-2 py-1">
-            {storeData.name}
+            {storeData?.name}
           </h2>
         </motion.div>
         <div className="w-[342px] mx-auto flex justify-between mt-8 mb-5 text-[#44495B] items-center">
           <h5 className="font-bold  ">わらび高木店のメンバー</h5>
-          <p className="font-normal text-xs">メンバーの一覧({store.length})</p>
+          <p className="font-normal text-xs">メンバーの一覧({store?.length})</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 w-[342px] mx-auto ">
-        {store.map((staff, uid) => (
+      <div className="grid grid-cols-2 gap-4 w-[342px] mx-auto">
+        {store?.map((staff, uid) => (
           <motion.div
             key={uid}
             initial={{ opacity: 0 }}
@@ -63,26 +63,26 @@ const IndividualStores = () => {
             transition={{ duration: 0.5, delay: 0.2 * uid }} // Delay the animation for each staff member
           >
             <Link
-              to={{
-                pathname: `/staff/${staff.username}`,
-                state: { staffData: staff },
-              }}
+              to={`/staff/${staff?.username}`}
+              onClick={() =>
+                localStorage.setItem("staff", JSON.stringify(staff))
+              }
             >
               <div className="relative">
                 <img
                   src="https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
-                  alt={`${staff.username} image`}
+                  alt={`${staff?.username} image`}
                   className="object-cover rounded-lg w-[170px] h-[170px]"
                 />
                 {/* Rating in the top right corner */}
                 <div className="absolute top-[6px] right-[6px] bg-white text-[#49BBDF] flex items-center gap-1 px-2 py-1 rounded-[4px] shadow-md">
                   <IoMdStar />
-                  {staff.score}
+                  {staff?.score}
                 </div>
                 {/* Name and Type in the bottom left corner */}
                 <div className="absolute bottom-0 left-0 bg-gradient-to-t from-black via-transparent to-transparent w-full p-2 text-white rounded-b-lg">
-                  <h3 className="text-sm font-semibold">{staff.username}</h3>
-                  <p className="text-xs">{staff.introduction}</p>
+                  <h3 className="text-sm font-semibold">{staff?.username}</h3>
+                  <p className="text-xs">{staff?.introduction}</p>
                 </div>
               </div>
             </Link>
