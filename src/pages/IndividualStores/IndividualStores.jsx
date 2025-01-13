@@ -1,15 +1,16 @@
 import { IoMdStar } from "react-icons/io";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useGetStuffsByStoreCode from "../../hooks/UseGetStuffsByStoreCode";
 import { Circles } from "react-loader-spinner";
 
 const IndividualStores = () => {
   const location = useLocation();
-  const { storeData } = location.state || {}; // Ensure that storeData exists
-  const { store, isLoading } = useGetStuffsByStoreCode(storeData);
+  const navigate = useNavigate();
 
-  console.log(storeData);
-  console.log(store);
+  // Retrieve storeData from location state or localStorage
+  const { storeData } = location.state || JSON.parse(localStorage.getItem("storeData")) || {};
+
+  const { store, isLoading } = useGetStuffsByStoreCode(storeData);
 
   if (isLoading) {
     return (

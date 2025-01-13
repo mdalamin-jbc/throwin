@@ -130,23 +130,26 @@ const Search = () => {
 
   const handleSearchStore = async (storeCode = null) => {
     const searchValue = storeCode || searchStore;
-
+  
     if (!searchValue) {
       setErrorMessage("店舗コードは必須です");
       return;
     }
-
+  
     try {
       const response = await axiosPublic.get(`/stores/${searchValue}`);
-
+  
       setStoreData(response.data);
       setErrorMessage("");
+      // Store data in localStorage
+      localStorage.setItem("storeData", JSON.stringify(response.data));
       navigate(`/store`, { state: { storeData: response.data } });
     } catch (error) {
       setErrorMessage("店舗が見つからないか、エラーが発生しました。");
       console.error("Error fetching store:", error);
     }
   };
+  
 
   return (
     <div className="min-w-[375px] mx-auto mb-[120px]">
