@@ -144,8 +144,8 @@ const BillingScreen = () => {
       // amount: 1000,
       currency: "JPY",
       payment_method: "paypal",
-      return_url: `http://localhost:5173/staff/${staff.username}/chargeCompleted`,
-      cancel_url: "http://localhost:5173/payment-cancle",
+      return_url: `https://throwin.eswaap.com/staff/${staff?.username}/chargeCompleted`,
+      cancel_url: "https://throwin.eswaap.com/payment-cancle",
     });
   }, [
     persAmount,
@@ -153,7 +153,7 @@ const BillingScreen = () => {
     staff?.uid,
     staff?.restaurant_uid,
     staff?.store_uid,
-    staff.username,
+    staff?.username,
   ]);
 
   // paypal payment
@@ -275,7 +275,7 @@ const BillingScreen = () => {
           </div>
           <div className="max-w-[430px] mx-auto mb-[120px] text-[#44495B]">
             <div className="py-4 text-center">
-              <h2 className="font-bold text-[25px]">{staff.name}</h2>
+              <h2 className="font-bold text-[25px]">{staff?.name}</h2>
               <p className="font-bold text-[10px]">{staff?.introduction}</p>
             </div>
             <div className="max-w-[416px] mx-auto">
@@ -372,7 +372,7 @@ const BillingScreen = () => {
                         <div className="px-6 pt-4 pb-4">
                           <p className="text-base font-medium ">
                             <span className="underline font-semibold">
-                              {staff.name}
+                              {staff?.name}
                             </span>{" "}
                             に、スローインします。 よろしいですか？
                           </p>

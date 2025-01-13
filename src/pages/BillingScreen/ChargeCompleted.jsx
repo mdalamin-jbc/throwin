@@ -14,7 +14,6 @@ import logo from "../../assets/images/home/logo.png";
 import effect from "../../assets/images/billing/billingEffect.png";
 import UseGetByStaffName from "../../hooks/UseGetByStaffName";
 import useAxiosPrivate from "../../hooks/axiousPrivate";
-import { motion } from "framer-motion"; // Importing motion
 
 const ChargeCompleted = () => {
   const { username } = useParams();
@@ -111,58 +110,31 @@ const ChargeCompleted = () => {
 
       <main className="min-w-[375px] mx-auto text-[#44495B] mt-11">
         <div className="text-center">
-          <motion.h3
-            className="font-bold text-2xl"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
-          >
-            {staff?.name}
-          </motion.h3>
-
-          <motion.img
+          <h3 className="font-bold text-2xl">{staff?.name}</h3>
+          <img
             className="rounded-full w-40 h-40 mx-auto mt-3 object-cover"
-            src="https://i.postimg.cc/Fzf19nfb/5e3ca18b58c181ccc105ca95163e891c.jpg"
+            src="https://postimg.cc/rRkqjjNz"
             alt={`${staff?.name}'s profile`}
             loading="eager"
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 0.8 }}
           />
-
-          <motion.h3
-            className="font-bold text-2xl w-[85%] mx-auto mt-6 mb-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.5 }}
-          >
+          <h3 className="font-bold text-2xl w-[85%] mx-auto mt-6 mb-4">
             ありがとうございます！ スローインしました
-          </motion.h3>
-
-          <motion.Link
+          </h3>
+          <Link
             className="text-[#5297FF] font-bold text-sm hover:underline"
             to="/history"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.7 }}
           >
             <p>履歴を見る</p>
-          </motion.Link>
+          </Link>
         </div>
       </main>
 
-      <motion.Link
-        to="/search"
-        className="fixed bottom-28 left-0 w-full px-6"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1 }}
-      >
+      <Link to="/search" className="fixed bottom-28 left-0 w-full px-6">
         <ButtonPrimary
           style="flex justify-center w-full rounded-full font-hiragino py-3 font-bold text-white bg-gradient-to-r from-[#65D0F2] to-[#2399F4] hover:opacity-90 transition-opacity"
           btnText="他のメンバーを探す"
         />
-      </motion.Link>
+      </Link>
     </div>
   );
 };
