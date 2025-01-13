@@ -10,7 +10,7 @@ const IndividualStores = () => {
   // Retrieve storeData from location state or localStorage
   const storeDataFromLocation = location.state?.storeData;
   const storeDataFromStorage = JSON.parse(localStorage.getItem("storeData"));
-  
+
   // Prioritize location state, otherwise fallback to localStorage
   const storeData = storeDataFromLocation || storeDataFromStorage;
 
@@ -62,26 +62,27 @@ const IndividualStores = () => {
         {store.map((staff, uid) => (
           <div key={uid}>
             <Link
-              to={{
-                pathname: `/staff/${staff.username}`,
-                state: { staffData: staff }, // Pass the staff data as state
-              }}
+              to={`/staff/${staff?.username}`}
+              state={{ staffData: staff }}
+              onClick={() =>
+                localStorage.setItem("staff", JSON.stringify(staff))
+              }
             >
               <div className="relative">
                 <img
                   src="https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
-                  alt={`${staff.username} image`}
+                  alt={`${staff?.username} image`}
                   className="object-cover rounded-lg w-[170px] h-[170px]"
                 />
                 {/* Rating in the top right corner */}
                 <div className="absolute top-[6px] right-[6px] bg-white text-[#49BBDF] flex items-center gap-1 px-2 py-1 rounded-[4px] shadow-md">
                   <IoMdStar />
-                  {staff.score}
+                  {staff?.score}
                 </div>
                 {/* Name and Type in the bottom left corner */}
                 <div className="absolute bottom-0 left-0 bg-gradient-to-t from-black via-transparent to-transparent w-full p-2 text-white rounded-b-lg">
-                  <h3 className="text-sm font-semibold">{staff.username}</h3>
-                  <p className="text-xs">{staff.introduction}</p>
+                  <h3 className="text-sm font-semibold">{staff?.username}</h3>
+                  <p className="text-xs">{staff?.introduction}</p>
                 </div>
               </div>
             </Link>

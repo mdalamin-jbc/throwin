@@ -51,7 +51,7 @@ const BillingScreen = () => {
 
     try {
       const response = await axiosPrivate.post(
-        `/auth/users/staff/${staff.uid}/like`
+        `/auth/users/staff/${staff?.uid}/like`
       );
 
       console.log("API Response:", response);
