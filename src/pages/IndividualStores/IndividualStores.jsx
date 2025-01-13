@@ -8,7 +8,11 @@ const IndividualStores = () => {
   const navigate = useNavigate();
 
   // Retrieve storeData from location state or localStorage
-  const { storeData } = location.state || JSON.parse(localStorage.getItem("storeData")) || {};
+  const storeDataFromLocation = location.state?.storeData;
+  const storeDataFromStorage = JSON.parse(localStorage.getItem("storeData"));
+  
+  // Prioritize location state, otherwise fallback to localStorage
+  const storeData = storeDataFromLocation || storeDataFromStorage;
 
   const { store, isLoading } = useGetStuffsByStoreCode(storeData);
 
