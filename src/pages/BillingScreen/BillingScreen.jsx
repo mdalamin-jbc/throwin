@@ -144,8 +144,8 @@ const BillingScreen = () => {
       // amount: 1000,
       currency: "JPY",
       payment_method: "paypal",
-      return_url: `https://main.d1qin9n9dqg0zp.amplifyapp.com/staff/${staff?.username}/chargeCompleted`,
-      cancel_url: "https://main.d1qin9n9dqg0zp.amplifyapp.com/payment-cancle",
+      return_url: `https://alpha.throwin-glow.com/staff/${staff?.username}/chargeCompleted`,
+      cancel_url: "https://alpha.throwin-glow.com/payment-cancle",
     });
   }, [
     persAmount,
