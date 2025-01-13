@@ -12,17 +12,20 @@ const useGetFavoriteStuff = () => {
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["favoriteStuff"], 
+    queryKey: ["favoriteStuff"],
     queryFn: async () => {
       try {
         const res = await AxiosPrivate.get("auth/users/favorite-staff");
         return res.data;
       } catch (error) {
-        console.error("Error fetching favorite stuff:", error.response?.data || error.message);
+        console.error(
+          "Error fetching favorite stuff:",
+          error.response?.data || error.message
+        );
         throw error;
       }
     },
-    enabled: Boolean(user?.access), 
+    enabled: true,
   });
 
   const favoriteStuffs = data;
