@@ -153,7 +153,7 @@ const Search = () => {
 
   return (
     <div className="min-w-[375px] mx-auto mb-[120px]">
-      <TitleBar title={"スタッフを探す"} />
+      <TitleBar title={"探す"} />
 
       {/* QR Scanner Section */}
       <div className="w-[342px] mx-auto">
@@ -163,7 +163,7 @@ const Search = () => {
         <button onClick={handleOpenScanner} disabled={isScannerOpen}>
           <ButtonPrimary
             icon={<img className="mr-4" src={camera} alt="search icon" />}
-            btnText="QRコードをスキャン"
+            btnText="カメラを起動する"
             style={`flex justify-center bg-gradient-to-r from-[#65D0F2] to-[#2399F4] w-[342px] rounded-[10px] font-hiragino py-[12px] font-bold text-white ${
               isScannerOpen ? "opacity-50 cursor-not-allowed" : ""
             }`}
@@ -192,7 +192,7 @@ const Search = () => {
       {/* Member Search */}
       <div className="w-[342px] mx-auto">
         <h4 className="mt-8 mb-4 font-semibold font-hiragino">
-          メンバー名から探す
+        メンバー名から探す
         </h4>
         <div className="relative flex flex-col justify-center">
           <input
@@ -227,7 +227,7 @@ const Search = () => {
       {/* Store Code Search */}
       <div className="w-[342px] mx-auto">
         <h4 className="mt-8 mb-4 font-semibold font-hiragino">
-          店舗コードから探す
+        店舗(チーム）コードから探す
         </h4>
         <div className="relative flex flex-col justify-center">
           <input
@@ -236,7 +236,7 @@ const Search = () => {
             })}
             name="searchStore"
             type="text"
-            placeholder="店舗コードを入力"
+            placeholder="店舗(チーム)コードを入力"
             className="w-full rounded-[8px] py-3 pl-4 pr-10 border border-[#D9D9D9] text-[#44495B] text-sm placeholder-gray-400 focus:outline-none focus:border-[#707070] shadow-sm"
             value={searchStore}
             onChange={(e) => setSearchStore(e.target.value)}
