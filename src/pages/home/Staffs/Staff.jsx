@@ -8,14 +8,28 @@ import useAxiosPrivate from "../../../hooks/axiousPrivate";
 import Swal from "sweetalert2";
 import { Circles } from "react-loader-spinner";
 import StaffProfileCard from "../../../components/StaffProfileCard/StaffProfileCard";
+import UseGetUserReview from "../../../hooks/UseGetUserReview";
+
+// Helper function to format date
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  return `${year}/${day}/${month} ${hours}:${minutes}`;
+};
 
 const Staff = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const { username } = useParams();
   const { staff } = UseGetByStaffName(username);
+  const { userReview } = UseGetUserReview(staff?.uid);
 
-  console.log(staff);
+  console.log(userReview);
+  // console.log(staff.uid);
   const { favoriteStuffs, refetch, isLoading } = UseGetFavorite_stuff();
 
   const axiosPrivate = useAxiosPrivate();
@@ -90,24 +104,23 @@ const Staff = () => {
               handleHeartToggle={handleHeartToggle}
             />
             <div className="w-[342px] mx-auto">
-              <div className="mt-10 border-b-[2px] border-[#E0EAED]">
+              <div className="mt-10 ">
                 <h2 className="font-semibold text-lg text-[#49BBDF]">
                   応援メッセージ
                 </h2>
-                <h4 className="flex justify-between mt-4 font-medium text-xs text-[#9C9C9C]">
-                  <span>ユーザーネーム：BDdD</span> <span>2024/2/1</span>
-                </h4>
-                <h2 className="font-medium text-sm text-[#44495B] mt-2 mb-[17px]">
-                  いつも頑張っている姿に感動してます！
-                </h2>
               </div>
-              <div className="mt-4 border-b-[2px] border-[#E0EAED]">
-                <h4 className="flex justify-between mt-4 font-medium text-xs text-[#9C9C9C]">
-                  <span>ユーザーネーム：BDdD</span> <span>2024/2/1</span>
-                </h4>
-                <h2 className="font-medium text-sm text-[#44495B] mt-2 mb-[17px]">
-                  いつも頑張っている姿に感動してます！
-                </h2>
+              <div className="mt-4 ">
+                {userReview?.map((review, index) => (
+                  <div key={index} className="border-b-[2px] border-[#E0EAED]">
+                    <h4 className="flex justify-between mt-4 font-medium text-xs text-[#9C9C9C]">
+                      <span>ユーザーネーム：{review?.nickname}</span>{" "}
+                      <span>{formatDate(review?.date)}</span>
+                    </h4>
+                    <h2 className="font-medium text-sm text-[#44495B] mt-2 mb-[17px]">
+                      {review?.message}
+                    </h2>
+                  </div>
+                ))}
               </div>
               <Link to={`/staff/${username}/billing_screen`}>
                 <button className="mt-6">
