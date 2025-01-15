@@ -37,8 +37,8 @@ const BillingScreen = () => {
 
   const navigate = useNavigate();
 
-  // console.log(userDetails);
-  console.log(staff);
+  console.log("hiiiiiiiiiiiiiiiiiii", userDetails.name);
+  // console.log(staff);
 
   // billing data
   const [billingData, setBillingData] = useState({});
