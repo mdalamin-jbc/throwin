@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Datepicker from "react-tailwindcss-datepicker";
+// import Datepicker from "react-tailwindcss-datepicker";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -118,14 +118,14 @@ const SalesManagement = () => {
           <div className="mt-[22px] flex items-center gap-6 font-semibold text-xs">
             <label className="text-[#434343]">期間指定</label>
             <div className="w-[265px] border py-[5px] pl-2 rounded-[7px] flex items-center gap-1">
-              <Datepicker
+              {/* <Datepicker
                 startFrom={START_FROM}
                 useRange={false}
                 value={value}
                 onChange={(newValue) => setValue(newValue)}
                 popperPlacement="bottom"
                 inputClassName="bg-transparent border-none focus:outline-none"
-              />
+              /> */}
             </div>
             <button
               className="bg-[#49BBDF] py-[5.5px] px-[18.5px] rounded-md text-white"
