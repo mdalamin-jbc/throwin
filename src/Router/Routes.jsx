@@ -10,7 +10,6 @@ import Gacha from "../pages/Gacha/Gacha";
 import Search from "../pages/Search/Search";
 import Favorite from "../pages/Favorite/Favorite";
 import NewReg from "../pages/NewReg/NewReg";
-
 import Setting from "../pages/Setting/Setting";
 import NickNameReg from "../pages/NickNameReg/NickNameReg";
 import CheckMail from "../pages/NewReg/CheckMail";
@@ -19,7 +18,6 @@ import PrivateRoute from "./PrivateRoute";
 import MemberList from "../pages/MemberList/MemberList";
 import IndividualStores from "../pages/IndividualStores/IndividualStores";
 import UserProfile from "../pages/Profile/UserProfile";
-
 import ChangeEmail from "../pages/Profile/ChangeEmail";
 import ChangePassword from "../pages/Profile/ChangePassword";
 import Staff from "../pages/home/Staffs/Staff";
@@ -42,6 +40,10 @@ import DeSeetings from "../pages/Dashboard/Seetings/DeSeetings";
 import QrCreation from "../pages/Dashboard/QrCreation/QrCreation";
 import SalesManagement from "../pages/Dashboard/SalesManagement/SalesManagement";
 import CreatANewTeam from "../pages/Dashboard/CreatANewTeam/CreatANewTeam";
+import DeGacha from "../pages/Dashboard/DeGacha/DeGacha";
+import DeHistory from "../pages/Dashboard/DeHistory/DeHistory";
+import CorporatesAdmin from "../pages/Admins/CorporatesAdmin/CorporatesAdmin";
+import DaComments from "../pages/Dashboard/DaComments/DaComments";
 
 export const Routes = createBrowserRouter([
   {
@@ -198,34 +200,48 @@ export const Routes = createBrowserRouter([
         path: "/terms",
         element: <TermsAndConditions />,
       },
+
       // -------------------------------------dashboard
       {
         path: "/dashboard",
         element: <Dashboard />,
         children: [
           {
+            path: "sales_management",
+            element: <SalesManagement />,
+          },
+          {
             path: "account",
             element: <Account />,
+          },
+          {
+            path: "comments",
+            element: <DaComments />,
+          },
+          {
+            path: "qr_creation",
+            element: <QrCreation />,
+          },
+          {
+            path: "deHistorys",
+            element: <DeHistory />,
           },
           {
             path: "creat_a_new_team",
             element: <CreatANewTeam />,
           },
-          {
-            path: "settings",
-            element: <DeSeetings />,
-          },
-          {
-            path: "sales_management",
-            element: <SalesManagement />,
-          },
+
           {
             path: "adminLogin",
             element: <AdminLogin />,
           },
           {
-            path: "qr_creation",
-            element: <QrCreation />,
+            path: "deGacha",
+            element: <DeGacha />,
+          },
+          {
+            path: "settings",
+            element: <DeSeetings />,
           },
         ],
       },

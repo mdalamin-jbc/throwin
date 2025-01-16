@@ -26,7 +26,7 @@ const SideMenu = () => {
     {
       label: "コメント",
       icon: <img src={message} alt="" className="mr-4 w-6" />,
-      path: "/dashboard/account",
+      path: "/dashboard/comments",
     },
     {
       label: "QR作成",
@@ -36,12 +36,12 @@ const SideMenu = () => {
     {
       label: "履歴",
       icon: <img src={history} alt="" className="mr-4 w-6" />,
-      path: "/dashboard/qr_creation",
+      path: "/dashboard/deHistorys",
     },
     {
       label: "ガチャ",
       icon: <img src={gacha} alt="" className="mr-4 w-6" />,
-      path: "/dashboard/qr_creation",
+      path: "/dashboard/deGacha",
     },
     {
       label: "設定",
