@@ -1,123 +1,84 @@
-import { useForm } from "react-hook-form";
-import { MdKeyboardArrowDown } from "react-icons/md";
-import search from "../../../assets/icons/search_3.png";
 import img from "../../../assets/images/store&staff/image.png";
 
 const DaComments = () => {
-  const {
-    register,
-    formState: { errors },
-  } = useForm();
   return (
     <div>
       <h2 className="font-semibold text-[27px] text-[#73879C]">コメント</h2>
-      <div className="bg-white mt-[27px] rounded-xl pb-8 mr-[54px] pt-10">
-        
-        
-
-        <div className="mx-[33px]">
-          <div className="mt-[22px]  flex justify-between ">
-            <button className="bg-[#4EBDF3] text-white py-[6px] px-[106px] rounded">
-              新規作成
-            </button>
-            <div className="relative flex flex-col justify-center mr-[100px]">
-              <div
-                // onClick={handleSearchStuff}
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
-              >
+      <div className="bg-white mt-[27px] rounded-lg pb-8 mr-[54px] ">
+        <div className="flex pt-10">
+          <div>
+            <div className="flex border-r bg-[#F8F9FB]  py-4">
+              <div className="px-6">
                 <img
-                  className="w-5 h-5 opacity-70"
-                  src={search}
-                  alt="search icon"
+                  src={img}
+                  className="rounded-full w-[60px] h-[60px]"
+                  alt=""
                 />
               </div>
-              <input
-                {...register("searchMember", {
-                  required: "メンバー名は必須です",
-                })}
-                name="searchMember"
-                type="text"
-                placeholder="検索"
-                className="w-full rounded-[8px] py-[6px] pl-9 pr-10 border border-[#D9D9D9] text-[#44495B] text-sm placeholder-gray-400 focus:outline-none focus:border-[#707070] shadow-sm"
-                // value={searchByStuffName}
-                // onChange={(e) => setSearchByStuffName(e.target.value)}
-              />
-
-              {errors.searchMember && (
-                <span className="text-red-500 mt-1">
-                  {errors.searchMember.message}
-                </span>
-              )}
+              <div className="text-[#434343]">
+                <h5 className="font-semibold text-lg ">かりん</h5>
+                <p className="font-light">メッセージが届いています。</p>
+              </div>
+              <div className="ml-[19px] mr-4 text-[#73879C]">
+                <p>04:04</p>
+              </div>
+            </div>
+            <div className="flex border-r   py-4">
+              <div className="px-6">
+                <img
+                  src={img}
+                  className="rounded-full w-[60px] h-[60px]"
+                  alt=""
+                />
+              </div>
+              <div className="">
+                <h5 className="font-semibold text-lg">かりん</h5>
+                <p className="font-light">メッセージが届いています。</p>
+              </div>
+              <div className="ml-[19px]">
+                <p>04:04</p>
+              </div>
+            </div>
+            <div className="flex border-r   py-4">
+              <div className="px-6">
+                <img
+                  src={img}
+                  className="rounded-full w-[60px] h-[60px]"
+                  alt=""
+                />
+              </div>
+              <div className="">
+                <h5 className="font-semibold text-lg">かりん</h5>
+                <p className="font-light">メッセージが届いています。</p>
+              </div>
+              <div className="ml-[19px]">
+                <p>04:04</p>
+              </div>
             </div>
           </div>
-
-          <div className="overflow-x-auto mt-6">
-            <table className="table ">
-              {/* head */}
-              <thead className=" bg-[#49BBDF] text-white ">
-                <tr>
-                  <th>
-                    <button className="flex items-center ">
-                      ポジション名 <MdKeyboardArrowDown />
-                    </button>
-                  </th>
-                  <th className="">
-                    <button className="flex items-center">
-                      店舗（チーム）コード <MdKeyboardArrowDown />
-                    </button>
-                  </th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {/* row 1 */}
-                <tr className="hover border">
-                  <td className="flex items-center gap-[17px]">
-                    <img src={img} alt="" className="w-[29px] rounded-full" />
-                    <p>かりん</p>
-                  </td>
-                  <td>公開</td>
-                  <td>
-                    <span className="bg-[#ABABAB] rounded-full px-3 py-1">
-                      詳細
-                    </span>
-                  </td>
-                </tr>
-                {/* row 2 */}
-                <tr className="hover border">
-                  <td className="flex items-center gap-[17px]">
-                    <img src={img} alt="" className="w-[29px] rounded-full" />
-                    <p>かりん</p>
-                  </td>
-                  <td>公開</td>
-                  <td>
-                    <span className="bg-[#ABABAB] rounded-full px-3 py-1">
-                      詳細
-                    </span>
-                  </td>
-                </tr>
-                {/* row 3 */}
-                <tr className="hover border">
-                  <td className="flex items-center gap-[17px]">
-                    <img src={img} alt="" className="w-[29px] rounded-full" />
-                    <p>かりん</p>
-                  </td>
-                  <td>公開</td>
-                  <td>
-                    <span className="bg-[#ABABAB] rounded-full px-3 py-1">
-                      詳細
-                    </span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <div className="ml-6">
+            <h4 className="font-semibold text-2xl text-[#49BBDF] mb-6">
+              応援メッセージ
+            </h4>
+            <div className="w-[400px]">
+              <div className="mt-4 border-b-[2px] border-[#E0EAED]">
+                <h4 className="flex justify-between mt-4 font-medium text-xs text-[#9C9C9C]">
+                  <span>ユーザーネーム：BDdD</span> <span>2024/2/1</span>
+                </h4>
+                <h2 className="font-medium text-sm text-[#44495B] mt-2 mb-[17px]">
+                  いつも頑張っている姿に感動してます！
+                </h2>
+              </div>
+              <div className="mt-4 border-b-[2px] border-[#E0EAED]">
+                <h4 className="flex justify-between mt-4 font-medium text-xs text-[#9C9C9C]">
+                  <span>ユーザーネーム：BDdD</span> <span>2024/2/1</span>
+                </h4>
+                <h2 className="font-medium text-sm text-[#44495B] mt-2 mb-[17px]">
+                  いつも頑張っている姿に感動してます！
+                </h2>
+              </div>
+            </div>
           </div>
-
-          {/* <div className="flex justify-center items-center h-[calc(100vh-128px)]">
-              <p className="text-[#B5B5B5]">
-                現在登録されている店舗（チーム）はありません
-              </p>
-            </div> */}
         </div>
       </div>
     </div>
