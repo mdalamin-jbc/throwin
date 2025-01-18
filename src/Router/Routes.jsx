@@ -44,6 +44,10 @@ import DeGacha from "../pages/Dashboard/DeGacha/DeGacha";
 import DeHistory from "../pages/Dashboard/DeHistory/DeHistory";
 import CorporatesAdmin from "../pages/Admins/CorporatesAdmin/CorporatesAdmin";
 import DaComments from "../pages/Dashboard/DaComments/DaComments";
+import SalesAgent from "../pages/Dashboard/SalesAgent/SalesAgent";
+import PaymentManagement from "../pages/Dashboard/PaymentManagement/PaymentManagement";
+import Client from "../pages/Dashboard/Client/Client";
+import CreatNewClient from "../pages/Dashboard/Client/CreatNewClient";
 
 export const Routes = createBrowserRouter([
   {
@@ -203,9 +207,14 @@ export const Routes = createBrowserRouter([
 
       // -------------------------------------dashboard
       {
+        path: "admin_login",
+        element: <AdminLogin />,
+      },
+      {
         path: "/dashboard",
         element: <Dashboard />,
         children: [
+          
           {
             path: "sales_management",
             element: <SalesManagement />,
@@ -213,6 +222,18 @@ export const Routes = createBrowserRouter([
           {
             path: "account",
             element: <Account />,
+          },
+          {
+            path: "client",
+            element: <Client />,
+          },
+          {
+            path: "client/creat_new",
+            element: <CreatNewClient />,
+          },
+          {
+            path: "sales_agent",
+            element: <SalesAgent />,
           },
           {
             path: "comments",
@@ -238,6 +259,10 @@ export const Routes = createBrowserRouter([
           {
             path: "deGacha",
             element: <DeGacha />,
+          },
+          {
+            path: "payment_management",
+            element: <PaymentManagement />,
           },
           {
             path: "settings",

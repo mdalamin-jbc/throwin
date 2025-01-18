@@ -1,0 +1,30 @@
+[
+     
+      {
+        "role": "staff",
+        "email": "ai@example.com",
+        "password": "password1234"
+      },
+      {
+        "role": "restaurant_owner",
+        "email": "xyz@gmail.com",
+        "password": "password1234"
+      },
+      {
+        "role": "sales_agent",
+        "email": "sales_agent@gmail.com",
+        "password": "string1234"
+      },
+      {
+        "role": "fc_admin",
+        "email": "fc_admin@gmail.com",
+        "password": "string1234"
+      },
+      {
+        "role": "glow_admin",
+        "email": "glow_admin@gmail.com",
+        "password": "string1234"
+      }
+    
+    ]
+  
