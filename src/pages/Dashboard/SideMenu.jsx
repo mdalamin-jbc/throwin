@@ -73,7 +73,7 @@ const SideMenu = () => {
 
   // Filter menu items based on role
   const menuItems = allMenuItems.filter((item) =>
-    item.roles.includes("restaurant_owner")
+    item.roles.includes(userRole)
   );
 
   return (
