@@ -140,6 +140,7 @@ const BillingScreen = () => {
       staff_uid: staff?.uid,
       restaurant_uid: staff?.restaurant_uid,
       store_uid: staff?.store_uid,
+      message: message,
       amount: persAmount,
       // amount: 1000,
       currency: "JPY",
@@ -154,6 +155,7 @@ const BillingScreen = () => {
     staff?.restaurant_uid,
     staff?.store_uid,
     staff?.username,
+    message,
   ]);
 
   // paypal payment

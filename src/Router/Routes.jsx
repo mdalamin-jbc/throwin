@@ -18,7 +18,6 @@ import PrivateRoute from "./PrivateRoute";
 import MemberList from "../pages/MemberList/MemberList";
 import IndividualStores from "../pages/IndividualStores/IndividualStores";
 import UserProfile from "../pages/Profile/UserProfile";
-
 import ChangeEmail from "../pages/Profile/ChangeEmail";
 import ChangePassword from "../pages/Profile/ChangePassword";
 import Staff from "../pages/home/Staffs/Staff";
@@ -43,11 +42,18 @@ import UseTicket from "../pages/Gacha/UseTicket";
 import Processing from "../pages/Gacha/Processing";
 import GotTicket from "../pages/Gacha/GotTicket";
 import TicketTermsAndConditons from "../pages/Gacha/TicketTermsAndConditons";
-import CreateANewTeam from "../pages/Dashboard/CreatANewTeam/CreatANewTeam";
 import SalesManagement from "../pages/Dashboard/SalesManagement/SalesManagement";
-import QrCreation from "../pages/Dashboard/QrCreation/QrCreation";
-import PaymentCancel from "../pages/BillingScreen/PaymentCancle";
 import GachaTickets from "../pages/Gacha/GachaTickets";
+import PaymentCancel from "../pages/BillingScreen/PaymentCancle";
+import Client from "../pages/Dashboard/Client/Client";
+import CreatNewClient from "../pages/Dashboard/Client/CreatNewClient";
+import SalesAgent from "../pages/Dashboard/SalesAgent/SalesAgent";
+import DaComments from "../pages/Dashboard/DaComments/DaComments";
+import QrCreation from "../pages/Dashboard/QrCreation/QrCreation";
+import DeHistory from "../pages/Dashboard/DeHistory/DeHistory";
+import CreateANewTeam from "../pages/Dashboard/CreatANewTeam/CreatANewTeam";
+import DeGacha from "../pages/Dashboard/DeGacha/DeGacha";
+import PaymentManagement from "../pages/Dashboard/PaymentManagement/PaymentManagement";
 
 export const Routes = createBrowserRouter([
   {
@@ -56,7 +62,7 @@ export const Routes = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home/>,
+        element: <Home />,
       },
       {
         path: "/socialLogin",
@@ -235,34 +241,68 @@ export const Routes = createBrowserRouter([
         path: "/terms",
         element: <TermsAndConditions />,
       },
+
       // -------------------------------------dashboard
+      {
+        path: "admin_login",
+        element: <AdminLogin />,
+      },
       {
         path: "/dashboard",
         element: <Dashboard />,
         children: [
           {
+            path: "sales_management",
+            element: <SalesManagement />,
+          },
+          {
             path: "account",
             element: <Account />,
+          },
+          {
+            path: "client",
+            element: <Client />,
+          },
+          {
+            path: "client/creat_new",
+            element: <CreatNewClient />,
+          },
+          {
+            path: "sales_agent",
+            element: <SalesAgent />,
+          },
+          {
+            path: "comments",
+            element: <DaComments />,
+          },
+          {
+            path: "qr_creation",
+            element: <QrCreation />,
+          },
+          {
+            path: "deHistorys",
+            element: <DeHistory />,
           },
           {
             path: "creat_a_new_team",
             element: <CreateANewTeam />,
           },
-          {
-            path: "settings",
-            element: <DeSeetings />,
-          },
-          {
-            path: "sales_management",
-            element: <SalesManagement />,
-          },
+
           {
             path: "adminLogin",
             element: <AdminLogin />,
           },
           {
-            path: "qr_creation",
-            element: <QrCreation />,
+            path: "deGacha",
+            element: <DeGacha />,
+          },
+          {
+            path: "payment_management",
+            element: <PaymentManagement />,
+          },
+          {
+            path: "settings",
+            element: <DeSeetings />,
           },
         ],
       },

@@ -65,86 +65,88 @@ const MemberList = () => {
         />
       </div>
       <div className="px-4 sm:px-6 lg:px-8">
-  <div className="flex flex-col max-w-[342px] mx-auto justify-center mt-4">
-    <form className="flex flex-col w-full mx-auto">
-      <div className="relative flex items-center w-full">
-        <input
-          {...register("name", {
-            required: "メールアドレスは必須です",
-            pattern: {
-              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-              message: "無効なメール形式です",
-            },
-          })}
-          name="name"
-          type="text"
-          placeholder="店舗コードを入力"
-          className="w-full rounded-[8px] py-3 pl-4 pr-10 border border-[#D9D9D9] text-[#44495B] text-sm placeholder-gray-400 focus:outline-none focus:border-[#707070] shadow-sm"
-          value={searchTerm}
-          onChange={handleSearchByUserName}
-        />
-        <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-          <img
-            onClick={() =>
-              handleSearchByUserName({ target: { value: searchTerm } })
-            }
-            className="w-5 h-5 opacity-70 cursor-pointer"
-            src={search}
-            alt="search icon"
-          />
-        </div>
-      </div>
-      {errors.name && (
-        <span className="text-red-500 mt-1">{errors.name.message}</span>
-      )}
-    </form>
-  </div>
-  <h2 className="flex justify-end font-normal text-xs max-w-[342px] m-[14px] mx-auto">
-    チーム・店舗の一覧({searchData.length})
-  </h2>
-
-  {/* Team Images */}
-  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-w-[342px] sm:max-w-none mx-auto">
-    {searchData.length > 0 ? (
-      searchData.map((staff, index) => (
-        <div key={index} className="relative w-full max-w-[170px] h-[170px] mx-auto">
-          <Link
-            to={{
-              pathname: `/staff/${staff.username}`,
-              state: { staffData: staff },
-            }}
-            onClick={() =>
-              localStorage.setItem("staff", JSON.stringify(staff))
-            }
-          >
-            <div className="relative">
-              <img
-                src="https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
-                alt={`${staff.username} image`}
-                className="object-cover rounded-lg w-[170px] h-[170px]"
+        <div className="flex flex-col max-w-[342px] mx-auto justify-center mt-4">
+          <form className="flex flex-col w-full mx-auto">
+            <div className="relative flex items-center w-full">
+              <input
+                {...register("name", {
+                  required: "メールアドレスは必須です",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "無効なメール形式です",
+                  },
+                })}
+                name="name"
+                type="text"
+                placeholder="店舗コードを入力"
+                className="w-full rounded-[8px] py-3 pl-4 pr-10 border border-[#D9D9D9] text-[#44495B] text-sm placeholder-gray-400 focus:outline-none focus:border-[#707070] shadow-sm"
+                value={searchTerm}
+                onChange={handleSearchByUserName}
               />
-              {/* Rating in the top right corner */}
-              <div className="absolute top-[6px] right-[6px] bg-white text-[#49BBDF] flex items-center gap-1 px-2 py-1 rounded-[4px] shadow-md">
-                <IoMdStar />
-                {staff.score}
-              </div>
-              {/* Name and Type in the bottom left corner */}
-              <div className="absolute bottom-0 left-0 bg-gradient-to-t from-black via-transparent to-transparent w-full p-2 text-white rounded-b-lg">
-                <h3 className="text-sm font-semibold">{staff.name}</h3>
-                <p className="text-xs">{staff.introduction}</p>
+              <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                <img
+                  onClick={() =>
+                    handleSearchByUserName({ target: { value: searchTerm } })
+                  }
+                  className="w-5 h-5 opacity-70 cursor-pointer"
+                  src={search}
+                  alt="search icon"
+                />
               </div>
             </div>
-          </Link>
+            {errors.name && (
+              <span className="text-red-500 mt-1">{errors.name.message}</span>
+            )}
+          </form>
         </div>
-      ))
-    ) : (
-      <div className="text-center text-gray-500 col-span-2 sm:col-span-3">
-        No results found.
-      </div>
-    )}
-  </div>
-</div>
+        <h2 className="flex justify-end font-normal text-xs max-w-[342px] m-[14px] mx-auto">
+          チーム・店舗の一覧({searchData.length})
+        </h2>
 
+        {/* Team Images */}
+        <div className="grid grid-cols-2  gap-3 max-w-[342px]  mx-auto">
+          {searchData.length > 0 ? (
+            searchData.map((staff, index) => (
+              <div
+                key={index}
+                className="relative w-full max-w-[170px] h-[170px] mx-auto"
+              >
+                <Link
+                  to={{
+                    pathname: `/staff/${staff.username}`,
+                    state: { staffData: staff },
+                  }}
+                  onClick={() =>
+                    localStorage.setItem("staff", JSON.stringify(staff))
+                  }
+                >
+                  <div className="relative">
+                    <img
+                      src="https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
+                      alt={`${staff.username} image`}
+                      className="object-cover rounded-lg w-[170px] h-[170px]"
+                    />
+                    {/* Rating in the top right corner */}
+                    <div className="absolute top-[6px] right-[6px] bg-white text-[#49BBDF] flex items-center gap-1 px-2 py-1 rounded-[4px] shadow-md">
+                      <IoMdStar />
+                      {staff.score}
+                    </div>
+                    {/* Name and Type in the bottom left corner */}
+                    <div className="absolute bottom-0 left-0 bg-gradient-to-t from-black via-transparent to-transparent w-full p-2 text-white rounded-b-lg">
+                      <h3 className="text-sm font-semibold">{staff.name}</h3>
+                      <p className="text-xs">{staff.introduction}</p>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            ))
+          ) : (
+            <div className="text-center text-gray-500 col-span-2 sm:col-span-3">
+              No results found.
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
