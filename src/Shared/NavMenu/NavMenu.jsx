@@ -2,7 +2,6 @@ import { NavLink } from "react-router-dom";
 import search from "../../assets/icons/search.png";
 import favorite from "../../assets/icons/favorite.png";
 import gacha from "../../assets/icons/Gacha.png";
-import notice from "../../assets/icons/notice.png";
 import history from "../../assets/icons/history.png";
 import user from "../../assets/icons/user.png";
 
@@ -81,7 +80,7 @@ const NavMenu = () => {
           })}
         >
           {({ isActive }) => (
-            <div className="flex flex-col items-center gap-1">
+            <div className="flex flex-col items-center gap-1 ml-2">
               <img
                 className={`transition-all ${
                   isActive ? "w-[26px]" : "w-[26px]"
