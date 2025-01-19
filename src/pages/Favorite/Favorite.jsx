@@ -12,6 +12,8 @@ const Favorite = () => {
   const axiosPrivate = useAxiosPrivate();
   const [isProcessing, setIsProcessing] = useState(false);
 
+  console.log(favoriteStuffs)
+
   const handleLikeDelete = async (id) => {
     if (isProcessing) return; // Prevent duplicate requests
     setIsProcessing(true);
