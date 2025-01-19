@@ -57,7 +57,7 @@ const History = () => {
       </Helmet>
       <TitleBar style="mb-0 w-full" title="履歴" icon={null}></TitleBar>
 
-      <div className="w-full max-w-[430px] mx-auto px-4 sm:px-6 mt-7 text-[#44495B] grid gap-5">
+      <div className="w-full max-w-[430px] mx-auto px-4 sm:px-6 mt-7 text-[#44495B] grid gap-2">
         {payments.length > 0 ? (
           payments.map((payment) => (
             <div
