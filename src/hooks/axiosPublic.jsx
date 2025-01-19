@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosPublic = axios.create({
-  baseURL: "http://176.34.7.102:8000",
+  baseURL: "https://api-dev.throwin-glow.com",
   headers: {
     "Content-Type": "application/json",
   },

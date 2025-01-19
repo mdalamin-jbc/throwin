@@ -1,35 +1,43 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import search from "../../assets/icons/search2.png";
 import logo from "../../assets/images/home/logo.png";
-import team from "../../assets/images/team/team.png";
 import { useForm } from "react-hook-form";
 import TitleBar from "../../components/TitleBar";
 import { Link, useParams } from "react-router-dom";
-import UseGetStaffListByStaffName from "../../hooks/UseGetStaffListByStaffName";
 import { Circles } from "react-loader-spinner";
 import { IoMdStar } from "react-icons/io";
+import UseStaffDetailsWithStoreId from "../../hooks/UseStaffDetailsWithStoreId";
 
 const MemberList = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchData, setSearchData] = useState([]);
   const { staffName } = useParams();
-  const { staffs, isLoading } = UseGetStaffListByStaffName(staffName);
-  const staffmembers = staffs.results;
-  console.log(staffmembers);
+  const { storeId, isLoading } = UseStaffDetailsWithStoreId(staffName);
 
   const {
     register,
-    handleSubmit,
-    reset,
     formState: { errors },
   } = useForm();
 
-  const handleSearchChange = (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    console.log(value);
-  };
+  useEffect(() => {
+    if (storeId) {
+      setSearchData(storeId); // Initialize searchData with storeId data
+    }
+  }, [storeId]);
 
-  // Array of team images
+  const handleSearchByUserName = (e) => {
+    const value = e.target.value.toLowerCase();
+    setSearchTerm(value);
+
+    if (!value) {
+      setSearchData(storeId);
+    } else {
+      const filteredData = storeId.filter((staff) =>
+        staff.name.toLowerCase().includes(value)
+      );
+      setSearchData(filteredData);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -72,11 +80,14 @@ const MemberList = () => {
               placeholder="店舗コードを入力"
               className="w-full rounded-[8px] py-3 pl-4 pr-10 border border-[#D9D9D9] text-[#44495B] text-sm placeholder-gray-400 focus:outline-none focus:border-[#707070] shadow-sm"
               value={searchTerm}
-              onChange={handleSearchChange}
+              onChange={handleSearchByUserName}
             />
             <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
               <img
-                className="w-5 h-5 opacity-70"
+                onClick={() =>
+                  handleSearchByUserName({ target: { value: searchTerm } })
+                }
+                className="w-5 h-5 opacity-70 cursor-pointer"
                 src={search}
                 alt="search icon"
               />
@@ -88,34 +99,48 @@ const MemberList = () => {
         </form>
       </div>
       <h2 className="flex justify-end font-normal text-xs w-[342px] m-[14px] mx-auto">
-        チーム・店舗の一覧({staffmembers.length})
+        チーム・店舗の一覧({searchData.length})
       </h2>
 
       {/* Team Images */}
-      <div className="grid grid-cols-2 gap-3 w-[342px] mx-auto ">
-        {staffmembers.map((staff, index) => (
-          <div key={index} className="relative w-[170px] h-[170px]">
-            <Link to={`/staff/${staff.username}`}>
-              <div className="relative">
-                <img
-                  src="https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
-                  alt={`${staff.username} image`}
-                  className="object-cover rounded-lg w-[170px] h-[170px]"
-                />
-                {/* Rating in the top right corner */}
-                <div className="absolute top-[6px] right-[6px] bg-white text-[#49BBDF] flex items-center gap-1 px-2 py-1 rounded-[4px] shadow-md">
-                  <IoMdStar />
-                  {staff.score}
+      <div className="grid grid-cols-2 gap-3 w-[342px] mx-auto">
+        {searchData.length > 0 ? (
+          searchData.map((staff, index) => (
+            <div key={index} className="relative w-[170px] h-[170px]">
+              <Link
+                to={{
+                  pathname: `/staff/${staff.username}`,
+                  state: { staffData: staff },
+                }}
+                onClick={() =>
+                  localStorage.setItem("staff", JSON.stringify(staff))
+                }
+              >
+                <div className="relative">
+                  <img
+                    src="https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
+                    alt={`${staff.username} image`}
+                    className="object-cover rounded-lg w-[170px] h-[170px]"
+                  />
+                  {/* Rating in the top right corner */}
+                  <div className="absolute top-[6px] right-[6px] bg-white text-[#49BBDF] flex items-center gap-1 px-2 py-1 rounded-[4px] shadow-md">
+                    <IoMdStar />
+                    {staff.score}
+                  </div>
+                  {/* Name and Type in the bottom left corner */}
+                  <div className="absolute bottom-0 left-0 bg-gradient-to-t from-black via-transparent to-transparent w-full p-2 text-white rounded-b-lg">
+                    <h3 className="text-sm font-semibold">{staff.name}</h3>
+                    <p className="text-xs">{staff.introduction}</p>
+                  </div>
                 </div>
-                {/* Name and Type in the bottom left corner */}
-                <div className="absolute bottom-0 left-0 bg-gradient-to-t from-black via-transparent to-transparent w-full p-2 text-white rounded-b-lg">
-                  <h3 className="text-sm font-semibold">{staff.username}</h3>
-                  <p className="text-xs">{staff.introduction}</p>
-                </div>
-              </div>
-            </Link>
+              </Link>
+            </div>
+          ))
+        ) : (
+          <div className="text-center text-gray-500 col-span-2">
+            No results found.
           </div>
-        ))}
+        )}
       </div>
     </div>
   );

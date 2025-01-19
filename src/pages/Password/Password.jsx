@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const RegistrationForm = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    confirmPassword: ''
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -30,36 +30,38 @@ const RegistrationForm = () => {
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
-        'http://176.34.7.102:8000/api/v1/auth/register/consumer',
+        "https://api-dev.throwin-glow.com/api/v1/auth/register/consumer",
         {
           email: formData.email,
           password: formData.password,
-          confirm_password: formData.confirmPassword
+          confirm_password: formData.confirmPassword,
         },
         {
           headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            Accept: "application/json",
+            "Content-Type": "application/json",
           },
-          withCredentials: true  
+          withCredentials: true,
         }
       );
 
       if (response.data.detail === "User Created Successfully") {
-        navigate('/mail_check');
+        navigate("/mail_check");
       } else {
         setError("登録に失敗しました。もう一度お試しください。");
       }
     } catch (error) {
-      setError(error.response ? error.response.data.detail : "エラーが発生しました");
+      setError(
+        error.response ? error.response.data.detail : "エラーが発生しました"
+      );
     }
   };
 
   return (
     <div>
       <h2>Register</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
       {step === 1 && (
         <div>
           <label>Email:</label>
@@ -73,7 +75,7 @@ const RegistrationForm = () => {
           <button onClick={handleNext}>Next</button>
         </div>
       )}
-      
+
       {step === 2 && (
         <div>
           <label>Password:</label>

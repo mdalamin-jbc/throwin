@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 import logo from "../../assets/images/home/logo.png";
-import { useNavigate, useParams } from "react-router-dom";
-import { IoMdStar } from "react-icons/io";
-import { FaRegHeart, FaHeart, FaApple } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { FaApple } from "react-icons/fa";
+import { SlPaypal } from "react-icons/sl";
 import { FcGoogle } from "react-icons/fc";
 import throws from "../../assets/icons/Throw .png";
 import throw_wh from "../../assets/icons/throw_white.png";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import TitleBar from "../../components/TitleBar";
 import { useForm } from "react-hook-form";
-import UseGetByStaffName from "../../hooks/UseGetByStaffName";
 import { Helmet } from "react-helmet";
 import useGetFavoriteStuff from "../../hooks/UseGetFavorite_stuff";
 import useAxiosPrivate from "../../hooks/axiousPrivate";
@@ -17,15 +16,16 @@ import UseUserDetails from "../../hooks/UseUserDetails";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import Swal from "sweetalert2";
 import { Circles } from "react-loader-spinner";
+import StaffProfileCard from "../../components/StaffProfileCard/StaffProfileCard";
 
 const BillingScreen = () => {
-  const [data, setData] = useState([]);
-
   const [isLiked, setIsLiked] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false); // Prevent rapid toggling
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
-  const { username } = useParams();
-  const { staff } = UseGetByStaffName(username);
+
+  const staff = JSON.parse(localStorage.getItem("staff"));
+
+  console.log(staff);
   const {
     favoriteStuffs,
     refetch: favRefetch,
@@ -38,7 +38,7 @@ const BillingScreen = () => {
   const navigate = useNavigate();
 
   // console.log(userDetails);
-  // console.log(staff);
+  console.log(staff);
 
   // billing data
   const [billingData, setBillingData] = useState({});
@@ -50,10 +50,9 @@ const BillingScreen = () => {
     setIsProcessing(true);
 
     try {
-      const endpoint = `/auth/users/staff/${staff.uid}/like`;
-      const response = isLiked
-        ? await axiosPrivate.delete(endpoint) // DELETE if currently liked
-        : await axiosPrivate.post(endpoint);
+      const response = await axiosPrivate.post(
+        `/auth/users/staff/${staff?.uid}/like`
+      );
 
       console.log("API Response:", response);
 
@@ -137,65 +136,113 @@ const BillingScreen = () => {
 
   useEffect(() => {
     setBillingData({
-      customer: userDetails?.id,
-      staff: staff?.uid,
+      nickname: userDetails?.name || "Guest",
+      staff_uid: staff?.uid,
+      restaurant_uid: staff?.restaurant_uid,
+      store_uid: staff?.store_uid,
+      message: message,
       amount: persAmount,
-      user_nick_name: userDetails?.name || "Guest",
-      anonymous: false,
+      // amount: 1000,
+      currency: "JPY",
+      payment_method: "paypal",
+      return_url: `https://alpha.throwin-glow.com/staff/${staff?.username}/chargeCompleted`,
+      cancel_url: "https://alpha.throwin-glow.com/payment-cancle",
     });
-  }, [persAmount, userDetails, staff?.uid]);
+  }, [
+    persAmount,
+    userDetails,
+    staff?.uid,
+    staff?.restaurant_uid,
+    staff?.store_uid,
+    staff?.username,
+    message,
+  ]);
 
-  const handlePayment = async () => {
+  // paypal payment
+  const handlePaypalPayment = async () => {
     try {
-      // Validate required fields before sending the request
       if (!billingData.amount || billingData.amount <= 0) {
         throw new Error("Payment amount must be greater than zero.");
       }
 
-      if (!billingData.staff) {
+      if (!billingData.staff_uid) {
         throw new Error("Staff ID is required.");
       }
 
       console.log("Sending Billing Data:", billingData);
 
-      // Send the POST request
       const response = await axiosPrivate.post(
-        `/payment_service/payments/`,
+        `/payment_service/make-payment/`,
         billingData
       );
+
       console.log(response);
-
-      // Check if the request succeeded
       if (response.status === 200 || response.status === 201) {
-        console.log("Payment successful:", response.data);
+        const approvalUrl = response.data.approval_url;
+        console.log("Redirecting to PayPal Approval URL:", approvalUrl);
 
-        // Show success message with SweetAlert
-        Swal.fire({
-          icon: "success",
-          title: "支払いが成功しました！",
-          text: `あなたの取引IDは : ${response.data.transaction_id}`,
-          confirmButtonText: "はい",
-        });
-        navigate(`/staff/${username}/chargeCompleted`);
+        // Redirect to PayPal for user approval
+        window.location.href = approvalUrl;
       } else {
-        throw new Error(`Unexpected response: ${response.status}`);
+        throw new Error("Failed to create payment. Please try again.");
       }
     } catch (error) {
-      // Extract error details
-      const errorDetail = error.response?.data?.detail || error.message;
+      console.error(
+        "Error creating payment:",
+        error.response?.data?.detail || error.message
+      );
 
-      // Log and alert the error for better debugging
-      console.error("Error processing payment:", errorDetail);
-
-      // Show error message with SweetAlert
       Swal.fire({
         icon: "error",
-        title: "支払いに失敗しました！",
-        text: errorDetail,
+        title: "支払いの作成に失敗しました！",
+        text: error.response?.data?.detail || error.message,
         confirmButtonText: "はい",
       });
     }
   };
+
+  const handlePayment = async () => {
+    try {
+      if (!billingData.amount || billingData.amount <= 0) {
+        throw new Error("Payment amount must be greater than zero.");
+      }
+
+      if (!billingData.staff_uid) {
+        throw new Error("Staff ID is required.");
+      }
+
+      console.log("Sending Billing Data:", billingData);
+
+      const response = await axiosPrivate.post(
+        `/payment_service/make-payment/`,
+        billingData
+      );
+
+      console.log(response);
+      if (response.status === 200 || response.status === 201) {
+        const approvalUrl = response.data.approval_url;
+        console.log("Redirecting to PayPal Approval URL:", approvalUrl);
+
+        // Redirect to PayPal for user approval
+        window.location.href = approvalUrl;
+      } else {
+        throw new Error("Failed to create payment. Please try again.");
+      }
+    } catch (error) {
+      console.error(
+        "Error creating payment:",
+        error.response?.data?.detail || error.message
+      );
+
+      Swal.fire({
+        icon: "error",
+        title: "支払いの作成に失敗しました！",
+        text: error.response?.data?.detail || error.message,
+        confirmButtonText: "はい",
+      });
+    }
+  };
+
   return (
     <>
       {isLoading ? (
@@ -230,38 +277,16 @@ const BillingScreen = () => {
           </div>
           <div className="max-w-[430px] mx-auto mb-[120px] text-[#44495B]">
             <div className="py-4 text-center">
-              <h2 className="font-bold text-[25px]">{staff.name}</h2>
+              <h2 className="font-bold text-[25px]">{staff?.name}</h2>
               <p className="font-bold text-[10px]">{staff?.introduction}</p>
             </div>
             <div className="max-w-[416px] mx-auto">
-              <div className="relative">
-                <img
-                  src="https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
-                  alt={`${staff?.name} `}
-                  className="object-cover rounded-lg w-full h-[277px]"
-                />
-                <div className="absolute bottom-0 left-0 w-full px-6 mb-[22px] p-2 text-white rounded-b-lg">
-                  <div className="flex justify-between items-center">
-                    <div className="bg-white text-[#F06464] flex items-center gap-1 px-2 py-1 rounded-full shadow-md">
-                      <IoMdStar />
-                      {staff?.score}
-                    </div>
-                    <h3 className="text-2xl font-bold">{staff?.name}</h3>
-                    <div
-                      className="text-2xl font-bold cursor-pointer"
-                      onClick={handleHeartToggle}
-                    >
-                      {isLiked ? <FaHeart color="red" /> : <FaRegHeart />}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-[#80D0E91A] pt-5 pb-[17px] px-[26px] max-w-[416px]">
-                <h2 className="font-semibold text-lg mb-2">自己紹介</h2>
-                <p className="font-light text-sm">{staff?.introduction}</p>
-              </div>
-
+              <StaffProfileCard
+                staff={staff}
+                isLiked={isLiked}
+                isProcessing={isProcessing}
+                handleHeartToggle={handleHeartToggle}
+              />
               <div className="px-3">
                 <div className="flex justify-between items-center px-5 mt-[51px] border-b-2 pb-2 text-[#C0C0C0]">
                   <h4 className="font-semibold text-sm">金額</h4>
@@ -277,11 +302,11 @@ const BillingScreen = () => {
                       key={index}
                       onClick={() => handleClick(amount)}
                       className={`border rounded-lg mt-[22px] px-4 py-2 whitespace-nowrap cursor-pointer 
-            ${
-              selectedAmount === amount
-                ? "bg-[#49BBDF] text-white"
-                : "border-[#49BBDF] text-[#49BBDF]"
-            }`}
+                      ${
+                        selectedAmount === amount
+                          ? "bg-[#49BBDF] text-white"
+                          : "border-[#49BBDF] text-[#49BBDF]"
+                      }`}
                     >
                       {amount}円
                     </h4>
@@ -311,10 +336,77 @@ const BillingScreen = () => {
                     <FaApple />
                     <span>Pay</span>
                   </h3>
-                  <h3 className="flex items-center border rounded px-3 gap-1">
+                  <h3 className="flex items-center border rounded px-3 py-2 gap-1">
                     <FcGoogle />
                     <span>Pay</span>
                   </h3>
+
+                  {/* ------------------------------- */}
+                  <div className="text-[#44495B] p-0">
+                    {/* Open the modal using document.getElementById('ID').showModal() method */}
+                    <button
+                      className="w-full"
+                      onClick={() =>
+                        document.getElementById("my_modal_6").showModal()
+                      }
+                    >
+                      <button className="flex items-center border rounded px-3 py-2 gap-1">
+                        <SlPaypal />
+                        <span>Pay</span>
+                      </button>
+                    </button>
+
+                    <dialog
+                      id="my_modal_6"
+                      className="modal max-w-[343px] mx-auto rounded-lg shadow-lg"
+                    >
+                      <div className="modal-box p-0 rounded-lg overflow-hidden">
+                        {/* Header with PayPal branding */}
+                        <div className="bg-[#49BBDF] text-white flex items-center justify-center py-4">
+                          <img
+                            src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_111x69.jpg"
+                            alt="PayPal Logo"
+                            className=" h-14 rounded-[10px]"
+                          />
+                        </div>
+
+                        {/* Modal Content */}
+                        <div className="px-6 pt-4 pb-4">
+                          <p className="text-base font-medium ">
+                            <span className="underline font-semibold">
+                              {staff?.name}
+                            </span>{" "}
+                            に、スローインします。 よろしいですか？
+                          </p>
+
+                          <div className="flex justify-between items-center text-sm mt-4">
+                            <p className="text-sm font-medium ">
+                              金額 : {selectedAmount}円
+                            </p>
+                            <p>決済方法 : PayPal</p>
+                          </div>
+                        </div>
+
+                        {/* Action Buttons */}
+                        <div className="flex justify-center gap-4 border-t border-gray-200">
+                          <form method="dialog" className="w-1/2">
+                            <button className="px-4 py-3 w-full text-red-600	 border-r border-gray-300 text-center text-[15px]	">
+                              キャンセル
+                            </button>
+                          </form>
+                          <form method="dialog" className="w-1/2">
+                            <button
+                              onClick={handlePaypalPayment}
+                              className="px-4 py-3 w-full text-blue-600 text-[15px]	 text-center"
+                            >
+                              確定
+                            </button>
+                          </form>
+                        </div>
+                      </div>
+                    </dialog>
+                  </div>
+                  {/* ------------------------------- */}
                 </div>
 
                 <div className="p-4">

@@ -13,7 +13,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const axiosPublic = useAxiosPublic();
-  const { login, user } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
 
   // const { email = "" } = location.state || {};
 
@@ -34,7 +34,7 @@ const Login = () => {
         email: data.mail,
         password: data.password,
       });
-
+      console.log(response);
       if (response.data.msg === "Login Successful") {
         console.log("Login successful!", response.data);
 

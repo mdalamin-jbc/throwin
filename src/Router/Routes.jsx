@@ -37,17 +37,23 @@ import Account from "../pages/Dashboard/Account/Account";
 import ForgetMailCheck from "../pages/Login/ForgetMailCheck";
 import NotificationDetails from "../pages/Notification/NotificationDetails";
 import DeSeetings from "../pages/Dashboard/Seetings/DeSeetings";
-import QrCreation from "../pages/Dashboard/QrCreation/QrCreation";
+import GachaTwo from "../pages/Gacha/GachaTwo";
+import UseTicket from "../pages/Gacha/UseTicket";
+import Processing from "../pages/Gacha/Processing";
+import GotTicket from "../pages/Gacha/GotTicket";
+import TicketTermsAndConditons from "../pages/Gacha/TicketTermsAndConditons";
 import SalesManagement from "../pages/Dashboard/SalesManagement/SalesManagement";
-import CreatANewTeam from "../pages/Dashboard/CreatANewTeam/CreatANewTeam";
-import DeGacha from "../pages/Dashboard/DeGacha/DeGacha";
-import DeHistory from "../pages/Dashboard/DeHistory/DeHistory";
-import CorporatesAdmin from "../pages/Admins/CorporatesAdmin/CorporatesAdmin";
-import DaComments from "../pages/Dashboard/DaComments/DaComments";
-import SalesAgent from "../pages/Dashboard/SalesAgent/SalesAgent";
-import PaymentManagement from "../pages/Dashboard/PaymentManagement/PaymentManagement";
+import GachaTickets from "../pages/Gacha/GachaTickets";
+import PaymentCancel from "../pages/BillingScreen/PaymentCancle";
 import Client from "../pages/Dashboard/Client/Client";
 import CreatNewClient from "../pages/Dashboard/Client/CreatNewClient";
+import SalesAgent from "../pages/Dashboard/SalesAgent/SalesAgent";
+import DaComments from "../pages/Dashboard/DaComments/DaComments";
+import QrCreation from "../pages/Dashboard/QrCreation/QrCreation";
+import DeHistory from "../pages/Dashboard/DeHistory/DeHistory";
+import CreateANewTeam from "../pages/Dashboard/CreatANewTeam/CreatANewTeam";
+import DeGacha from "../pages/Dashboard/DeGacha/DeGacha";
+import PaymentManagement from "../pages/Dashboard/PaymentManagement/PaymentManagement";
 
 export const Routes = createBrowserRouter([
   {
@@ -56,7 +62,7 @@ export const Routes = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home></Home>,
+        element: <Home />,
       },
       {
         path: "/socialLogin",
@@ -106,7 +112,6 @@ export const Routes = createBrowserRouter([
         path: "/favorite",
         element: <Favorite />,
       },
-
       {
         path: "/gacha",
         element: (
@@ -115,7 +120,34 @@ export const Routes = createBrowserRouter([
           </PrivateRoute>
         ),
       },
-
+      {
+        path: "/gacha/tickets",
+        element: (
+          <PrivateRoute>
+            <GachaTickets />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/gacha2",
+        element: <GachaTwo />,
+      },
+      {
+        path: "/gacha2/ticket/:id",
+        element: <UseTicket />,
+      },
+      {
+        path: "/gacha2/ticket/:id/processing",
+        element: <Processing />,
+      },
+      {
+        path: "/gacha2/ticket/:id/processing/got-ticket",
+        element: <GotTicket />,
+      },
+      {
+        path: "/gacha2/ticket/:id/processing/got-ticket/ticket-terms",
+        element: <TicketTermsAndConditons />,
+      },
       {
         path: "setting",
         element: <Setting />,
@@ -145,9 +177,14 @@ export const Routes = createBrowserRouter([
         path: "/staff/:username/billing_screen",
         element: <BillingScreen />,
       },
+
       {
         path: "/staff/:username/chargeCompleted",
         element: <ChargeCompleted />,
+      },
+      {
+        path: "payment-cancle",
+        element: <PaymentCancel />,
       },
       {
         path: "/member_list/:staffName",
@@ -214,7 +251,6 @@ export const Routes = createBrowserRouter([
         path: "/dashboard",
         element: <Dashboard />,
         children: [
-          
           {
             path: "sales_management",
             element: <SalesManagement />,
@@ -249,7 +285,7 @@ export const Routes = createBrowserRouter([
           },
           {
             path: "creat_a_new_team",
-            element: <CreatANewTeam />,
+            element: <CreateANewTeam />,
           },
 
           {

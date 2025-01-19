@@ -26,11 +26,16 @@ const Root = () => {
   // Check if the current path is within the dashboard
 
   return (
-    <div>
-      {shouldRenderNavMenu && <NavMenu />}
-
+    <div className="bg-[#F9FAFB] min-h-screen flex flex-col">
+    {/* Top Navigation Menu */}
+    {shouldRenderNavMenu && <NavMenu />}
+  
+    {/* Main Content */}
+    <main className="flex-grow">
       <Outlet />
-    </div>
+    </main>
+  </div>
+  
   );
 };
 
