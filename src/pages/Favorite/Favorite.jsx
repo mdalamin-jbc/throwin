@@ -6,20 +6,21 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 import { Circles } from "react-loader-spinner";
 import img from "../../assets/images/store&staff/image.png";
+import { Link } from "react-router-dom";
 
 const Favorite = () => {
   const { favoriteStuffs, refetch, isLoading } = useGetFavoriteStuff();
   const axiosPrivate = useAxiosPrivate();
   const [isProcessing, setIsProcessing] = useState(false);
 
+  console.log(favoriteStuffs);
+
   const handleLikeDelete = async (id) => {
     if (isProcessing) return; // Prevent duplicate requests
     setIsProcessing(true);
 
     try {
-      const response = await axiosPrivate.post(
-        `/auth/users/staff/${id}/like`
-      );
+      const response = await axiosPrivate.post(`/auth/users/staff/${id}/like`);
       console.log("API Response:", response);
 
       if ([200, 201, 204].includes(response.status)) {
@@ -66,31 +67,30 @@ const Favorite = () => {
             <p className="text-center mt-10">No favorite stuffs found.</p>
           ) : (
             favoriteStuffs.map((stuff) => (
-              <div
-                key={stuff.uid}
-                className="min-w-[375px] max-w-[430px] mx-auto px-[25px] mt-7 grid gap-5"
-              >
-                <div className="flex items-center">
-                  <img
-                    className="w-[49px] h-[49px] rounded-full"
-                    src={img}
-                    alt=""
-                  />
-                  <div className="flex-1 flex justify-between items-center">
-                    <div className="ml-[13px]">
-                      <h3 className="font-bold text-sm">{stuff.name}</h3>
-                      <p className="font-normal text-sm text-[#9C9C9C]">
-                        {stuff.introduction}
-                      </p>
-                    </div>
-                    <div className="flex flex-col items-end">
-                      <button onClick={() => handleLikeDelete(stuff.uid)}>
-                        <FaHeart className="text-[#F24E1E] text-[20px] mt-4" />
-                      </button>
+              <Link to={`/staff/${stuff.username}`} key={stuff.uid}>
+                <div className="min-w-[375px] max-w-[430px] mx-auto px-[25px] mt-7 grid gap-5">
+                  <div className="flex items-center">
+                    <img
+                      className="w-[49px] h-[49px] rounded-full"
+                      src={img}
+                      alt=""
+                    />
+                    <div className="flex-1 flex justify-between items-center">
+                      <div className="ml-[13px]">
+                        <h3 className="font-bold text-sm">{stuff.name}</h3>
+                        <p className="font-normal text-sm text-[#9C9C9C]">
+                          {stuff.introduction}
+                        </p>
+                      </div>
+                      <div className="flex flex-col items-end">
+                        <button onClick={() => handleLikeDelete(stuff.uid)}>
+                          <FaHeart className="text-[#F24E1E] text-[20px] mt-4" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))
           )}
         </div>

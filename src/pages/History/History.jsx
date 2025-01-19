@@ -51,27 +51,30 @@ const History = () => {
 
   // Render the history page
   return (
-    <div className="mb-[120px]">
+    <div className="w-full mb-[120px]">
       <Helmet>
         <title>Throwin | History</title>
       </Helmet>
       <TitleBar style="mb-0 w-full" title="履歴" icon={null}></TitleBar>
 
-      <div className="min-w-[375px] max-w-[430px] mx-auto px-[25px] mt-7 text-[#44495B] grid gap-5">
+      <div className="w-full max-w-[430px] mx-auto px-4 sm:px-6 mt-7 text-[#44495B] grid gap-5">
         {payments.length > 0 ? (
           payments.map((payment) => (
-            <div key={payment.transaction_id} className="flex items-center">
+            <div
+              key={payment.transaction_id}
+              className="flex items-center bg-white shadow-md rounded-lg p-4"
+            >
               <img
-                className="w-[49px] h-[49px] rounded-full"
+                className="w-12 h-12 rounded-full object-cover"
                 src={img} // Placeholder image
                 alt="user"
               />
-              <div className="flex-1 flex justify-between items-center">
-                <div className="ml-[13px]">
+              <div className="flex-1 flex justify-between items-center ml-4">
+                <div>
                   <h3 className="font-bold text-sm">
                     {payment.customer_name} 店舗名
                   </h3>
-                  <p className="font-normal text-sm text-[#9C9C9C]">
+                  <p className="font-normal text-xs text-[#9C9C9C]">
                     {formatDate(payment.created_at)}
                   </p>
                 </div>
@@ -79,7 +82,7 @@ const History = () => {
                   <h3 className="font-bold text-sm">
                     {payment.amount.toLocaleString()}円
                   </h3>
-                  <p className="text-sm text-[#9C9C9C]">
+                  <p className="text-xs text-[#9C9C9C]">
                     Status: {payment.status}
                   </p>
                 </div>

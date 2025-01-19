@@ -280,7 +280,7 @@ const BillingScreen = () => {
               <h2 className="font-bold text-[25px]">{staff?.name}</h2>
               <p className="font-bold text-[10px]">{staff?.introduction}</p>
             </div>
-            <div className="max-w-[416px] mx-auto">
+            <div className="max-w-[430px] mx-auto">
               <StaffProfileCard
                 staff={staff}
                 isLiked={isLiked}
@@ -321,7 +321,7 @@ const BillingScreen = () => {
                   <textarea
                     onChange={handleMessage}
                     value={message} // Bind state to the textarea
-                    className="border-[1px] rounded-md w-full h-[200px] px-5 py-3 text-[#C0C0C0] font-light text-sm"
+                    className="border-[1px] rounded-md w-full h-[200px] px-5 py-3 text-[#434343]  text-sm"
                     placeholder="メッセージを書く..."
                   />
                 </div>
