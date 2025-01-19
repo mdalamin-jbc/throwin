@@ -6,7 +6,6 @@ import logo from "../../../assets/images/socialLogin/logo2.png";
 import ButtonPrimary from "../../../components/ButtonPrimary";
 
 const userData = [
-  
   {
     role: "restaurant_owner",
     email: "restaurant_owner@gmail.com",
@@ -17,8 +16,16 @@ const userData = [
     email: "sales_agent@gmail.com",
     password: "1234",
   },
-  { role: "fc_admin", email: "fc_admin@gmail.com", password: "1234" },
-  { role: "glow_admin", email: "glow_admin@gmail.com", password: "1234" },
+  {
+    role: "fc_admin",
+    email: "fc_admin@gmail.com",
+    password: "1234",
+  },
+  {
+    role: "glow_admin",
+    email: "glow_admin@gmail.com",
+    password: "1234",
+  },
 ];
 
 const AdminLogin = () => {
