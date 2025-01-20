@@ -131,22 +131,22 @@ const BillingScreen = () => {
     }
   };
 
-  const validateAmount = () => {
-    const amount = parseInt(selectedAmount.replace(/,/g, ""), 10);
-    if (amount < 500) {
-      Swal.fire({
-        icon: "error",
-        title: "エラー",
-        text: "金額は500円以上でなければなりません。",
-        confirmButtonText: "はい",
-      });
-      return false;
-    }
-    return true;
-  };
+  // const validateAmount = () => {
+  //   const amount = parseInt(selectedAmount.replace(/,/g, ""), 10);
+  //   if (amount < 500) {
+  //     Swal.fire({
+  //       icon: "error",
+  //       title: "エラー",
+  //       text: "金額は500円以上でなければなりません。",
+  //       confirmButtonText: "はい",
+  //     });
+  //     return false;
+  //   }
+  //   return true;
+  // };
 
   const handlePayment = async () => {
-    if (!validateAmount()) return;
+    // if (!validateAmount()) return;
 
     try {
       if (!billingData.staff_uid) {
@@ -227,8 +227,16 @@ const BillingScreen = () => {
   // paypal payment
   const handlePaypalPayment = async () => {
     try {
-      if (!billingData.amount || billingData.amount <= 0) {
-        throw new Error("Payment amount must be greater than zero.");
+      // if (!billingData.amount || billingData.amount <= 0) {
+      //   throw new Error("Payment amount must be greater than zero.");
+      // }
+      // Validate amount range
+      if (billingData.amount < 500) {
+        throw new Error("金額は500円以上でなければなりません。");
+      }
+
+      if (billingData.amount > 49999) {
+        throw new Error("金額は59,000円以下でなければなりません。");
       }
 
       if (!billingData.staff_uid) {
@@ -362,7 +370,6 @@ const BillingScreen = () => {
                       type="text"
                       value={selectedAmount}
                       onChange={handleAmountChange}
-                      onBlur={validateAmount}
                       className="text-right mr-1 bg-transparent max-w-[200px] focus:outline-none w-fit"
                       placeholder="金額を入力してください"
                     />
