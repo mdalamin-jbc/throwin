@@ -67,9 +67,12 @@ const Favorite = () => {
             <p className="text-center mt-10">No favorite stuffs found.</p>
           ) : (
             favoriteStuffs.map((stuff) => (
-              <Link to={`/staff/${stuff.username}`} key={stuff.uid}>
-                <div className="min-w-[375px] max-w-[430px] mx-auto px-[25px] mt-7 grid gap-5">
-                  <div className="flex items-center">
+              <div
+                key={stuff.uid}
+                className="min-w-[375px] max-w-[430px] mx-auto px-[25px] mt-7 grid gap-5"
+              >
+                <div className="flex items-center justify-between">
+                  <Link to={`/staff/${stuff.username}`} className="flex">
                     <img
                       className="w-[49px] h-[49px] rounded-full"
                       src={img}
@@ -82,15 +85,13 @@ const Favorite = () => {
                           {stuff.introduction}
                         </p>
                       </div>
-                      <div className="flex flex-col items-end">
-                        <button onClick={() => handleLikeDelete(stuff.uid)}>
-                          <FaHeart className="text-[#F24E1E] text-[20px] mt-4" />
-                        </button>
-                      </div>
                     </div>
-                  </div>
+                  </Link>
+                  <button onClick={() => handleLikeDelete(stuff.uid)}>
+                    <FaHeart className="text-[#F24E1E] text-[20px] mt-4" />
+                  </button>
                 </div>
-              </Link>
+              </div>
             ))
           )}
         </div>

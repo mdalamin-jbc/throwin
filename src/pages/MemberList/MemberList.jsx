@@ -14,6 +14,8 @@ const MemberList = () => {
   const { staffName } = useParams();
   const { storeId, isLoading } = UseStaffDetailsWithStoreId(staffName);
 
+  console.log(storeId)
+
   const {
     register,
     formState: { errors },

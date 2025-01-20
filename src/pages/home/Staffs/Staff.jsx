@@ -28,7 +28,7 @@ const Staff = () => {
   const { staff } = UseGetByStaffName(username);
   const { userReview } = UseGetUserReview(staff?.uid);
 
-  console.log(userReview);
+  console.log(username);
   // console.log(staff.uid);
   const { favoriteStuffs, refetch, isLoading } = UseGetFavorite_stuff();
 
