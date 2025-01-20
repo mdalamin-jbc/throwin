@@ -4,8 +4,8 @@ import logo from "../../assets/images/socialLogin/logo2.png";
 import socialBg from "../../assets/images/socialLogin/social bg.jpeg";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import { useForm } from "react-hook-form";
-import Swal from "sweetalert2";
 import useAxiosPublic from "../../hooks/axiosPublic";
+import toast from "react-hot-toast";
 
 const ForgetPassword = () => {
   const navigate = useNavigate();
@@ -38,22 +38,20 @@ const ForgetPassword = () => {
       );
       console.log(response);
       // Display success message from API response
-      Swal.fire({
-        title: "成功 ",
-        text: "パスワードリセットのリクエストが正常に送信されました！",
-        icon: "success",
-        confirmButtonText: "はい",
-      }).then(() => {
-        navigate("/forget_mail_check");
-      });
+      toast
+        .success("パスワードリセットのリクエストが正常に送信されました！", {
+          position: "top-center",
+          duration: 3000,
+        })
+        .then(() => {
+          navigate("/forget_mail_check");
+        });
     } catch (error) {
       console.log(error);
       const errorMsg = "エラーが発生しました。後で再試行してください。";
-      Swal.fire({
-        title: "エラー",
-        text: errorMsg,
-        icon: "error",
-        confirmButtonText: "はい",
+      toast.error(errorMsg, {
+        position: "top-center",
+        duration: 4000,
       });
     }
   };

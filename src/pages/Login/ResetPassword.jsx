@@ -6,7 +6,7 @@ import socialBg from "../../assets/images/socialLogin/social bg.jpeg";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import useAxiosReg from "../../hooks/axiosReg";
 import { useState } from "react";
-import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 
 const ResetPassword = () => {
   const { userId, token } = useParams();
@@ -42,15 +42,14 @@ const ResetPassword = () => {
 
       // Success response handling
       if (response.data.detail === "Password reset successful") {
-        Swal.fire({
-          icon: "success",
-          title: "成功",
-          text: "パスワードが正常にリセットされました！",
-          confirmButtonText: "はい ",
+        toast.success("パスワードが正常にリセットされました！", {
+          position: "top-center",
+          duration: 4000,
         }).then(() => {
           console.log(response);
-          navigate("/login"); // Redirect to login page after the alert
+          navigate("/login"); // Redirect to login page after the toast
         });
+        
       } else {
         setErrorMessage("パスワードのリセットに失敗しました。もう一度お試しください。");
       }

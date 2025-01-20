@@ -1,8 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
-import Swal from "sweetalert2"; // Import SweetAlert2
 import mailImg from "../../assets/icons/mail-icon-3.svg";
 import useAxiosPublic from "../../hooks/axiosPublic";
+import toast from "react-hot-toast";
 
 const CheckMail = () => {
   const axiosPublic = useAxiosPublic();
@@ -22,22 +22,18 @@ const CheckMail = () => {
 
       if (response.status === 200) {
         // Show SweetAlert for success
-        Swal.fire({
-          title: "成功!",
-          text: "アクティベーションメールが正常に再送信されました！",
-          icon: "success",
-          confirmButtonText: "はい ",
+        toast.success("アクティベーションメールが正常に再送信されました！", {
+          position: "top-center",
+          duration: 3000,
         });
       } else {
         throw new Error("Unexpected response status");
       }
     } catch (error) {
       console.log(error);
-      Swal.fire({
-        title: "エラー!",
-        text: "このメールアドレスはすでにアクティブ化されています。",
-        icon: "error",
-        confirmButtonText: "はい",
+      toast.error("このメールアドレスはすでにアクティブ化されています。", {
+        position: "top-center",
+        duration: 3000,
       });
     } finally {
       setIsLoading(false); // Hide loading indicator

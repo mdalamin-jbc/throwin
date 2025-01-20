@@ -11,7 +11,7 @@ const StaffProfileCard = ({
 }) => {
   return (
     <>
-      <div className="relative">
+      <div className="relative max-w-[430px]">
         <img
           src="https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
           alt={`${staff?.name} image`}

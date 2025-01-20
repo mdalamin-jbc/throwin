@@ -1,11 +1,10 @@
 import { IoMdStar } from "react-icons/io";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import useGetStuffsByStoreCode from "../../hooks/UseGetStuffsByStoreCode";
 import { Circles } from "react-loader-spinner";
 
 const IndividualStores = () => {
   const location = useLocation();
-  const navigate = useNavigate();
 
   // Retrieve storeData from location state or localStorage
   const storeDataFromLocation = location.state?.storeData;

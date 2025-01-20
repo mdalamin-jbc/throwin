@@ -1,4 +1,3 @@
-import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import closeIcon from "../../assets/icons/close.png";
@@ -8,6 +7,7 @@ import ButtonPrimary from "../../components/ButtonPrimary";
 import useAxiosPublic from "../../hooks/axiosPublic";
 import { useContext } from "react";
 import AuthContext from "../../contexts/AuthContext";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -42,12 +42,9 @@ const Login = () => {
         login(response.data.data);
 
         // Show success message
-        Swal.fire({
-          position: "top",
-          icon: "success",
-          title: `ログインに成功しました。`,
-          showConfirmButton: false,
-          timer: 1500,
+        toast.success("ログインに成功しました。", {
+          position: "top-center",
+          duration: 1500,
         });
         // console.log(response.data.data.access);
 
@@ -72,12 +69,9 @@ const Login = () => {
         console.error("Login failed:", response.data.msg);
 
         // Show error message
-        Swal.fire({
-          position: "top",
-          icon: "error",
-          title: `${response.data.msg}`,
-          showConfirmButton: false,
-          timer: 1500,
+        toast.error(response.data.msg, {
+          position: "top-center",
+          duration: 1500,
         });
       }
     } catch (error) {
@@ -87,12 +81,9 @@ const Login = () => {
       );
 
       // Show error message
-      Swal.fire({
-        position: "top",
-        icon: "error",
-        title: `メールアドレスまたはパスワードが間違っています。`,
-        showConfirmButton: false,
-        timer: 1500,
+      toast.error("メールアドレスまたはパスワードが間違っています。", {
+        position: "top-center",
+        duration: 1500,
       });
     }
   };

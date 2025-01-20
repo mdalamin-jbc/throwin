@@ -17,6 +17,7 @@ import { RiArrowLeftSLine } from "react-icons/ri";
 import Swal from "sweetalert2";
 import { Circles } from "react-loader-spinner";
 import StaffProfileCard from "../../components/StaffProfileCard/StaffProfileCard";
+import toast from "react-hot-toast";
 
 const BillingScreen = () => {
   const [isLiked, setIsLiked] = useState(false);
@@ -56,34 +57,29 @@ const BillingScreen = () => {
 
       console.log("API Response:", response);
 
-      if (
-        response.status === 200 ||
-        response.status === 201 ||
-        response.status === 204
-      ) {
+      if ([200, 201, 204].includes(response.status)) {
         setIsLiked((prev) => !prev);
 
         await favRefetch();
 
-        // Show success alert
-        Swal.fire({
-          icon: "success",
-          title: "成功 !",
-          text: isLiked
+        // Show success toast
+        toast.success(
+          isLiked
             ? "あなたはこのスタッフをいいねから削除しました。"
             : "あなたはこのスタッフをいいねしました。",
-
-          confirmButtonText: "はい",
-        });
+          {
+            position: "top-center",
+            duration: 3000,
+          }
+        );
       } else {
         throw new Error("いいねのステータスの更新に失敗しました。");
       }
     } catch (error) {
-      // Show error alert
-      Swal.fire({
-        icon: "error",
-        title: "おっと!",
-        text: "何かがうまくいきませんでした",
+      // Show error toast
+      toast.error("何かがうまくいきませんでした。", {
+        position: "top-center",
+        duration: 3000,
       });
 
       console.error(
@@ -176,12 +172,15 @@ const BillingScreen = () => {
         error.response?.data?.detail || error.message
       );
 
-      Swal.fire({
-        icon: "error",
-        title: "支払いの作成に失敗しました！",
-        text: error.response?.data?.detail || error.message,
-        confirmButtonText: "はい",
-      });
+      toast.error(
+        error.response?.data?.detail ||
+          error.message ||
+          "支払いの作成に失敗しました！",
+        {
+          position: "top-center",
+          duration: 3000,
+        }
+      );
     }
   };
 
@@ -266,12 +265,15 @@ const BillingScreen = () => {
         error.response?.data?.detail || error.message
       );
 
-      Swal.fire({
-        icon: "error",
-        title: "支払いの作成に失敗しました！",
-        text: error.response?.data?.detail || error.message,
-        confirmButtonText: "はい",
-      });
+      toast.error(
+        error.response?.data?.detail ||
+          error.message ||
+          "支払いの作成に失敗しました！",
+        {
+          position: "top-center",
+          duration: 3000,
+        }
+      );
     }
   };
 

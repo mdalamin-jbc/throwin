@@ -1,4 +1,3 @@
-import Swal from "sweetalert2";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import TitleBar from "../../components/TitleBar";
 import { useForm } from "react-hook-form";
@@ -8,6 +7,7 @@ import useAxiosPrivate from "../../hooks/axiousPrivate";
 import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { RiArrowLeftSLine } from "react-icons/ri";
+import toast from "react-hot-toast";
 
 const DisplayName = () => {
   const [error, setError] = useState();
@@ -28,17 +28,16 @@ const DisplayName = () => {
         name: data.name,
       });
       console.log(response);
-      Swal.fire({
-        position: "top",
-        icon: "success",
-        title: `名前が正常に変更されました。`,
-        showConfirmButton: false,
-        timer: 1500,
-      }).then(() => {
-        reset();
-        setError(null);
-        navigate("/myPage");
-      });
+      toast
+        .success("名前が正常に変更されました。", {
+          position: "top-center",
+          duration: 1500,
+        })
+        .then(() => {
+          reset();
+          setError(null);
+          navigate("/myPage");
+        });
     } catch (error) {
       console.error(
         "Error setting name:",
@@ -53,12 +52,9 @@ const DisplayName = () => {
 
       setError({ name: errorMessage }); // Set the error state with the appropriate message
 
-      Swal.fire({
-        position: "top",
-        icon: "error",
-        title: "すでに使用されているニックネームです",
-        showConfirmButton: false,
-        timer: 1500,
+      toast.error("すでに使用されているニックネームです", {
+        position: "top-center",
+        duration: 1500,
       });
     }
   };

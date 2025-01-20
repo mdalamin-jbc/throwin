@@ -1,4 +1,4 @@
-import Swal from "sweetalert2";
+
 import ButtonPrimary from "../../components/ButtonPrimary";
 import TitleBar from "../../components/TitleBar";
 import { useForm } from "react-hook-form";
@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import useAxiosPrivate from "../../hooks/axiousPrivate";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 const NickNameReg = () => {
   const [error, setError] = useState();
@@ -26,17 +27,16 @@ const NickNameReg = () => {
         name: data.name,
       });
       console.log(response);
-      Swal.fire({
-        position: "top",
-        icon: "success",
-        title: `ニックネームが正常に設定されました。`,
-        showConfirmButton: false,
-        timer: 1500,
-      }).then(() => {
-        reset();
-        setError(null);
-        navigate("/reg_complete");
-      });
+      toast
+        .success("ニックネームが正常に設定されました。", {
+          position: "top-center",
+          duration: 1500,
+        })
+        .then(() => {
+          reset();
+          setError(null);
+          navigate("/reg_complete");
+        });
     } catch (error) {
       console.error(
         "Error setting name:",
@@ -51,13 +51,11 @@ const NickNameReg = () => {
 
       setError({ name: errorMessage }); // Set the error state with the appropriate message
 
-      Swal.fire({
-        position: "top",
-        icon: "error",
-        title: errorMessage,
-        showConfirmButton: false,
-        timer: 1500,
+      toast.error(errorMessage, {
+        position: "top-center",
+        duration: 1500,
       });
+      
     }
   };
 

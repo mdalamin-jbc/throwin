@@ -1,19 +1,14 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { Helmet } from "react-helmet";
-import {
-  useNavigate,
-  useParams,
-  useSearchParams,
-  Link,
-} from "react-router-dom";
+import { useParams, useSearchParams, Link } from "react-router-dom";
 import TitleBar from "../../components/TitleBar";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import { Circles } from "react-loader-spinner";
-import Swal from "sweetalert2";
 import logo from "../../assets/images/home/logo.png";
 import effect from "../../assets/images/billing/billingEffect.png";
 import UseGetByStaffName from "../../hooks/UseGetByStaffName";
 import useAxiosPrivate from "../../hooks/axiousPrivate";
+import toast from "react-hot-toast";
 
 const ChargeCompleted = () => {
   const { username } = useParams();
@@ -33,12 +28,11 @@ const ChargeCompleted = () => {
     const payerId = searchParams.get("PayerID");
 
     if (!paymentId || !payerId) {
-      await Swal.fire({
-        icon: "error",
-        title: "支払いが無効です。",
-        text: "有効な支払いIDまたは支払者IDが見つかりません。",
-        confirmButtonText: "はい",
+      await toast.error("有効な支払いIDまたは支払者IDが見つかりません。", {
+        position: "top-center",
+        duration: 3000,
       });
+
       setPaymentStatus("failed");
       return;
     }
@@ -53,21 +47,22 @@ const ChargeCompleted = () => {
 
       if (response.status === 200) {
         setPaymentStatus("success");
-        await Swal.fire({
-          icon: "success",
-          title: "支払いが成功しました！",
-          text: `取引ID: ${paymentId}`,
-          confirmButtonText: "はい",
+        await toast.success(`取引ID: ${paymentId}`, {
+          position: "top-center",
+          duration: 3000,
         });
       }
     } catch (error) {
       setPaymentStatus("failed");
-      await Swal.fire({
-        icon: "error",
-        title: "支払いの検証に失敗しました！",
-        text: error.response?.data?.detail || error.message,
-        confirmButtonText: "はい",
-      });
+      await toast.error(
+        error.response?.data?.detail ||
+          error.message ||
+          "支払いの検証に失敗しました！",
+        {
+          position: "top-center",
+          duration: 3000,
+        }
+      );
     }
   }, [searchParams, axiosPrivate]);
 

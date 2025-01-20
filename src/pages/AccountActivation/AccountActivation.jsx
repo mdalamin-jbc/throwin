@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
 import useAxiosPublic from "../../hooks/axiosPublic";
+import toast from "react-hot-toast";
 
 const AccountActivation = () => {
   const { userId, token } = useParams();
@@ -26,21 +26,21 @@ const AccountActivation = () => {
           response.data.detail === "User Activated Successfully" ||
           response.status === 200
         ) {
-          Swal.fire({
-            title: "成功",
-            text: "あなたのアカウントはアクティブ化されました！",
-            icon: "success",
-            confirmButtonText: "はい",
-          }).then(() => navigate("/onboarding"));
-          console.log(response.data.detail);
+          toast
+            .success("あなたのアカウントはアクティブ化されました！", {
+              position: "top-center",
+              duration: 3000,
+            })
+            .then(() => {
+              navigate("/onboarding");
+              console.log(response.data.detail);
+            });
         }
       } catch (error) {
         console.log(error.response);
-        Swal.fire({
-          title: "アクティベーションに失敗しました",
-          text: "エラーが発生しました。後でもう一度お試しください。",
-          icon: "error",
-          confirmButtonText: "はい",
+        toast.error("エラーが発生しました。後でもう一度お試しください。", {
+          position: "top-center",
+          duration: 3000,
         });
       }
     };

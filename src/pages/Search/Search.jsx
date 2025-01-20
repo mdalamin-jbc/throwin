@@ -2,13 +2,11 @@ import camera from "../../assets/icons/camera.png";
 import { useForm } from "react-hook-form";
 import TitleBar from "../../components/TitleBar";
 import search from "../../assets/icons/search2.png";
-
 import ButtonPrimary from "../../components/ButtonPrimary";
 import { useState, useRef, useEffect } from "react";
 import { BrowserQRCodeReader } from "@zxing/library";
 import useAxiosPublic from "../../hooks/axiosPublic";
 import { useNavigate } from "react-router-dom";
-import UseGetStaffListByStaffName from "../../hooks/UseGetStaffListByStaffName";
 import UseStaffDetailsWithStoreId from "../../hooks/UseStaffDetailsWithStoreId";
 
 const Search = () => {

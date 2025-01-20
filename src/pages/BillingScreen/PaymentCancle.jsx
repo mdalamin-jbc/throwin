@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const PaymentCancel = () => {
   const [searchParams] = useSearchParams();
@@ -12,11 +12,9 @@ const PaymentCancel = () => {
       const token = searchParams.get("token");
 
       if (!token) {
-        Swal.fire({
-          icon: "error",
-          title: "支払いIDが見つかりません。",
-          text: "キャンセルリクエストには有効な支払いIDが必要です。",
-          confirmButtonText: "戻る",
+        toast.error("キャンセルリクエストには有効な支払いIDが必要です。", {
+          position: "top-center",
+          duration: 3000,
         });
         return;
       }
@@ -27,29 +25,25 @@ const PaymentCancel = () => {
         });
 
         if (response.status === 200) {
-          Swal.fire({
-            icon: "success",
-            title: "支払いがキャンセルされました。",
-            text: "支払いが正常にキャンセルされました。",
-            confirmButtonText: "OK",
+          toast.success("支払いが正常にキャンセルされました。", {
+            position: "top-center",
+            duration: 3000,
           });
         } else {
-          Swal.fire({
-            icon: "error",
-            title: "エラーが発生しました。",
-            text: response.data?.error || "不明なエラーが発生しました。",
-            confirmButtonText: "戻る",
+          toast.error(response.data?.error || "不明なエラーが発生しました。", {
+            position: "top-center",
+            duration: 3000,
           });
         }
       } catch (error) {
-        Swal.fire({
-          icon: "error",
-          title: "キャンセル処理に失敗しました。",
-          text:
-            error.response?.data?.detail ||
+        toast.error(
+          error.response?.data?.detail ||
             "サーバーとの通信中にエラーが発生しました。",
-          confirmButtonText: "戻る",
-        });
+          {
+            position: "top-center",
+            duration: 3000,
+          }
+        );
       }
     };
 

@@ -6,6 +6,7 @@ import ButtonPrimary from "../../components/ButtonPrimary";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import useAxiosPublic from "../../hooks/axiosPublic";
+import toast from "react-hot-toast";
 
 const EmailLogin = () => {
   const navigate = useNavigate();
@@ -36,12 +37,13 @@ const EmailLogin = () => {
         error.response?.data?.email?.[0] ||
         "エラーが発生しました。後で再試行してください。";
       console.log(errorMsg);
-      Swal.fire({
-        title: "エラー",
-        text: "すでにアカウントがあります。アカウントをアクティベートしてください。",
-        icon: "error",
-        confirmButtonText: "はい",
-      });
+      toast.error(
+        "すでにアカウントがあります。アカウントをアクティベートしてください。",
+        {
+          position: "top-center",
+          duration: 3000,
+        }
+      );
     }
   };
 

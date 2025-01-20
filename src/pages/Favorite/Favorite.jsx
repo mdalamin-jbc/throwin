@@ -3,10 +3,10 @@ import { FaHeart } from "react-icons/fa";
 import useGetFavoriteStuff from "../../hooks/UseGetFavorite_stuff";
 import useAxiosPrivate from "../../hooks/axiousPrivate";
 import { useState } from "react";
-import Swal from "sweetalert2";
 import { Circles } from "react-loader-spinner";
 import img from "../../assets/images/store&staff/image.png";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Favorite = () => {
   const { favoriteStuffs, refetch, isLoading } = useGetFavoriteStuff();
@@ -18,20 +18,16 @@ const Favorite = () => {
   const handleLikeDelete = async (id) => {
     if (isProcessing) return; // Prevent duplicate requests
     setIsProcessing(true);
-
+  
     try {
       const response = await axiosPrivate.post(`/auth/users/staff/${id}/like`);
       console.log("API Response:", response);
-
+  
       if ([200, 201, 204].includes(response.status)) {
-        await refetch();
-        Swal.fire({
-          icon: "success",
-          title: "成功！",
-          text: "このスタッフへの「いいね」を取り消しました。",
-          confirmButtonText: "はい",
-          // timer: 1500,
-          showConfirmButton: true,
+        await refetch(); // Refresh the data
+        toast.success("このスタッフへの「いいね」を取り消しました！", {
+          duration: 3000,
+          position: "top-center",
         });
       } else {
         throw new Error("「いいね」のステータスの更新に失敗しました。");
@@ -40,6 +36,13 @@ const Favorite = () => {
       console.error(
         "Error updating like status:",
         error?.response?.data?.detail || error?.message || "Unknown error"
+      );
+      toast.error(
+        error?.response?.data?.detail || "「いいね」の取り消し中にエラーが発生しました。",
+        {
+          duration: 3000,
+          position: "top-right",
+        }
       );
     } finally {
       setIsProcessing(false);

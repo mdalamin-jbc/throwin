@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import { Circles } from "react-loader-spinner";
 import StaffProfileCard from "../../../components/StaffProfileCard/StaffProfileCard";
 import UseGetUserReview from "../../../hooks/UseGetUserReview";
+import toast from "react-hot-toast";
 
 // Helper function to format date
 const formatDate = (dateString) => {
@@ -55,23 +56,23 @@ const Staff = () => {
       if ([200, 201, 204].includes(response.status)) {
         setIsLiked((prev) => !prev);
         await refetch();
-        Swal.fire({
-          icon: "success",
-          title: "成功!",
-          text: isLiked
+
+        toast.success(
+          isLiked
             ? "あなたはこのスタッフをいいねから削除しました。"
             : "あなたはこのスタッフをいいねしました。",
-          confirmButtonText: "はい",
-        });
+          {
+            position: "top-center",
+            duration: 3000, // Adjust duration as needed
+          }
+        );
       } else {
         throw new Error("Failed to update like status");
       }
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "エラー!",
-        text: "何かがうまくいきませんでした。もう一度お試しください。",
-        confirmButtonText: "はい",
+      toast.error("何かがうまくいきませんでした。もう一度お試しください。", {
+        position: "top-center",
+        duration: 3000,
       });
       console.error(
         "Error updating like status:",
@@ -110,7 +111,10 @@ const Staff = () => {
                 </h2>
                 <div className="mt-4">
                   {userReview?.map((review, index) => (
-                    <div key={index} className="border-b-[2px] border-[#E0EAED]">
+                    <div
+                      key={index}
+                      className="border-b-[2px] border-[#E0EAED]"
+                    >
                       <h4 className="flex justify-between mt-4 font-medium text-xs text-[#9C9C9C]">
                         <span>ユーザーネーム：{review?.nickname}</span>
                         <span>{formatDate(review?.date)}</span>
@@ -139,7 +143,6 @@ const Staff = () => {
       )}
     </>
   );
-  
 };
 
 export default Staff;

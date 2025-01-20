@@ -5,7 +5,7 @@ import UseUserDetails from "../../hooks/UseUserDetails";
 import useAxiosPrivate from "../../hooks/axiousPrivate";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 
 const ChangeEmail = () => {
   const { userDetails } = UseUserDetails();
@@ -28,11 +28,9 @@ const ChangeEmail = () => {
       console.log(response);
 
       // Show success alert
-      Swal.fire({
-        icon: "success",
-        title: "成功 !",
-        text: "確認メールが送信されました。",
-        confirmButtonText: "はい",
+      toast.success("確認メールが送信されました。", {
+        position: "top-center",
+        duration: 3000,
       });
 
       reset();
@@ -40,11 +38,9 @@ const ChangeEmail = () => {
       console.log(error);
 
       // Show error alert
-      Swal.fire({
-        icon: "error",
-        title: "おっと。。。",
-        text: "何かがうまくいきませんでした。もう一度お試しください。.",
-        confirmButtonText: "はい",
+      toast.error("何かがうまくいきませんでした。もう一度お試しください。", {
+        position: "top-center",
+        duration: 3000,
       });
     }
   };
