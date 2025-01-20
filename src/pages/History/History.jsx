@@ -62,7 +62,7 @@ const History = () => {
           payments.map((payment) => (
             <div
               key={payment.transaction_id}
-              className="flex items-center bg-white shadow-md rounded-lg p-4"
+              className="flex items-center  shadow-md rounded-lg p-4"
             >
               <img
                 className="w-12 h-12 rounded-full object-cover"

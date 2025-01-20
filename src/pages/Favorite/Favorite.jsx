@@ -18,11 +18,11 @@ const Favorite = () => {
   const handleLikeDelete = async (id) => {
     if (isProcessing) return; // Prevent duplicate requests
     setIsProcessing(true);
-  
+
     try {
       const response = await axiosPrivate.post(`/auth/users/staff/${id}/like`);
       console.log("API Response:", response);
-  
+
       if ([200, 201, 204].includes(response.status)) {
         await refetch(); // Refresh the data
         toast.success("このスタッフへの「いいね」を取り消しました！", {
@@ -38,7 +38,8 @@ const Favorite = () => {
         error?.response?.data?.detail || error?.message || "Unknown error"
       );
       toast.error(
-        error?.response?.data?.detail || "「いいね」の取り消し中にエラーが発生しました。",
+        error?.response?.data?.detail ||
+          "「いいね」の取り消し中にエラーが発生しました。",
         {
           duration: 3000,
           position: "top-right",
@@ -70,29 +71,28 @@ const Favorite = () => {
             <p className="text-center mt-10">No favorite stuffs found.</p>
           ) : (
             favoriteStuffs.map((stuff) => (
-              <div
-                key={stuff.uid}
-                className="min-w-[375px] max-w-[430px] mx-auto px-[25px]  grid  shadow-md rounded-lg py-4"
-              >
-                <div className="flex items-center justify-between">
-                  <Link to={`/staff/${stuff.username}`} className="flex">
-                    <img
-                      className="w-[49px] h-[49px] rounded-full"
-                      src={img}
-                      alt=""
-                    />
-                    <div className="flex-1 flex justify-between items-center">
-                      <div className="ml-[13px]">
-                        <h3 className="font-bold text-sm">{stuff.name}</h3>
-                        <p className="font-normal text-sm text-[#9C9C9C]">
-                          {stuff.introduction}
-                        </p>
+              <div key={stuff.uid} className="px-4">
+                <div className="min-w-[375px] max-w-[430px] mx-auto px-[25px]  grid  shadow-md rounded-lg p-4 ">
+                  <div className="flex items-center justify-between">
+                    <Link to={`/staff/${stuff.username}`} className="flex">
+                      <img
+                        className="w-[49px] h-[49px] rounded-full"
+                        src={img}
+                        alt=""
+                      />
+                      <div className="flex-1 flex justify-between items-center">
+                        <div className="ml-[13px]">
+                          <h3 className="font-bold text-sm">{stuff.name}</h3>
+                          <p className="font-normal text-sm text-[#9C9C9C]">
+                            {stuff.introduction}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  </Link>
-                  <button onClick={() => handleLikeDelete(stuff.uid)}>
-                    <FaHeart className="text-[#F24E1E] text-[20px] mt-4" />
-                  </button>
+                    </Link>
+                    <button onClick={() => handleLikeDelete(stuff.uid)}>
+                      <FaHeart className="text-[#F24E1E] text-[20px] mt-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
             ))

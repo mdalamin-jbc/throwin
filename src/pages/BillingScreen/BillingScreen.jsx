@@ -14,7 +14,6 @@ import useGetFavoriteStuff from "../../hooks/UseGetFavorite_stuff";
 import useAxiosPrivate from "../../hooks/axiousPrivate";
 import UseUserDetails from "../../hooks/UseUserDetails";
 import { RiArrowLeftSLine } from "react-icons/ri";
-import Swal from "sweetalert2";
 import { Circles } from "react-loader-spinner";
 import StaffProfileCard from "../../components/StaffProfileCard/StaffProfileCard";
 import toast from "react-hot-toast";
@@ -119,27 +118,16 @@ const BillingScreen = () => {
 
   // custom ammount set start
   const handleAmountChange = (event) => {
-    const input = event.target.value.replace(/,/g, ""); // Remove commas if present
+    const input = event.target.value.replace(/,/g, ""); // Remove commas
     const numericValue = parseInt(input, 10);
 
-    if (!isNaN(numericValue)) {
-      setSelectedAmount(numericValue.toLocaleString()); // Update state with formatted value
+    // Check if the input is empty or if the value is a valid number
+    if (input === "" || !isNaN(numericValue)) {
+      setSelectedAmount(
+        isNaN(numericValue) ? "" : numericValue.toLocaleString()
+      );
     }
   };
-
-  // const validateAmount = () => {
-  //   const amount = parseInt(selectedAmount.replace(/,/g, ""), 10);
-  //   if (amount < 500) {
-  //     Swal.fire({
-  //       icon: "error",
-  //       title: "エラー",
-  //       text: "金額は500円以上でなければなりません。",
-  //       confirmButtonText: "はい",
-  //     });
-  //     return false;
-  //   }
-  //   return true;
-  // };
 
   const handlePayment = async () => {
     // if (!validateAmount()) return;
@@ -226,16 +214,12 @@ const BillingScreen = () => {
   // paypal payment
   const handlePaypalPayment = async () => {
     try {
-      // if (!billingData.amount || billingData.amount <= 0) {
-      //   throw new Error("Payment amount must be greater than zero.");
-      // }
-      // Validate amount range
       if (billingData.amount < 500) {
         throw new Error("金額は500円以上でなければなりません。");
       }
 
       if (billingData.amount > 49999) {
-        throw new Error("金額は59,000円以下でなければなりません。");
+        throw new Error("金額は 50,000円以下でなければなりません。");
       }
 
       if (!billingData.staff_uid) {
@@ -276,48 +260,6 @@ const BillingScreen = () => {
       );
     }
   };
-
-  // const handlePayment = async () => {
-  //   try {
-  //     if (!billingData.amount || billingData.amount <= 0) {
-  //       throw new Error("Payment amount must be greater than zero.");
-  //     }
-
-  //     if (!billingData.staff_uid) {
-  //       throw new Error("Staff ID is required.");
-  //     }
-
-  //     console.log("Sending Billing Data:", billingData);
-
-  //     const response = await axiosPrivate.post(
-  //       `/payment_service/make-payment/`,
-  //       billingData
-  //     );
-
-  //     console.log(response);
-  //     if (response.status === 200 || response.status === 201) {
-  //       const approvalUrl = response.data.approval_url;
-  //       console.log("Redirecting to PayPal Approval URL:", approvalUrl);
-
-  //       // Redirect to PayPal for user approval
-  //       window.location.href = approvalUrl;
-  //     } else {
-  //       throw new Error("Failed to create payment. Please try again.");
-  //     }
-  //   } catch (error) {
-  //     console.error(
-  //       "Error creating payment:",
-  //       error.response?.data?.detail || error.message
-  //     );
-
-  //     Swal.fire({
-  //       icon: "error",
-  //       title: "支払いの作成に失敗しました！",
-  //       text: error.response?.data?.detail || error.message,
-  //       confirmButtonText: "はい",
-  //     });
-  //   }
-  // };
 
   return (
     <>
@@ -372,8 +314,7 @@ const BillingScreen = () => {
                       type="text"
                       value={selectedAmount}
                       onChange={handleAmountChange}
-                      className="text-right mr-1 bg-transparent max-w-[200px] focus:outline-none w-fit"
-                      placeholder="金額を入力してください"
+                      className="text-right mr-1 bg-transparent max-w-[200px] focus:outline-none w-fit placeholder:text-[16px] placeholder:font-normal"
                     />
                     円
                   </div>
