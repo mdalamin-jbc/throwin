@@ -69,7 +69,7 @@ const Favorite = () => {
             favoriteStuffs.map((stuff) => (
               <div
                 key={stuff.uid}
-                className="min-w-[375px] max-w-[430px] mx-auto px-[25px] mt-7 grid gap-5"
+                className="min-w-[375px] max-w-[430px] mx-auto px-[25px]  grid  shadow-md rounded-lg py-4"
               >
                 <div className="flex items-center justify-between">
                   <Link to={`/staff/${stuff.username}`} className="flex">
