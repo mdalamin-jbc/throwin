@@ -121,6 +121,72 @@ const BillingScreen = () => {
       : "bg-gray-400 text-gray-700"
   }`;
 
+  // custom ammount set start
+  const handleAmountChange = (event) => {
+    const input = event.target.value.replace(/,/g, ""); // Remove commas if present
+    const numericValue = parseInt(input, 10);
+
+    if (!isNaN(numericValue)) {
+      setSelectedAmount(numericValue.toLocaleString()); // Update state with formatted value
+    }
+  };
+
+  const validateAmount = () => {
+    const amount = parseInt(selectedAmount.replace(/,/g, ""), 10);
+    if (amount < 500) {
+      Swal.fire({
+        icon: "error",
+        title: "エラー",
+        text: "金額は500円以上でなければなりません。",
+        confirmButtonText: "はい",
+      });
+      return false;
+    }
+    return true;
+  };
+
+  const handlePayment = async () => {
+    if (!validateAmount()) return;
+
+    try {
+      if (!billingData.staff_uid) {
+        throw new Error("Staff ID is required.");
+      }
+
+      console.log("Sending Billing Data:", billingData);
+
+      const response = await axiosPrivate.post(
+        `/payment_service/make-payment/`,
+        billingData
+      );
+
+      console.log(response);
+      if (response.status === 200 || response.status === 201) {
+        const approvalUrl = response.data.approval_url;
+        console.log("Redirecting to PayPal Approval URL:", approvalUrl);
+
+        // Redirect to PayPal for user approval
+        window.location.href = approvalUrl;
+      } else {
+        throw new Error("Failed to create payment. Please try again.");
+      }
+    } catch (error) {
+      console.error(
+        "Error creating payment:",
+        error.response?.data?.detail || error.message
+      );
+
+      Swal.fire({
+        icon: "error",
+        title: "支払いの作成に失敗しました！",
+        text: error.response?.data?.detail || error.message,
+        confirmButtonText: "はい",
+      });
+    }
+  };
+
+  // custom ammount set end
+
   const amounts = ["1,000", "3,000", "5,000", "10,000"];
   const handleClick = (amount) => {
     setSelectedAmount(amount);
@@ -201,47 +267,47 @@ const BillingScreen = () => {
     }
   };
 
-  const handlePayment = async () => {
-    try {
-      if (!billingData.amount || billingData.amount <= 0) {
-        throw new Error("Payment amount must be greater than zero.");
-      }
+  // const handlePayment = async () => {
+  //   try {
+  //     if (!billingData.amount || billingData.amount <= 0) {
+  //       throw new Error("Payment amount must be greater than zero.");
+  //     }
 
-      if (!billingData.staff_uid) {
-        throw new Error("Staff ID is required.");
-      }
+  //     if (!billingData.staff_uid) {
+  //       throw new Error("Staff ID is required.");
+  //     }
 
-      console.log("Sending Billing Data:", billingData);
+  //     console.log("Sending Billing Data:", billingData);
 
-      const response = await axiosPrivate.post(
-        `/payment_service/make-payment/`,
-        billingData
-      );
+  //     const response = await axiosPrivate.post(
+  //       `/payment_service/make-payment/`,
+  //       billingData
+  //     );
 
-      console.log(response);
-      if (response.status === 200 || response.status === 201) {
-        const approvalUrl = response.data.approval_url;
-        console.log("Redirecting to PayPal Approval URL:", approvalUrl);
+  //     console.log(response);
+  //     if (response.status === 200 || response.status === 201) {
+  //       const approvalUrl = response.data.approval_url;
+  //       console.log("Redirecting to PayPal Approval URL:", approvalUrl);
 
-        // Redirect to PayPal for user approval
-        window.location.href = approvalUrl;
-      } else {
-        throw new Error("Failed to create payment. Please try again.");
-      }
-    } catch (error) {
-      console.error(
-        "Error creating payment:",
-        error.response?.data?.detail || error.message
-      );
+  //       // Redirect to PayPal for user approval
+  //       window.location.href = approvalUrl;
+  //     } else {
+  //       throw new Error("Failed to create payment. Please try again.");
+  //     }
+  //   } catch (error) {
+  //     console.error(
+  //       "Error creating payment:",
+  //       error.response?.data?.detail || error.message
+  //     );
 
-      Swal.fire({
-        icon: "error",
-        title: "支払いの作成に失敗しました！",
-        text: error.response?.data?.detail || error.message,
-        confirmButtonText: "はい",
-      });
-    }
-  };
+  //     Swal.fire({
+  //       icon: "error",
+  //       title: "支払いの作成に失敗しました！",
+  //       text: error.response?.data?.detail || error.message,
+  //       confirmButtonText: "はい",
+  //     });
+  //   }
+  // };
 
   return (
     <>
@@ -290,9 +356,18 @@ const BillingScreen = () => {
               <div className="px-3">
                 <div className="flex justify-between items-center px-5 mt-[51px] border-b-2 pb-2 text-[#C0C0C0]">
                   <h4 className="font-semibold text-sm">金額</h4>
-                  <h3 className="font-semibold text-[28px]">
-                    {selectedAmount}円
-                  </h3>
+
+                  <div className="font-semibold text-[28px] text-[#C0C0C0]">
+                    <input
+                      type="text"
+                      value={selectedAmount}
+                      onChange={handleAmountChange}
+                      onBlur={validateAmount}
+                      className="text-right mr-1 bg-transparent max-w-[200px] focus:outline-none w-fit"
+                      placeholder="金額を入力してください"
+                    />
+                    円
+                  </div>
                 </div>
 
                 {/* amount */}
