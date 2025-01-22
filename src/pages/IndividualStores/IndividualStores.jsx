@@ -14,6 +14,7 @@ const IndividualStores = () => {
   const storeData = storeDataFromLocation || storeDataFromStorage;
 
   const { store, isLoading } = useGetStuffsByStoreCode(storeData);
+  console.log(storeData);
 
   if (isLoading) {
     return (
@@ -40,7 +41,7 @@ const IndividualStores = () => {
         {/* Store Image with Gradient Overlay and Store Name */}
         <div className="relative">
           <img
-            src="https://s3-alpha-sig.figma.com/img/e5b7/27e5/d85bf08137ca367e755012d701fbcc11?Expires=1737331200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=q9q0UtOHo5kPHHtsn1~ExK5hDVmU7hazSCe--8sH040n1CsRu~VE1y7C9bryOV4UB0NrF0-NE1s4wnc13ZRVrhN~wnSU0KZy1Y8zmx4LXpJBP9Dv7HguG7v9-gSOIM1GQbZKg9fe4z-UMRlAfaHTzXsEBsLCp6BgGs0AVOhVvYHsA5Moquw7gbIf3d7-bUXWRVtHW9rSIbW1LNJhBIvtR8TGNHeSEzcC1G8JN4Nht-tD7k9FD1uroHaWoeSxnuH4T-WP2zo2wEUkNmkCfZYm~AE6sdbezaiJYl76AsNfFQvOzQpXeQzpQnJiDaUIxGE9yrn0OTN6RTN9JR~DN~wZog__"
+            src="https://s3-alpha-sig.figma.com/img/e5b7/27e5/d85bf08137ca367e755012d701fbcc11?Expires=1738540800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Th882NrXNK6C~0DJwGOhnIpPyCPpd7A3nGsHUcwlv7z11LTnVBUgFO-MNgvdsPrW83ee8EGcXhTkjMfVlhtQfqirAJOE1DObC8FnUptaG9eVxQm9zorKdvmI1ECBh-9l~nXlBBz0Th3F0Dnj0zhDQ2FXsdruj8B0EpSvMESfwUSrle2v2fDSrL7B-Xv51dSkFxr2MzI9GLsofT0rkz5DavSvfYJrajF6rNafTCy64RO9wVPdSXvgprCNqHjywQBx2qardTw42r6B7vcYVbpxRvNrs6R2uZOR56O8E6JFZe6YTip-4~fCv2ZvSGPJHd2S7kC7PLQoIh5S261JayQgIQ__"
             alt={`${storeData?.name}`}
             className="w-full"
           />
@@ -80,7 +81,7 @@ const IndividualStores = () => {
                 </div>
                 {/* Name and Type in the bottom left corner */}
                 <div className="absolute bottom-0 left-0 bg-gradient-to-t from-black via-transparent to-transparent w-full p-2 text-white rounded-b-lg">
-                  <h3 className="text-sm font-semibold">{staff?.username}</h3>
+                  <h3 className="text-sm font-semibold">{staff?.name}</h3>
                   <p className="text-xs">{staff?.introduction}</p>
                 </div>
               </div>

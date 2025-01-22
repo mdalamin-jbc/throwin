@@ -72,7 +72,7 @@ const Favorite = () => {
           ) : (
             favoriteStuffs.map((stuff) => (
               <div key={stuff.uid} className="px-4">
-                <div className="min-w-[375px] max-w-[430px] mx-auto px-[25px]  grid  shadow-md rounded-lg p-4 ">
+                <div className=" max-w-[430px] mx-auto px-[25px]  grid  shadow-md rounded-lg p-4 ">
                   <div className="flex items-center justify-between">
                     <Link to={`/staff/${stuff.username}`} className="flex">
                       <img

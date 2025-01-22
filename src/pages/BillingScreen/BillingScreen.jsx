@@ -25,7 +25,7 @@ const BillingScreen = () => {
 
   const staff = JSON.parse(localStorage.getItem("staff"));
 
-  console.log(staff);
+  // console.log(staff);
   const {
     favoriteStuffs,
     refetch: favRefetch,
@@ -38,7 +38,7 @@ const BillingScreen = () => {
   const navigate = useNavigate();
 
   // console.log(userDetails);
-  console.log(staff);
+  // console.log(staff);
 
   // billing data
   const [billingData, setBillingData] = useState({});
@@ -54,7 +54,7 @@ const BillingScreen = () => {
         `/auth/users/staff/${staff?.uid}/like`
       );
 
-      console.log("API Response:", response);
+      // console.log("API Response:", response);
 
       if ([200, 201, 204].includes(response.status)) {
         setIsLiked((prev) => !prev);
