@@ -1,34 +1,12 @@
-import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-
+import { toast } from "react-hot-toast";
 import logo from "../../../assets/images/socialLogin/logo2.png";
 import ButtonPrimary from "../../../components/ButtonPrimary";
-
-const userData = [
-  {
-    role: "restaurant_owner",
-    email: "restaurant_owner@gmail.com",
-    password: "1234",
-  },
-  {
-    role: "sales_agent",
-    email: "sales_agent@gmail.com",
-    password: "1234",
-  },
-  {
-    role: "fc_admin",
-    email: "fc_admin@gmail.com",
-    password: "1234",
-  },
-  {
-    role: "glow_admin",
-    email: "glow_admin@gmail.com",
-    password: "1234",
-  },
-];
+import useAxiosPublic from "../../../hooks/axiosPublic";
 
 const AdminLogin = () => {
+  const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
 
   const {
@@ -37,35 +15,55 @@ const AdminLogin = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    const user = userData.find(
-      (u) => u.email === data.mail && u.password === data.password
-    );
-
-    if (user) {
-      // Save role in local storage
-      localStorage.setItem("userRole", user.role);
-
-      Swal.fire({
-        icon: "success",
-        title: "ログイン成功",
-        text: `ようこそ, ${user.role}`,
+  const onSubmit = async (data) => {
+    try {
+      const response = await axiosPublic.post("/auth/login", {
+        email: data.mail,
+        password: data.password,
       });
 
-      // Redirect to the dashboard
-      navigate(`/dashboard`);
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "エラー",
-        text: "無効なメールまたはパスワード",
-      });
+      console.log("Response:", response); // Debugging
+
+      if (response.status === 200) {
+        const result = response.data;
+
+        // Extract user role and tokens
+        const userRole = result.data?.role;
+        localStorage.setItem("userRole", userRole);
+        localStorage.setItem("accessToken", result.data?.access);
+        localStorage.setItem("refreshToken", result.data?.refresh);
+
+        toast.success(`ようこそ, ${userRole}`, {
+          position: "top-center",
+          duration: 3000,
+        });
+
+        // Redirect to the dashboard
+        navigate(`/dashboard`);
+      }
+    } catch (error) {
+      console.error("Error:", error); // Debugging
+
+      if (error.response) {
+        toast.error(
+          error.response.data.detail || "無効なメールまたはパスワード",
+          {
+            position: "top-right",
+            duration: 3000,
+          }
+        );
+      } else {
+        toast.error("サーバーに接続できません。後でもう一度お試しください。", {
+          position: "top-right",
+          duration: 3000,
+        });
+      }
     }
   };
 
   return (
     <div className="flex flex-col justify-center items-center h-screen bg-cover bg-center p-4 overflow-hidden bg-[#f8f9fb]">
-      <div className="absolute inset-0  h-screen"></div>
+      <div className="absolute inset-0 h-screen"></div>
 
       <div className="bg-white py-[18px] px-10 rounded-[10px] shadow-xl text-center relative w-[380px] h-auto">
         <img src={logo} alt="Logo" className="w-[221px] h-auto mx-auto mb-4" />
@@ -81,7 +79,7 @@ const AdminLogin = () => {
               <input
                 {...register("mail", { required: "メールは必須です" })}
                 name="mail"
-                type="mail"
+                type="email"
                 placeholder="ログインメールアドレス"
                 className="input rounded-none py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
               />

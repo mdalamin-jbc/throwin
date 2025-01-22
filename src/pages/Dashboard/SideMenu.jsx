@@ -13,6 +13,7 @@ import payment from "../../assets/icons/payment_management.png";
 const SideMenu = () => {
   const location = useLocation();
   const userRole = localStorage.getItem("userRole");
+  console.log(userRole);
 
   const allMenuItems = [
     {
