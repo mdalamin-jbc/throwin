@@ -34,7 +34,7 @@ const History = () => {
     enabled: true,
   });
 
-  // Display a loading spinner while data is loading
+  console.log(payments)
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
