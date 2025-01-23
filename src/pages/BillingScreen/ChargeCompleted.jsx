@@ -16,8 +16,10 @@ const ChargeCompleted = () => {
   const axiosPrivate = useAxiosPrivate();
   const { staff, isLoading: staffLoading } = UseGetByStaffName(username);
 
-  const [paymentStatus, setPaymentStatus] = useState(null); // Track payment validation result
-  const validatedRef = useRef(false); // Track if validation has already occurred
+  const [paymentStatus, setPaymentStatus] = useState(null);
+  const validatedRef = useRef(false);
+
+  console.log(staff);
 
   const validatePayment = useCallback(async () => {
     // Only proceed if validation hasn't been done before
@@ -108,7 +110,11 @@ const ChargeCompleted = () => {
           <h3 className="font-bold text-2xl">{staff?.name}</h3>
           <img
             className="rounded-full w-40 h-40 mx-auto mt-3 object-cover"
-            src="https://i.postimg.cc/Fzf19nfb/5e3ca18b58c181ccc105ca95163e891c.jpg"
+            src={
+              staff.image?.medium
+                ? staff.image?.medium
+                : "https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
+            }
             alt={`${staff?.name}'s profile`}
             loading="eager"
           />

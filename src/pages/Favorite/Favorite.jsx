@@ -4,7 +4,6 @@ import useGetFavoriteStuff from "../../hooks/UseGetFavorite_stuff";
 import useAxiosPrivate from "../../hooks/axiousPrivate";
 import { useState } from "react";
 import { Circles } from "react-loader-spinner";
-import img from "../../assets/images/store&staff/image.png";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 
@@ -70,26 +69,30 @@ const Favorite = () => {
           {favoriteStuffs.length === 0 ? (
             <p className="text-center mt-10">No favorite stuffs found.</p>
           ) : (
-            favoriteStuffs.map((stuff) => (
-              <div key={stuff.uid} className="px-4">
+            favoriteStuffs.map((staff) => (
+              <div key={staff.uid} className="px-4">
                 <div className=" max-w-[430px] mx-auto px-[25px]  grid  shadow-md rounded-lg p-4 ">
                   <div className="flex items-center justify-between">
-                    <Link to={`/staff/${stuff.username}`} className="flex">
+                    <Link to={`/staff/${staff.username}`} className="flex">
                       <img
                         className="w-[49px] h-[49px] rounded-full"
-                        src={img}
+                        src={
+                          staff.image?.small
+                            ? staff.image.small
+                            : "https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
+                        }
                         alt=""
                       />
                       <div className="flex-1 flex justify-between items-center">
                         <div className="ml-[13px]">
-                          <h3 className="font-bold text-sm">{stuff.name}</h3>
+                          <h3 className="font-bold text-sm">{staff.name}</h3>
                           <p className="font-normal text-sm text-[#9C9C9C]">
-                            {stuff.introduction}
+                            {staff.introduction}
                           </p>
                         </div>
                       </div>
                     </Link>
-                    <button onClick={() => handleLikeDelete(stuff.uid)}>
+                    <button onClick={() => handleLikeDelete(staff.uid)}>
                       <FaHeart className="text-[#F24E1E] text-[20px] mt-4" />
                     </button>
                   </div>

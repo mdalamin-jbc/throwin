@@ -14,7 +14,7 @@ const MemberList = () => {
   const { staffName } = useParams();
   const { storeId, isLoading } = UseStaffDetailsWithStoreId(staffName);
 
-  console.log(storeId)
+  console.log(storeId);
 
   const {
     register,
@@ -124,10 +124,15 @@ const MemberList = () => {
                 >
                   <div className="relative">
                     <img
-                      src="https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
+                      src={
+                        staff.image?.medium
+                          ? staff.image.medium
+                          : "https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
+                      }
                       alt={`${staff.username} image`}
                       className="object-cover rounded-lg w-[170px] h-[170px]"
                     />
+
                     {/* Rating in the top right corner */}
                     <div className="absolute top-[6px] right-[6px] bg-white text-[#49BBDF] flex items-center gap-1 px-2 py-1 rounded-[4px] shadow-md">
                       <IoMdStar />

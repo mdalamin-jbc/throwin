@@ -3,7 +3,7 @@ import TitleBar from "../../components/TitleBar";
 import useAxiosPrivate from "../../hooks/axiousPrivate";
 import { useQuery } from "@tanstack/react-query";
 import { Circles } from "react-loader-spinner";
-import img from "../../assets/images/store&staff/image.png";
+
 
 // Helper function to format date
 const formatDate = (dateString) => {
@@ -66,7 +66,11 @@ const History = () => {
             >
               <img
                 className="w-12 h-12 rounded-full object-cover"
-                src={img} // Placeholder image
+                src={
+                  payment.image?.medium
+                    ? payment.image?.medium
+                    : "https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
+                }
                 alt="user"
               />
               <div className="flex-1 flex justify-between items-center ml-4">
