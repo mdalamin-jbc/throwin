@@ -149,7 +149,7 @@ const Login = () => {
 
             <button>
               <ButtonPrimary
-                btnText="登録"
+                btnText="ログイン"
                 style="font-hiragino bg-gradient-to-r from-[#65D0F2] to-[#2399F4] min-w-[253px] rounded-full text-center py-[10px] font-bold text-white"
               />
             </button>
