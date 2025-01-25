@@ -36,7 +36,7 @@ const QrCreation = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-4xl  p-6">
       <h2 className="font-semibold text-[27px] text-[#73879C]">QR作成</h2>
       <div className="bg-white mt-6 rounded-xl pb-8 shadow-md">
         <h4 className="font-semibold text-lg text-gray-500 pt-6 pl-8 pb-5 border-b border-gray-300">
