@@ -1,6 +1,6 @@
-const PaymentModal = ({ staff, selectedAmount, handleConfirm }) => (
+const PaymentModal = ({ staff, selectedAmount, handlePaypalPayment }) => (
   <dialog
-    id="payment-modal"
+    id="payment-by-paypal-modal"
     className="modal max-w-[343px] mx-auto rounded-lg shadow-lg"
   >
     <div className="modal-box p-0 rounded-lg overflow-hidden">
@@ -29,13 +29,15 @@ const PaymentModal = ({ staff, selectedAmount, handleConfirm }) => (
       {/* Action Buttons */}
       <div className="flex justify-center gap-4 border-t border-gray-200">
         <button
-          onClick={() => document.getElementById("payment-modal").close()}
+          onClick={() =>
+            document.getElementById("payment-by-paypal-modal").close()
+          }
           className="px-4 py-3 w-1/2 text-red-600 border-r border-gray-300 text-center text-[15px]"
         >
           キャンセル
         </button>
         <button
-          onClick={handleConfirm}
+          onClick={handlePaypalPayment}
           className="px-4 py-3 w-1/2 text-blue-600 text-[15px] text-center"
         >
           確定

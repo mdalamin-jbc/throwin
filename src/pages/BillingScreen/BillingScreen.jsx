@@ -7,6 +7,8 @@ import UseUserDetails from "../../hooks/UseUserDetails";
 import { FaApple } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { SlPaypal } from "react-icons/sl";
+import useAxiosPrivate from "../../hooks/axiousPrivate";
+import toast from "react-hot-toast";
 
 const BillingScreen = () => {
   const [selectedAmount, setSelectedAmount] = useState("0");
@@ -14,6 +16,7 @@ const BillingScreen = () => {
   const [billingData, setBillingData] = useState({});
   const staff = JSON.parse(localStorage.getItem("staff"));
   const { userDetails } = UseUserDetails();
+  const axiosPrivate = useAxiosPrivate();
 
   console.log(staff, userDetails);
 
@@ -41,13 +44,57 @@ const BillingScreen = () => {
     userDetails?.name,
   ]);
 
-  const handleConfirm = () => {
-    console.log("Payment Confirmed!", billingData);
-    // document.getElementById("payment-modal").close(); // Close modal after confirmation
+  const handlePaypalPayment = async () => {
+    try {
+      if (billingData.amount < 500) {
+        throw new Error("金額は500円以上でなければなりません。");
+      }
+
+      if (billingData.amount > 49999) {
+        throw new Error("金額は 50,000円以下でなければなりません。");
+      }
+
+      if (!billingData.staff_uid) {
+        throw new Error("Staff ID is required.");
+      }
+
+      console.log("Sending Billing Data:", billingData);
+
+      const response = await axiosPrivate.post(
+        `/payment_service/make-payment/`,
+        billingData
+      );
+
+      console.log(response);
+      if (response.status === 200 || response.status === 201) {
+        const approvalUrl = response.data.approval_url;
+        console.log("Redirecting to PayPal Approval URL:", approvalUrl);
+
+        // Redirect to PayPal for user approval
+        window.location.href = approvalUrl;
+      } else {
+        throw new Error("Failed to create payment. Please try again.");
+      }
+    } catch (error) {
+      console.error(
+        "Error creating payment:",
+        error.response?.data?.detail || error.message
+      );
+
+      toast.error(
+        error.response?.data?.detail ||
+          error.message ||
+          "支払いの作成に失敗しました！",
+        {
+          position: "top-center",
+          duration: 3000,
+        }
+      );
+    }
   };
 
   const handleOpenModal = () => {
-    document.getElementById("payment-modal").showModal();
+    document.getElementById("payment-by-paypal-modal").showModal();
   };
 
   return (
@@ -84,7 +131,7 @@ const BillingScreen = () => {
         <PaymentModal
           staff={staff}
           selectedAmount={selectedAmount}
-          handleConfirm={handleConfirm}
+          handlePaypalPayment={handlePaypalPayment}
         />
       </div>
     </div>
