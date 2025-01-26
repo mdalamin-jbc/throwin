@@ -4,7 +4,6 @@ import useAxiosPrivate from "../../hooks/axiousPrivate";
 import { useQuery } from "@tanstack/react-query";
 import { Circles } from "react-loader-spinner";
 
-
 // Helper function to format date
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -34,7 +33,7 @@ const History = () => {
     enabled: true,
   });
 
-  console.log(payments)
+  console.log(payments);
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -67,8 +66,8 @@ const History = () => {
               <img
                 className="w-12 h-12 rounded-full object-cover"
                 src={
-                  payment.image?.medium
-                    ? payment.image?.medium
+                  payment.staff_image?.medium
+                    ? payment.staff_image?.medium
                     : "https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
                 }
                 alt="user"
