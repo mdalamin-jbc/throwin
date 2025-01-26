@@ -1,15 +1,24 @@
+import PropTypes from "prop-types";
 const BillingForm = ({
   selectedAmount,
   setSelectedAmount,
   message,
   setMessage,
 }) => {
-  const amounts = ["1,000", "3,000", "5,000", "10,000"];
+  // Numeric values for amounts
+  const amounts = [1000, 3000, 5000, 10000];
 
   const handleAmountChange = (event) => {
+    // Remove commas and parse the value as a number
     const input = event.target.value.replace(/,/g, "");
     const numericValue = parseInt(input, 10);
-    setSelectedAmount(isNaN(numericValue) ? "" : numericValue.toLocaleString());
+
+    // Update state with numeric value formatted with commas
+    setSelectedAmount(isNaN(numericValue) ? "" : numericValue);
+  };
+
+  const formatWithCommas = (value) => {
+    return value.toLocaleString();
   };
 
   return (
@@ -17,17 +26,18 @@ const BillingForm = ({
       <div className="">
         <div className="flex justify-between items-center px-5 mt-[51px] border-b-2 pb-2 text-[#C0C0C0]">
           <h4 className="font-semibold text-sm">金額</h4>
-
           <div className="font-semibold text-[28px] text-[#C0C0C0]">
             <input
               type="text"
-              value={selectedAmount}
+              value={selectedAmount ? formatWithCommas(selectedAmount) : ""}
               onChange={handleAmountChange}
               className="text-right mr-1 bg-transparent max-w-[200px] focus:outline-none w-fit placeholder:text-[16px] placeholder:font-normal"
+              placeholder="金額を入力..."
             />
             円
           </div>
         </div>
+
         <div className="flex gap-[14px] overflow-x-auto scrollbar-hide font-semibold text-sm text-[#49BBDF]">
           {amounts.map((amount, index) => (
             <h4
@@ -40,7 +50,7 @@ const BillingForm = ({
                           : "border-[#49BBDF] text-[#49BBDF]"
                       }`}
             >
-              {amount}円
+              {formatWithCommas(amount)}円
             </h4>
           ))}
         </div>
@@ -58,12 +68,20 @@ const BillingForm = ({
           placeholder="メッセージを書く..."
         />
       </div>
+
       <div className="mt-6">
         <h2 className="font-semibold text-lg">決済方法</h2>
         <h2 className="font-bold text-sm my-4">スマホ決済</h2>
       </div>
     </div>
   );
+};
+
+BillingForm.propTypes = {
+  selectedAmount: PropTypes.number.isRequired,
+  setSelectedAmount: PropTypes.func.isRequired,
+  message: PropTypes.string.isRequired,
+  setMessage: PropTypes.func.isRequired,
 };
 
 export default BillingForm;
