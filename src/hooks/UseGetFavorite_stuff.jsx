@@ -25,7 +25,8 @@ const useGetFavoriteStuff = () => {
         throw error;
       }
     },
-    enabled: Boolean(user?.access),
+
+    enabled: true,
   });
 
   const favoriteStuffs = data;
