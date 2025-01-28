@@ -22,7 +22,7 @@ const AdminLogin = () => {
         password: data.password,
       });
 
-      console.log("Response:", response); // Debugging
+      console.log("Response:", response); 
 
       if (response.status === 200) {
         const result = response.data;

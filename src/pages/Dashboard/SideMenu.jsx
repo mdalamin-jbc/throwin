@@ -1,4 +1,3 @@
-import { FaSignOutAlt } from "react-icons/fa";
 import { NavLink, useLocation } from "react-router-dom";
 import logo from "../../assets/images/socialLogin/logo2.png";
 import management from "../../assets/icons/management.png";
@@ -74,12 +73,7 @@ const SideMenu = () => {
 
   // Filter menu items based on role
   const menuItems = allMenuItems.filter((item) =>
-    item.roles.includes(
-      "restaurant_owner",
-      "sales_agent",
-      "fc_admin",
-      "glow_admin"
-    )
+    item.roles.includes(userRole)
   );
 
   return (
