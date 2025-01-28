@@ -1,3 +1,4 @@
+import { FaSignOutAlt } from "react-icons/fa";
 import { NavLink, useLocation } from "react-router-dom";
 import logo from "../../assets/images/socialLogin/logo2.png";
 import management from "../../assets/icons/management.png";
@@ -25,6 +26,12 @@ const SideMenu = () => {
       label: "アカウント",
       icon: <img src={management} alt="" className="mr-4 w-[30px]" />,
       path: "/dashboard/account",
+      roles: ["restaurant_owner", "sales_agent", "fc_admin", "glow_admin"],
+    },
+    {
+      label: "アカウント",
+      icon: <img src={management} alt="" className="mr-4 w-[30px]" />,
+      path: "/dashboard/m_account",
       roles: ["restaurant_owner", "sales_agent", "fc_admin", "glow_admin"],
     },
     {
@@ -89,7 +96,7 @@ const SideMenu = () => {
 
       {/* Menu Items */}
       <ul className="flex-1 list-none p-0 m-0">
-        {menuItems.map((item) => (
+        {allMenuItems.map((item) => (
           <li key={item.path}>
             <NavLink
               to={item.path}

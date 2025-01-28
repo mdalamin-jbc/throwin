@@ -3,7 +3,8 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import search from "../../../assets/icons/search_3.png";
 import img from "../../../assets/images/store&staff/image.png";
 import { Link } from "react-router-dom";
-const Account = () => {
+
+const MemberAccount = () => {
   const {
     register,
     formState: { errors },
@@ -13,17 +14,17 @@ const Account = () => {
       <h2 className="font-semibold text-[27px] text-[#73879C]">アカウント</h2>
       <div className="bg-white mt-[27px] rounded-xl pb-8 mr-[54px]">
         <h4 className="font-semibold text-[18px] text-[#73879C] pt-[30px] pl-[33px] pb-[21px] ">
-          チーム（店舗）リスト
+          居酒屋ABC_大阪店　メンバーリスト
         </h4>
         <div className="border-b-[3px] mx-5"></div>
 
         <div className="mx-[33px]">
           <div className="mt-[22px]  flex justify-between ">
             <Link
-              to="creat_new"
-              className="bg-[#4EBDF3] text-white py-[6px] px-[106px] rounded"
+              to="member_reg"
+              className="bg-[#49BBDF] text-white py-[6px] px-[36px] rounded"
             >
-              新規作成 <span className=" text-xl">+</span>
+              メンバー登録 <span className=" text-xl">+</span>
             </Link>
             <div className="relative flex flex-col justify-center mr-[100px]">
               <div
@@ -59,19 +60,24 @@ const Account = () => {
           <div className="overflow-x-auto mt-6">
             <table className="table ">
               {/* head */}
-              <thead className=" bg-[#49BBDF] text-white ">
+              <thead className=" bg-[#EEEEEE] text-[#434343] ">
                 <tr>
                   <th>
                     <button className="flex items-center ">
-                      ポジション名 <MdKeyboardArrowDown />
+                      メンバー名 <MdKeyboardArrowDown />
+                    </button>
+                  </th>
+                  <th></th>
+                  <th className="">
+                    <button className="flex items-center">
+                      公開状況 <MdKeyboardArrowDown />
                     </button>
                   </th>
                   <th className="">
                     <button className="flex items-center">
-                      店舗（チーム）コード <MdKeyboardArrowDown />
+                      売上管理 <MdKeyboardArrowDown />
                     </button>
                   </th>
-                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -81,35 +87,13 @@ const Account = () => {
                     <img src={img} alt="" className="w-[29px] rounded-full" />
                     <p>かりん</p>
                   </td>
+                  <td></td>
                   <td>公開</td>
-                  <td>
-                    <span className="bg-[#ABABAB] rounded-full px-3 py-1">
+                  <td className="flex gap-5">
+                    <span className="bg-[#49BBDF] text-white rounded-full px-3 py-1">
                       詳細
                     </span>
-                  </td>
-                </tr>
-                {/* row 2 */}
-                <tr className="hover border">
-                  <td className="flex items-center gap-[17px]">
-                    <img src={img} alt="" className="w-[29px] rounded-full" />
-                    <p>かりん</p>
-                  </td>
-                  <td>公開</td>
-                  <td>
-                    <span className="bg-[#ABABAB] rounded-full px-3 py-1">
-                      詳細
-                    </span>
-                  </td>
-                </tr>
-                {/* row 3 */}
-                <tr className="hover border">
-                  <td className="flex items-center gap-[17px]">
-                    <img src={img} alt="" className="w-[29px] rounded-full" />
-                    <p>かりん</p>
-                  </td>
-                  <td>公開</td>
-                  <td>
-                    <span className="bg-[#ABABAB] rounded-full px-3 py-1">
+                    <span className="bg-[#49BBDF] text-white rounded-full px-3 py-1">
                       詳細
                     </span>
                   </td>
@@ -119,14 +103,14 @@ const Account = () => {
           </div>
 
           {/* <div className="flex justify-center items-center h-[calc(100vh-128px)]">
-            <p className="text-[#B5B5B5]">
-              現在登録されている店舗（チーム）はありません
-            </p>
-          </div> */}
+                <p className="text-[#B5B5B5]">
+                  現在登録されている店舗（チーム）はありません
+                </p>
+              </div> */}
         </div>
       </div>
     </div>
   );
 };
 
-export default Account;
+export default MemberAccount;

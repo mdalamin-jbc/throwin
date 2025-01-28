@@ -54,6 +54,9 @@ import DeHistory from "../pages/Dashboard/DeHistory/DeHistory";
 import CreateANewTeam from "../pages/Dashboard/CreatANewTeam/CreatANewTeam";
 import DeGacha from "../pages/Dashboard/DeGacha/DeGacha";
 import PaymentManagement from "../pages/Dashboard/PaymentManagement/PaymentManagement";
+import CreatANewAccount from "../pages/Dashboard/Account/CreatANewAccount";
+import MemberAccount from "../pages/Dashboard/MemberAccount/MemberAccount";
+import MemberReg from "../pages/Dashboard/MemberAccount/MemberReg";
 
 export const Routes = createBrowserRouter([
   {
@@ -258,6 +261,18 @@ export const Routes = createBrowserRouter([
           {
             path: "account",
             element: <Account />,
+          },
+          {
+            path: "account/creat_new",
+            element: <CreatANewAccount />,
+          },
+          {
+            path: "m_account",
+            element: <MemberAccount />,
+          },
+          {
+            path: "m_account/member_reg",
+            element: <MemberReg />,
           },
           {
             path: "client",
