@@ -28,16 +28,16 @@ const DisplayName = () => {
         name: data.name,
       });
       console.log(response);
-      toast
-        .success("名前が正常に変更されました。", {
-          position: "top-center",
-          duration: 1500,
-        })
-        .then(() => {
-          reset();
-          setError(null);
-          navigate("/myPage");
-        });
+      toast.success("名前が正常に変更されました。", {
+        position: "top-center",
+        duration: 1500,
+      });
+
+      setTimeout(() => {
+        reset();
+        setError(null);
+        navigate("/myPage");
+      }, 500);
     } catch (error) {
       console.error(
         "Error setting name:",
