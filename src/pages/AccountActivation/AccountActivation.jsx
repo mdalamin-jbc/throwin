@@ -18,7 +18,7 @@ const AccountActivation = () => {
 
       try {
         const response = await axiosPublic.get(
-          `/auth/users/acivate/${userId}/${token}`
+          /auth/users/acivate/${userId}/${token}
         );
         console.log(response.data);
 
@@ -26,15 +26,15 @@ const AccountActivation = () => {
           response.data.detail === "User Activated Successfully" ||
           response.status === 200
         ) {
-          toast
-            .success("あなたのアカウントはアクティブ化されました！", {
-              position: "top-center",
-              duration: 3000,
-            })
-            .then(() => {
-              navigate("/onboarding");
-              console.log(response.data.detail);
-            });
+          toast.success("あなたのアカウントはアクティブ化されました！", {
+            position: "top-center",
+            duration: 3000,
+          });
+
+          // Delay navigation to ensure toast is displayed
+          setTimeout(() => {
+            navigate("/onboarding");
+          }, 2000);
         }
       } catch (error) {
         console.log(error.response);

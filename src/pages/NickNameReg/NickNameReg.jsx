@@ -1,4 +1,3 @@
-
 import ButtonPrimary from "../../components/ButtonPrimary";
 import TitleBar from "../../components/TitleBar";
 import { useForm } from "react-hook-form";
@@ -27,37 +26,37 @@ const NickNameReg = () => {
         name: data.name,
       });
       console.log(response);
-      toast
-        .success("ニックネームが正常に設定されました。", {
-          position: "top-center",
-          duration: 1500,
-        })
-        .then(() => {
-          reset();
-          setError(null);
-          navigate("/reg_complete");
-        });
+      toast.success("ニックネームが正常に設定されました。", {
+        position: "top-center",
+        duration: 1500,
+      });
+  
+      // Redirect after the toast notification is shown
+      setTimeout(() => {
+        reset();
+        setError(null);
+        navigate("/reg_complete");
+      }, 500);
     } catch (error) {
       console.error(
         "Error setting name:",
         error.response ? error.response.data : error
       );
-
+  
       const errorMessage =
-        error.response?.data?.name?.[0] ===
-        "User with this name already exists."
+        error.response?.data?.name?.[0] === "User with this name already exists."
           ? "すでに使用されているニックネームです"
           : "エラーが発生しました";
-
+  
       setError({ name: errorMessage }); // Set the error state with the appropriate message
-
+  
       toast.error(errorMessage, {
         position: "top-center",
         duration: 1500,
       });
-      
     }
   };
+  
 
   return (
     <div className="">
