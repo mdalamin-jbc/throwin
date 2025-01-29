@@ -18,7 +18,7 @@ const AccountActivation = () => {
 
       try {
         const response = await axiosPublic.get(
-          /auth/users/acivate/${userId}/${token}
+          `/auth/users/acivate/${userId}/${token}`
         );
         console.log(response.data);
 
