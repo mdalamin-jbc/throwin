@@ -24,6 +24,7 @@ const OnboardingSlider = () => {
   const swiperRef = useRef(null);
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
+  const { width, height } = useWindowSize();
 
   const handleNext = () => {
     if (swiperRef.current) {
@@ -34,15 +35,14 @@ const OnboardingSlider = () => {
       }
     }
   };
-  const { width, height } = useWindowSize();
 
   return (
-    <div className="relative min-h-screen w-full flex justify-center items-center overflow-hidden">
+    <div className="relative w-full min-h-[100dvh] flex justify-center items-center overflow-hidden">
       <Helmet>
         <title>Throwin | Onboarding</title>
       </Helmet>
       <div
-        className="shadow-xl text-center relative w-full min-h-screen flex flex-col justify-center items-center"
+        className="shadow-xl text-center relative w-full min-h-[100dvh] flex flex-col justify-center items-center"
         style={{
           backgroundImage: `url(${bgImage})`,
           backgroundSize: "cover",
@@ -51,76 +51,75 @@ const OnboardingSlider = () => {
         }}
       >
         <Confetti width={width} height={height} />
-        <div className="p-8 w-full flex flex-col justify-center items-center">
+        <div className="p-4 md:p-8 w-full h-full flex flex-col justify-center items-center relative">
           <Swiper
-            cssMode={true}
-            pagination={{
-              clickable: true,
-              el: ".custom-pagination",
-            }}
+            pagination={true}
             mousewheel={true}
             keyboard={true}
             modules={[Navigation, Pagination, Mousewheel, Keyboard]}
-            className="mySwiper w-full"
+            className="mySwiper w-full h-full mb-24"
             onSwiper={(swiper) => {
               swiperRef.current = swiper;
             }}
             onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
           >
             {/* Slide 1 */}
-            <SwiperSlide className="flex flex-col justify-center items-center h-[84vh] px-4 md:px-16">
-              <h2 className="font-hiragino font-medium text-[clamp(16px,3vw,22px)] text-[#49BBDF] flex gap-3 justify-center mb-3">
-                \ <span>はじめに</span> /
-              </h2>
-              <h3 className="text-[clamp(14px,4vw,20px)] text-[#44495B] leading-8 text-center mb-8">
-                <span>Throwinは</span>あなたの応援をカタチにできる <br />
-                投げ銭サービスです
-              </h3>
-              <img
-                src={img}
-                alt="Slide 1"
-                className="object-contain w-[min(90vw,350px)] mx-auto"
-              />
+            <SwiperSlide className="flex flex-col justify-center items-center min-h-[80dvh] px-4 md:px-16">
+              <div className="flex flex-col items-center justify-center gap-4">
+                <h2 className="font-hiragino font-medium text-[clamp(16px,3vw,22px)] text-[#49BBDF] flex gap-3 justify-center">
+                  \ <span>はじめに</span> /
+                </h2>
+                <h3 className="text-[clamp(14px,4vw,20px)] text-[#44495B] leading-8 text-center">
+                  <span>Throwinは</span>あなたの応援をカタチにできる <br />
+                  投げ銭サービスです
+                </h3>
+                <img
+                  src={img}
+                  alt="Slide 1"
+                  className="object-contain w-[min(90vw,350px)] mx-auto mt-4"
+                />
+              </div>
             </SwiperSlide>
 
             {/* Slide 2 */}
-            <SwiperSlide className="flex flex-col justify-center items-center h-[85vh] px-4 md:px-16">
-              <h3 className="text-[clamp(14px,4vw,20px)] text-[#44495B] leading-8 text-center mb-8">
-                元気や、感動を
-                <br /> 与えてくれた人に、
-                <br />
-                スローインしましょう！
-              </h3>
-              <img
-                src={img2}
-                alt="Slide 2"
-                className="object-contain w-[min(90vw,350px)] mx-auto"
-              />
+            <SwiperSlide className="flex flex-col justify-center items-center min-h-[80dvh] px-4 md:px-16">
+              <div className="flex flex-col items-center justify-center gap-4">
+                <h3 className="text-[clamp(14px,4vw,20px)] text-[#44495B] leading-8 text-center">
+                  元気や、感動を
+                  <br /> 与えてくれた人に、
+                  <br />
+                  スローインしましょう！
+                </h3>
+                <img
+                  src={img2}
+                  alt="Slide 2"
+                  className="object-contain w-[min(90vw,350px)] mx-auto mt-4"
+                />
+              </div>
             </SwiperSlide>
 
             {/* Slide 3 */}
-            <SwiperSlide className="flex flex-col justify-center items-center h-[92vh] px-4 md:px-16">
-              <h3 className="text-[clamp(14px,4vw,20px)] text-[#44495B] leading-8 text-center mb-8">
-                ガチャ機能の説明
-              </h3>
-              <img
-                src={img2}
-                alt="Slide 3"
-                className="object-contain w-[min(90vw,350px)] mx-auto"
-              />
+            <SwiperSlide className="flex flex-col justify-center items-center min-h-[80dvh] px-4 md:px-16">
+              <div className="flex flex-col items-center justify-center gap-4">
+                <h3 className="text-[clamp(14px,4vw,20px)] text-[#44495B] leading-8 text-center">
+                  ガチャ機能の説明
+                </h3>
+                <img
+                  src={img2}
+                  alt="Slide 3"
+                  className="object-contain w-[min(90vw,350px)] mx-auto mt-4"
+                />
+              </div>
             </SwiperSlide>
           </Swiper>
-
-          {/* Pagination (Fix: Make sure Swiper assigns pagination here) */}
-          <div className="custom-pagination absolute bottom-[15vh]   left-1/2 transform -translate-x-1/2 flex gap-3"></div>
 
           {/* Next Button */}
           <button
             onClick={handleNext}
-            className="next-button absolute bottom-[5vh] left-1/2 transform -translate-x-1/2"
+            className="absolute bottom-8 left-1/2 transform -translate-x-1/2 w-full max-w-[342px] px-4"
           >
             <ButtonPrimary
-              style="rounded-full bg-gradient-to-r from-[#65D0F2] to-[#2399F4] w-[min(90vw,342px)]"
+              style="rounded-full bg-gradient-to-r from-[#65D0F2] to-[#2399F4] w-full"
               btnText={activeIndex === 2 ? "始める" : "次へ"}
             />
           </button>
