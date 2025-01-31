@@ -37,15 +37,13 @@ const ForgetPassword = () => {
         }
       );
       console.log(response);
-      // Display success message from API response
-      toast
-        .success("パスワードリセットのリクエストが正常に送信されました！", {
-          position: "top-center",
-          duration: 3000,
-        })
-        .then(() => {
-          navigate("/forget_mail_check");
-        });
+      // Show success toast and navigate
+      toast.success("パスワードリセットのリクエストが正常に送信されました！", {
+        position: "top-center",
+        duration: 3000,
+      });
+      // Navigate after showing toast
+      navigate("/forget_mail_check");
     } catch (error) {
       console.log(error);
       const errorMsg = "エラーが発生しました。後で再試行してください。";

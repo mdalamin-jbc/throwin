@@ -35,7 +35,7 @@ const OnboardingSlider = () => {
 
   // Custom dot indicator component
   const CustomDots = () => (
-    <div className="flex gap-3 md:gap-3 justify-center my-8">
+    <div className="flex gap-3 md:gap-3 justify-center">
       {[0, 1, 2].map((index) => (
         <button
           key={index}
@@ -128,7 +128,7 @@ const OnboardingSlider = () => {
             </SwiperSlide>
           </Swiper>
 
-          <div className="w-full flex flex-col items-center gap-4">
+          <div className="w-full flex flex-col items-center space-y-16">
             {/* Custom Dots */}
             <CustomDots />
 
