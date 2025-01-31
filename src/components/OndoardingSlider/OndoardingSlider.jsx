@@ -72,7 +72,7 @@ const OnboardingSlider = () => {
             mousewheel={true}
             keyboard={true}
             modules={[Navigation, Pagination, Mousewheel, Keyboard]}
-            className="mySwiper w-full flex-1"
+            className="mySwiper w-full flex-1 mb-8" // Added margin bottom here
             onSwiper={(swiper) => {
               swiperRef.current = swiper;
             }}
@@ -108,7 +108,7 @@ const OnboardingSlider = () => {
                 <img
                   src={img2}
                   alt="Slide 2"
-                  className="object-contain w-[min(70vw,350px)] mx-auto mt-4"
+                  className="object-contain w-[min(70vw,350px)] mx-auto"
                 />
               </div>
             </SwiperSlide>
@@ -122,13 +122,13 @@ const OnboardingSlider = () => {
                 <img
                   src={img2}
                   alt="Slide 3"
-                  className="object-contain w-[min(70vw,350px)] mx-auto mt-20"
+                  className="object-contain w-[min(70vw,350px)] mx-auto"
                 />
               </div>
             </SwiperSlide>
           </Swiper>
 
-          <div className="w-full flex flex-col items-center space-y-16">
+          <div className="w-full flex flex-col items-center gap-8">
             {/* Custom Dots */}
             <CustomDots />
 
