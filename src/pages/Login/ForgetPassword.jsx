@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import closeIcon from "../../assets/icons/close.png";
 import logo from "../../assets/images/socialLogin/logo2.png";
 import socialBg from "../../assets/images/socialLogin/social bg.jpeg";
@@ -23,31 +24,18 @@ const ForgetPassword = () => {
 
   const onSubmit = async (data) => {
     try {
-      // API call to request password reset with CSRF token in headers
-      const response = await axiosPublic.post(
-        "/auth/password/reset-request",
-        {
-          email: data.mail,
-        },
-        {
-          headers: {
-            "X-CSRFTOKEN":
-              "FxK7D1PMlrToHLyOS8xXkTp0mJfDZLfGub7UfeaNcPh6j32wUWHYtmksXTazlM0f", // CSRF Token
-          },
-        }
-      );
+      const response = await axiosPublic.post("/auth/password/reset-request", {
+        email: data.mail,
+      });
       console.log(response);
-      // Show success toast and navigate
       toast.success("パスワードリセットのリクエストが正常に送信されました！", {
         position: "top-center",
         duration: 3000,
       });
-      // Navigate after showing toast
       navigate("/forget_mail_check");
     } catch (error) {
       console.log(error);
-      const errorMsg = "エラーが発生しました。後で再試行してください。";
-      toast.error(errorMsg, {
+      toast.error("エラーが発生しました。後で再試行してください。", {
         position: "top-center",
         duration: 4000,
       });
@@ -55,13 +43,18 @@ const ForgetPassword = () => {
   };
 
   return (
-    <div
+    <motion.div
       className="flex flex-col justify-center items-center h-screen bg-cover bg-center p-4"
       style={{ backgroundImage: `url(${socialBg})` }}
     >
       <div className="absolute inset-0 bg-[#072233fb] h-screen"></div>
 
-      <div className="bg-white p-6 rounded-[10px] shadow-xl text-center relative w-[291px] h-[336px]">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1 }}
+        className="bg-white p-6 rounded-[10px] shadow-xl text-center relative w-[291px] h-[336px]"
+      >
         <img src={logo} alt="Logo" className="w-[150px] h-auto mx-auto mb-4" />
 
         <div className="flex flex-col justify-center">
@@ -88,12 +81,16 @@ const ForgetPassword = () => {
               )}
             </div>
 
-            <button type="submit">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              type="submit"
+            >
               <ButtonPrimary
                 btnText="パスワードリセット"
                 style="bg-gradient-to-r from-[#65D0F2] to-[#2399F4] min-w-[253px] rounded-full font-hiragino text-center py-[10px] font-bold text-white"
               />
-            </button>
+            </motion.button>
           </form>
 
           <div className="flex font-hiragino text-xs text-[#626262A6] justify-center gap-2 mt-6 mb-2">
@@ -108,16 +105,17 @@ const ForgetPassword = () => {
             ログイン画面へ
           </Link>
         </div>
-      </div>
+      </motion.div>
 
       <button className="mt-24 p-2 relative" onClick={handleClose}>
-        <img
+        <motion.img
+          whileHover={{ scale: 1.2 }}
           src={closeIcon}
           alt="Close"
           className="w-[17px] h-[17px] text-gray-500 hover:text-gray-700"
         />
       </button>
-    </div>
+    </motion.div>
   );
 };
 

@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import closeIcon from "../../assets/icons/close.png";
 import logo from "../../assets/images/socialLogin/logo2.png";
 import socialBg from "../../assets/images/socialLogin/social bg.jpeg";
@@ -9,13 +10,11 @@ import { useContext } from "react";
 import AuthContext from "../../contexts/AuthContext";
 import toast from "react-hot-toast";
 
+
 const Login = () => {
   const navigate = useNavigate();
-
   const axiosPublic = useAxiosPublic();
   const { login } = useContext(AuthContext);
-
-  // const { email = "" } = location.state || {};
 
   const handleClose = () => {
     navigate("/");
@@ -24,7 +23,6 @@ const Login = () => {
   const {
     register,
     handleSubmit,
-
     formState: { errors },
   } = useForm();
 
@@ -34,70 +32,39 @@ const Login = () => {
         email: data.mail,
         password: data.password,
       });
-      console.log(response);
       if (response.data.msg === "Login Successful") {
-        console.log("Login successful!", response.data);
-
-        // Use the login function from context
         login(response.data.data);
-
-        // Show success message
-        toast.success("ログインに成功しました。", {
-          position: "top-center",
-          duration: 1500,
-        });
-        // console.log(response.data.data.access);
-
-        // Fetch user details
+        toast.success("ログインに成功しました。", { position: "top-center", duration: 1500 });
         const res = await axiosPublic.get(`/auth/users/me`, {
-          headers: response.data.data.access
-            ? { Authorization: `Bearer ${response.data.data.access}` }
-            : {},
+          headers: response.data.data.access ? { Authorization: `Bearer ${response.data.data.access}` } : {},
           ...(response.data.data.access && { withCredentials: true }),
         });
-
-        if (res.status === 200) {
-          // Check if the user has a name or not
-          if (res.data.name === null || res.data.name === "Anonymous user") {
-            navigate("/nickName_reg");
-          } else {
-            console.log(res);
-            navigate("/search");
-          }
-        }
+        navigate(res.data.name === null || res.data.name === "Anonymous user" ? "/nickName_reg" : "/search");
       } else {
-        console.error("Login failed:", response.data.msg);
-
-        // Show error message
-        toast.error(response.data.msg, {
-          position: "top-center",
-          duration: 1500,
-        });
+        toast.error(response.data.msg, { position: "top-center", duration: 1500 });
       }
     } catch (error) {
-      console.error(
-        "Error logging in:",
-        error.response ? error.response.data : error
-      );
-
-      // Show error message
-      toast.error("メールアドレスまたはパスワードが間違っています。", {
-        position: "top-center",
-        duration: 1500,
-      });
+      toast.error("メールアドレスまたはパスワードが間違っています。", { position: "top-center", duration: 1500 });
     }
   };
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
       className="flex flex-col justify-center items-center h-screen bg-cover bg-center p-4 overflow-hidden"
       style={{ backgroundImage: `url(${socialBg})` }}
     >
       <div className="absolute inset-0 bg-[#072233fb] h-screen"></div>
 
-      <div className="bg-white p-6 rounded-[10px] shadow-xl text-center relative w-[291px] h-[460px]">
+      <motion.div
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 1.5 }}
+        className="bg-white p-6 rounded-[10px] shadow-xl text-center relative w-[291px] h-[460px]"
+      >
         <img src={logo} alt="Logo" className="w-[150px] h-auto mx-auto mb-4" />
-
         <div className="flex flex-col justify-center">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="form-control">
@@ -113,25 +80,16 @@ const Login = () => {
                   },
                 })}
                 name="mail"
-                type="mail"
+                type="email"
                 placeholder="メールアドレス"
                 className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
               />
-              {errors.mail && (
-                <span className="text-red-500 mt-1">{errors.mail.message}</span>
-              )}
+              {errors.mail && <span className="text-red-500 mt-1">{errors.mail.message}</span>}
             </div>
             <div className="form-control">
               <label className="label flex justify-between items-center">
-                <span className="label-text font-bold text-sm font-Noto">
-                  パスワード
-                </span>
-                <Link
-                  to="/forget_password"
-                  className="label-text text-[10px] font-hiragino text-[#5297FF]"
-                >
-                  パスワードをお忘れですか？
-                </Link>
+                <span className="label-text font-bold text-sm font-Noto">パスワード</span>
+                <Link to="/forget_password" className="label-text text-[10px] font-hiragino text-[#5297FF]">パスワードをお忘れですか？</Link>
               </label>
               <input
                 {...register("password", { required: true })}
@@ -140,11 +98,7 @@ const Login = () => {
                 placeholder="パスワード"
                 className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
               />
-              {errors.password && (
-                <span className="text-red-500 my-1 font-Noto">
-                  パスワードが必要です
-                </span>
-              )}
+              {errors.password && <span className="text-red-500 my-1 font-Noto">パスワードが必要です</span>}
             </div>
 
             <button>
@@ -155,24 +109,20 @@ const Login = () => {
             </button>
           </form>
 
-          <Link
-            to="/socialLogin"
-            className="font-bold text-sm text-[#5297FF] mt-3 font-hiragino"
-          >
-            会員登録がまだの方はこちら
-          </Link>
+          <Link to="/socialLogin" className="font-bold text-sm text-[#5297FF] mt-3 font-hiragino">会員登録がまだの方はこちら</Link>
         </div>
-      </div>
+      </motion.div>
 
-      {/* Close Icon Button Below the Form */}
-      <button className="mt-6 p-2 relative" onClick={handleClose}>
-        <img
-          src={closeIcon}
-          alt="Close"
-          className="w-[17px] h-[17px] text-gray-500 hover:text-gray-700"
-        />
-      </button>
-    </div>
+      <motion.button
+        className="mt-6 p-2 relative"
+        onClick={handleClose}
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 0.3 }}
+      >
+        <img src={closeIcon} alt="Close" className="w-[17px] h-[17px] text-gray-500 hover:text-gray-700" />
+      </motion.button>
+    </motion.div>
   );
 };
 

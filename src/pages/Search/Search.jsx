@@ -8,19 +8,19 @@ import { BrowserQRCodeReader } from "@zxing/library";
 import useAxiosPublic from "../../hooks/axiosPublic";
 import { useNavigate } from "react-router-dom";
 import UseStaffDetailsWithStoreId from "../../hooks/UseStaffDetailsWithStoreId";
+import { motion } from "framer-motion";
 
 const Search = () => {
   const [searchByStuffName, setSearchByStuffName] = useState("");
   const [searchStore, setSearchStore] = useState("");
   const [isScannerOpen, setIsScannerOpen] = useState(false);
-  const [storeData, setStoreData] = useState(null);
-  const [stuffData, setStuffData] = useState(null);
+
   const [errorMessage, setErrorMessage] = useState("");
   const videoRef = useRef(null);
   const codeReaderRef = useRef(null);
-  const { storeId,isLoading, isError, refetch } = UseStaffDetailsWithStoreId(searchByStuffName);
+  const { storeId, isLoading, isError, refetch } =
+    UseStaffDetailsWithStoreId(searchByStuffName);
 
-  
   const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
 
@@ -89,6 +89,7 @@ const Search = () => {
       setErrorMessage("カメラの初期化にエラーが発生しました。");
     }
   };
+  
 
   const handleCloseScanner = () => {
     if (codeReaderRef.current) {
@@ -103,7 +104,6 @@ const Search = () => {
     const searchValue = staffName || searchByStuffName;
 
     console.log(storeId);
-    
 
     if (!searchValue) {
       setErrorMessage("メンバー名は必須です");
@@ -118,7 +118,6 @@ const Search = () => {
     refetch();
 
     if (!isLoading && !isError) {
-      setStuffData(storeId);
       setErrorMessage("");
       navigate(`/member_list/${searchValue}`);
     } else if (isError) {
@@ -128,16 +127,15 @@ const Search = () => {
 
   const handleSearchStore = async (storeCode = null) => {
     const searchValue = storeCode || searchStore;
-  
+
     if (!searchValue) {
       setErrorMessage("店舗コードは必須です");
       return;
     }
-  
+
     try {
       const response = await axiosPublic.get(`/stores/${searchValue}`);
-  
-      setStoreData(response.data);
+
       setErrorMessage("");
       // Store data in localStorage
       localStorage.setItem("storeData", JSON.stringify(response.data));
@@ -147,18 +145,28 @@ const Search = () => {
       console.error("Error fetching store:", error);
     }
   };
-  
 
   return (
     <div className="min-w-[375px] mx-auto mb-[120px]">
       <TitleBar title={"探す"} />
 
       {/* QR Scanner Section */}
-      <div className="w-[342px] mx-auto">
+      <motion.div
+        className="w-[342px] mx-auto"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
         <h4 className="font-hiragino font-semibold text-lg mt-8 mb-4">
           QRコードで探す
         </h4>
-        <button onClick={handleOpenScanner} disabled={isScannerOpen}>
+        <motion.button
+          onClick={handleOpenScanner}
+          disabled={isScannerOpen}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+        >
           <ButtonPrimary
             icon={<img className="mr-4" src={camera} alt="search icon" />}
             btnText="カメラを起動する"
@@ -166,10 +174,15 @@ const Search = () => {
               isScannerOpen ? "opacity-50 cursor-not-allowed" : ""
             }`}
           />
-        </button>
+        </motion.button>
 
         {isScannerOpen && (
-          <div className="relative mt-4">
+          <motion.div
+            className="relative mt-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+          >
             <video
               ref={videoRef}
               className="w-full rounded-lg shadow-lg"
@@ -182,15 +195,30 @@ const Search = () => {
             >
               閉じる
             </button>
-          </div>
+          </motion.div>
         )}
-        {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
-      </div>
+
+        {errorMessage && (
+          <motion.p
+            className="text-red-500 mt-2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+          >
+            {errorMessage}
+          </motion.p>
+        )}
+      </motion.div>
 
       {/* Member Search */}
-      <div className="w-[342px] mx-auto">
+      <motion.div
+        className="w-[342px] mx-auto"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration:1 }}
+      >
         <h4 className="mt-8 mb-4 font-semibold font-hiragino">
-        メンバー名から探す
+          メンバー名から探す
         </h4>
         <div className="relative flex flex-col justify-center">
           <input
@@ -220,12 +248,17 @@ const Search = () => {
             </span>
           )}
         </div>
-      </div>
+      </motion.div>
 
       {/* Store Code Search */}
-      <div className="w-[342px] mx-auto">
+      <motion.div
+        className="w-[342px] mx-auto"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
         <h4 className="mt-8 mb-4 font-semibold font-hiragino">
-        店舗(チーム）コードから探す
+          店舗(チーム）コードから探す
         </h4>
         <div className="relative flex flex-col justify-center">
           <input
@@ -255,7 +288,7 @@ const Search = () => {
             </span>
           )}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
