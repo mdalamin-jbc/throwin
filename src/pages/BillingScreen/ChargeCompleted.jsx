@@ -120,7 +120,7 @@ const ChargeCompleted = () => {
       </main>
 
       <Link to="/search" className="fixed bottom-28 left-0 w-full px-6">
-        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 1.2 }}>
+        <motion.div whileHover={{ scale: 0 }} whileTap={{ scale: 0.9 }}>
           <ButtonPrimary style="flex justify-center w-full rounded-full font-hiragino py-3 font-bold text-white bg-gradient-to-r from-[#65D0F2] to-[#2399F4] hover:opacity-90 transition-opacity" btnText="他のメンバーを探す" />
         </motion.div>
       </Link>
