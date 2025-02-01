@@ -104,9 +104,9 @@ const ChargeCompleted = () => {
 
       <header>
         <TitleBar title="" style="mb-0 w-full" icon={<img className="w-28" src={logo} alt="Throwin Logo" />} />
-        <div className="absolute left-0 right-0 flex justify-center">
+        {/* <div className="absolute left-0 right-0 flex justify-center">
           <motion.img src={effect} alt="Billing Effect" className="min-w-[375px] max-w-full" loading="eager" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8 }} />
-        </div>
+        </div> */}
         <Confetti width={width} height={height} />
       </header>
 
