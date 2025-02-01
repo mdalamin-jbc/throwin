@@ -9,6 +9,7 @@ import { Helmet } from "react-helmet";
 import { MdDeleteOutline } from "react-icons/md";
 import useAxiosPrivate from "../../hooks/axiousPrivate";
 import "./styles.css";
+import toast from "react-hot-toast";
 
 const UserProfile = () => {
   const { logout } = useAuth();
@@ -20,15 +21,13 @@ const UserProfile = () => {
   console.log(userDetails);
 
   const handleLogout = () => {
-    logout();
-    Swal.fire({
-      icon: "success",
-      title: "ログアウト成功",
-      text: "正常にログアウトされました",
-      confirmButtonText: "OK",
-    }).then(() => {
-      navigate("/login");
+    toast.success("正常にログアウトされました", {
+      position: "top-center",
+      duration: 1500,
     });
+
+    navigate("/login");
+    logout();
   };
 
   const handleUserIdDelete = async () => {
@@ -36,12 +35,9 @@ const UserProfile = () => {
       const response = await axiosPrivate.delete(`/auth/users/delete`);
       console.log("User deleted successfully:", response.data);
 
-      // Show SweetAlert for success
-      Swal.fire({
-        title: "成功しました！",
-        text: "ユーザーが正常に削除されました。",
-        icon: "success",
-        confirmButtonText: "OK",
+      toast.success("ユーザーが正常に削除されました。", {
+        position: "top-center",
+        duration: 1500,
       });
       logout();
     } catch (error) {
@@ -51,13 +47,10 @@ const UserProfile = () => {
       );
 
       // Show SweetAlert for error
-      Swal.fire({
-        title: "エラー",
-        text: error.response
-          ? error.response.data.message || "削除に失敗しました。"
-          : "何かがうまくいきませんでした。",
-        icon: "error",
-        confirmButtonText: "OK",
+
+      toast.error("何かがうまくいきませんでした。", {
+        position: "top-center",
+        duration: 1500,
       });
     }
   };
@@ -156,7 +149,7 @@ const UserProfile = () => {
           {/* Open the modal using document.getElementById('ID').showModal() method */}
           <button
             className="w-full"
-            onClick={() => document.getElementById("my_modal_1").showModal()}
+            onClick={() => document.getElementById("logout_modal").showModal()}
           >
             <div className="flex justify-between border-b-[1.5px] hover:cursor-pointer text-[#ff00ff]">
               <h4>ログアウト</h4>
@@ -167,7 +160,7 @@ const UserProfile = () => {
             </div>
           </button>
 
-          <dialog id="my_modal_1" className="modal max-w-[343px] mx-auto ">
+          <dialog id="logout_modal" className="modal max-w-[343px] mx-auto ">
             <div className="modal-box p-0 pt-7">
               {" "}
               {/* Removed padding */}
@@ -200,7 +193,7 @@ const UserProfile = () => {
           {/* Open the modal using document.getElementById('ID').showModal() method */}
           <button
             className="w-full"
-            onClick={() => document.getElementById("my_modal_2").showModal()}
+            onClick={() => document.getElementById("delete_modal").showModal()}
           >
             <div className="flex justify-between border-b-[1.5px] my-5 hover:cursor-pointer text-[#DC143C]">
               <h4>アカウントを削除する</h4>
@@ -211,7 +204,7 @@ const UserProfile = () => {
             </div>
           </button>
 
-          <dialog id="my_modal_2" className="modal max-w-[343px] mx-auto">
+          <dialog id="delete_modal" className="modal max-w-[343px] mx-auto">
             <div className="modal-box bg-[#F9F9F9] p-0 pt-7">
               {/* Modal box with green background */}
               <div>
