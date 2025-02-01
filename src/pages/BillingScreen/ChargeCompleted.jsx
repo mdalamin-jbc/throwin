@@ -13,38 +13,68 @@ import Confetti from "react-confetti";
 import useWindowSize from "react-use/lib/useWindowSize";
 import confetti from "canvas-confetti";
 
-const fadeInUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { 
-    opacity: 1, 
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: [0.645, 0.045, 0.355, 1]
-    }
-  }
-};
-
-const scaleIn = {
-  hidden: { opacity: 0, scale: 0.95 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: {
-      duration: 0.5,
-      ease: [0.645, 0.045, 0.355, 1]
-    }
-  }
-};
-
-const staggerContainer = {
+// Enhanced animations with smoother easing
+const pageTransition = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2,
-      delayChildren: 0.3
+      duration: 0.8,
+      ease: [0.22, 1, 0.36, 1],
+      staggerChildren: 0.3,
+      delayChildren: 0.2
     }
+  },
+  exit: {
+    opacity: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.22, 1, 0.36, 1]
+    }
+  }
+};
+
+const fadeInUp = {
+  hidden: { 
+    opacity: 0, 
+    y: 30,
+    scale: 0.95
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.8,
+      ease: [0.22, 1, 0.36, 1]
+    }
+  }
+};
+
+const imageScale = {
+  hidden: { 
+    scale: 0.8, 
+    opacity: 0,
+    rotateZ: -5
+  },
+  visible: {
+    scale: 1,
+    opacity: 1,
+    rotateZ: 0,
+    transition: {
+      duration: 1,
+      ease: [0.34, 1.56, 0.64, 1]
+    }
+  }
+};
+
+const pulseAnimation = {
+  scale: [1, 1.02, 1],
+  opacity: [0.5, 0.7, 0.5],
+  transition: {
+    duration: 3,
+    repeat: Infinity,
+    ease: "easeInOut"
   }
 };
 
@@ -57,11 +87,14 @@ const ChargeCompleted = () => {
   const validatedRef = useRef(false);
   const { width, height } = useWindowSize();
 
+  // Enhanced confetti effect
   const fireConfetti = () => {
-    const count = 200;
-    const defaults = { 
+    const count = 300;
+    const defaults = {
       origin: { y: 0.7 },
-      colors: ['#65D0F2', '#2399F4', '#ffffff']
+      colors: ['#65D0F2', '#2399F4', '#ffffff', '#91E3FF'],
+      spread: 80,
+      ticks: 300
     };
 
     function fire(particleRatio, opts) {
@@ -72,11 +105,11 @@ const ChargeCompleted = () => {
       });
     }
 
-    fire(0.25, { spread: 26, startVelocity: 55 });
-    fire(0.2, { spread: 60 });
-    fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
-    fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
-    fire(0.1, { spread: 120, startVelocity: 45 });
+    fire(0.25, { spread: 26, startVelocity: 55, gravity: 1.2 });
+    fire(0.2, { spread: 60, startVelocity: 50, gravity: 1.1 });
+    fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8, gravity: 1 });
+    fire(0.1, { spread: 130, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+    fire(0.1, { spread: 130, startVelocity: 45, gravity: 0.9 });
   };
 
   const validatePayment = useCallback(async () => {
@@ -103,7 +136,7 @@ const ChargeCompleted = () => {
 
       if (response.status === 200) {
         setPaymentStatus("success");
-        fireConfetti();
+        setTimeout(fireConfetti, 500);
         toast.success(`取引ID: ${paymentId}`, {
           position: "top-center",
           duration: 3000,
@@ -130,7 +163,7 @@ const ChargeCompleted = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="flex justify-center items-center h-screen"
+        className="flex justify-center items-center h-screen bg-gradient-to-b from-white to-blue-50"
       >
         <Circles height="80" width="80" color="#49BBDF" ariaLabel="loading" />
       </motion.div>
@@ -138,13 +171,13 @@ const ChargeCompleted = () => {
   }
 
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       <motion.div 
-        variants={fadeInUp}
+        variants={pageTransition}
         initial="hidden"
         animate="visible"
-        exit="hidden"
-        className="relative min-h-screen pb-32 overflow-hidden"
+        exit="exit"
+        className="relative min-h-screen pb-32 overflow-hidden bg-gradient-to-b from-white to-blue-50"
       >
         <Helmet>
           <title>Throwin | Billing Page</title>
@@ -153,12 +186,10 @@ const ChargeCompleted = () => {
         <header className="relative z-10">
           <TitleBar 
             title="" 
-            style="mb-0 w-full backdrop-blur-sm bg-white/80" 
+            style="mb-0 w-full backdrop-blur-md bg-white/90 shadow-sm" 
             icon={
               <motion.img 
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.5 }}
+                variants={imageScale}
                 className="w-28" 
                 src={logo} 
                 alt="Throwin Logo" 
@@ -169,16 +200,15 @@ const ChargeCompleted = () => {
             width={width} 
             height={height}
             recycle={false}
-            numberOfPieces={200}
-            gravity={0.2}
+            numberOfPieces={300}
+            gravity={0.15}
+            colors={['#65D0F2', '#2399F4', '#ffffff', '#91E3FF']}
           />
         </header>
 
         <main className="min-w-[375px] mx-auto text-[#44495B] mt-11 px-4">
           <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            animate="visible"
+            variants={pageTransition}
             className="text-center"
           >
             <motion.h3 variants={fadeInUp} className="font-bold text-2xl">
@@ -186,23 +216,28 @@ const ChargeCompleted = () => {
             </motion.h3>
             
             <motion.div
-              variants={scaleIn}
-              className="relative w-40 h-40 mx-auto mt-3"
+              variants={fadeInUp}
+              className="relative w-40 h-40 mx-auto mt-6"
             >
               <motion.div
-                className="absolute inset-0 rounded-full bg-gradient-to-r from-[#65D0F2] to-[#2399F4] blur-lg opacity-50"
-                animate={{ 
-                  scale: [1, 1.02, 1],
-                  opacity: [0.5, 0.6, 0.5]
+                className="absolute inset-0 rounded-full bg-gradient-to-r from-[#65D0F2] to-[#2399F4] blur-xl"
+                animate={pulseAnimation}
+              />
+              <motion.div
+                className="absolute inset-0 rounded-full bg-gradient-to-r from-[#65D0F2] to-[#2399F4] opacity-30 blur-lg"
+                animate={{
+                  scale: [1, 1.1, 1],
+                  rotate: [0, 90, 0],
                 }}
                 transition={{
-                  duration: 2,
+                  duration: 8,
                   repeat: Infinity,
-                  ease: "easeInOut"
+                  ease: "linear"
                 }}
               />
               <motion.img
-                className="rounded-full w-40 h-40 relative z-10 object-cover border-4 border-white shadow-lg"
+                variants={imageScale}
+                className="rounded-full w-40 h-40 relative z-10 object-cover border-4 border-white shadow-xl"
                 src={staff.image?.medium || "https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"}
                 alt={`${staff?.name}'s profile`}
                 loading="eager"
@@ -211,12 +246,16 @@ const ChargeCompleted = () => {
 
             <motion.h3 
               variants={fadeInUp}
-              className="font-bold text-2xl w-[85%] mx-auto mt-6 mb-4"
+              className="font-bold text-2xl w-[85%] mx-auto mt-8 mb-4"
             >
               ありがとうございます！ スローインしました
             </motion.h3>
             
-            <motion.div variants={fadeInUp}>
+            <motion.div 
+              variants={fadeInUp}
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+            >
               <Link 
                 className="text-[#5297FF] font-bold text-sm hover:underline inline-block"
                 to="/history"
@@ -229,18 +268,16 @@ const ChargeCompleted = () => {
 
         <motion.div 
           className="fixed bottom-28 left-0 w-full px-6"
-          initial={{ y: 100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 1, duration: 0.5 }}
+          variants={fadeInUp}
         >
           <Link to="/search" className="block">
             <motion.div
-              whileHover={{ scale: 1.02 }}
+              whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
             >
               <ButtonPrimary 
-                style="flex justify-center w-full rounded-full font-hiragino py-3 font-bold text-white bg-gradient-to-r from-[#65D0F2] to-[#2399F4] shadow-lg hover:shadow-xl transition-all duration-300" 
+                style="flex justify-center w-full rounded-full font-hiragino py-4 font-bold text-white bg-gradient-to-r from-[#65D0F2] to-[#2399F4] shadow-xl hover:shadow-2xl transition-all duration-300" 
                 btnText="他のメンバーを探す" 
               />
             </motion.div>
