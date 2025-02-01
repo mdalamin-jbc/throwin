@@ -207,14 +207,14 @@ const ChargeCompleted = () => {
               />
             } 
           />
-          <Confetti 
+          {/* <Confetti 
             width={width} 
             height={height}
             recycle={false}
             numberOfPieces={200}
             gravity={0.12}
             colors={['#65D0F2', '#2399F4', '#ffffff', '#91E3FF']}
-          />
+          /> */}
         </header>
 
         <main className="min-w-[375px] mx-auto text-[#44495B] mt-11 px-4">
