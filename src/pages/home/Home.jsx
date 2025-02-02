@@ -1,4 +1,3 @@
-import logo from "../../assets/images/home/logo.png";
 import logo1 from "../../assets/logo/home_logo.png";
 import logo2 from "../../assets/logo/home_logo_part_2.png";
 import video from "../../assets/video/banner_video.mp4";
@@ -27,16 +26,6 @@ const Home = () => {
         className="absolute inset-0 w-full h-full object-cover"
       ></video>
 
-      {/* Centered Logo */}
-      <motion.div
-        className="absolute inset-0 flex justify-center items-center z-10" // Set z-index lower
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.7 }}
-      >
-        {/* Other elements (like video and buttons) */}
-      </motion.div>
-
       {/* Centered Logo with delayed animation */}
       <motion.div
         className="absolute inset-0 flex justify-center items-center z-20" // Set z-index higher for logo
@@ -46,7 +35,6 @@ const Home = () => {
       >
         {/* Logo with animation */}
         <div style={{ position: "relative", width: "100%", height: "100%" }}>
-          {/* Animated logo2 with delay */}
           <motion.img
             src={logo2}
             alt="logo"
@@ -56,20 +44,22 @@ const Home = () => {
               left: "44%",
               transform: "translateX(-50%)",
             }}
-            initial={{ opacity: 0, y: -100 }} // Start from above the screen
+            className="md:left-[60%] md:w-[40px] md:max-w-[none]"
+            initial={{ opacity: 0, y: -100 }}
             animate={{
               opacity: 1,
               y: 0,
-              scale: [1, 1.2, 1], // Bounce effect on scaling
+              scale: [1, 1.2, 1],
             }}
             transition={{
-              duration: 2, // Slower duration
-              delay: 0.3, // Delay before logo2 starts appearing
-              type: "spring", // Spring effect for bouncing
+              duration: 2,
+              delay: 0.3,
+              type: "spring",
               stiffness: 150,
-              damping: 5,
+              damping: 2,
             }}
           />
+
           {/* Static logo1 */}
           <img
             src={logo1}
