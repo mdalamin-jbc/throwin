@@ -36,13 +36,21 @@ const Home = () => {
           <motion.div 
             className="absolute w-full flex justify-center"
             style={{
-              transform: 'translate(-1.2%, 3%)'  // Changed -2% to 3% to move down
+              transform: window.innerWidth <= 768 ? 
+                'translate(-1.2%, 3%)' : // Original mobile positioning
+                `translate(
+                  ${window.innerHeight <= 720 ? '-0.8%' : 
+                    window.innerHeight <= 1080 ? '-0.3%' : '-1.2%'
+                  }, 
+                  ${window.innerHeight <= 720 ? '2%' : 
+                    window.innerHeight <= 1080 ? '2.5%' : '3%'
+                  })`
             }}
           >
             <motion.img
               src={logo2}
               alt="coin logo"
-              className="w-auto h-auto max-w-[30%] md:max-w-[25%] lg:max-w-[20%]"
+              className="w-auto h-auto max-w-[30%] md:max-w-[25%] lg:max-w-[20%]" // Kept original mobile sizing
               initial={{ opacity: 0, y: -300 }}
               animate={{
                 opacity: 1,
@@ -62,7 +70,7 @@ const Home = () => {
           <img
             src={logo1}
             alt="main logo"
-            className="w-auto h-auto max-w-[80%] md:max-w-[70%] lg:max-w-[60%]"
+            className="w-auto h-auto max-w-[80%] md:max-w-[70%] lg:max-w-[60%]" // Kept original sizing
           />
         </div>
       </motion.div>
