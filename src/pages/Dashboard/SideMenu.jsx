@@ -1,4 +1,5 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import logo from "../../assets/images/socialLogin/logo2.png";
 import management from "../../assets/icons/management.png";
 import ep_seeting from "../../assets/icons/ep_setting.png";
@@ -11,6 +12,7 @@ import payment from "../../assets/icons/payment_management.png";
 
 const SideMenu = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const userRole = localStorage.getItem("userRole");
   console.log(userRole);
 
@@ -78,44 +80,58 @@ const SideMenu = () => {
   ];
 
   // Filter menu items based on role
-  const menuItems = allMenuItems.filter((item) =>
-    item.roles.includes(userRole)
-  );
+  const menuItems = allMenuItems.filter((item) => item.roles.includes(userRole));
+
+  // Default to the first item's path if no path matches
+  useEffect(() => {
+    if (!menuItems.some((item) => item.path === location.pathname)) {
+      navigate(menuItems[0].path);
+    }
+  }, [location.pathname, menuItems, navigate]);
 
   return (
-    <div className="w-[300px] h-[900px] shadow-lg flex flex-col justify-between bg-white">
+    <div className="w-full h-full min-h-[720px] flex flex-col lg:w-[300px]">
       {/* Logo Section */}
-      <div className="mt-6 ml-9 border-gray-300 text-center ">
-        <img src={logo} alt="Logo" className="w-[221px] mb-[61px]" />
-      </div>
+      <div className="shadow-lg flex flex-col justify-between bg-white h-full lg:h-[100vh]">
+        <div className="mt-6 ml-9 border-gray-300 text-center">
+          <img
+            src={logo}
+            alt="Logo"
+            className="w-[50%] lg:w-[221px] mb-[30px] lg:mb-[61px]"
+          />
+        </div>
 
-      <h4 className="text-sm font-semibold pl-6 mb-6">
-        チーム名（企業名）が入ります
-      </h4>
+        <h4 className="text-sm font-semibold pl-6 mb-6">
+          チーム名（企業名）が入ります
+        </h4>
 
-      {/* Menu Items */}
-      <ul className="flex-1 list-none p-0 m-0">
-        {menuItems.map((item) => (
-          <li key={item.path}>
-            <NavLink
-              to={item.path}
-              className={`flex items-center px-10 py-4 border-t border-b hover:bg-[#edf9fc] cursor-pointer ${
-                location.pathname === item.path
-                  ? "bg-[#edf9fc] font-semibold"
-                  : ""
-              }`}
-            >
-              <span className="text-blue-500">{item.icon}</span>
-              <span className="text-[#434343] text-base ">{item.label}</span>
-            </NavLink>
-          </li>
-        ))}
-      </ul>
+        {/* Menu Items */}
+        <ul className="flex-1 list-none p-0 m-0 bg-white">
+          {menuItems.map((item) => (
+            <li key={item.path}>
+              <NavLink
+                to={item.path}
+                className={`flex items-center px-6 py-2 lg:px-10 lg:py-4 border-t border-b hover:bg-[#edf9fc] cursor-pointer ${
+                  location.pathname === item.path
+                    ? "bg-[#edf9fc] font-semibold"
+                    : ""
+                }`}
+              >
+                <span className="text-blue-500">{item.icon}</span>
+                <span className="text-[#434343] text-base">{item.label}</span>
+              </NavLink>
+            </li>
+          ))}
+        </ul>
 
-      {/* Logout */}
-      <div className="text-center py-3  cursor-pointer bg-[#49BBDF]">
-        {/* <FaSignOutAlt className="text-blue-500 text-xl mr-4" /> */}
-        <span className="text-white text-lg font-semibold">ログアウト</span>
+        {/* Logout */}
+        <Link
+          to={"/dashboard/adminLogin"}
+          className="text-center py-3 cursor-pointer bg-[#49BBDF] hover:bg-[#3aa0bf]"
+        >
+          {/* <FaSignOutAlt className="text-blue-500 text-xl mr-4" /> */}
+          <span className="text-white text-lg font-semibold">ログアウト</span>
+        </Link>
       </div>
     </div>
   );
