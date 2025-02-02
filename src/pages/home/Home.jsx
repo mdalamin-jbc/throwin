@@ -44,19 +44,18 @@ const Home = () => {
               left: "44%",
               transform: "translateX(-50%)",
             }}
-            className="md:left-[60%] md:w-[40px] md:max-w-[none]"
-            initial={{ opacity: 0, y: -100 }}
+            initial={{ opacity: 0, y: -300 }} // Start from above the screen
             animate={{
               opacity: 1,
-              y: 0,
+              y: 0, 
               scale: [1, 1.2, 1],
             }}
             transition={{
-              duration: 2,
+              duration: 2, // Control the speed of the animation
               delay: 0.3,
               type: "spring",
-              stiffness: 150,
-              damping: 2,
+              stiffness: 5,
+              damping: 2, 
             }}
           />
 
