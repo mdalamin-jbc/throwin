@@ -1,5 +1,7 @@
 import logo from "../../assets/images/home/logo.png";
-import bg from "../../assets/images/home/bg.png";
+import logo1 from "../../assets/logo/home_logo.png";
+import logo2 from "../../assets/logo/home_logo_part_2.png";
+import video from "../../assets/video/banner_video.mp4";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -16,15 +18,15 @@ const Home = () => {
   };
 
   return (
-    <div
-      className="relative bg-[#49BBDF] h-screen overflow-hidden pt-[70px] md:pt-5 border-white"
-      style={{
-        backgroundImage: `url(${bg})`,
-        backgroundSize: "cover",
-        backgroundPosition: "top",
-        backgroundRepeat: "no-repeat",
-      }}
-    >
+    <div className="relative bg-[#49BBDF] h-screen overflow-hidden pt-[70px] md:pt-5 border-white">
+      <video
+        src={video}
+        autoPlay
+        loop
+        muted
+        className="absolute inset-0 w-full h-full object-cover"
+      ></video>
+
       {/* Centered Logo */}
       <motion.div
         className="absolute inset-0 flex justify-center items-center z-20"
@@ -33,6 +35,10 @@ const Home = () => {
         transition={{ duration: 0.7 }}
       >
         <img src={logo} alt="logo" className="w-[350px]" />
+        {/* <div>
+          <img src={logo2} alt="logo" className="absolute" />
+          <img src={logo1} alt="logo" className="relative " />
+        </div> */}
       </motion.div>
 
       {/* Buttons */}
