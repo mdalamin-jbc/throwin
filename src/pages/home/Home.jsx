@@ -29,16 +29,59 @@ const Home = () => {
 
       {/* Centered Logo */}
       <motion.div
-        className="absolute inset-0 flex justify-center items-center z-20"
+        className="absolute inset-0 flex justify-center items-center z-10" // Set z-index lower
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.7 }}
       >
-        <img src={logo} alt="logo" className="w-[350px]" />
-        {/* <div>
-          <img src={logo2} alt="logo" className="absolute" />
-          <img src={logo1} alt="logo" className="relative " />
-        </div> */}
+        {/* Other elements (like video and buttons) */}
+      </motion.div>
+
+      {/* Centered Logo with delayed animation */}
+      <motion.div
+        className="absolute inset-0 flex justify-center items-center z-20" // Set z-index higher for logo
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.7 }}
+      >
+        {/* Logo with animation */}
+        <div style={{ position: "relative", width: "100%", height: "100%" }}>
+          {/* Animated logo2 with delay */}
+          <motion.img
+            src={logo2}
+            alt="logo"
+            style={{
+              position: "absolute",
+              top: "46%",
+              left: "44%",
+              transform: "translateX(-50%)",
+            }}
+            initial={{ opacity: 0, y: -100 }} // Start from above the screen
+            animate={{
+              opacity: 1,
+              y: 0,
+              scale: [1, 1.2, 1], // Bounce effect on scaling
+            }}
+            transition={{
+              duration: 2, // Slower duration
+              delay: 0.3, // Delay before logo2 starts appearing
+              type: "spring", // Spring effect for bouncing
+              stiffness: 150,
+              damping: 5,
+            }}
+          />
+          {/* Static logo1 */}
+          <img
+            src={logo1}
+            alt="logo"
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          />
+        </div>
       </motion.div>
 
       {/* Buttons */}
