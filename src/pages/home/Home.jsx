@@ -39,7 +39,7 @@ const Home = () => {
               transform: window.innerWidth <= 768 ? 
                 'translate(-1.2%, 3%)' : // Original mobile positioning
                 `translate(
-                  ${window.innerHeight <= 720 ? '-0.8%' : 
+                  ${window.innerHeight <= 720 ? '-0.4%' : 
                     window.innerHeight <= 1080 ? '-0.3%' : '-1.2%'
                   }, 
                   ${window.innerHeight <= 720 ? '2%' : 
