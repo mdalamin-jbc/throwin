@@ -1,9 +1,9 @@
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import ButtonPrimary from "../../components/ButtonPrimary";
 import logo1 from "../../assets/logo/home_logo.png";
 import logo2 from "../../assets/logo/home_logo_part_2.png";
 import video from "../../assets/video/banner_video.mp4";
-import ButtonPrimary from "../../components/ButtonPrimary";
-import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -24,57 +24,50 @@ const Home = () => {
         loop
         muted
         className="absolute inset-0 w-full h-full object-cover"
-      ></video>
+      />
 
-      {/* Centered Logo with delayed animation */}
       <motion.div
-        className="absolute inset-0 flex justify-center items-center z-20" // Set z-index higher for logo
+        className="absolute inset-0 flex justify-center items-center z-20"
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.7 }}
       >
-        {/* Logo with animation */}
-        <div style={{ position: "relative", width: "100%", height: "100%" }}>
-          <motion.img
-            src={logo2}
-            alt="logo"
+        <div className="relative w-full h-full flex justify-center items-center">
+          <motion.div 
+            className="absolute w-full flex justify-center"
             style={{
-              position: "absolute",
-              top: "46%",
-              left: "44%",
-              transform: "translateX(-50%)",
+              transform: 'translate(-1.2%, 3%)'  // Changed -2% to 3% to move down
             }}
-            initial={{ opacity: 0, y: -300 }} // Start from above the screen
-            animate={{
-              opacity: 1,
-              y: 0, 
-              scale: [1, 1.2, 1],
-            }}
-            transition={{
-              duration: 2, // Control the speed of the animation
-              delay: 0.3,
-              type: "spring",
-              stiffness: 5,
-              damping: 2, 
-            }}
-          />
+          >
+            <motion.img
+              src={logo2}
+              alt="coin logo"
+              className="w-auto h-auto max-w-[30%] md:max-w-[25%] lg:max-w-[20%]"
+              initial={{ opacity: 0, y: -300 }}
+              animate={{
+                opacity: 1,
+                y: 0,
+                scale: [1, 1.2, 1],
+              }}
+              transition={{
+                duration: 2,
+                delay: 0.3,
+                type: "spring",
+                stiffness: 5,
+                damping: 2,
+              }}
+            />
+          </motion.div>
 
-          {/* Static logo1 */}
           <img
             src={logo1}
-            alt="logo"
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-            }}
+            alt="main logo"
+            className="w-auto h-auto max-w-[80%] md:max-w-[70%] lg:max-w-[60%]"
           />
         </div>
       </motion.div>
 
-      {/* Buttons */}
-      <div className="absolute bottom-[40px] lg:-bottom-[60%] xl:bottom-0 w-full flex flex-col gap-3 justify-center items-center z-20">
+      <div className="absolute bottom-[40px] lg:bottom-8 w-full flex flex-col gap-3 justify-center items-center z-20">
         <motion.button
           onClick={handleStart}
           initial={{ opacity: 0, y: 20 }}
