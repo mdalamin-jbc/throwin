@@ -1,7 +1,10 @@
 import { useForm } from "react-hook-form";
 import ButtonPrimary from "../../../components/ButtonPrimary";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const MemberReg = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -11,6 +14,17 @@ const MemberReg = () => {
 
   const onSubmit = (data) => {
     console.log("Form Data:", data);
+  };
+
+  const handleMemberReg = () => {
+    toast.success("Member register successfully!", {
+      duration: 3000,
+      position: "top-center",
+    });
+
+    setTimeout(() => {
+      navigate("/dashboard/m_account");
+    }, 1500);
   };
 
   return (
@@ -169,7 +183,7 @@ const MemberReg = () => {
                 </form>
                 <form method="dialog">
                   <button
-                    //   onClick={handleUserIdDelete}
+                    onClick={handleMemberReg}
                     className="px-4 py-4  flex items-center justify-center text-[#2976EA]"
                   >
                     <span className="ml-8">登録する</span>

@@ -3,7 +3,7 @@ import { BiSolidDownArrow } from "react-icons/bi";
 import logo from "../../../assets/images/socialLogin/logo2.png";
 import QRCode from "react-qr-code";
 import ButtonPrimary from "../../../components/ButtonPrimary";
-import html2canvas from "html2canvas";
+// import html2canvas from "html2canvas";
 
 const QrCreation = () => {
   const {

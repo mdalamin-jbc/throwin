@@ -1,6 +1,9 @@
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const CreateANewAccount = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -10,6 +13,17 @@ const CreateANewAccount = () => {
   const onSubmit = (data) => {
     // Handle form submission logic here
     console.log("Form Data:", data);
+  };
+
+  const handleCreatNewAccount = () => {
+    toast.success("Account created successfully!", {
+      duration: 3000, 
+      position: "top-center", 
+    });
+
+    setTimeout(() => {
+      navigate("/dashboard/account");
+    }, 1500);
   };
 
   return (
@@ -144,7 +158,7 @@ const CreateANewAccount = () => {
                 </form>
                 <form method="dialog">
                   <button
-                    //   onClick={handleUserIdDelete}
+                    onClick={handleCreatNewAccount}
                     className="px-4 py-4  flex items-center justify-center text-[#2976EA]"
                   >
                     <span className="ml-8">登録する</span>

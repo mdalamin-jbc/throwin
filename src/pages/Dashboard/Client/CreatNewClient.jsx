@@ -1,7 +1,10 @@
 import { useForm } from "react-hook-form";
 import ButtonPrimary from "../../../components/ButtonPrimary";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const CreatNewClient = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -11,6 +14,17 @@ const CreatNewClient = () => {
 
   const onSubmit = (data) => {
     console.log("Form Data:", data);
+  };
+
+  const handleCreatNewClient = () => {
+    toast.success("New client creat successfully!", {
+      duration: 3000,
+      position: "top-center",
+    });
+
+    setTimeout(() => {
+      navigate("/dashboard/client");
+    }, 1500);
   };
 
   return (
@@ -126,9 +140,7 @@ const CreatNewClient = () => {
                     </div>
                     <div className="flex justify-between text-xs text-gray-500 mt-1">
                       {errors.email && (
-                        <p className="text-red-500">
-                          {errors.email.message}
-                        </p>
+                        <p className="text-red-500">{errors.email.message}</p>
                       )}
                     </div>
                   </td>
@@ -176,9 +188,7 @@ const CreatNewClient = () => {
                     </div>
                     <div className="flex justify-between text-xs text-gray-500 mt-1">
                       {errors.address && (
-                        <p className="text-red-500">
-                          {errors.address.message}
-                        </p>
+                        <p className="text-red-500">{errors.address.message}</p>
                       )}
                     </div>
                   </td>
@@ -414,7 +424,10 @@ const CreatNewClient = () => {
                   </button>
                 </form>
                 <form method="dialog">
-                  <button className="px-4 py-4 flex items-center justify-center text-[#2976EA]">
+                  <button
+                    onClick={handleCreatNewClient}
+                    className="px-4 py-4 flex items-center justify-center text-[#2976EA]"
+                  >
                     <span className="ml-8">登録する</span>
                   </button>
                 </form>
