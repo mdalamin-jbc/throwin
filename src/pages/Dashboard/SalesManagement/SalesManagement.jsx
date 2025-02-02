@@ -167,7 +167,7 @@ const SalesManagement = () => {
 
           {/* Chart Section */}
           <div className="mt-[27px]">
-            <Bar height={220} width={600} data={data} options={options} />
+            <Bar height={150} width={600} data={data} options={options} />
           </div>
         </div>
       </div>

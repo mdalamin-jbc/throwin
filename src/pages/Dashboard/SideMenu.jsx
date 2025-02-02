@@ -14,7 +14,12 @@ const SideMenu = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const userRole = localStorage.getItem("userRole");
-  console.log(userRole);
+
+  // Helper function to check if a path is active
+  const isPathActive = (path, subPaths = []) => {
+    if (location.pathname === path) return true;
+    return subPaths.some(subPath => location.pathname.startsWith(path + subPath));
+  };
 
   const allMenuItems = [
     {
@@ -27,18 +32,21 @@ const SideMenu = () => {
       label: "アカウント",
       icon: <img src={management} alt="" className="mr-4 w-[30px]" />,
       path: "/dashboard/account",
+      subPaths: ["/creat_new"],
       roles: ["sales_agent"],
     },
     {
       label: "アカウント",
       icon: <img src={management} alt="" className="mr-4 w-[30px]" />,
       path: "/dashboard/m_account",
+      subPaths: ["/member_reg"],
       roles: ["restaurant_owner"],
     },
     {
       label: "クライアント",
       icon: <img src={management} alt="" className="mr-4 w-[30px]" />,
       path: "/dashboard/client",
+      subPaths: ["/creat_new"],
       roles: ["fc_admin", "glow_admin"],
     },
     {
@@ -82,16 +90,29 @@ const SideMenu = () => {
   // Filter menu items based on role
   const menuItems = allMenuItems.filter((item) => item.roles.includes(userRole));
 
-  // Default to the first item's path if no path matches
+  // Check if current path is valid
+  const isValidPath = (currentPath) => {
+    return menuItems.some((item) => {
+      const mainPathValid = currentPath === item.path;
+      const subPathValid = item.subPaths?.some(subPath => 
+        currentPath === item.path + subPath
+      );
+      return mainPathValid || subPathValid;
+    });
+  };
+
+  // Only redirect if path is completely invalid
   useEffect(() => {
-    if (!menuItems.some((item) => item.path === location.pathname)) {
-      navigate(menuItems[0].path);
+    if (location.pathname !== "/dashboard/adminLogin" && !location.pathname.includes(menuItems[0]?.path)) {
+      const pathIsValid = isValidPath(location.pathname);
+      if (!pathIsValid) {
+        navigate(menuItems[0]?.path || "/dashboard/sales_management");
+      }
     }
-  }, [location.pathname, menuItems, navigate]);
+  }, [location.pathname]);
 
   return (
     <div className="w-full h-full min-h-[720px] flex flex-col lg:w-[300px]">
-      {/* Logo Section */}
       <div className="shadow-lg flex flex-col justify-between bg-white h-full lg:h-[100vh]">
         <div className="mt-6 ml-9 border-gray-300 text-center">
           <img
@@ -105,17 +126,15 @@ const SideMenu = () => {
           チーム名（企業名）が入ります
         </h4>
 
-        {/* Menu Items */}
         <ul className="flex-1 list-none p-0 m-0 bg-white">
           {menuItems.map((item) => (
             <li key={item.path}>
               <NavLink
                 to={item.path}
-                className={`flex items-center px-6 py-2 lg:px-10 lg:py-4 border-t border-b hover:bg-[#edf9fc] cursor-pointer ${
-                  location.pathname === item.path
-                    ? "bg-[#edf9fc] font-semibold"
-                    : ""
-                }`}
+                className={({ isActive }) => `
+                  flex items-center px-6 py-2 lg:px-10 lg:py-4 border-t border-b hover:bg-[#edf9fc] cursor-pointer
+                  ${isPathActive(item.path, item.subPaths || []) ? "bg-[#edf9fc] font-semibold" : ""}
+                `}
               >
                 <span className="text-blue-500">{item.icon}</span>
                 <span className="text-[#434343] text-base">{item.label}</span>
@@ -124,12 +143,10 @@ const SideMenu = () => {
           ))}
         </ul>
 
-        {/* Logout */}
         <Link
           to={"/dashboard/adminLogin"}
           className="text-center py-3 cursor-pointer bg-[#49BBDF] hover:bg-[#3aa0bf]"
         >
-          {/* <FaSignOutAlt className="text-blue-500 text-xl mr-4" /> */}
           <span className="text-white text-lg font-semibold">ログアウト</span>
         </Link>
       </div>
