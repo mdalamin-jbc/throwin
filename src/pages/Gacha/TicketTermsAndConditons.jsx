@@ -5,7 +5,6 @@ import { Link, useNavigate } from "react-router-dom";
 import gold_ticket from "../../assets/images/gacha/gold-ticket.png";
 import ButtonSecondary from "../../components/ButtonSecondary";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
-import { CgLogOut } from "react-icons/cg";
 
 const TicketTermsAndConditons = () => {
   const navigate = useNavigate();
@@ -26,12 +25,14 @@ const TicketTermsAndConditons = () => {
       <div className="max-w-[430px] mx-auto mt-6">
         <img className="w-full" src={gold_ticket} alt="" />
 
-        <p className="mt-[38px] mb-[38px] max-w-[329px] mx-auto">
-          規約例 <br />
-          TICKETと交換できる景品については、直接店舗・チームにてご確認ください。
-          使用済みのTICKETはいかなる場合も再利用は不可です。必ず店員・スタッフに
-          こちらの画面をご提示の上で使用をお願いします。
-        </p>
+        <div className="mt-[38px] mb-[38px]  mx-6">
+          <p className="font-semibold mb-2">規約例 </p>
+          <p className="text-sm text-[#747474]">
+            TICKETと交換できる景品については、直接店舗・チームにてご確認ください。
+            使用済みのTICKETはいかなる場合も再利用は不可です。必ず店員・スタッフに
+            こちらの画面をご提示の上で使用をお願いします。
+          </p>
+        </div>
 
         {/* -------------------------------------- */}
         <button
@@ -47,7 +48,7 @@ const TicketTermsAndConditons = () => {
               <ButtonSecondary
                 icon={<MdOutlineKeyboardArrowRight />}
                 btnText="TICKETを使用する"
-                style="font-hiragino bg-gradient-to-r from-[#65D0F2] to-[#2399F4] max-w-[342px] mx-auto rounded-full text-center py-[10px] font-bold text-white"
+                style="font-hiragino bg-gradient-to-r from-[#65D0F2] to-[#2399F4] max-w-full mx-6 rounded-full text-center py-[10px] font-bold text-white"
               />
             </button>
           </div>
