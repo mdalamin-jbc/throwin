@@ -13,14 +13,14 @@ import Confetti from "react-confetti";
 import useWindowSize from "react-use/lib/useWindowSize";
 import confetti from "canvas-confetti";
 
-// Slower, smoother animations optimized for mobile
+// Animation configurations remain unchanged
 const pageTransition = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
       duration: 1.2,
-      ease: [0.16, 1, 0.3, 1], // Gentler ease curve
+      ease: [0.16, 1, 0.3, 1],
       staggerChildren: 0.4,
       delayChildren: 0.3
     }
@@ -97,14 +97,14 @@ const ChargeCompleted = () => {
   const { width, height } = useWindowSize();
 
   const fireConfetti = () => {
-    const count = 200; // Reduced particle count for better performance
+    const count = 200;
     const defaults = {
       origin: { y: 0.7 },
       colors: ['#65D0F2', '#2399F4', '#ffffff', '#91E3FF'],
       spread: 70,
       ticks: 200,
-      gravity: 0.8, // Reduced gravity for slower falling
-      scalar: 0.8 // Smaller particles
+      gravity: 0.8,
+      scalar: 0.8
     };
 
     function fire(particleRatio, opts) {
@@ -139,6 +139,18 @@ const ChargeCompleted = () => {
     }
 
     try {
+      // Check if it's a Visa payment
+      if (paymentId.startsWith('VISA_')) {
+        setPaymentStatus("success");
+        setTimeout(fireConfetti, 800);
+        toast.success(`取引ID: ${paymentId}`, {
+          position: "top-center",
+          duration: 4000,
+        });
+        return;
+      }
+
+      // Regular PayPal payment validation
       const response = await axiosPrivate.get(
         "/payment_service/paypal-success/",
         { params: { paymentId, PayerID: payerId } }
@@ -146,7 +158,7 @@ const ChargeCompleted = () => {
 
       if (response.status === 200) {
         setPaymentStatus("success");
-        setTimeout(fireConfetti, 800); // Delayed confetti for smoother entry
+        setTimeout(fireConfetti, 800);
         toast.success(`取引ID: ${paymentId}`, {
           position: "top-center",
           duration: 4000,

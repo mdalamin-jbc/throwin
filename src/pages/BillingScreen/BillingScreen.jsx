@@ -45,6 +45,26 @@ const BillingScreen = () => {
   const [selectedAmount, setSelectedAmount] = useState("0");
   const [message, setMessage] = useState("");
 
+   // Modified Visa payment handler
+   const handleVisaPayment = () => {
+    // Close the modal first
+    const modal = document.getElementById("my_modal_1");
+    if (modal) {
+      modal.close();
+    }
+
+    // Generate a mock payment ID
+    const mockPaymentId = `VISA_${Date.now()}`;
+
+    // Store payment ID in URL params like PayPal does
+    const params = new URLSearchParams();
+    params.append('paymentId', mockPaymentId);
+    params.append('PayerID', 'VISA_DIRECT');
+
+    // Navigate to success page with params
+    navigate(`/staff/${staff?.username}/chargeCompleted?${params.toString()}`);
+  };
+
   const handleHeartToggle = async () => {
     if (isProcessing) return; // Prevent duplicate requests
     setIsProcessing(true);
@@ -630,15 +650,16 @@ const BillingScreen = () => {
                         />
                       </button>
 
+                      {/* Modified Visa payment modal */}
                       <dialog
                         id="my_modal_1"
-                        className="modal max-w-[343px] mx-auto "
+                        className="modal max-w-[343px] mx-auto"
                       >
-                        <div className="modal-box p-0 ">
+                        <div className="modal-box p-0">
                           <div className="px-10 pt-10 pb-6">
-                            <p className=" text-lg  ">
-                              <span className="underline ">{staff.name}</span>{" "}
-                              に、スローインします。 よろしいですか？
+                            <p className="text-lg">
+                              <span className="underline">{staff?.name}</span>{" "}
+                              に、 スローインします。 よろしいですか？
                             </p>
                             <p>金額 : {selectedAmount}円</p>
                             <div className="flex gap-1">
@@ -649,19 +670,16 @@ const BillingScreen = () => {
 
                           <div className="flex justify-center gap-4 border-t-2">
                             <form method="dialog">
-                              <button className="px-4 py-4  border-r-2 border-gray-300 flex items-center justify-center">
-                                <span className="mr-10">キャンセル</span>{" "}
+                              <button className="px-4 py-4 border-r-2 border-gray-300">
+                                <span className="mr-10">キャンセル</span>
                               </button>
                             </form>
                             <form method="dialog">
                               <button
-                                // onClick={handleLogout}
-                                className="px-4 py-4 text-blue-500 flex items-center justify-center"
+                                onClick={handleVisaPayment}
+                                className="px-4 py-4 text-blue-500"
                               >
-                                <span onClick={handlePayment} className="ml-8">
-                                  確定
-                                </span>{" "}
-                                {/* Add some spacing between text and border */}
+                                <span className="ml-8">確定</span>
                               </button>
                             </form>
                           </div>
