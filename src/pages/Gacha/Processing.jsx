@@ -2,22 +2,17 @@ import { Link, useNavigate } from "react-router-dom";
 import TitleBar from "../../components/TitleBar";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import logo from "../../assets/images/home/logo.png";
-import img1 from "../../assets/images/gacha/gachaImg1.png";
-import img2 from "../../assets/images/gacha/gachaimg2.png";
-import { useState, useEffect } from "react";
+import video from "../../assets/video/vending_process.mp4";
+import { useRef } from "react";
 
 const Processing = () => {
   const navigate = useNavigate();
-  const [showSecondImage, setShowSecondImage] = useState(false);
+  const videoRef = useRef(null);
 
-  // Handle image transition after 10 seconds
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowSecondImage(true);
-    }, 2000); // 10 seconds
-
-    return () => clearTimeout(timer); // Cleanup timeout if the component unmounts
-  }, []);
+  // Function to navigate after video ends
+  const handleVideoEnd = () => {
+    navigate("got-ticket");
+  };
 
   return (
     <div>
@@ -35,13 +30,13 @@ const Processing = () => {
       />
       <div className="max-w-[430px] mx-auto">
         <div className="flex justify-center">
-          {showSecondImage ? (
-            <Link to="got-ticket">
-              <img src={img2} className="w-[300px]" alt="Gacha Result" />
-            </Link>
-          ) : (
-            <img src={img1} className="w-[370px]" alt="Processing..." />
-          )}
+          <video
+            ref={videoRef}
+            src={video}
+            className=""
+            autoPlay
+            onEnded={handleVideoEnd}
+          />
         </div>
       </div>
     </div>

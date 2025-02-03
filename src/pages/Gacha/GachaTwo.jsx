@@ -6,7 +6,7 @@ import logo from "../../assets/images/home/logo.png";
 const GachaTwo = () => {
   const navigate = useNavigate();
 
-  const tikits = [
+  const tickets = [
     { id: 1, name: "居酒屋あ_A店", count: 4 },
     { id: 2, name: "バスケチームB", count: 1 },
     { id: 3, name: "バスケチームD", count: 2 },
@@ -27,17 +27,18 @@ const GachaTwo = () => {
         icon={<img className="w-[110px] items-center" src={logo} alt="logo" />}
       />
       <div>
-        <h3 className="text-center mt-[29px] mb-[18px] font-bold text-xl text-[#585858]">
+        <h3 className="text-center mt-[29px] mb-[18px] font-semibold text-xl text-[#585858]">
           保有中のガチャ券
         </h3>
-        <div className="grid gap-[18px] max-w-[351px] mx-auto">
-          {tikits && tikits.length > 0 ? (
-            tikits.map((ticket) => (
+
+        <div className="grid gap-4 max-w-[351px] mx-auto">
+          {tickets && tickets.length > 0 ? (
+            tickets.map((ticket) => (
               <Link to={`ticket/${ticket.id}`} key={ticket.id}>
-                <div className="flex justify-between font-bold text-xl shadow-md px-[21px] py-[30px]">
+                <div className="flex justify-between items-center font-bold text-base border border-[#49BBDF] rounded-lg shadow-md px-5 py-4 bg-[#EAF8FD]">
                   <h3 className="text-[#585858]">{ticket.name}</h3>
-                  <h4>
-                    x<span className="text-[45px]">{ticket.count}</span>
+                  <h4 className="flex gap-1 items-center border-l-2 border-[#49BBDF] border-dashed  pl-5 text-[#585858]">
+                    x<span className="text-2xl font-bold">{ticket.count}</span>
                   </h4>
                 </div>
               </Link>
@@ -46,6 +47,10 @@ const GachaTwo = () => {
             <p className="text-center text-[#585858]">No tickets available</p>
           )}
         </div>
+        <h2 className="font-bold text-center text-xl text-[#49BBDF] mt-8">
+          使用するガチャ券を <br />
+          選択しよう！
+        </h2>
       </div>
     </div>
   );

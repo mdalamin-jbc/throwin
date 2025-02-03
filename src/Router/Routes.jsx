@@ -129,23 +129,23 @@ export const Routes = createBrowserRouter([
         ),
       },
       {
-        path: "/gacha2",
+        path: "/gacha/available_spins",
         element: <GachaTwo />,
       },
       {
-        path: "/gacha2/ticket/:id",
+        path: "/gacha/available_spins/ticket/:id",
         element: <UseTicket />,
       },
       {
-        path: "/gacha2/ticket/:id/processing",
+        path: "/gacha/available_spins/ticket/:id/processing",
         element: <Processing />,
       },
       {
-        path: "/gacha2/ticket/:id/processing/got-ticket",
+        path: "/gacha/available_spins/ticket/:id/processing/got-ticket",
         element: <GotTicket />,
       },
       {
-        path: "/gacha2/ticket/:id/processing/got-ticket/ticket-terms",
+        path: "/gacha/available_spins/ticket/:id/processing/got-ticket/ticket-terms",
         element: <TicketTermsAndConditons />,
       },
       {
