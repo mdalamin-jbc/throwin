@@ -20,9 +20,9 @@ const TicketTermsAndConditons = () => {
 
   // Determine the image based on the ticket response
     const ticketImage =
-      ticketResponse === "gold"
+      ticketResponse.result === "gold"
         ? gold
-        : ticketResponse === "silver"
+        : ticketResponse.result === "silver"
         ? silver
         : bronze;
   return (
