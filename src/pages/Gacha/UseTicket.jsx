@@ -1,4 +1,4 @@
-import { useParams, useNavigate, Link, useLocation } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import TitleBar from "../../components/TitleBar";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import logo from "../../assets/images/home/logo.png";
@@ -96,20 +96,20 @@ const UseTicket = () => {
               </span>
             </h4>
           </div>
-          <button
+          {/* <button
             onClick={handlePlayGacha}
             className="font-hiragino bg-gradient-to-r from-[#65D0F2] to-[#2399F4] max-w-[342px] mx-auto rounded-full text-center py-[10px] font-bold text-white flex items-center justify-center gap-2"
           >
             <span>回す！</span>
             <MdOutlineKeyboardArrowRight />
-          </button>
-          <Link to={`processing`}>
+          </button> */}
+          <button className="w-full" onClick={handlePlayGacha}>
             <ButtonSecondary
               icon={<MdOutlineKeyboardArrowRight />}
               btnText="回す！"
-              style="font-hiragino bg-gradient-to-r from-[#65D0F2] to-[#2399F4] max-w-[342px] mx-auto rounded-full text-center py-[10px] font-bold text-white"
+              style="font-hiragino bg-gradient-to-r from-[#65D0F2] to-[#2399F4] w-[342px] mx-auto rounded-full text-center py-[10px] font-bold text-white"
             />
-          </Link>
+          </button>
         </div>
       </div>
     </div>
