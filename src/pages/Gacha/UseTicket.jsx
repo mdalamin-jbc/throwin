@@ -1,4 +1,4 @@
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate, Link, useLocation } from "react-router-dom";
 import TitleBar from "../../components/TitleBar";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import logo from "../../assets/images/home/logo.png";
@@ -7,18 +7,34 @@ import ButtonSecondary from "../../components/ButtonSecondary";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import UseGetAvailableSpins from "../../hooks/Gacha/UseGetAvailableSpins";
 import { Circles } from "react-loader-spinner";
+import useAxiosPrivate from "../../hooks/axiousPrivate";
 
 const UseTicket = () => {
   const { store_uid } = useParams();
   const { availableSpins, refetch, isLoading, isError } =
     UseGetAvailableSpins();
+  const location = useLocation();
   const navigate = useNavigate();
+  const ticketResponse = location.state?.ticketResponse;
+  const axiosPrivate = useAxiosPrivate();
 
   console.log("Available Spins:", availableSpins);
   console.log("Store UID:", store_uid);
 
   // Filter to find the ticket matching store_uid
   const ticket = availableSpins.find((spin) => spin.store_uid === store_uid);
+
+  const handlePlayGacha = async () => {
+    try {
+      const response = await axiosPrivate.post("/gacha/play", { store_uid });
+      console.log("Gacha Response:", response.data);
+
+      // Navigate to first result page with data
+      navigate("processing", { state: { ticketResponse: response.data } });
+    } catch (error) {
+      console.error("Error playing gacha:", error);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -80,7 +96,13 @@ const UseTicket = () => {
               </span>
             </h4>
           </div>
-
+          <button
+            onClick={handlePlayGacha}
+            className="font-hiragino bg-gradient-to-r from-[#65D0F2] to-[#2399F4] max-w-[342px] mx-auto rounded-full text-center py-[10px] font-bold text-white flex items-center justify-center gap-2"
+          >
+            <span>回す！</span>
+            <MdOutlineKeyboardArrowRight />
+          </button>
           <Link to={`processing`}>
             <ButtonSecondary
               icon={<MdOutlineKeyboardArrowRight />}

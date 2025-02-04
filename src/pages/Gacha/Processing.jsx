@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import TitleBar from "../../components/TitleBar";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import logo from "../../assets/images/home/logo.png";
@@ -9,9 +9,13 @@ const Processing = () => {
   const navigate = useNavigate();
   const videoRef = useRef(null);
 
+  const location = useLocation();
+  const ticketResponse = location.state?.ticketResponse;
+  console.log(ticketResponse);
+
   // Function to navigate after video ends
   const handleVideoEnd = () => {
-    navigate("got-ticket");
+    navigate("got-ticket", { state: { ticketResponse } });
   };
 
   return (
