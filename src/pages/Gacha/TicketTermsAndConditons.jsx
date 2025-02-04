@@ -1,13 +1,30 @@
 import { RiArrowLeftSLine } from "react-icons/ri";
 import logo from "../../assets/images/home/logo.png";
 import TitleBar from "../../components/TitleBar";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import gold_ticket from "../../assets/images/gacha/gold-ticket.png";
 import ButtonSecondary from "../../components/ButtonSecondary";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 
+import gold from "../../assets/images/gacha/gold-ticket.png";
+import bronze from "../../assets/images/gacha/bronze.png";
+import silver from "../../assets/images/gacha/silver.png";
+
 const TicketTermsAndConditons = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const ticketResponse = location.state?.ticketResponse;
+
+  console.log("Ticket Response:", ticketResponse);
+
+
+  // Determine the image based on the ticket response
+    const ticketImage =
+      ticketResponse === "gold"
+        ? gold
+        : ticketResponse === "silver"
+        ? silver
+        : bronze;
   return (
     <div className="mb-[120px]">
       <TitleBar
@@ -23,7 +40,7 @@ const TicketTermsAndConditons = () => {
         icon={<img className="w-[110px] items-center" src={logo} alt="logo" />}
       />
       <div className="max-w-[430px] mx-auto mt-6">
-        <img className="w-full" src={gold_ticket} alt="" />
+        <img className="w-full" src={ticketImage} alt="" />
 
         <div className="mt-[38px] mb-[38px]  mx-6">
           <p className="font-semibold mb-2">規約例 </p>

@@ -14,6 +14,9 @@ const GotTicket = () => {
   const ticketResponse = location.state?.ticketResponse;
 
   console.log("Ticket Response:", ticketResponse);
+  const handleTickitTerms = () => {
+    navigate("ticket-terms", { state: { ticketResponse } });
+  };
 
   // Determine the image based on the ticket response
   const ticketImage =
@@ -21,7 +24,7 @@ const GotTicket = () => {
       ? gold
       : ticketResponse === "silver"
       ? silver
-      : bronze; // Default to bronze if the response is unknown
+      : bronze;
 
   return (
     <div className="mb-[120px]">
@@ -45,14 +48,14 @@ const GotTicket = () => {
           alt="Ticket"
         />
 
-        <Link className="mt-5 mb-3" to={`/use-ticket`}>
+        <button onClick={handleTickitTerms} className="mt-5 mb-3">
           <ButtonSecondary
             icon={<MdOutlineKeyboardArrowRight />}
             btnText="もう一度回す" // Spin again
             style="font-hiragino bg-gradient-to-r from-[#65D0F2] to-[#2399F4] max-w-[342px] mx-auto rounded-full text-center py-[10px] font-bold text-white"
           />
-        </Link>
-        <Link to={`/ticket-terms`}>
+        </button>
+        <Link to={`ticket-terms`}>
           <ButtonSecondary
             icon={<MdOutlineKeyboardArrowRight />}
             btnText="このTICKETを使用する" // Use this ticket
