@@ -4,8 +4,10 @@ import favorite from "../../assets/icons/favorite.png";
 import gacha from "../../assets/icons/Gacha.png";
 import history from "../../assets/icons/history.png";
 import user from "../../assets/icons/user.png";
+import UseGetAvailableSpins from "../../hooks/Gacha/UseGetAvailableSpins";
 
 const NavMenu = () => {
+  const { availableSpins } = UseGetAvailableSpins();
   const links = (
     <>
       <li>
@@ -64,7 +66,7 @@ const NavMenu = () => {
               } transition-transform`}
             >
               <div className="bg-[#49BBDF] w-[26px] h-[26px] rounded-full absolute -right-1 -top-4 flex items-center justify-center">
-                <h2 className="text-xs text-white">1</h2>
+                <h2 className="text-xs text-white">{availableSpins.length}</h2>
               </div>
               <img src={gacha} alt="" className="w-[30px]" />
               <p className="text-xs">ガチャ</p>

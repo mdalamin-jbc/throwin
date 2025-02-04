@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import TitleBar from "../../components/TitleBar";
 import logo from "../../assets/images/home/logo.png";
 import gold from "../../assets/images/gacha/lation_gold_card.png";
@@ -7,12 +8,15 @@ import UseGetSpins from "../../hooks/Gacha/UseGetSpins";
 import { Circles } from "react-loader-spinner";
 
 const GachaTickets = () => {
-  const { availableTickets, refetch, data, isLoading, isError } = UseGetSpins();
-
-  console.log("Available Tickets:", availableTickets);
+  const { availableTickets, isLoading, isError } = UseGetSpins();
 
   return (
-    <div className="mb-[120px]">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="mb-[120px]"
+    >
       <TitleBar
         style="mb-0 w-full"
         back={""}
@@ -20,12 +24,16 @@ const GachaTickets = () => {
         icon={<img className="w-[110px] items-center" src={logo} alt="logo" />}
       />
       <div className="max-w-[430px] mx-auto mt-[22px]">
-        <div className="mx-[10px]">
+        <motion.div
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="mx-[10px]"
+        >
           <h4 className="text-center mb-3">TICKET BOX</h4>
 
-          {/* ✅ Show Loader When Fetching Data */}
           {isLoading ? (
-            <div className="flex justify-center items-center h-40">
+            <div className="flex justify-center items-center h-[80vh]">
               <Circles
                 height="80"
                 width="80"
@@ -35,18 +43,19 @@ const GachaTickets = () => {
               />
             </div>
           ) : isError ? (
-            // ✅ Show Error Message If Fetching Fails
             <p className="text-center text-red-500">
               Failed to load tickets. Please try again.
             </p>
           ) : availableTickets.length === 0 ? (
-            // ✅ Show Message If No Tickets Are Available
             <p className="text-center text-gray-500">No tickets available.</p>
           ) : (
-            // ✅ Render Available Tickets
-            <div className="max-w-[390px] mx-auto grid grid-cols-2 gap-[18px]">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              className="max-w-[390px] mx-auto grid grid-cols-2 gap-[18px]"
+            >
               {availableTickets.map((ticket) => {
-                // Determine the ticket image based on gacha_kind
                 const ticketImage =
                   ticket.gacha_kind === "gold"
                     ? gold
@@ -55,7 +64,13 @@ const GachaTickets = () => {
                     : bronze;
 
                 return (
-                  <div key={ticket.uid} className="flex justify-center">
+                  <motion.div
+                    key={ticket.uid}
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.4 }}
+                    className="flex justify-center"
+                  >
                     <div className="bg-[#49BBDF14] rounded-full w-[181px] h-[181px] flex justify-center items-center flex-col">
                       <img
                         src={ticketImage}
@@ -66,14 +81,14 @@ const GachaTickets = () => {
                         {ticket.store_name}
                       </h5>
                     </div>
-                  </div>
+                  </motion.div>
                 );
               })}
-            </div>
+            </motion.div>
           )}
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
