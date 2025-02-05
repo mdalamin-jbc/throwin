@@ -33,8 +33,9 @@ const SideMenu = () => {
       icon: <img src={management} alt="" className="mr-4 w-[30px]" />,
       path: "/dashboard/account",
       subPaths: ["/creat_new"],
-      roles: ["sales_agent"],
+      roles: ["sales_agent","restaurant_owner"],
     },
+    // --------------------
     {
       label: "アカウント",
       icon: <img src={management} alt="" className="mr-4 w-[30px]" />,
@@ -109,7 +110,7 @@ const SideMenu = () => {
         navigate(menuItems[0]?.path || "/dashboard/sales_management");
       }
     }
-  }, [location.pathname]);
+  }, [location.pathname,]);
 
   return (
     <div className="w-full h-full min-h-[720px] flex flex-col lg:w-[300px]">

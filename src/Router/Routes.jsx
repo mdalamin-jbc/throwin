@@ -270,8 +270,9 @@ export const Routes = createBrowserRouter([
             path: "m_account",
             element: <MemberAccount />,
           },
+          //---------------------------------update part 
           {
-            path: "m_account/member_reg",
+            path: "/dashboard/account/:id",
             element: <MemberReg />,
           },
           {
