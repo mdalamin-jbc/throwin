@@ -136,16 +136,27 @@ const BillingScreen = () => {
       : "bg-gray-400 text-gray-700"
   }`;
 
-  // custom ammount set start
   const handleAmountChange = (event) => {
-    const input = event.target.value.replace(/,/g, ""); // Remove commas
-    const numericValue = parseInt(input, 10);
-
-    // Check if the input is empty or if the value is a valid number
-    if (input === "" || !isNaN(numericValue)) {
-      setSelectedAmount(
-        isNaN(numericValue) ? "" : numericValue.toLocaleString()
-      );
+    // Remove any non-digit characters first
+    let input = event.target.value.replace(/[^\d]/g, '');
+    
+    // Limit the length to 5 digits (max 50,000 yen)
+    input = input.slice(0, 5);
+    
+    // Don't process if empty
+    if (input === '') {
+      setSelectedAmount('');
+      return;
+    }
+    
+    // Convert to number and format with commas
+    const number = parseInt(input, 10);
+    
+    // Check if it's a valid number and within limits
+    if (!isNaN(number)) {
+      // Format the number with commas
+      const formattedValue = number.toLocaleString();
+      setSelectedAmount(formattedValue);
     }
   };
 
