@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import logo1 from "../../assets/logo/home_logo.png";
 import logo2 from "../../assets/logo/home_logo_part_2.png";
@@ -9,24 +9,6 @@ import video from "../../assets/video/banner_video.mp4";
 const Home = () => {
   const navigate = useNavigate();
   const videoRef = useRef(null);
-  const [isReady, setIsReady] = useState(false);
-
-  useEffect(() => {
-    const videoElement = videoRef.current;
-    
-    if (videoElement) {
-      const handleCanPlay = () => {
-        setIsReady(true);
-      };
-      
-      videoElement.addEventListener('canplay', handleCanPlay);
-      videoElement.load();
-      
-      return () => {
-        videoElement.removeEventListener('canplay', handleCanPlay);
-      };
-    }
-  }, []);
 
   const handleNavigation = (path) => {
     if (videoRef.current) {
@@ -37,19 +19,17 @@ const Home = () => {
 
   return (
     <div className="fixed inset-0 w-full h-full overflow-hidden">
-      <div className={`transition-opacity duration-300 ${isReady ? 'opacity-100' : 'opacity-0'}`}>
-        <video
-          ref={videoRef}
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-fill"
-          style={{ visibility: isReady ? 'visible' : 'hidden' }}
-        >
-          <source src={video} type="video/mp4" />
-        </video>
-      </div>
+      {/* Simple video implementation */}
+      <video
+        ref={videoRef}
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-fill"
+      >
+        <source src={video} type="video/mp4" />
+      </video>
 
       <motion.div
         className="absolute inset-0 flex justify-center items-center z-20"
