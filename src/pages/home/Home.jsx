@@ -204,7 +204,7 @@ const Home = () => {
             />
           </motion.div>
 
-          <div className="fixed bottom-8 left-0 right-0 flex flex-col gap-4 items-center z-30">
+          <div className="fixed bottom-8 left-0 right-0 flex flex-col gap-3 items-center z-30">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -230,7 +230,7 @@ const Home = () => {
               >
                 <ButtonPrimary
                   btnText="始める"
-                  style="bg-gradient-to-r from-[#65D0F2] to-[#2399F4] min-w-[350px] rounded-full text-center py-[10px] lg:py-6 font-bold text-white shadow-lg hover:shadow-2xl transition-all duration-300"
+                  style="bg-white min-w-[350px] rounded-full text-center py-[15px] lg:py-6 font-bold text-[#49bbdf] shadow-lg hover:shadow-2xl transition-all duration-300"
                 />
               </motion.button>
             </motion.div>
@@ -242,7 +242,7 @@ const Home = () => {
               className="relative group"
             >
               <motion.div
-                className="absolute inset-0 bg-white rounded-full opacity-0 group-hover:opacity-20 transition-all duration-300 blur-xl"
+                className="absolute inset-0 border-2 border-white/30 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 blur-sm"
                 animate={{
                   scale: [1, 1.05, 1],
                 }}
@@ -254,7 +254,7 @@ const Home = () => {
               />
               <motion.button
                 onClick={() => handleNavigation("/login")}
-                className="bg-white/90 backdrop-blur-sm min-w-[350px] lg:py-6 text-center py-3 font-bold rounded-full font-hiragino text-[#49BBDF] shadow-lg hover:shadow-2xl transition-all duration-300"
+                className="border-2 border-white min-w-[350px] lg:py-6 text-center py-[15px] font-bold rounded-full font-hiragino text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/10"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
