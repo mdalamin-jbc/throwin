@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import search from "../../../assets/icons/search_3.png";
 import { FaPlus } from "react-icons/fa";
+import { Link } from "react-router-dom";
 const SalesAgent = () => {
   const {
     register,
@@ -18,9 +19,9 @@ const SalesAgent = () => {
 
         <div className="mx-[33px]">
           <div className="mt-[22px]  flex justify-between ">
-            <button className="bg-[#49BBDF] text-white py-[6px] px-[36px] rounded flex items-center gap-3">
+            <Link to="sign_up" className="bg-[#49BBDF] text-white py-[6px] px-[36px] rounded flex items-center gap-3">
               <p>新規登録</p> <FaPlus />
-            </button>
+            </Link>
             <div className="relative flex flex-col justify-center mr-[100px]">
               <div
                 // onClick={handleSearchStuff}

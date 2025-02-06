@@ -57,6 +57,7 @@ import PaymentManagement from "../pages/Dashboard/PaymentManagement/PaymentManag
 import CreatANewAccount from "../pages/Dashboard/Account/CreatANewAccount";
 import MemberAccount from "../pages/Dashboard/MemberAccount/MemberAccount";
 import MemberReg from "../pages/Dashboard/MemberAccount/MemberReg";
+import SingUp from "../pages/Dashboard/SalesAgent/SingUp";
 
 export const Routes = createBrowserRouter([
   {
@@ -286,6 +287,10 @@ export const Routes = createBrowserRouter([
           {
             path: "sales_agent",
             element: <SalesAgent />,
+          },
+          {
+            path:'sales_agent/sign_up',
+            element:<SingUp/>
           },
           {
             path: "comments",

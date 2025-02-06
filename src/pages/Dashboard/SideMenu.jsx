@@ -18,7 +18,9 @@ const SideMenu = () => {
   // Helper function to check if a path is active
   const isPathActive = (path, subPaths = []) => {
     if (location.pathname === path) return true;
-    return subPaths.some(subPath => location.pathname.startsWith(path + subPath));
+    return subPaths.some((subPath) =>
+      location.pathname.startsWith(path + subPath)
+    );
   };
 
   const allMenuItems = [
@@ -33,16 +35,18 @@ const SideMenu = () => {
       icon: <img src={management} alt="" className="mr-4 w-[30px]" />,
       path: "/dashboard/account",
       subPaths: ["/creat_new"],
-      roles: ["sales_agent","restaurant_owner"],
+      roles: ["sales_agent", "restaurant_owner"],
+    },
+
+    {
+      label: "営業代理店",
+      icon: <img src={management} alt="" className="mr-4 w-[30px]" />,
+      path: "/dashboard/sales_agent",
+      subPaths: ["/sales_agent"],
+      roles: ["glow_admin", "fc_admin", "sales_agent"],
     },
     // --------------------
-    {
-      label: "アカウント",
-      icon: <img src={management} alt="" className="mr-4 w-[30px]" />,
-      path: "/dashboard/m_account",
-      subPaths: ["/member_reg"],
-      roles: ["restaurant_owner"],
-    },
+
     {
       label: "クライアント",
       icon: <img src={management} alt="" className="mr-4 w-[30px]" />,
@@ -89,28 +93,33 @@ const SideMenu = () => {
   ];
 
   // Filter menu items based on role
-  const menuItems = allMenuItems.filter((item) => item.roles.includes(userRole));
+  const menuItems = allMenuItems.filter((item) =>
+    item.roles.includes(userRole)
+  );
 
   // Check if current path is valid
   const isValidPath = (currentPath) => {
     return menuItems.some((item) => {
       const mainPathValid = currentPath === item.path;
-      const subPathValid = item.subPaths?.some(subPath => 
-        currentPath === item.path + subPath
+      const subPathValid = item.subPaths?.some(
+        (subPath) => currentPath === item.path + subPath
       );
       return mainPathValid || subPathValid;
     });
   };
 
   // Only redirect if path is completely invalid
-  useEffect(() => {
-    if (location.pathname !== "/dashboard/adminLogin" && !location.pathname.includes(menuItems[0]?.path)) {
-      const pathIsValid = isValidPath(location.pathname);
-      if (!pathIsValid) {
-        navigate(menuItems[0]?.path || "/dashboard/sales_management");
-      }
-    }
-  }, [location.pathname,]);
+  // useEffect(() => {
+  //   if (
+  //     location.pathname !== "/dashboard/adminLogin" &&
+  //     !location.pathname.includes(menuItems[0]?.path)
+  //   ) {
+  //     const pathIsValid = isValidPath(location.pathname);
+  //     if (!pathIsValid) {
+  //       navigate(menuItems[0]?.path || "/dashboard/sales_management");
+  //     }
+  //   }
+  // }, [location.pathname]);
 
   return (
     <div className="w-full h-full min-h-[720px] flex flex-col lg:w-[300px]">
@@ -134,7 +143,11 @@ const SideMenu = () => {
                 to={item.path}
                 className={({ isActive }) => `
                   flex items-center px-6 py-2 lg:px-10 lg:py-4 border-t border-b hover:bg-[#edf9fc] cursor-pointer
-                  ${isPathActive(item.path, item.subPaths || []) ? "bg-[#edf9fc] font-semibold" : ""}
+                  ${
+                    isPathActive(item.path, item.subPaths || [])
+                      ? "bg-[#edf9fc] font-semibold"
+                      : ""
+                  }
                 `}
               >
                 <span className="text-blue-500">{item.icon}</span>
