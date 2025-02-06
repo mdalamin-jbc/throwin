@@ -230,7 +230,7 @@ const Home = () => {
               >
                 <ButtonPrimary
                   btnText="始める"
-                  style="bg-white min-w-[350px] rounded-full text-center py-[15px] lg:py-6 font-bold text-[#49bbdf] shadow-lg hover:shadow-2xl transition-all duration-300"
+                  style="bg-white min-w-[350px] rounded-full text-center py-[15px] lg:py-6 font-bold text-[#00BFFF] shadow-lg hover:shadow-2xl transition-all duration-300"
                 />
               </motion.button>
             </motion.div>
