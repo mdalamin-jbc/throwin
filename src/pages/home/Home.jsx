@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import logo1 from "../../assets/logo/home_logo.png";
 import logo2 from "../../assets/logo/home_logo_part_2.png";
@@ -9,58 +9,47 @@ import video from "../../assets/video/banner_video.mp4";
 const Home = () => {
   const navigate = useNavigate();
   const videoRef = useRef(null);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    // Initialize video when component mounts
-    if (videoRef.current) {
-      videoRef.current.src = video;
-      videoRef.current.load();
-      const playPromise = videoRef.current.play();
+    const videoElement = videoRef.current;
+    
+    if (videoElement) {
+      const handleCanPlay = () => {
+        setIsReady(true);
+      };
       
-      if (playPromise !== undefined) {
-        playPromise.catch(error => {
-          console.log("Video autoplay failed:", error);
-        });
-      }
+      videoElement.addEventListener('canplay', handleCanPlay);
+      videoElement.load();
+      
+      return () => {
+        videoElement.removeEventListener('canplay', handleCanPlay);
+      };
     }
-
-    // Cleanup function
-    return () => {
-      if (videoRef.current) {
-        videoRef.current.pause();
-        videoRef.current.src = "";
-        videoRef.current.load();
-      }
-    };
   }, []);
 
-  const handleLogin = () => {
+  const handleNavigation = (path) => {
     if (videoRef.current) {
       videoRef.current.pause();
     }
-    navigate("/login");
-  };
-
-  const handleStart = () => {
-    if (videoRef.current) {
-      videoRef.current.pause();
-    }
-    navigate("/socialLogin");
+    navigate(path);
   };
 
   return (
-    <div className="relative bg-[#49BBDF] h-screen overflow-hidden pt-[70px] md:pt-5 border-white">
-      <video
-        ref={videoRef}
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
-        className="absolute inset-0 w-full h-full object-fill"
-      >
-        <source src={video} type="video/mp4" />
-      </video>
+    <div className="fixed inset-0 w-full h-full overflow-hidden">
+      <div className={`transition-opacity duration-300 ${isReady ? 'opacity-100' : 'opacity-0'}`}>
+        <video
+          ref={videoRef}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-fill"
+          style={{ visibility: isReady ? 'visible' : 'hidden' }}
+        >
+          <source src={video} type="video/mp4" />
+        </video>
+      </div>
 
       <motion.div
         className="absolute inset-0 flex justify-center items-center z-20"
@@ -111,12 +100,14 @@ const Home = () => {
         </div>
       </motion.div>
 
-      <div className="absolute bottom-[40px] lg:bottom-8 w-full flex flex-col gap-3 justify-center items-center z-20">
+      <div className="fixed bottom-8 left-0 right-0 flex flex-col gap-3 items-center z-30">
         <motion.button
-          onClick={handleStart}
-          initial={{ opacity: 0, y: 20 }}
+          onClick={() => handleNavigation("/socialLogin")}
+          initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
         >
           <ButtonPrimary
             btnText="始める"
@@ -125,11 +116,13 @@ const Home = () => {
         </motion.button>
 
         <motion.button
-          onClick={handleLogin}
+          onClick={() => handleNavigation("/login")}
           className="bg-white min-w-[350px] lg:py-6 text-center py-3 font-bold rounded-full font-hiragino text-[#49BBDF]"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.3 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
         >
           ログイン
         </motion.button>
