@@ -58,6 +58,7 @@ import CreatANewAccount from "../pages/Dashboard/Account/CreatANewAccount";
 import MemberAccount from "../pages/Dashboard/MemberAccount/MemberAccount";
 import MemberReg from "../pages/Dashboard/MemberAccount/MemberReg";
 import SingUp from "../pages/Dashboard/SalesAgent/SingUp";
+import ResturentStore from "../pages/Dashboard/ResturentStore/ResturentStore";
 
 export const Routes = createBrowserRouter([
   {
@@ -268,12 +269,16 @@ export const Routes = createBrowserRouter([
             element: <CreatANewAccount />,
           },
           {
+            path: "/dashboard/account/:id",
+            element: <ResturentStore />,
+          },
+          {
             path: "m_account",
             element: <MemberAccount />,
           },
-          //---------------------------------update part 
+          //---------------------------------update part
           {
-            path: "/dashboard/account/:id",
+            path: "/dashboard/account/:id/creat_new_staff",
             element: <MemberReg />,
           },
           {
@@ -289,8 +294,8 @@ export const Routes = createBrowserRouter([
             element: <SalesAgent />,
           },
           {
-            path:'sales_agent/sign_up',
-            element:<SingUp/>
+            path: "sales_agent/sign_up",
+            element: <SingUp />,
           },
           {
             path: "comments",

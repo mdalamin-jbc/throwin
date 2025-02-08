@@ -9,11 +9,15 @@ import qr from "../../assets/icons/qr.png";
 import history from "../../assets/icons/historyn.png";
 import gacha from "../../assets/icons/gachan.png";
 import payment from "../../assets/icons/payment_management.png";
+import UseUserDetails from "../../hooks/UseUserDetails";
 
 const SideMenu = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const userRole = localStorage.getItem("userRole");
+  const { userDetails ,isLoading} = UseUserDetails();
+  const userRole = userDetails.kind;
+
+  console.log(userDetails.kind);
 
   // Helper function to check if a path is active
   const isPathActive = (path, subPaths = []) => {

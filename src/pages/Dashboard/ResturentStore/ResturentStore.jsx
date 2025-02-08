@@ -3,14 +3,15 @@ import { useForm } from "react-hook-form";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import search from "../../../assets/icons/search_3.png";
 import img from "../../../assets/images/store&staff/image.png";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
-import UseGetRestaurantOwnerStoreList from "../../../hooks/Dashboard/UseGetRestaurantOwnerStoreList";
-
-const Account = () => {
-  const { storeList, refetch, isLoading, isError, error } =
-    UseGetRestaurantOwnerStoreList();
-  console.log(storeList);
+import UseGetRestaurantStaffList from "../../../hooks/Dashboard/UseGetResturantStaffList";
+const ResturentStore = () => {
+  const id = useParams();
+  const { restaurantStaffList, refetch, isLoading, isError, error } =
+    UseGetRestaurantStaffList();
+  console.log(id);
+  console.log(restaurantStaffList);
   const {
     register,
     formState: { errors },
@@ -40,18 +41,23 @@ const Account = () => {
     <div>
       <h2 className="font-semibold text-[27px] text-[#73879C]">アカウント</h2>
       <div className="bg-white mt-[27px] rounded-xl pb-8 mr-[54px]">
-        <h4 className="font-semibold text-[18px] text-[#73879C] pt-[30px] pl-[33px] pb-[21px]">
-          チーム（店舗）リスト
-        </h4>
+        <div className="flex items-center justify-between mx-10 ml-0">
+          <div className="font-semibold text-[18px] text-[#73879C] pt-[30px] pl-[33px] pb-[21px] flex gap-3">
+            <h3>チーム（店舗）リスト</h3> <h3>メンバーリスト</h3>
+          </div>
+          <h4 className=" text-[18px] text-[#73879C] border-b-2">
+            店舗（チーム）一覧に戻る
+          </h4>
+        </div>
         <div className="border-b-[3px] mx-5"></div>
 
         <div className="mx-[33px]">
           <div className="mt-[22px] flex justify-between">
             <Link
-              to="creat_new"
+              to="creat_new_staff"
               className="bg-[#4EBDF3] text-white py-[6px] px-[106px] rounded"
             >
-              新規作成 <span className="text-xl">+</span>
+              メンバー登録 <span className="text-xl">+</span>
             </Link>
             <div className="relative flex flex-col justify-center mr-[100px]">
               <div className="absolute left-3 top-1/2 transform -translate-y-1/2 cursor-pointer">
@@ -81,12 +87,7 @@ const Account = () => {
                 <tr>
                   <th>
                     <button className="flex items-center">
-                      ポジション名 <MdKeyboardArrowDown />
-                    </button>
-                  </th>
-                  <th>
-                    <button className="flex items-center">
-                      店舗（チーム）コード <MdKeyboardArrowDown />
+                      メンバー名 <MdKeyboardArrowDown />
                     </button>
                   </th>
                   <th>
@@ -94,27 +95,32 @@ const Account = () => {
                       公開状況 <MdKeyboardArrowDown />
                     </button>
                   </th>
+                  <th>
+                    <button className="flex items-center">
+                      売上管理 <MdKeyboardArrowDown />
+                    </button>
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {storeList.length > 0 ? (
-                  storeList.map((store) => (
-                    <tr key={store.uid} className="hover border">
-                      <Link to={`${store.uid}`}>
+                {restaurantStaffList?.length > 0 ? (
+                  restaurantStaffList.map((staff) => (
+                    <tr key={staff.uid} className="hover border">
+                      <Link>
                         <td className="flex items-center gap-[17px]">
                           <img
                             src={img}
                             alt=""
                             className="w-[29px] rounded-full"
                           />
-                          <p>{store.name}</p>
+                          <p>{staff.name}</p>
                         </td>
                       </Link>
-                      <td>{store.code}</td>
+                      <td>{staff.public_status}</td>
                       {/* -----------------------------route update */}
                       <td>
                         <button className="bg-[#ABABAB] rounded-full px-3 py-1 text-white">
-                          {store.exposure}
+                          {staff.exposure}
                         </button>
                       </td>
                     </tr>
@@ -135,4 +141,4 @@ const Account = () => {
   );
 };
 
-export default Account;
+export default ResturentStore;
