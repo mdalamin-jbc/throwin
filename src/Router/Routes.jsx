@@ -184,7 +184,7 @@ export const Routes = createBrowserRouter([
       },
 
       {
-        path: "/staff/:username/chargeCompleted",
+        path: "/store/:store_code/staff/:username/chargeCompleted",
         element: <ChargeCompleted />,
       },
       {
