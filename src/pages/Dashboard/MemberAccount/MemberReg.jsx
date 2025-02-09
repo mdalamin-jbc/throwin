@@ -1,47 +1,71 @@
 import { useForm } from "react-hook-form";
 import ButtonPrimary from "../../../components/ButtonPrimary";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import useAxiosPrivate from "../../../hooks/axiousPrivate";
 
 const MemberReg = () => {
+  const { store_uid } = useParams(); // Assuming store_uid is passed as a URL parameter
   const navigate = useNavigate();
+  const axiosPrivate = useAxiosPrivate();
+
   const {
     register,
     handleSubmit,
-
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("Form Data:", data);
-  };
+  // API request on form submission
+  const handleMemberReg = async (data) => {
+    const requestBody = {
+      name: data.storeName,
+      email: "user@example.com",
+      public_status: "public",
+      introduction: data.bio,
+      fun_fact: "",
+      thank_message: data.thanksMessage,
+      store_uid: store_uid,
+    };
 
-  const handleMemberReg = () => {
-    toast.success("Member register successfully!", {
-      duration: 3000,
-      position: "top-center",
-    });
+    try {
+      const response = await axiosPrivate.post(
+        "/restaurant-owner/staff",
+        requestBody
+      );
 
-    setTimeout(() => {
-      navigate("/dashboard/m_account");
-    }, 1500);
+      console.log("Member registered:", response.data);
+
+      // Show success message
+      toast.success("Member registered successfully!", {
+        duration: 3000,
+        position: "top-center",
+      });
+
+      setTimeout(() => {
+        navigate(-1);
+      }, 1500);
+    } catch (error) {
+      console.error("Error registering member:", error);
+      toast.error("Registration failed. Please try again.", {
+        duration: 3000,
+        position: "top-center",
+      });
+    }
   };
 
   return (
-    <div className="flex gap-10">
+    <div className="flex gap-10 mb-[120px]">
       {/* Left Panel */}
       <div className="">
         <h2 className="font-semibold text-[27px] text-[#73879C]">アカウント</h2>
-        <div className="bg-white mt-5 rounded-xl p-8 max-w-[587px] shadow">
+        <div className="bg-white mt-5 rounded-xl p-8 max-w-[587px] shadow mb-[120px]">
           <h4 className="font-semibold text-[18px] text-[#73879C] pb-4">
             居酒屋ABC_大阪店 メンバー新規登録
           </h4>
           <div className="border-b-[3px] mb-5"></div>
 
-          {/* Tabs */}
-
           {/* Form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={handleSubmit(handleMemberReg)} className="space-y-6">
             <table className="table border-none">
               <tbody>
                 {/* row 1 */}
@@ -70,6 +94,7 @@ const MemberReg = () => {
                     </div>
                   </td>
                 </tr>
+
                 {/* row 2 */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
@@ -83,6 +108,7 @@ const MemberReg = () => {
                     />
                   </td>
                 </tr>
+
                 {/* row 3 */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
@@ -97,13 +123,9 @@ const MemberReg = () => {
                       ></textarea>
                       <p className="text-xs text-gray-500 text-right">0/30</p>
                     </div>
-                    {errors.throwinAmount && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {errors.throwinAmount.message}
-                      </p>
-                    )}
                   </td>
                 </tr>
+
                 {/* row 4 */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
@@ -120,13 +142,9 @@ const MemberReg = () => {
                       ></textarea>
                       <p className="text-xs text-gray-500 text-right">0/30</p>
                     </div>
-                    {errors.throwinAmount && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {errors.throwinAmount.message}
-                      </p>
-                    )}
                   </td>
                 </tr>
+
                 {/* row 5 */}
                 <tr>
                   <td>
@@ -148,13 +166,8 @@ const MemberReg = () => {
             </table>
 
             {/* Submit Button */}
-
             <div className="flex justify-center mt-5 ">
-              <button
-                onClick={() =>
-                  document.getElementById("my_modal_8").showModal()
-                }
-              >
+              <button type="submit">
                 <ButtonPrimary
                   style="rounded-full bg-[#49BBDF] w-[342px] text-[#FFFFFF] font-bold text-lg"
                   btnText={"作成する"}
@@ -167,9 +180,8 @@ const MemberReg = () => {
 
           <dialog id="my_modal_8" className="modal max-w-[343px] mx-auto">
             <div className="modal-box bg-[#F9F9F9] p-0 pt-7">
-              {/* Modal box with green background */}
               <div>
-                <p className="text-center text-lg  ">
+                <p className="text-center text-lg">
                   こちらの内容でメンバーを
                   <br /> 新規作成しますか？
                 </p>
@@ -183,7 +195,7 @@ const MemberReg = () => {
                 </form>
                 <form method="dialog">
                   <button
-                    onClick={handleMemberReg}
+                    type="submit"
                     className="px-4 py-4  flex items-center justify-center text-[#2976EA]"
                   >
                     <span className="ml-8">登録する</span>

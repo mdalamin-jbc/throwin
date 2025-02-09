@@ -48,7 +48,7 @@ const Account = () => {
         <div className="mx-[33px]">
           <div className="mt-[22px] flex justify-between">
             <Link
-              to="creat_new"
+              to="creat_new_store"
               className="bg-[#4EBDF3] text-white py-[6px] px-[106px] rounded"
             >
               新規作成 <span className="text-xl">+</span>

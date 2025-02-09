@@ -1,8 +1,10 @@
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import useAxiosPrivate from "../../../hooks/axiousPrivate";
 
 const CreateANewAccount = () => {
+  const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
   const {
     register,
@@ -10,21 +12,35 @@ const CreateANewAccount = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    // Handle form submission logic here
-    console.log("Form Data:", data);
+  const onSubmit = async (data) => {
+    console.log("フォーム送信データ:", data);
+  
+    const formData = new FormData();
+    formData.append("name", data.storeName);
+    formData.append("location", data.location);
+    formData.append("throwin_amounts", data.throwinAmount);
+    formData.append("gacha_enabled", data.gacha);
+  
+    try {
+      const response = await axiosPrivate.post("restaurant-owner/stores", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+  
+      if (response.status === 200 || response.status === 201) {
+        toast.success("アカウントが正常に作成されました！");
+        setTimeout(() => navigate("/dashboard/account"), 1500);
+      } else {
+        console.error("エラーレスポンス:", response.data);
+        toast.error("アカウント作成に失敗しました！");
+      }
+    } catch (error) {
+      console.error("エラー:", error);
+      toast.error("エラーが発生しました。もう一度お試しください。");
+    }
   };
-
-  const handleCreatNewAccount = () => {
-    toast.success("Account created successfully!", {
-      duration: 3000, 
-      position: "top-center", 
-    });
-
-    setTimeout(() => {
-      navigate("/dashboard/account");
-    }, 1500);
-  };
+  
 
   return (
     <div>
@@ -39,10 +55,11 @@ const CreateANewAccount = () => {
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="mx-8 mt-6 space-y-6"
+            encType="multipart/form-data" // Ensures proper file upload handling
           >
             <table className="table border-none">
               <tbody>
-                {/* row 1 */}
+                {/* 店舗（チーム）名 */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
                     <p>店舗（チーム）名</p>
@@ -63,20 +80,30 @@ const CreateANewAccount = () => {
                     )}
                   </td>
                 </tr>
-                {/* row 2 */}
-                <tr className="hover">
+
+                {/* TOP画像 */}
+                {/* <tr className="hover">
                   <td className="flex items-center gap-[17px]">
                     <p>TOP画像</p>
                   </td>
                   <td>
                     <input
-                      {...register("topImage")}
+                      {...register("topImage", {
+                        required: "画像をアップロードしてください",
+                      })}
                       type="file"
+                      accept="image/*"
                       className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
                     />
+                    {errors.topImage && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.topImage.message}
+                      </p>
+                    )}
                   </td>
-                </tr>
-                {/* row 3 */}
+                </tr> */}
+
+                {/* Throwin額の選択 */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
                     <p>Throwin額の選択ボタン</p>
@@ -107,6 +134,7 @@ const CreateANewAccount = () => {
                   </td>
                 </tr>
 
+                {/* ガチャ券付与 */}
                 <tr>
                   <td>
                     <label className="block text-gray-700 text-sm font-semibold mb-2">
@@ -115,11 +143,11 @@ const CreateANewAccount = () => {
                   </td>
                   <td>
                     <select
-                      {...register("gacha")}
+                      {...register("gacha_enabled")}
                       className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
                     >
-                      <option value="有り">有り</option>
-                      <option value="無し">無し</option>
+                      <option value="yes">有り</option>
+                      <option value="no">無し</option>
                     </select>
                   </td>
                 </tr>
@@ -129,44 +157,13 @@ const CreateANewAccount = () => {
             {/* Submit Button */}
             <div className="text-center">
               <button
+                type="submit"
                 className="bg-[#4EBDF3] text-white py-3 px-10 rounded-lg text-lg"
-                onClick={() =>
-                  document.getElementById("my_modal_7").showModal()
-                }
               >
                 作成する
               </button>
             </div>
           </form>
-          {/* ------------------------- */}
-
-          <dialog id="my_modal_7" className="modal max-w-[343px] mx-auto">
-            <div className="modal-box bg-[#F9F9F9] p-0 pt-7">
-              {/* Modal box with green background */}
-              <div>
-                <p className="text-center text-lg  ">
-                  こちらの内容で店舗（チーム）を
-                  <br /> 新規作成しますか？
-                </p>
-              </div>
-
-              <div className="flex justify-center gap-4 border-t-2">
-                <form method="dialog">
-                  <button className="px-4 py-4  border-r-2 border-gray-300 flex items-center justify-center ">
-                    <span className="mr-10">編集する</span>
-                  </button>
-                </form>
-                <form method="dialog">
-                  <button
-                    onClick={handleCreatNewAccount}
-                    className="px-4 py-4  flex items-center justify-center text-[#2976EA]"
-                  >
-                    <span className="ml-8">登録する</span>
-                  </button>
-                </form>
-              </div>
-            </div>
-          </dialog>
         </div>
       </div>
     </div>

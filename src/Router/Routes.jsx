@@ -265,7 +265,7 @@ export const Routes = createBrowserRouter([
             element: <Account />,
           },
           {
-            path: "account/creat_new",
+            path: "account/creat_new_store",
             element: <CreatANewAccount />,
           },
           {
