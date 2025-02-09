@@ -17,30 +17,38 @@ const MemberReg = () => {
 
   // API request on form submission
   const handleMemberReg = async (data) => {
-    const requestBody = {
-      name: data.storeName,
-      email: "user@example.com",
-      public_status: "public",
-      introduction: data.bio,
-      fun_fact: "",
-      thank_message: data.thanksMessage,
-      store_uid: store_uid,
-    };
-
+    const formData = new FormData();
+    formData.append("name", data.storeName);
+    formData.append("email", "user@example.com");
+    formData.append("public_status", "public");
+    formData.append("introduction", data.bio);
+    formData.append("fun_fact", "");
+    formData.append("thank_message", data.thanksMessage);
+    formData.append("store_uid", store_uid);
+  
+    // If there's an image
+    if (data.topImage[0]) {
+      formData.append("image", data.topImage[0]); // Ensure the field matches what the server expects
+    }
+  
     try {
       const response = await axiosPrivate.post(
         "/restaurant-owner/staff",
-        requestBody
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Ensure the correct content type for file upload
+          },
+        }
       );
-
+  
       console.log("Member registered:", response.data);
-
-      // Show success message
+  
       toast.success("Member registered successfully!", {
         duration: 3000,
         position: "top-center",
       });
-
+  
       setTimeout(() => {
         navigate(-1);
       }, 1500);
@@ -52,6 +60,7 @@ const MemberReg = () => {
       });
     }
   };
+  
 
   return (
     <div className="flex gap-10 mb-[120px]">
