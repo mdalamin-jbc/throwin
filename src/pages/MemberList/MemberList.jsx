@@ -115,7 +115,7 @@ const MemberList = () => {
               >
                 <Link
                   to={{
-                    pathname: `/${staff.store_code}/staff/${staff.username}`,
+                    pathname: `/store/${staff.store_code}/staff/${staff.username}`,
                     state: { staffData: staff },
                   }}
                   onClick={() =>

@@ -175,11 +175,11 @@ export const Routes = createBrowserRouter([
       },
       // staff details page
       {
-        path: "/:store_code/staff/:username",
+        path: "/store/:store_code/staff/:username",
         element: <Staff />,
       },
       {
-        path: "/staff/:username/billing_screen",
+        path: "/store/:store_code/staff/:username/billing_screen",
         element: <BillingScreen />,
       },
 

@@ -127,7 +127,7 @@ const Staff = () => {
                   ))}
                 </div>
               </div>
-              <Link to={`/staff/${username}/billing_screen`}>
+              <Link to={`/store/${store_code}/staff/${username}/billing_screen`}>
                 <button className="mt-6 w-full">
                   <ButtonPrimary
                     icon={

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import logo from "../../assets/images/home/logo.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FaApple } from "react-icons/fa";
 import { SlPaypal } from "react-icons/sl";
 import { FcGoogle } from "react-icons/fc";
@@ -17,8 +17,12 @@ import { RiArrowLeftSLine } from "react-icons/ri";
 import { Circles } from "react-loader-spinner";
 import StaffProfileCard from "../../components/StaffProfileCard/StaffProfileCard";
 import toast from "react-hot-toast";
+import UseGetUserDetails from "../../hooks/Staff/UseGetUserDetails";
 
 const BillingScreen = () => {
+  const { store_code, username } = useParams();
+  const { staff_details } = UseGetUserDetails(username, store_code);
+  console.log(store_code, username);
   const [isLiked, setIsLiked] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false); // Prevent rapid toggling
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
@@ -45,8 +49,8 @@ const BillingScreen = () => {
   const [selectedAmount, setSelectedAmount] = useState("0");
   const [message, setMessage] = useState("");
 
-   // Modified Visa payment handler
-   const handleVisaPayment = () => {
+  // Modified Visa payment handler
+  const handleVisaPayment = () => {
     // Close the modal first
     const modal = document.getElementById("my_modal_1");
     if (modal) {
@@ -58,8 +62,8 @@ const BillingScreen = () => {
 
     // Store payment ID in URL params like PayPal does
     const params = new URLSearchParams();
-    params.append('paymentId', mockPaymentId);
-    params.append('PayerID', 'VISA_DIRECT');
+    params.append("paymentId", mockPaymentId);
+    params.append("PayerID", "VISA_DIRECT");
 
     // Navigate to success page with params
     navigate(`/staff/${staff?.username}/chargeCompleted?${params.toString()}`);
@@ -138,20 +142,20 @@ const BillingScreen = () => {
 
   const handleAmountChange = (event) => {
     // Remove any non-digit characters first
-    let input = event.target.value.replace(/[^\d]/g, '');
-    
+    let input = event.target.value.replace(/[^\d]/g, "");
+
     // Limit the length to 5 digits (max 50,000 yen)
     input = input.slice(0, 5);
-    
+
     // Don't process if empty
-    if (input === '') {
-      setSelectedAmount('');
+    if (input === "") {
+      setSelectedAmount("");
       return;
     }
-    
+
     // Convert to number and format with commas
     const number = parseInt(input, 10);
-    
+
     // Check if it's a valid number and within limits
     if (!isNaN(number)) {
       // Format the number with commas
@@ -229,7 +233,7 @@ const BillingScreen = () => {
       // amount: 1000,
       currency: "JPY",
       payment_method: "paypal",
-      return_url: `https://alpha.throwin-glow.com/staff/${staff?.username}/chargeCompleted`,
+      return_url: `https://alpha.throwin-glow.com/staff/${staff_details?.username}/chargeCompleted`,
       cancel_url: "https://alpha.throwin-glow.com/payment-cancle",
     });
   }, [
@@ -240,6 +244,7 @@ const BillingScreen = () => {
     staff?.store_uid,
     staff?.username,
     message,
+    staff_details,
   ]);
 
   // paypal payment
@@ -326,12 +331,14 @@ const BillingScreen = () => {
           </div>
           <div className="max-w-[430px] mx-auto mb-[120px] text-[#44495B]">
             <div className="py-4 text-center">
-              <h2 className="font-bold text-[25px]">{staff?.name}</h2>
-              <p className="font-bold text-[10px]">{staff?.introduction}</p>
+              <h2 className="font-bold text-[25px]">{staff_details?.name}</h2>
+              <p className="font-bold text-[10px]">
+                {staff_details?.introduction}
+              </p>
             </div>
             <div className="max-w-[430px] mx-auto">
               <StaffProfileCard
-                staff={staff}
+                staff={staff_details}
                 isLiked={isLiked}
                 isProcessing={isProcessing}
                 handleHeartToggle={handleHeartToggle}

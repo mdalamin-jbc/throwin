@@ -62,7 +62,7 @@ const IndividualStores = () => {
         {store.map((staff, uid) => (
           <div key={uid}>
             <Link
-              to={`/${staff.store_code}/staff/${staff.username}`}
+              to={`/store/${staff.store_code}/staff/${staff.username}`}
               state={{ staffData: staff }}
               onClick={() =>
                 localStorage.setItem("staff", JSON.stringify(staff))
