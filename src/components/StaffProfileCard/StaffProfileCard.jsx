@@ -34,7 +34,7 @@ const StaffProfileCard = ({
               }`}
               onClick={!isProcessing ? handleHeartToggle : undefined}
             >
-              {staff.liked ? <FaHeart color="red" /> : <FaRegHeart />}
+              {isLiked ? <FaHeart color="red" /> : <FaRegHeart />}
             </div>
           </div>
         </div>
@@ -49,10 +49,10 @@ const StaffProfileCard = ({
 };
 
 StaffProfileCard.propTypes = {
-  staff: PropTypes.object, 
-  isLiked: PropTypes.bool, 
-  isProcessing: PropTypes.bool, 
-  handleHeartToggle: PropTypes.func, 
+  staff: PropTypes.object,
+  isLiked: PropTypes.bool,
+  isProcessing: PropTypes.bool,
+  handleHeartToggle: PropTypes.func,
 };
 
 export default StaffProfileCard;
