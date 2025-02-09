@@ -233,11 +233,13 @@ const BillingScreen = () => {
       // amount: 1000,
       currency: "JPY",
       payment_method: "paypal",
-      return_url: `https://alpha.throwin-glow.com//store/${store_code}/staff/${username}/chargeCompleted`,
+      return_url: `https://alpha.throwin-glow.com/store/${store_code}/staff/${username}/chargeCompleted`,
       cancel_url: "https://alpha.throwin-glow.com/payment-cancle",
     });
   }, [
     persAmount,
+    store_code,
+    username,
     userDetails,
     staff?.uid,
     staff?.restaurant_uid,
