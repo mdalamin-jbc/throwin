@@ -166,11 +166,16 @@ export const Routes = createBrowserRouter([
       },
 
       {
+        path: "/member_list/:staffName",
+        element: <MemberList />,
+      },
+      {
         path: "/store",
         element: <IndividualStores />,
       },
+      // staff details page
       {
-        path: "/staff/:username",
+        path: "/:store_code/staff/:username",
         element: <Staff />,
       },
       {
@@ -185,10 +190,6 @@ export const Routes = createBrowserRouter([
       {
         path: "payment-cancle",
         element: <PaymentCancel />,
-      },
-      {
-        path: "/member_list/:staffName",
-        element: <MemberList />,
       },
       // History
       {

@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import ButtonPrimary from "../../../components/ButtonPrimary";
 import throws from "../../../assets/icons/Throw .png";
-import UseGetByStaffName from "../../../hooks/UseGetByStaffName";
 import UseGetFavorite_stuff from "../../../hooks/UseGetFavorite_stuff";
 import useAxiosPrivate from "../../../hooks/axiousPrivate";
-import Swal from "sweetalert2";
+
 import { Circles } from "react-loader-spinner";
 import StaffProfileCard from "../../../components/StaffProfileCard/StaffProfileCard";
 import UseGetUserReview from "../../../hooks/UseGetUserReview";
 import toast from "react-hot-toast";
+import UseGetUserDetails from "../../../hooks/Staff/UseGetUserDetails";
 
 // Helper function to format date
 const formatDate = (dateString) => {
@@ -25,24 +25,25 @@ const formatDate = (dateString) => {
 const Staff = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const { username } = useParams();
-  const { staff } = UseGetByStaffName(username);
-  const { userReview } = UseGetUserReview(staff?.uid);
+  const { username, store_code } = useParams();
 
-  console.log(username);
+  const { staff_details } = UseGetUserDetails(username, store_code);
+  const { userReview } = UseGetUserReview(staff_details?.uid);
+
+  console.log("hiiiiiiiiiiiiiiiiiiiii", staff_details);
   // console.log(staff.uid);
   const { favoriteStuffs, refetch, isLoading } = UseGetFavorite_stuff();
 
   const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
-    if (staff && favoriteStuffs.length > 0) {
+    if (staff_details && favoriteStuffs.length > 0) {
       const isStaffLiked = favoriteStuffs.some(
-        (favorite) => favorite.uid === staff.uid
+        (favorite) => favorite.uid === staff_details.uid
       );
       setIsLiked(isStaffLiked);
     }
-  }, [staff, favoriteStuffs]);
+  }, [staff_details, favoriteStuffs]);
 
   const handleHeartToggle = async () => {
     if (isProcessing) return;
@@ -50,7 +51,7 @@ const Staff = () => {
 
     try {
       const response = await axiosPrivate.post(
-        `/auth/users/staff/${staff.uid}/like`
+        `/auth/users/staff/${staff_details.uid}/like`
       );
 
       if ([200, 201, 204].includes(response.status)) {
@@ -99,7 +100,7 @@ const Staff = () => {
         <div className="w-full max-w-[430px] mx-auto mb-[120px]">
           <div className="w-full">
             <StaffProfileCard
-              staff={staff}
+              staff={staff_details}
               isLiked={isLiked}
               isProcessing={isProcessing}
               handleHeartToggle={handleHeartToggle}

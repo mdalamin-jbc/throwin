@@ -14,7 +14,7 @@ const IndividualStores = () => {
   const storeData = storeDataFromLocation || storeDataFromStorage;
 
   const { store, isLoading } = useGetStuffsByStoreCode(storeData);
-  console.log(storeData);
+  console.log(store);
 
   if (isLoading) {
     return (
@@ -62,7 +62,7 @@ const IndividualStores = () => {
         {store.map((staff, uid) => (
           <div key={uid}>
             <Link
-              to={`/staff/${staff?.username}`}
+              to={`/${staff.store_code}/staff/${staff.username}`}
               state={{ staffData: staff }}
               onClick={() =>
                 localStorage.setItem("staff", JSON.stringify(staff))

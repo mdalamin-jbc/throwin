@@ -23,7 +23,7 @@ const MemberList = () => {
 
   useEffect(() => {
     if (storeId) {
-      setSearchData(storeId); // Initialize searchData with storeId data
+      setSearchData(storeId);
     }
   }, [storeId]);
 
@@ -115,7 +115,7 @@ const MemberList = () => {
               >
                 <Link
                   to={{
-                    pathname: `/staff/${staff.username}`,
+                    pathname: `/${staff.store_code}/staff/${staff.username}`,
                     state: { staffData: staff },
                   }}
                   onClick={() =>
