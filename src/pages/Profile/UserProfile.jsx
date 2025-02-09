@@ -3,7 +3,6 @@ import { CgLogOut } from "react-icons/cg";
 import TitleBar from "../../components/TitleBar";
 import { useAuth } from "../../hooks/useAuth";
 import { Link, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
 import UseUserDetails from "../../hooks/UseUserDetails";
 import { Helmet } from "react-helmet";
 import { MdDeleteOutline } from "react-icons/md";

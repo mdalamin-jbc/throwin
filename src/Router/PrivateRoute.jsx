@@ -10,7 +10,7 @@ const PrivateRoute = ({ children }) => {
     return <div>Loading...</div>;
   }
 
-  return user ? children : <Navigate to="/socialLogin" />;
+  return user ? children : <Navigate to="/" />;
 };
 
 // Define PropTypes
