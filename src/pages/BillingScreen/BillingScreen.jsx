@@ -233,7 +233,10 @@ const BillingScreen = () => {
       // amount: 1000,
       currency: "JPY",
       payment_method: "paypal",
-      return_url: `https://alpha.throwin-glow.com/store/${store_code}/staff/${username}/chargeCompleted`,
+      return_url: `http://localhost:5173/store/${encodeURIComponent(
+        store_code
+      )}/staff/${username}/chargeCompleted`,
+
       cancel_url: "https://alpha.throwin-glow.com/payment-cancle",
     });
   }, [
@@ -415,7 +418,15 @@ const BillingScreen = () => {
                         document.getElementById("my_modal_6").showModal()
                       }
                     >
-                      <button className="flex items-center border rounded px-3 py-2 gap-1">
+                      <button
+                        onClick={() =>
+                          localStorage.setItem(
+                            "staff_details",
+                            JSON.stringify(staff_details)
+                          )
+                        }
+                        className="flex items-center border rounded px-3 py-2 gap-1"
+                      >
                         <SlPaypal />
                         <span>Pay</span>
                       </button>

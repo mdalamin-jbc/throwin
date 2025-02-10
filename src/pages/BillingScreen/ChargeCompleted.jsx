@@ -1,17 +1,16 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { Helmet } from "react-helmet";
-import { useParams, useSearchParams, Link } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import TitleBar from "../../components/TitleBar";
 import ButtonPrimary from "../../components/ButtonPrimary";
-import { Circles } from "react-loader-spinner";
+
 import logo from "../../assets/images/home/logo.png";
 import useAxiosPrivate from "../../hooks/axiousPrivate";
 import toast from "react-hot-toast";
 import Confetti from "react-confetti";
 import useWindowSize from "react-use/lib/useWindowSize";
 import confetti from "canvas-confetti";
-import UseGetUserDetails from "../../hooks/Staff/UseGetUserDetails";
 
 // Animation configurations remain unchanged
 const pageTransition = {
@@ -88,13 +87,16 @@ const gradientRotation = {
 };
 
 const ChargeCompleted = () => {
-  const { store_code, username } = useParams();
+  // const { store_code, username } = useParams();
   const [searchParams] = useSearchParams();
   const axiosPrivate = useAxiosPrivate();
-  const { staff_details, isLoading } = UseGetUserDetails(username, store_code);
+  // const { staff_details, isLoading } = UseGetUserDetails(username, store_code);
   const [paymentStatus, setPaymentStatus] = useState(null);
   const validatedRef = useRef(false);
   const { width, height } = useWindowSize();
+
+  const staff_details = JSON.parse(localStorage.getItem("staff_details"));
+console.log(staff_details);
 
   const fireConfetti = () => {
     const count = 200;
@@ -181,19 +183,19 @@ const ChargeCompleted = () => {
     }
   }, [validatePayment, paymentStatus]);
 
-  if (isLoading) {
-    return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.8 }}
-        className="flex justify-center items-center h-screen bg-gradient-to-b from-white to-blue-50"
-      >
-        <Circles height="80" width="80" color="#49BBDF" ariaLabel="loading" />
-      </motion.div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <motion.div
+  //       initial={{ opacity: 0 }}
+  //       animate={{ opacity: 1 }}
+  //       exit={{ opacity: 0 }}
+  //       transition={{ duration: 0.8 }}
+  //       className="flex justify-center items-center h-screen bg-gradient-to-b from-white to-blue-50"
+  //     >
+  //       <Circles height="80" width="80" color="#49BBDF" ariaLabel="loading" />
+  //     </motion.div>
+  //   );
+  // }
 
   return (
     <AnimatePresence mode="wait">
