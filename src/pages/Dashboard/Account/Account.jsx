@@ -100,7 +100,7 @@ const Account = () => {
                 {storeList.length > 0 ? (
                   storeList.map((store) => (
                     <tr key={store.uid} className="hover border">
-                      <Link to={`${store.uid}`}>
+                      <Link to={`${store.code}`}>
                         <td className="flex items-center gap-[17px]">
                           <img
                             src={img}

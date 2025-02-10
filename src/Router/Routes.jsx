@@ -269,7 +269,7 @@ export const Routes = createBrowserRouter([
             element: <CreatANewAccount />,
           },
           {
-            path: "/dashboard/account/:id",
+            path: "/dashboard/account/:store_code",
             element: <ResturentStore />,
           },
           {

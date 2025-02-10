@@ -6,12 +6,13 @@ import img from "../../../assets/images/store&staff/image.png";
 import { Link, useParams } from "react-router-dom";
 
 import UseGetRestaurantStaffList from "../../../hooks/Dashboard/UseGetResturantStaffList";
+import UseGetStaffByStoreCode from "../../../hooks/Dashboard/UseGetStaffByStoreCode";
 const ResturentStore = () => {
-  const id = useParams();
+  const store_code = useParams();
+  const{staffListByStoreCode}=UseGetStaffByStoreCode(store_code)
   const { restaurantStaffList, refetch, isLoading, isError, error } =
     UseGetRestaurantStaffList();
-  console.log(id);
-  console.log(restaurantStaffList);
+  console.log(store_code);
   const {
     register,
     formState: { errors },
