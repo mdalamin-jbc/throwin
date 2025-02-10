@@ -100,7 +100,12 @@ const Account = () => {
                 {storeList.length > 0 ? (
                   storeList.map((store) => (
                     <tr key={store.uid} className="hover border">
-                      <Link to={`${store.code}`}>
+                      <Link
+                        onClick={() =>
+                          localStorage.setItem("store", JSON.stringify(store))
+                        }
+                        to={`${store.code}`}
+                      >
                         <td className="flex items-center gap-[17px]">
                           <img
                             src={img}

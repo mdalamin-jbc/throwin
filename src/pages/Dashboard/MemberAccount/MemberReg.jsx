@@ -1,54 +1,50 @@
 import { useForm } from "react-hook-form";
 import ButtonPrimary from "../../../components/ButtonPrimary";
 import toast from "react-hot-toast";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../../../hooks/axiousPrivate";
 
 const MemberReg = () => {
-  const { store_uid } = useParams(); // Assuming store_uid is passed as a URL parameter
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
-
+  const store = JSON.parse(localStorage.getItem("store"));
+  console.log(store.uid);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  // API request on form submission
   const handleMemberReg = async (data) => {
-    const formData = new FormData();
-    formData.append("name", data.storeName);
-    formData.append("email", "user@example.com");
-    formData.append("public_status", "public");
-    formData.append("introduction", data.bio);
-    formData.append("fun_fact", "");
-    formData.append("thank_message", data.thanksMessage);
-    formData.append("store_uid", store_uid);
-  
-    // If there's an image
-    if (data.topImage[0]) {
-      formData.append("image", data.topImage[0]); // Ensure the field matches what the server expects
-    }
-  
+    const staffCreatData = {
+      name: data.name,
+      email: data.email,
+      public_status: "public",
+      introduction: data.bio,
+      fun_fact: data.gacha,
+      thank_message: data.thanksMessage,
+      store_uid: store.uid,
+    };
+    console.log("Form Data Submitted:", staffCreatData);
+
     try {
       const response = await axiosPrivate.post(
         "/restaurant-owner/staff",
-        formData,
+        staffCreatData,
         {
           headers: {
             "Content-Type": "multipart/form-data", // Ensure the correct content type for file upload
           },
         }
       );
-  
+
       console.log("Member registered:", response.data);
-  
+
       toast.success("Member registered successfully!", {
         duration: 3000,
         position: "top-center",
       });
-  
+
       setTimeout(() => {
         navigate(-1);
       }, 1500);
@@ -60,7 +56,6 @@ const MemberReg = () => {
       });
     }
   };
-  
 
   return (
     <div className="flex gap-10 mb-[120px]">
@@ -85,8 +80,8 @@ const MemberReg = () => {
                   <td>
                     <div className="flex gap-5 items-center">
                       <input
-                        {...register("storeName", {
-                          required: "店舗名は必須です",
+                        {...register("name", {
+                          required: "メンバー名は必須です。",
                         })}
                         type="text"
                         placeholder="居酒屋ABC 梅田店"
@@ -95,16 +90,40 @@ const MemberReg = () => {
                       <p>0/10</p>
                     </div>
                     <div className="flex justify-between text-xs text-gray-500 mt-1">
-                      {errors.storeName && (
-                        <p className="text-red-500">
-                          {errors.storeName.message}
-                        </p>
+                      {errors.name && (
+                        <p className="text-red-500">{errors.name.message}</p>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+                {/* row 2 */}
+                <tr className="hover">
+                  <td className="flex items-center gap-[17px]">
+                    <label className="block text-gray-700">
+                      メンバーのメール
+                    </label>
+                  </td>
+                  <td>
+                    <div className="flex gap-5 items-center">
+                      <input
+                        {...register("email", {
+                          required: " メンバーのメールは必須です。",
+                        })}
+                        type="email"
+                        placeholder="example@domain.com"
+                        className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+                      />
+                      <p>0/10</p>
+                    </div>
+                    <div className="flex justify-between text-xs text-gray-500 mt-1">
+                      {errors.email && (
+                        <p className="text-red-500">{errors.email.message}</p>
                       )}
                     </div>
                   </td>
                 </tr>
 
-                {/* row 2 */}
+                {/* row 3 */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
                     <p>TOP画像</p>
@@ -118,7 +137,7 @@ const MemberReg = () => {
                   </td>
                 </tr>
 
-                {/* row 3 */}
+                {/* row 4 */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
                     <label className="block text-gray-700">自己紹介</label>
@@ -135,7 +154,7 @@ const MemberReg = () => {
                   </td>
                 </tr>
 
-                {/* row 4 */}
+                {/* row 5 */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
                     <label className="block text-gray-700">
@@ -154,7 +173,7 @@ const MemberReg = () => {
                   </td>
                 </tr>
 
-                {/* row 5 */}
+                {/* row 6 */}
                 <tr>
                   <td>
                     <label className="block text-gray-700 text-sm font-semibold mb-2">

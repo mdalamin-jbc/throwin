@@ -9,10 +9,9 @@ import UseGetRestaurantStaffList from "../../../hooks/Dashboard/UseGetResturantS
 import UseGetStaffByStoreCode from "../../../hooks/Dashboard/UseGetStaffByStoreCode";
 const ResturentStore = () => {
   const store_code = useParams();
-  const{staffListByStoreCode}=UseGetStaffByStoreCode(store_code)
-  const { restaurantStaffList, refetch, isLoading, isError, error } =
-    UseGetRestaurantStaffList();
-  console.log(store_code);
+  const { staffListByStoreCode } = UseGetStaffByStoreCode(store_code);
+
+  console.log(staffListByStoreCode);
   const {
     register,
     formState: { errors },
@@ -104,8 +103,8 @@ const ResturentStore = () => {
                 </tr>
               </thead>
               <tbody>
-                {restaurantStaffList?.length > 0 ? (
-                  restaurantStaffList.map((staff) => (
+                {staffListByStoreCode?.length > 0 ? (
+                  staffListByStoreCode.map((staff) => (
                     <tr key={staff.uid} className="hover border">
                       <Link>
                         <td className="flex items-center gap-[17px]">

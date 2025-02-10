@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -10,33 +11,62 @@ const CreateANewAccount = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
+    watch,
   } = useForm();
 
+  const [amounts, setAmounts] = useState([]); // Store selected amounts
+  const throwinAmount = watch("throwinAmount", "");
+
+  console.log(amounts);
+
+  // Add Amount Function
+  const addAmount = () => {
+    const amountValue = parseInt(throwinAmount, 10);
+    if (
+      !isNaN(amountValue) &&
+      amountValue >= 500 &&
+      amountValue <= 50000 &&
+      !amounts.includes(amountValue.toString())
+    ) {
+      setAmounts([...amounts, amountValue.toString()]);
+      setValue("throwinAmount", ""); // Clear input
+    } else {
+      toast.error("金額は500円から50,000円の間で選択してください。");
+    }
+  };
+
+  // Remove Amount Function
+  const removeAmount = (amountToRemove) => {
+    setAmounts(amounts.filter((amount) => amount !== amountToRemove));
+  };
+
+  // Form Submit Function
   const onSubmit = async (data) => {
-    console.log("フォーム送信データ:", data);
+    const storeCreateData = new FormData();
+    storeCreateData.append("name", String(data.storeName)); // Ensure string
+    storeCreateData.append("location", String(data.location)); // Ensure string
+    storeCreateData.append("gacha_enabled", String(data.gacha_enabled)); // Ensure string
+    storeCreateData.append("throwin_amounts", JSON.stringify(amounts.map(String))); // Ensure array of strings
   
-    const formData = new FormData();
-    formData.append("name", data.storeName);
-    formData.append("location", data.location);
-    formData.append("throwin_amounts", data.throwinAmount);
-    formData.append("gacha_enabled", data.gacha);
+    console.log(Object.fromEntries(storeCreateData)); // Debugging
   
     try {
-      const response = await axiosPrivate.post("restaurant-owner/stores", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await axiosPrivate.post(
+        "/restaurant-owner/stores",
+        storeCreateData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
   
       if (response.status === 200 || response.status === 201) {
         toast.success("アカウントが正常に作成されました！");
         setTimeout(() => navigate("/dashboard/account"), 1500);
       } else {
-        console.error("エラーレスポンス:", response.data);
         toast.error("アカウント作成に失敗しました！");
       }
     } catch (error) {
-      console.error("エラー:", error);
       toast.error("エラーが発生しました。もう一度お試しください。");
     }
   };
@@ -46,7 +76,7 @@ const CreateANewAccount = () => {
     <div>
       <h2 className="font-semibold text-[27px] text-[#73879C]">アカウント</h2>
       <div className="bg-white mt-[27px] rounded-xl pb-8 mr-[54px]">
-        <h4 className="font-semibold text-[18px] text-[#73879C] pt-[30px] pl-[33px] pb-[21px] ">
+        <h4 className="font-semibold text-[18px] text-[#73879C] pt-[30px] pl-[33px] pb-[21px]">
           店舗（チーム）新規作成
         </h4>
         <div className="border-b-[3px] mx-5"></div>
@@ -55,7 +85,6 @@ const CreateANewAccount = () => {
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="mx-8 mt-6 space-y-6"
-            encType="multipart/form-data" // Ensures proper file upload handling
           >
             <table className="table border-none">
               <tbody>
@@ -82,7 +111,7 @@ const CreateANewAccount = () => {
                 </tr>
 
                 {/* TOP画像 */}
-                {/* <tr className="hover">
+                <tr className="hover">
                   <td className="flex items-center gap-[17px]">
                     <p>TOP画像</p>
                   </td>
@@ -101,31 +130,55 @@ const CreateANewAccount = () => {
                       </p>
                     )}
                   </td>
-                </tr> */}
+                </tr>
 
                 {/* Throwin額の選択 */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
-                    <p>Throwin額の選択ボタン</p>
+                    <p>Throwin額の選択</p>
                   </td>
                   <td className="">
-                    <div className="flex space-x-4">
-                      {[1000, 5000, 10000].map((amount) => (
-                        <label
-                          key={amount}
-                          className="flex items-center space-x-2 border px-4 py-2 rounded cursor-pointer"
+                    <div className="flex items-center space-x-2">
+                      {/* Selected Amounts List (Left Side) */}
+                      <div className="flex space-x-1">
+                        {amounts.map((amount, index) => (
+                          <div
+                            key={index}
+                            className="border border-[#D9D9D9] text-[#777A83] px-[14px] py-2 rounded-[3px] text-sm flex gap-3 cursor-pointer"
+                            onClick={() => removeAmount(amount)} // Click to remove
+                          >
+                            <p>{amount.toLocaleString()}</p>{" "}
+                            <p className="text-[#434343]">円</p>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Input Field and Add Button */}
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="number"
+                          {...register("throwinAmount", {
+                            min: { value: 500, message: "最低金額は500円です" },
+                            max: {
+                              value: 50000,
+                              message: "最大金額は50000円です",
+                            },
+                          })}
+                          className="border-b-2 px-4 py-2 w-40"
+                          placeholder="金額を入力"
+                          onKeyDown={(e) => e.key === "Enter" && addAmount()}
+                        />
+
+                        <button
+                          type="button"
+                          onClick={addAmount}
+                          className="bg-blue-500 text-white px-4 py-2 rounded"
                         >
-                          <input
-                            type="radio"
-                            {...register("throwinAmount", {
-                              required: "金額を選択してください",
-                            })}
-                            value={amount}
-                          />
-                          <span>{amount.toLocaleString()} 円</span>
-                        </label>
-                      ))}
+                          追加
+                        </button>
+                      </div>
                     </div>
+
                     {errors.throwinAmount && (
                       <p className="text-red-500 text-sm mt-1">
                         {errors.throwinAmount.message}
