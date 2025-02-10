@@ -233,7 +233,7 @@ const BillingScreen = () => {
       // amount: 1000,
       currency: "JPY",
       payment_method: "paypal",
-      return_url: `http://localhost:5173/store/${encodeURIComponent(
+      return_url: `https://alpha.throwin-glow.com/store/${encodeURIComponent(
         store_code
       )}/staff/${username}/chargeCompleted`,
 
