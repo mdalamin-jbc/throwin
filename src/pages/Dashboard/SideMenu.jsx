@@ -14,9 +14,9 @@ import UseUserDetails from "../../hooks/UseUserDetails";
 const SideMenu = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { userDetails ,isLoading} = UseUserDetails();
+  const { userDetails, isLoading } = UseUserDetails();
   // const userRole = userDetails.kind;
-  const userRole = localStorage.getItem("userRole")
+  const userRole = localStorage.getItem("userRole");
 
   console.log(userDetails);
 
@@ -48,7 +48,7 @@ const SideMenu = () => {
       icon: <img src={management} alt="" className="mr-4 w-[30px]" />,
       path: "/dashboard/sales_agent",
       subPaths: ["/sales_agent"],
-      roles: ["glow_admin", "fc_admin", "sales_agent"],
+      roles: ["glow_admin", "fc_admin"],
     },
     // --------------------
 
