@@ -73,7 +73,12 @@ const Favorite = () => {
               <div key={staff.uid} className="px-4">
                 <div className=" max-w-[430px] mx-auto px-[25px]  grid  shadow-md rounded-lg p-4 ">
                   <div className="flex items-center justify-between">
-                    <Link to={`/staff/${staff.username}`} className="flex">
+                    <Link
+                      to={{
+                        pathname: `/store/${staff.store_code}/staff/${staff.username}`,
+                      }}
+                      className="flex"
+                    >
                       <img
                         className="w-[49px] h-[49px] rounded-full"
                         src={
