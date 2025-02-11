@@ -15,9 +15,10 @@ const SideMenu = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { userDetails ,isLoading} = UseUserDetails();
-  const userRole = userDetails.kind;
+  // const userRole = userDetails.kind;
+  const userRole = localStorage.getItem("userRole")
 
-  console.log(userDetails.kind);
+  console.log(userDetails);
 
   // Helper function to check if a path is active
   const isPathActive = (path, subPaths = []) => {
