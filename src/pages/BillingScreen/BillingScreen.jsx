@@ -66,7 +66,8 @@ const BillingScreen = () => {
     params.append("PayerID", "VISA_DIRECT");
 
     // Navigate to success page with params
-    navigate(`/staff/${staff?.username}/chargeCompleted?${params.toString()}`);
+    //navigate(`/staff/${staff?.username}/chargeCompleted?${params.toString()}`);
+    navigate(`/store/${store_code}/staff/${username}/chargeCompleted?${params.toString()}`);
   };
 
   const handleHeartToggle = async () => {
