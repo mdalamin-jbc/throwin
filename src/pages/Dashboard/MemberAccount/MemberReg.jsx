@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../../../hooks/axiousPrivate";
 import { BiSolidDownArrow } from "react-icons/bi";
+import StaffPreviewSection from "./StaffPreviewSection";
 
 const MemberReg = () => {
   const navigate = useNavigate();
@@ -221,7 +222,7 @@ const MemberReg = () => {
                     ガチャ券付与
                   </label>
                 </td>
-                
+
                 <td>
                   <div className="relative w-[248px]">
                     {/* Custom Select Box with Flex Layout */}
@@ -255,6 +256,9 @@ const MemberReg = () => {
           </form>
           {/* ------------------------- */}
         </div>
+      </div>
+      <div className="mt-14">
+        <StaffPreviewSection />
       </div>
     </div>
   );
