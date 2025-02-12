@@ -52,7 +52,7 @@ const BillingScreen = () => {
   // Modified Visa payment handler
   const handleVisaPayment = () => {
     // Close the modal first
-    const modal = document.getElementById("my_modal_1");
+    const modal = document.getElementById("visa_payment_modal");
     if (modal) {
       modal.close();
     }
@@ -666,7 +666,7 @@ const BillingScreen = () => {
                       <button
                         className="w-full"
                         onClick={() =>
-                          document.getElementById("my_modal_1").showModal()
+                          document.getElementById("visa_payment_modal").showModal()
                         }
                       >
                         <ButtonPrimary
@@ -684,7 +684,7 @@ const BillingScreen = () => {
 
                       {/* Modified Visa payment modal */}
                       <dialog
-                        id="my_modal_1"
+                        id="visa_payment_modal"
                         className="modal max-w-[343px] mx-auto"
                       >
                         <div className="modal-box p-0">
@@ -732,6 +732,7 @@ const BillingScreen = () => {
                       }
                       btnText="スローインする！"
                       style={buttonStyle}
+                      
                     />
                   </button>
                 )}
