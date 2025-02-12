@@ -57,6 +57,11 @@ const BillingScreen = () => {
         modal.close();
       }
   
+      // Save current staff details to localStorage
+      if (staff_details) {
+        localStorage.setItem("staff_details", JSON.stringify(staff_details));
+      }
+  
       // Generate a mock payment ID with timestamp
       const mockPaymentId = `VISA_${Date.now()}`;
   
@@ -65,14 +70,12 @@ const BillingScreen = () => {
         paymentId: mockPaymentId,
         PayerID: "VISA_DIRECT",
         amount: selectedAmount,
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        payment_method: "visa" // Add payment method indicator
       });
   
-      // Construct the full URL
-      const completionUrl = `/store/${store_code}/staff/${username}/chargeCompleted?${params.toString()}`;
-  
-      // Use replace instead of navigate to ensure a clean navigation
-      window.location.replace(completionUrl);
+      // Navigate using window.location.replace for a clean state reset
+      window.location.replace(`/store/${store_code}/staff/${username}/chargeCompleted?${params.toString()}`);
     } catch (error) {
       console.error("Navigation error:", error);
       toast.error("エラーが発生しました。もう一度お試しください。", {
