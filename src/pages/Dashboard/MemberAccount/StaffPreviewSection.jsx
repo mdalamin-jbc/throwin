@@ -69,7 +69,7 @@ const StaffPreviewSection = () => {
                 <div className="absolute bottom-0 left-0 w-full px-6 mb-[22px] p-2 text-white rounded-b-lg">
                   <div className="flex justify-between items-center">
                     <div className="bg-white text-[#F06464] flex items-center gap-1 px-2 py-1 rounded-full shadow-md">
-                      <IoMdStar />
+                      0<IoMdStar />
                       {staff?.score}
                     </div>
                     <h3 className="text-2xl font-bold">{staff?.name}</h3>
@@ -81,6 +81,9 @@ const StaffPreviewSection = () => {
                     >
                       {isLiked ? <FaHeart color="red" /> : <FaRegHeart />}
                     </div> */}
+                    <div>
+                      {/* <FaRegHeart /> */}
+                    </div>
                   </div>
                 </div>
               </div>
