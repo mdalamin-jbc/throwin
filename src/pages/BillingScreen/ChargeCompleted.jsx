@@ -10,7 +10,8 @@ import useAxiosPrivate from "../../hooks/axiousPrivate";
 import toast from "react-hot-toast";
 import Confetti from "react-confetti";
 import useWindowSize from "react-use/lib/useWindowSize";
-import confetti from "canvas-confetti";
+// import confetti from "canvas-confetti";
+
 
 // Animation configurations remain unchanged
 const pageTransition = {
@@ -98,31 +99,31 @@ const ChargeCompleted = () => {
   const staff_details = JSON.parse(localStorage.getItem("staff_details"));
 console.log(staff_details);
 
-  const fireConfetti = () => {
-    const count = 200;
-    const defaults = {
-      origin: { y: 0.7 },
-      colors: ["#65D0F2", "#2399F4", "#ffffff", "#91E3FF"],
-      spread: 70,
-      ticks: 200,
-      gravity: 0.8,
-      scalar: 0.8,
-    };
+  // const fireConfetti = () => {
+  //   const count = 200;
+  //   const defaults = {
+  //     origin: { y: 0.7 },
+  //     colors: ["#65D0F2", "#2399F4", "#ffffff", "#91E3FF"],
+  //     spread: 70,
+  //     ticks: 200,
+  //     gravity: 0.8,
+  //     scalar: 0.8,
+  //   };
 
-    function fire(particleRatio, opts) {
-      confetti({
-        ...defaults,
-        ...opts,
-        particleCount: Math.floor(count * particleRatio),
-      });
-    }
+  //   function fire(particleRatio, opts) {
+  //     confetti({
+  //       ...defaults,
+  //       ...opts,
+  //       particleCount: Math.floor(count * particleRatio),
+  //     });
+  //   }
 
-    fire(0.25, { spread: 26, startVelocity: 45 });
-    fire(0.2, { spread: 50, startVelocity: 40 });
-    fire(0.35, { spread: 80, decay: 0.92, scalar: 0.8 });
-    fire(0.1, { spread: 100, startVelocity: 25, decay: 0.92 });
-    fire(0.1, { spread: 100, startVelocity: 35 });
-  };
+  //   fire(0.25, { spread: 26, startVelocity: 45 });
+  //   fire(0.2, { spread: 50, startVelocity: 40 });
+  //   fire(0.35, { spread: 80, decay: 0.92, scalar: 0.8 });
+  //   fire(0.1, { spread: 100, startVelocity: 25, decay: 0.92 });
+  //   fire(0.1, { spread: 100, startVelocity: 35 });
+  // };
 
   const validatePayment = useCallback(async () => {
     if (validatedRef.current) return;
@@ -144,7 +145,7 @@ console.log(staff_details);
       // Check if it's a Visa payment
       if (paymentId.startsWith("VISA_")) {
         setPaymentStatus("success");
-        setTimeout(fireConfetti, 800);
+        // setTimeout(fireConfetti, 800);
         toast.success(`取引ID: ${paymentId}`, {
           position: "top-center",
           duration: 4000,
@@ -160,7 +161,7 @@ console.log(staff_details);
 
       if (response.status === 200) {
         setPaymentStatus("success");
-        setTimeout(fireConfetti, 800);
+        // setTimeout(fireConfetti, 800);
         toast.success(`取引ID: ${paymentId}`, {
           position: "top-center",
           duration: 4000,
