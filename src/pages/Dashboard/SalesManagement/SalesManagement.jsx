@@ -91,32 +91,6 @@ const SalesManagement = () => {
     ],
   };
 
-  const dataTeam = {
-    labels: ["チームA", "チームB", "チームC", "チームD", "チームE"],
-    datasets: [
-      {
-        type: "bar",
-        label: "売上",
-        backgroundColor: "#49BBDF",
-        data: [500, 750, 600, 900, 850],
-        yAxisID: "y",
-      },
-    ],
-  };
-
-  const dataMember = {
-    labels: ["メンバー1", "メンバー2", "メンバー3", "メンバー4", "メンバー5"],
-    datasets: [
-      {
-        type: "bar",
-        label: "売上",
-        backgroundColor: "#49BBDF",
-        data: [100, 200, 150, 180, 250],
-        yAxisID: "y",
-      },
-    ],
-  };
-
   const options = {
     responsive: true,
     scales: {

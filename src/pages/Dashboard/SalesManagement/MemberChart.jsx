@@ -1,4 +1,82 @@
+import { Bar } from "react-chartjs-2";
+
 const MemberChart = () => {
+  const dataOverall = {
+    labels: [
+      "1 火",
+      "2 水",
+      "3 木",
+      "4 金",
+      "5 土",
+      "6 日",
+      "7 月",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "16",
+      "17",
+      "18",
+      "18",
+      "20",
+      "21",
+      "22",
+      "23",
+      "24",
+      "25",
+      "26",
+      "27",
+      "28",
+    ],
+    datasets: [
+      {
+        type: "line",
+        label: "客数",
+        borderColor: "#9E9E9E",
+        borderWidth: 2,
+        pointRadius: 4,
+        fill: false,
+        data: [
+          2.1, 2.5, 3.6, 2, 0, 0, 2.4, 2.9, 2, 2.5, 0, 0, 2.6, 2.8, 1.7, 2, 1.8,
+          0, 0, 2.5, 2.9, 0, 0, 2.7, 2.2, 0, 3.7,
+        ],
+        yAxisID: "y1",
+      },
+      {
+        type: "bar",
+        label: "売上",
+        backgroundColor: "#49BBDF",
+        data: [
+          12, 14.5, 17.5, 11, 0, 0, 14, 17, 11, 13, 0, 0, 15, 16.2, 9, 12, 10.5,
+          0, 0, 15, 17, 0, 0, 15.5, 13, 0, 21,
+        ],
+        yAxisID: "y",
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    scales: {
+      y: {
+        type: "linear",
+        display: true,
+        position: "left",
+      },
+      y1: {
+        type: "linear",
+        display: true,
+        position: "right",
+        grid: {
+          drawOnChartArea: false,
+        },
+      },
+    },
+  };
+
   return (
     <div>
       <div className="mt-[22px] flex items-center gap-4 font-semibold text-xs">
@@ -50,13 +128,12 @@ const MemberChart = () => {
       <div className="mt-[33px] grid grid-cols-3 gap-[17px]">
         {[
           {
-            title: "売上額(Throwin額)",
+            title: "売上（Throwin額)",
             value: "1,000,000",
             unit: "円",
           },
-          { title: "利益額", value: "15,00", unit: "" },
+          { title: "利益額", value: "300,000", unit: "円" },
           { title: "Throwin回数", value: "1,500", unit: "回" },
-          { title: "稼働店舗（チーム）数", value: "5", unit: "" },
         ].map((item, i) => (
           <div
             key={i}
@@ -71,6 +148,9 @@ const MemberChart = () => {
             </div>
           </div>
         ))}
+      </div>
+      <div className="mt-[27px]">
+        <Bar height={200} width={600} data={dataOverall} options={options} />
       </div>
     </div>
   );
