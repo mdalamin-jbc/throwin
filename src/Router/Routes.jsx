@@ -278,7 +278,7 @@ export const Routes = createBrowserRouter([
           },
           //---------------------------------update part
           {
-            path: "/dashboard/account/:id/creat_new_staff",
+            path: "/dashboard/account/:id/creat_newStaff",
             element: <MemberReg />,
           },
           {

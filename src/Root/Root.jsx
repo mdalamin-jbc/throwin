@@ -10,7 +10,6 @@ const Root = () => {
     "favorite",
     "gacha",
     "notice",
-
     "member_list",
     "myPage",
     "store",

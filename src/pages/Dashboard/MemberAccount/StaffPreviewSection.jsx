@@ -1,13 +1,12 @@
 import { useState } from "react";
 import img from "../../../assets/images/dashboard/phone.png";
-import navmenu from "../../../assets/images/dashboard/prevideo_img_navmenu.png";
+import navimg from "../../../assets/images/dashboard/preview.png";
 import staff from "../../../assets/images/store&staff/image.png";
 import logo from "../../../assets/logo/logo4.png";
 import TitleBar from "../../../components/TitleBar";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import { IoMdStar } from "react-icons/io";
 import { FaHeart } from "react-icons/fa";
-import { MdArrowForwardIos } from "react-icons/md";
 
 const StaffPreviewSection = () => {
   const [activeTab, setActiveTab] = useState("profile");
@@ -163,9 +162,8 @@ const StaffPreviewSection = () => {
               </p>
             </div>
             <div className="mt-[110px]">
-              
               <div className="">
-                <img className="rounded-b-[40px]" src={navmenu} alt="" />
+                <img className="rounded-b-[40px]" src={navimg} alt="" />
               </div>
             </div>
           </div>

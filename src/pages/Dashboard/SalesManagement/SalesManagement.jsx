@@ -30,6 +30,8 @@ const SalesManagement = () => {
   const [selectedYear, setSelectedYear] = useState("2025年");
   const [selectedMonth, setSelectedMonth] = useState("1月");
 
+  const userRole = localStorage.getItem("userRole");
+
   const handleTabChange = (tab) => setActiveTab(tab);
   const handleYearChange = (e) => setSelectedYear(e.target.value);
   const handleMonthChange = (e) => setSelectedMonth(e.target.value);
@@ -118,6 +120,10 @@ const SalesManagement = () => {
           {[
             { id: "overall", label: "全体の数字" },
             { id: "team", label: "チーム（店舗）" },
+            { id: "whole", label: "全体" },
+            { id: "Sales Agent", label: "営業代理店" },
+            { id: "client", label: "クライアント" },
+            { id: "Store (Team)", label: "店舗（チーム）" },
             { id: "member", label: "メンバー" },
           ].map((tab) => (
             <h4
@@ -215,7 +221,31 @@ const SalesManagement = () => {
             </div>
           )}
 
-          {/* Member Tab Content */}
+          {/* whole Tab Content */}
+          {activeTab === "whole" && (
+            <div className="mt-[27px]">
+              <MemberChart />
+            </div>
+          )}
+          {/* Sales Agent Tab Content */}
+          {activeTab === "Sales Agent" && (
+            <div className="mt-[27px]">
+              <MemberChart />
+            </div>
+          )}
+          {/* client Tab Content */}
+          {activeTab === "client" && (
+            <div className="mt-[27px]">
+              <MemberChart />
+            </div>
+          )}
+          {/* Store (Team) Tab Content */}
+          {activeTab === "Store (Team)" && (
+            <div className="mt-[27px]">
+              <MemberChart />
+            </div>
+          )}
+          {/* member Tab Content */}
           {activeTab === "member" && (
             <div className="mt-[27px]">
               <MemberChart />

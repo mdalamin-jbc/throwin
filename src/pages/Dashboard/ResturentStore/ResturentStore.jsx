@@ -54,7 +54,7 @@ const ResturentStore = () => {
         <div className="mx-[33px]">
           <div className="mt-[22px] flex justify-between">
             <Link
-              to="creat_new_staff"
+              to="creat_newStaff"
               className="bg-[#4EBDF3] text-white py-[6px] px-[106px] rounded"
             >
               メンバー登録 <span className="text-xl">+</span>
