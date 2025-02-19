@@ -4,7 +4,6 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import search from "../../../assets/icons/search_3.png";
 import img from "../../../assets/images/store&staff/image.png";
 import { Link } from "react-router-dom";
-
 import UseGetRestaurantOwnerStoreList from "../../../hooks/Dashboard/UseGetRestaurantOwnerStoreList";
 
 const Account = () => {

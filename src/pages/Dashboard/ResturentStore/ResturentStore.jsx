@@ -4,14 +4,12 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import search from "../../../assets/icons/search_3.png";
 import img from "../../../assets/images/store&staff/image.png";
 import { Link, useParams } from "react-router-dom";
-
-import UseGetRestaurantStaffList from "../../../hooks/Dashboard/UseGetResturantStaffList";
 import UseGetStaffByStoreCode from "../../../hooks/Dashboard/UseGetStaffByStoreCode";
 const ResturentStore = () => {
   const store_code = useParams();
-  const { staffListByStoreCode } = UseGetStaffByStoreCode(store_code);
+  const { restaurantStaffListByStoreCode } = UseGetStaffByStoreCode(store_code);
 
-  console.log(staffListByStoreCode);
+  console.log(restaurantStaffListByStoreCode);
   const {
     register,
     formState: { errors },
@@ -103,8 +101,8 @@ const ResturentStore = () => {
                 </tr>
               </thead>
               <tbody>
-                {staffListByStoreCode?.length > 0 ? (
-                  staffListByStoreCode.map((staff) => (
+                {restaurantStaffListByStoreCode?.length > 0 ? (
+                  restaurantStaffListByStoreCode.map((staff) => (
                     <tr key={staff.uid} className="hover border">
                       <Link>
                         <td className="flex items-center gap-[17px]">

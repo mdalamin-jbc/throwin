@@ -45,23 +45,20 @@ const CreateANewAccount = () => {
 
   // Form Submit Function
   const onSubmit = async (data) => {
-    const storeCreateData = new FormData();
-    storeCreateData.append("name", String(data.storeName)); // Ensure string
-    storeCreateData.append("location", String(data.location)); // Ensure string
-    storeCreateData.append("gacha_enabled", String(data.gacha_enabled)); // Ensure string
-    storeCreateData.append(
-      "throwin_amounts",
-      JSON.stringify(amounts.map(String))
-    ); // Ensure array of strings
-
-    console.log(Object.fromEntries(storeCreateData)); // Debugging
+    // Construct the payload
+    const storeCreateData = {
+      name: data.storeName,
+      location: data.location,
+      gacha_enabled: data.gacha_enabled,
+      throwin_amounts: amounts.map(String), // Ensure amounts are strings
+    };
 
     try {
       const response = await axiosPrivate.post(
         "restaurant-owner/stores",
         storeCreateData,
         {
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: { "Content-Type": "application/json" },
         }
       );
 

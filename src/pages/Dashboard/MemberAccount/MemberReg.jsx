@@ -124,7 +124,6 @@ const MemberReg = () => {
                       {...register("email", {
                         required: " メンバーのメールは必須です。",
                         maxLength: {
-                          value: 10,
                           message:
                             "メールアドレスは10文字以内で入力してください。",
                         },
@@ -133,10 +132,7 @@ const MemberReg = () => {
                       type="email"
                       placeholder="example@domain.com"
                       className="w-full border rounded px-4 py-2"
-                      maxLength={10}
                     />
-
-                    <p>{emailCount}/10</p>
                   </div>
                   <div className="flex justify-between text-xs text-gray-500 mt-1">
                     {errors.email && (

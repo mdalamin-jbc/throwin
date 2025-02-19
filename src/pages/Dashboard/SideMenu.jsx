@@ -18,7 +18,7 @@ const SideMenu = () => {
   // const userRole = userDetails.kind;
   const userRole = localStorage.getItem("userRole");
 
-  console.log(userDetails);
+
 
   // Helper function to check if a path is active
   const isPathActive = (path, subPaths = []) => {

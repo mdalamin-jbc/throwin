@@ -28,7 +28,7 @@ const UseGetRestaurantStaffList = () => {
         throw new Error("Failed to fetch staff list. Please try again.");
       }
     },
-    enabled: Boolean(user?.access), // Only run query if user is authenticated
+    enabled: Boolean(user?.access), 
   });
   //   console.log(restaurantStaffList);
   return { restaurantStaffList, refetch, isLoading, isError, error };
