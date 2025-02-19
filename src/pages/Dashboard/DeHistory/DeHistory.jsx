@@ -4,13 +4,15 @@ import UseGetPaymentHistoryResturentWoner from "../../../hooks/Dashboard/UseGetP
 const DeHistory = () => {
   const { PaymentHistoryResturentWoner, refetch, isLoading, isError, error } =
     UseGetPaymentHistoryResturentWoner();
-
+  console.log(PaymentHistoryResturentWoner);
   if (isLoading) {
     return <p className="text-center mt-10 text-gray-500">Loading...</p>;
   }
 
   if (isError) {
-    return <p className="text-center mt-10 text-red-500">Error: {error.message}</p>;
+    return (
+      <p className="text-center mt-10 text-red-500">Error: {error.message}</p>
+    );
   }
 
   return (
@@ -57,13 +59,17 @@ const DeHistory = () => {
                     <tr key={index} className="hover border">
                       <td>{payment.transaction_date || "N/A"}</td>
                       <td>
-                        <p className="text-[#49BBDF]">{payment.store_name || "N/A"}</p>
+                        <p className="text-[#49BBDF]">
+                          {payment.store_name || "N/A"}
+                        </p>
                       </td>
                       <td>
                         <p>{payment.amount ? `${payment.amount}円` : "N/A"}</p>
                       </td>
                       <td>
-                        <p className="text-[#49BBDF]">{payment.staff_name || "N/A"}</p>
+                        <p className="text-[#49BBDF]">
+                          {payment.staff_name || "N/A"}
+                        </p>
                       </td>
                       <td>
                         <p className="bg-[#49BBDF] text-white rounded-full text-center py-1">
