@@ -5,11 +5,16 @@ import search from "../../../assets/icons/search_3.png";
 import img from "../../../assets/images/store&staff/image.png";
 import { Link } from "react-router-dom";
 import UseGetRestaurantOwnerStoreList from "../../../hooks/Dashboard/UseGetRestaurantOwnerStoreList";
+import Pagination from "./Pagination";
 
 const Account = () => {
   const { storeList, refetch, isLoading, isError, error } =
     UseGetRestaurantOwnerStoreList();
-  console.log(storeList);
+
+  // Add pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
   const {
     register,
     formState: { errors },
@@ -33,7 +38,23 @@ const Account = () => {
     fetchTeams();
   }, []);
 
-  const filteredTeams = teams.filter((team) => team.name.includes(searchQuery));
+  // Calculate pagination
+  const filteredStores = storeList.filter(
+    (store) =>
+      store.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      store.code?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const totalPages = Math.ceil(filteredStores.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedStores = filteredStores.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div>
@@ -96,8 +117,8 @@ const Account = () => {
                 </tr>
               </thead>
               <tbody>
-                {storeList.length > 0 ? (
-                  storeList.map((store) => (
+                {paginatedStores.length > 0 ? (
+                  paginatedStores.map((store) => (
                     <tr key={store.uid} className="hover border">
                       <Link
                         onClick={() =>
@@ -115,7 +136,6 @@ const Account = () => {
                         </td>
                       </Link>
                       <td>{store.code}</td>
-                      {/* -----------------------------route update */}
                       <td>
                         <button className="bg-[#ABABAB] rounded-full px-3 py-1 text-white">
                           {store.exposure}
@@ -132,6 +152,17 @@ const Account = () => {
                 )}
               </tbody>
             </table>
+
+            {/* Add pagination */}
+            {paginatedStores.length > 0 && (
+              <div className="mt-6">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>
