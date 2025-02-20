@@ -156,7 +156,7 @@ const SideMenu = () => {
         </ul>
 
         <Link
-          to={"/dashboard/adminLogin"}
+          to={"/admin/login"}
           className="text-center py-3 cursor-pointer bg-[#49BBDF] hover:bg-[#3aa0bf]"
         >
           <span className="text-white text-lg font-semibold">ログアウト</span>
