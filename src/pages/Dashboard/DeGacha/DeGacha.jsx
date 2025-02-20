@@ -1,10 +1,13 @@
 import { MdKeyboardArrowDown } from "react-icons/md";
 import img from "../../../assets/images/dashboard/Oval 7.png";
+import UseGetGachaHistory from "../../../hooks/Dashboard/UseGetGachaHistory";
 const DeGacha = () => {
+  const { resturentGachaHisotry } = UseGetGachaHistory();
+  console.log(resturentGachaHisotry);
   return (
     <div>
       <h2 className="font-semibold text-[27px] text-[#73879C]">アカウント</h2>
-      <div className="bg-white mt-[27px] rounded-xl pb-8 mr-[54px]">
+      <div className="bg-white mt-[27px] rounded-xl pb-8 ">
         <h4 className="font-semibold text-[18px] text-[#73879C] pt-[30px] pl-[33px] pb-[21px] ">
           ガチャ使用状況
         </h4>
@@ -32,43 +35,30 @@ const DeGacha = () => {
                 </tr>
               </thead>
               <tbody>
-                {/* row 1 */}
-                <tr className="hover border">
-                  <td className="flex items-center gap-[17px]">
-                    <img src={img} alt="" className="w-[29px] rounded-full" />
-                    <p className="text-[#49BBDF]">居酒屋ABC_大阪店</p>
-                  </td>
-                  <td>有り</td>
-                  <td>1/4枚</td>
-                  <td>5/8枚</td>
-                  <td>100/120枚</td>
-                </tr>
-                {/* row 2 */}
-                <tr className="hover border">
-                  <td className="flex items-center gap-[17px]">
-                    <img src={img} alt="" className="w-[29px] rounded-full" />
-                    <p className="text-[#49BBDF]">居酒屋ABC_大阪店</p>
-                  </td>
-                  <td>有り</td>
-                  <td>1/4枚</td>
-                  <td>5/8枚</td>
-                  <td>100/120枚</td>
-                </tr>
-                {/* row 3 */}
-                <tr className="hover border">
-                  <td className="flex items-center gap-[17px]">
-                    <img src={img} alt="" className="w-[29px] rounded-full" />
-                    <p className="text-[#49BBDF]">居酒屋ABC_大阪店</p>
-                  </td>
-                  <td>有り</td>
-                  <td>1/4枚</td>
-                  <td>5/8枚</td>
-                  <td>100/120枚</td>
-                </tr>
+                {resturentGachaHisotry?.map((item, index) => (
+                  <tr key={item.uid} className="hover border">
+                    <td className="flex items-center gap-[17px]">
+                      <img
+                        src={item.banner || img}
+                        alt=""
+                        className="w-[29px] rounded-full"
+                      />
+                      <p className="text-[#49BBDF]">{item.name}</p>
+                    </td>
+                    <td>{item.gacha_settings === "yes" ? "有り" : "無し"}</td>
+                    <td>
+                      {item.gold_issued}/{item.gold_total || "N/A"}枚
+                    </td>
+                    <td>
+                      {item.silver_issued}/{item.silver_total || "N/A"}枚
+                    </td>
+                    <td>
+                      {item.bronze_issued}/{item.bronze_total || "N/A"}枚
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
-
-            
           </div>
         </div>
       </div>
