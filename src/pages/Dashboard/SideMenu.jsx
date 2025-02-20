@@ -37,7 +37,7 @@ const SideMenu = () => {
       icon: <img src={management} alt="" className="mr-4 w-[30px]" />,
       path: "/dashboard/account",
       subPaths: ["/creat_new"],
-      roles: ["sales_agent", "restaurant_owner"],
+      roles: ["restaurant_owner"],
     },
     {
       label: "営業代理店",
@@ -46,12 +46,14 @@ const SideMenu = () => {
       subPaths: ["/sales_agent"],
       roles: ["glow_admin", "fc_admin"],
     },
+
+    // common account
     {
       label: "クライアント",
       icon: <img src={management} alt="" className="mr-4 w-[30px]" />,
       path: "/dashboard/client",
       subPaths: ["/creat_new"],
-      roles: ["fc_admin", "glow_admin"],
+      roles: ["fc_admin", "glow_admin", "sales_agent"],
     },
     {
       label: "コメント",
@@ -99,7 +101,7 @@ const SideMenu = () => {
   // Check if current path is valid
   const isValidPath = (currentPath) => {
     // First check if the exact path exists
-    const exactPathExists = menuItems.some(item => item.path === currentPath);
+    const exactPathExists = menuItems.some((item) => item.path === currentPath);
     if (exactPathExists) return true;
 
     // Then check for subpaths
@@ -114,7 +116,7 @@ const SideMenu = () => {
   // Only redirect to sales_management on initial load or direct dashboard access
   useEffect(() => {
     // Only redirect if we're at the root dashboard path
-    if (location.pathname === '/dashboard') {
+    if (location.pathname === "/dashboard") {
       navigate("/dashboard/sales_management");
     }
   }, []);
