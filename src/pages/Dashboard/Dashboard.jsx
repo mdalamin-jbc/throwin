@@ -7,11 +7,13 @@ const Dashboard = ({ userRole }) => {
   const shouldShowSideMenu = location.pathname !== "/dashboard/adminLogin";
 
   return (
-    <div className="flex h-screen bg-[#f8f9fb] overflow-auto">
+    <div className="flex min-h-screen bg-[#f8f9fb]">
       {shouldShowSideMenu && <SideMenu userRole={userRole} />}
 
-      <div className="flex-1 mt-[50px] ml-[54px]">
-        <Outlet />
+      <div className={`flex-1 overflow-auto min-h-screen ${shouldShowSideMenu ? 'ml-[300px]' : ''}`}>
+        <div className="p-[50px] pr-[54px]">
+          <Outlet />
+        </div>
       </div>
     </div>
   );

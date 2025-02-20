@@ -120,44 +120,46 @@ const SideMenu = () => {
   }, []);
 
   return (
-    <div className="w-full h-full min-h-[720px] flex flex-col lg:w-[300px]">
-      <div className="shadow-lg flex flex-col justify-between bg-white h-full lg:h-[100vh]">
-        <div className="mt-6 ml-9 border-gray-300 text-center">
-          <img
-            src={logo}
-            alt="Logo"
-            className="w-[50%] lg:w-[221px] mb-[30px] lg:mb-[61px]"
-          />
+    <div className="fixed top-0 left-0 h-screen w-[300px]">
+      <div className="shadow-lg flex flex-col justify-between bg-white h-full">
+        <div>
+          <div className="mt-6 ml-9 border-gray-300 text-center">
+            <img
+              src={logo}
+              alt="Logo"
+              className="w-[50%] lg:w-[221px] mb-[30px] lg:mb-[61px]"
+            />
+          </div>
+
+          <h4 className="text-sm font-semibold pl-6 mb-6">
+            チーム名（企業名）が入ります
+          </h4>
+
+          <ul className="flex-1 list-none p-0 m-0 bg-white">
+            {menuItems.map((item) => (
+              <li key={item.path}>
+                <NavLink
+                  to={item.path}
+                  className={({ isActive }) => `
+                    flex items-center px-6 py-2 lg:px-10 lg:py-4 border-t border-b hover:bg-[#edf9fc] cursor-pointer
+                    ${
+                      isPathActive(item.path, item.subPaths || [])
+                        ? "bg-[#edf9fc] font-semibold"
+                        : ""
+                    }
+                  `}
+                >
+                  <span className="text-blue-500">{item.icon}</span>
+                  <span className="text-[#434343] text-base">{item.label}</span>
+                </NavLink>
+              </li>
+            ))}
+          </ul>
         </div>
-
-        <h4 className="text-sm font-semibold pl-6 mb-6">
-          チーム名（企業名）が入ります
-        </h4>
-
-        <ul className="flex-1 list-none p-0 m-0 bg-white">
-          {menuItems.map((item) => (
-            <li key={item.path}>
-              <NavLink
-                to={item.path}
-                className={({ isActive }) => `
-                  flex items-center px-6 py-2 lg:px-10 lg:py-4 border-t border-b hover:bg-[#edf9fc] cursor-pointer
-                  ${
-                    isPathActive(item.path, item.subPaths || [])
-                      ? "bg-[#edf9fc] font-semibold"
-                      : ""
-                  }
-                `}
-              >
-                <span className="text-blue-500">{item.icon}</span>
-                <span className="text-[#434343] text-base">{item.label}</span>
-              </NavLink>
-            </li>
-          ))}
-        </ul>
 
         <Link
           to={"/admin/login"}
-          className="text-center py-3 cursor-pointer bg-[#49BBDF] hover:bg-[#3aa0bf]"
+          className="text-center py-3 cursor-pointer bg-[#49BBDF] hover:bg-[#3aa0bf] mt-auto"
         >
           <span className="text-white text-lg font-semibold">ログアウト</span>
         </Link>
