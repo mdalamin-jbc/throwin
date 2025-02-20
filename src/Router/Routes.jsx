@@ -249,7 +249,7 @@ export const Routes = createBrowserRouter([
 
       // -------------------------------------dashboard
       {
-        path: "admin_login",
+        path: "admin/login",
         element: <AdminLogin />,
       },
       {

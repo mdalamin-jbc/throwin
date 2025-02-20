@@ -15,10 +15,7 @@ const SideMenu = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { userDetails, isLoading } = UseUserDetails();
-  // const userRole = userDetails.kind;
   const userRole = localStorage.getItem("userRole");
-
-
 
   // Helper function to check if a path is active
   const isPathActive = (path, subPaths = []) => {
@@ -42,7 +39,6 @@ const SideMenu = () => {
       subPaths: ["/creat_new"],
       roles: ["sales_agent", "restaurant_owner"],
     },
-
     {
       label: "営業代理店",
       icon: <img src={management} alt="" className="mr-4 w-[30px]" />,
@@ -50,8 +46,6 @@ const SideMenu = () => {
       subPaths: ["/sales_agent"],
       roles: ["glow_admin", "fc_admin"],
     },
-    // --------------------
-
     {
       label: "クライアント",
       icon: <img src={management} alt="" className="mr-4 w-[30px]" />,
@@ -104,27 +98,26 @@ const SideMenu = () => {
 
   // Check if current path is valid
   const isValidPath = (currentPath) => {
+    // First check if the exact path exists
+    const exactPathExists = menuItems.some(item => item.path === currentPath);
+    if (exactPathExists) return true;
+
+    // Then check for subpaths
     return menuItems.some((item) => {
-      const mainPathValid = currentPath === item.path;
-      const subPathValid = item.subPaths?.some(
+      if (!item.subPaths) return false;
+      return item.subPaths.some(
         (subPath) => currentPath === item.path + subPath
       );
-      return mainPathValid || subPathValid;
     });
   };
 
-  // Only redirect if path is completely invalid
-  // useEffect(() => {
-  //   if (
-  //     location.pathname !== "/dashboard/adminLogin" &&
-  //     !location.pathname.includes(menuItems[0]?.path)
-  //   ) {
-  //     const pathIsValid = isValidPath(location.pathname);
-  //     if (!pathIsValid) {
-  //       navigate(menuItems[0]?.path || "/dashboard/sales_management");
-  //     }
-  //   }
-  // }, [location.pathname]);
+  // Only redirect to sales_management on initial load or direct dashboard access
+  useEffect(() => {
+    // Only redirect if we're at the root dashboard path
+    if (location.pathname === '/dashboard') {
+      navigate("/dashboard/sales_management");
+    }
+  }, []);
 
   return (
     <div className="w-full h-full min-h-[720px] flex flex-col lg:w-[300px]">
