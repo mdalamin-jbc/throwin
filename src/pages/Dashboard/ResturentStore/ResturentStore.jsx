@@ -7,9 +7,12 @@ import { Link, useParams } from "react-router-dom";
 import UseGetStaffByStoreCode from "../../../hooks/Dashboard/UseGetStaffByStoreCode";
 const ResturentStore = () => {
   const store_code = useParams();
-  const { restaurantStaffListByStoreCode } = UseGetStaffByStoreCode(store_code.store_code);
+  const store = JSON.parse(localStorage.getItem("store"));
+  const { restaurantStaffListByStoreCode } = UseGetStaffByStoreCode(
+    store_code.store_code
+  );
 
-  console.log(restaurantStaffListByStoreCode);
+  
   const {
     register,
     formState: { errors },
@@ -17,31 +20,13 @@ const ResturentStore = () => {
   } = useForm();
   const searchQuery = watch("searchMember", "");
 
-  const [teams, setTeams] = useState([]);
-
-  useEffect(() => {
-    // Fetch or set data dynamically
-    const fetchTeams = async () => {
-      // Replace with real API call
-      const data = [
-        { id: 1, name: "かりん", status: "公開" },
-        { id: 2, name: "さくら", status: "非公開" },
-        { id: 3, name: "たけし", status: "公開" },
-      ];
-      setTeams(data);
-    };
-    fetchTeams();
-  }, []);
-
-  const filteredTeams = teams.filter((team) => team.name.includes(searchQuery));
-
   return (
     <div>
       <h2 className="font-semibold text-[27px] text-[#73879C]">アカウント</h2>
       <div className="bg-white mt-[27px] rounded-xl pb-8 mr-[54px]">
         <div className="flex items-center justify-between mx-10 ml-0">
           <div className="font-semibold text-[18px] text-[#73879C] pt-[30px] pl-[33px] pb-[21px] flex gap-3">
-            <h3>チーム（店舗）リスト</h3> <h3>メンバーリスト</h3>
+            <h3>{store.name}</h3> <h3>メンバーリスト</h3>
           </div>
           <h4 className=" text-[18px] text-[#73879C] border-b-2">
             店舗（チーム）一覧に戻る

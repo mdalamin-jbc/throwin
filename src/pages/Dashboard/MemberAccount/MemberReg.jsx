@@ -73,7 +73,7 @@ const MemberReg = () => {
         <h2 className="font-semibold text-[27px] text-[#73879C]">アカウント</h2>
         <div className="bg-white mt-5 rounded-xl p-8 max-w-[587px] shadow mb-[120px]">
           <h4 className="font-semibold text-[18px] text-[#73879C] pb-4">
-            居酒屋ABC_大阪店 メンバー新規登録
+            {store.name} メンバー新規登録
           </h4>
           <div className="border-b-[3px] mb-5"></div>
 
