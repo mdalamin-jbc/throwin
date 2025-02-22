@@ -7,6 +7,8 @@ const UseGetStaffByStoreCode = (store_code) => {
   axiosPrivate;
   const { user } = useAuth();
 
+  console.log(store_code);
+
   const {
     refetch,
     data: restaurantStaffListByStoreCode = [],
@@ -20,9 +22,9 @@ const UseGetStaffByStoreCode = (store_code) => {
 
       try {
         const response = await axiosPrivate.get(
-          `/restaurant-owner/store-staffs?store_code=${store_code.store_code}`
+          `/restaurant-owner/store-staffs?store_code=${store_code}`
         );
-        
+
         return response.data || [];
       } catch (error) {
         console.error(

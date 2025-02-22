@@ -7,7 +7,7 @@ import { Link, useParams } from "react-router-dom";
 import UseGetStaffByStoreCode from "../../../hooks/Dashboard/UseGetStaffByStoreCode";
 const ResturentStore = () => {
   const store_code = useParams();
-  const { restaurantStaffListByStoreCode } = UseGetStaffByStoreCode(store_code);
+  const { restaurantStaffListByStoreCode } = UseGetStaffByStoreCode(store_code.store_code);
 
   console.log(restaurantStaffListByStoreCode);
   const {

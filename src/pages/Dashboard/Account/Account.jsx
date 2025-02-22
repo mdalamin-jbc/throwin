@@ -59,7 +59,7 @@ const Account = () => {
   return (
     <div>
       <h2 className="font-semibold text-[27px] text-[#73879C]">アカウント</h2>
-      <div className="bg-white mt-[27px] rounded-xl pb-8 mr-[54px]">
+      <div className="bg-white mt-[27px] rounded-xl pb-8">
         <h4 className="font-semibold text-[18px] text-[#73879C] pt-[30px] pl-[33px] pb-[21px]">
           チーム（店舗）リスト
         </h4>
@@ -68,7 +68,7 @@ const Account = () => {
         <div className="mx-[33px]">
           <div className="mt-[22px] flex justify-between">
             <Link
-              to="creat_new_store"
+              to="creat_newStore"
               className="bg-[#4EBDF3] text-white py-[6px] px-[106px] rounded"
             >
               新規作成 <span className="text-xl">+</span>

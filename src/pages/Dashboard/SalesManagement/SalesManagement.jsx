@@ -27,39 +27,39 @@ ChartJS.register(
 
 const SalesManagement = () => {
   const userRole = localStorage.getItem("userRole");
-  
+
   // Define tab configurations based on user roles
   const tabConfigurations = {
     restaurant_owner: [
       { id: "overall", label: "全体の数字" },
       { id: "team", label: "チーム（店舗）" },
-      { id: "member", label: "メンバー" }
+      { id: "member", label: "メンバー" },
     ],
     sales_agent: [
       { id: "whole", label: "全体" },
       { id: "client", label: "クライアント" },
       { id: "Store (Team)", label: "店舗（チーム）" },
-      { id: "member", label: "メンバー" }
+      { id: "member", label: "メンバー" },
     ],
     fc_admin: [
       { id: "whole", label: "全体" },
       { id: "Sales Agent", label: "営業代理店" },
       { id: "client", label: "クライアント" },
       { id: "Store (Team)", label: "店舗（チーム）" },
-      { id: "member", label: "メンバー" }
+      { id: "member", label: "メンバー" },
     ],
     glow_admin: [
       { id: "whole", label: "全体" },
       { id: "Sales Agent", label: "営業代理店" },
       { id: "client", label: "クライアント" },
       { id: "Store (Team)", label: "店舗（チーム）" },
-      { id: "member", label: "メンバー" }
-    ]
+      { id: "member", label: "メンバー" },
+    ],
   };
 
   // Get available tabs based on user role
   const availableTabs = tabConfigurations[userRole] || [];
-  
+
   const [activeTab, setActiveTab] = useState(availableTabs[0]?.id || "overall");
   const [selectedYear, setSelectedYear] = useState("2025年");
   const [selectedMonth, setSelectedMonth] = useState("1月");
@@ -70,9 +70,33 @@ const SalesManagement = () => {
 
   const dataOverall = {
     labels: [
-      "1 火", "2 水", "3 木", "4 金", "5 土", "6 日", "7 月",
-      "9", "10", "11", "12", "13", "14", "15", "16", "17", "18",
-      "18", "20", "21", "22", "23", "24", "25", "26", "27", "28",
+      "1 火",
+      "2 水",
+      "3 木",
+      "4 金",
+      "5 土",
+      "6 日",
+      "7 月",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "16",
+      "17",
+      "18",
+      "18",
+      "20",
+      "21",
+      "22",
+      "23",
+      "24",
+      "25",
+      "26",
+      "27",
+      "28",
     ],
     datasets: [
       {
@@ -82,14 +106,20 @@ const SalesManagement = () => {
         borderWidth: 2,
         pointRadius: 4,
         fill: false,
-        data: [2.1, 2.5, 3.6, 2, 0, 0, 2.4, 2.9, 2, 2.5, 0, 0, 2.6, 2.8, 1.7, 2, 1.8, 0, 0, 2.5, 2.9, 0, 0, 2.7, 2.2, 0, 3.7],
+        data: [
+          2.1, 2.5, 3.6, 2, 0, 0, 2.4, 2.9, 2, 2.5, 0, 0, 2.6, 2.8, 1.7, 2, 1.8,
+          0, 0, 2.5, 2.9, 0, 0, 2.7, 2.2, 0, 3.7,
+        ],
         yAxisID: "y1",
       },
       {
         type: "bar",
         label: "売上",
         backgroundColor: "#49BBDF",
-        data: [12, 14.5, 17.5, 11, 0, 0, 14, 17, 11, 13, 0, 0, 15, 16.2, 9, 12, 10.5, 0, 0, 15, 17, 0, 0, 15.5, 13, 0, 21],
+        data: [
+          12, 14.5, 17.5, 11, 0, 0, 14, 17, 11, 13, 0, 0, 15, 16.2, 9, 12, 10.5,
+          0, 0, 15, 17, 0, 0, 15.5, 13, 0, 21,
+        ],
         yAxisID: "y",
       },
     ],
@@ -159,27 +189,18 @@ const SalesManagement = () => {
             key={i}
             className="bg-[#F9F9F9] py-[47px] text-center rounded-[20px]"
           >
-            <p className="font-semibold text-lg text-[利益額]">
-              {item.title}
-            </p>
+            <p className="font-semibold text-lg text-[利益額]">{item.title}</p>
             <div className="flex justify-center items-center gap-6">
               <h3 className="text-[#49BBDF] font-semibold text-[36px] mt-[28px] ml-10">
                 {item.value}
               </h3>
-              {item.unit && (
-                <p className="font-semibold mt-10">{item.unit}</p>
-              )}
+              {item.unit && <p className="font-semibold mt-10">{item.unit}</p>}
             </div>
           </div>
         ))}
       </div>
       <div className="mt-[27px]">
-        <Bar
-          height={200}
-          width={600}
-          data={dataOverall}
-          options={options}
-        />
+        <Bar height={200} width={600} data={dataOverall} options={options} />
       </div>
     </>
   );
@@ -187,7 +208,7 @@ const SalesManagement = () => {
   return (
     <div>
       <h2 className="font-semibold text-[27px] text-[#73879C]">売上管理</h2>
-      <div className="bg-white mt-[27px] rounded-xl pb-8 mr-[54px]">
+      <div className="bg-white mt-[27px] rounded-xl pb-8 ">
         <div className="flex">
           {availableTabs.map((tab) => (
             <h4
@@ -205,7 +226,8 @@ const SalesManagement = () => {
 
         <div className="mx-[33px]">
           {/* Conditional rendering based on active tab */}
-          {(activeTab === "overall" || activeTab === "whole") && renderStatsSection()}
+          {(activeTab === "overall" || activeTab === "whole") &&
+            renderStatsSection()}
 
           {activeTab === "team" && (
             <div className="mt-[27px]">
