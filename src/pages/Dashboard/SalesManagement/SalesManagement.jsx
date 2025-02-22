@@ -13,6 +13,7 @@ import {
 } from "chart.js";
 import TeamChart from "./TeamChart";
 import MemberChart from "./MemberChart";
+import SalesAgent from "../SalesAgent/SalesAgent";
 
 ChartJS.register(
   CategoryScale,
@@ -243,7 +244,7 @@ const SalesManagement = () => {
 
           {activeTab === "Sales Agent" && (
             <div className="mt-[27px]">
-              <MemberChart />
+              <SalesAgent />
             </div>
           )}
 
