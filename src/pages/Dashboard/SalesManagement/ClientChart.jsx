@@ -1,6 +1,6 @@
 import { Bar } from "react-chartjs-2";
 
-const MemberChart = () => {
+const ClientChart = () => {
   const dataOverall = {
     labels: [
       "1 火",
@@ -57,7 +57,6 @@ const MemberChart = () => {
       },
     ],
   };
-
   const options = {
     responsive: true,
     scales: {
@@ -98,7 +97,7 @@ const MemberChart = () => {
             className="border rounded px-2 py-1 w-[111px]"
           >
             {[...Array(12)].map((_, i) => (
-              <option key={i}>{i + 1}</option>
+              <option key={i}>{i + 1}月</option>
             ))}
           </select>
         </div>
@@ -109,31 +108,22 @@ const MemberChart = () => {
       </div>
       {/* ------------------------------- */}
       <div className="mt-[px] flex items-center gap-4 font-semibold text-xs">
-        <label className="text-[#434343]">チーム（店舗）</label>
+        <label className="text-[#434343]">営業代理店　　</label>
         <div className="flex items-center gap-2  py-[5px] px-2 rounded-md">
           <select className="border rounded px-2 py-1 w-[295px]">
-            <option value="">BBT 福井</option>
-          </select>
-        </div>
-      </div>
-      {/* ------------------------------- */}
-      <div className="mt-[px] flex items-center gap-[50px] font-semibold text-xs">
-        <label className="text-[#434343]">メンバー</label>
-        <div className="flex items-center gap-2  py-[5px] px-2 rounded-md">
-          <select className="border rounded px-2 py-1 w-[295px]">
-            <option value="">山田　花梨（かりん）</option>
+            <option value="">株式会社セールスラボ</option>
           </select>
         </div>
       </div>
       <div className="mt-[33px] grid grid-cols-3 gap-[17px]">
         {[
           {
-            title: "売上（Throwin額)",
+            title: "売上額(Throwin額)",
             value: "1,000,000",
             unit: "円",
           },
-          { title: "利益額", value: "300,000", unit: "円" },
-          { title: "Throwin回数", value: "1,500", unit: "回" },
+          { title: "利益額", value: "300,000", unit: "" },
+          { title: "稼働クライアント数", value: "5", unit: "" },
         ].map((item, i) => (
           <div
             key={i}
@@ -156,4 +146,4 @@ const MemberChart = () => {
   );
 };
 
-export default MemberChart;
+export default ClientChart;

@@ -14,6 +14,8 @@ import {
 import TeamChart from "./TeamChart";
 import MemberChart from "./MemberChart";
 import SalesAgent from "../SalesAgent/SalesAgent";
+import ClientChart from "./ClientChart";
+import StoreTeamChart from "./StoreTeamChart";
 
 ChartJS.register(
   CategoryScale,
@@ -250,13 +252,13 @@ const SalesManagement = () => {
 
           {activeTab === "client" && (
             <div className="mt-[27px]">
-              <MemberChart />
+              <ClientChart />
             </div>
           )}
 
           {activeTab === "Store (Team)" && (
             <div className="mt-[27px]">
-              <MemberChart />
+              <StoreTeamChart />
             </div>
           )}
         </div>

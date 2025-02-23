@@ -1,6 +1,7 @@
+import React from "react";
 import { Bar } from "react-chartjs-2";
 
-const MemberChart = () => {
+const StoreTeamChart = () => {
   const dataOverall = {
     labels: [
       "1 火",
@@ -109,19 +110,19 @@ const MemberChart = () => {
       </div>
       {/* ------------------------------- */}
       <div className="mt-[px] flex items-center gap-4 font-semibold text-xs">
-        <label className="text-[#434343]">チーム（店舗）</label>
+        <label className="text-[#434343]">クライアント　</label>
         <div className="flex items-center gap-2  py-[5px] px-2 rounded-md">
           <select className="border rounded px-2 py-1 w-[295px]">
-            <option value="">BBT 福井</option>
+            <option value="">居酒屋ABC</option>
           </select>
         </div>
       </div>
       {/* ------------------------------- */}
-      <div className="mt-[px] flex items-center gap-[50px] font-semibold text-xs">
-        <label className="text-[#434343]">メンバー</label>
+      <div className=" flex items-center gap-[32px] font-semibold text-xs">
+        <label className="text-[#434343]">店舗(チーム)</label>
         <div className="flex items-center gap-2  py-[5px] px-2 rounded-md">
           <select className="border rounded px-2 py-1 w-[295px]">
-            <option value="">山田　花梨（かりん）</option>
+            <option value="">居酒屋ABC_大阪店</option>
           </select>
         </div>
       </div>
@@ -133,7 +134,7 @@ const MemberChart = () => {
             unit: "円",
           },
           { title: "利益額", value: "300,000", unit: "円" },
-          { title: "Throwin回数", value: "1,500", unit: "回" },
+          { title: "稼働メンバー数", value: "5", unit: "" },
         ].map((item, i) => (
           <div
             key={i}
@@ -156,4 +157,4 @@ const MemberChart = () => {
   );
 };
 
-export default MemberChart;
+export default StoreTeamChart;
