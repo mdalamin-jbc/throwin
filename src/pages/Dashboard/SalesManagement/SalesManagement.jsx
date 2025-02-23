@@ -238,12 +238,6 @@ const SalesManagement = () => {
             </div>
           )}
 
-          {activeTab === "member" && (
-            <div className="mt-[27px]">
-              <MemberChart />
-            </div>
-          )}
-
           {activeTab === "Sales Agent" && (
             <div className="mt-[27px]">
               <SalesAgent />
@@ -259,6 +253,13 @@ const SalesManagement = () => {
           {activeTab === "Store (Team)" && (
             <div className="mt-[27px]">
               <StoreTeamChart />
+            </div>
+          )}
+
+          {/* member cart dynamic */}
+          {activeTab === "member" && (
+            <div className="mt-[27px]">
+              <MemberChart />
             </div>
           )}
         </div>
