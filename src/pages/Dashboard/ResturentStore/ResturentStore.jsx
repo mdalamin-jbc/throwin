@@ -11,8 +11,8 @@ const ResturentStore = () => {
   const { restaurantStaffListByStoreCode } = UseGetStaffByStoreCode(
     store_code.store_code
   );
+  console.log(restaurantStaffListByStoreCode);
 
-  
   const {
     register,
     formState: { errors },

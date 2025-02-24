@@ -1,4 +1,9 @@
+import { Link } from "react-router-dom";
+import UseGetResturentWonerSettings from "../../../hooks/Dashboard/UseGetResturentWonerSettings";
+
 const DeSeetings = () => {
+  const { resturentWonerSettings } = UseGetResturentWonerSettings();
+  console.log(resturentWonerSettings);
   return (
     <div>
       <h2 className="font-semibold text-[27px] text-[#73879C]">設定</h2>
@@ -17,49 +22,65 @@ const DeSeetings = () => {
                 {/* row 1 */}
                 <tr className="hover ">
                   <td>企業名・屋号</td>
-                  <td>企業名・屋号</td>
+                  <td>{resturentWonerSettings?.company_name}</td>
                 </tr>
                 {/* row 2 */}
                 <tr className="hover ">
                   <td>代表電話番号</td>
-                  <td>000-0000-0000s</td>
+                  <td>{resturentWonerSettings?.phone_number}</td>
                 </tr>
                 {/* row 3 */}
                 <tr className="hover ">
                   <td>所在地</td>
-                  <td>〒555-0000 大阪市〇〇</td>
+                  <td>
+                    {resturentWonerSettings?.location ||
+                      "〒555-0000 大阪市〇〇"}
+                  </td>
                 </tr>
                 {/* row 4 */}
                 <tr className="hover ">
                   <td>業種</td>
-                  <td>バスケットボールチーム運営</td>
+                  <td>
+                    {resturentWonerSettings?.industry ||
+                      "バスケットボールチーム運営"}
+                  </td>
                 </tr>
                 {/* row 5 */}
                 <tr className="hover ">
                   <td>法人番号</td>
-                  <td>000000000000</td>
+                  <td>
+                    {resturentWonerSettings?.corporate_number || "000000000000"}
+                  </td>
                 </tr>
                 {/* row 6 */}
                 <tr className="hover ">
                   <td>インボイス適格請求書番号</td>
-                  <td>T000000000000</td>
+                  <td>
+                    {resturentWonerSettings?.invoice_number || "T000000000000"}
+                  </td>
                 </tr>
                 {/* row 7 */}
                 <tr className="hover ">
                   <td>ご担当者名</td>
-                  <td>山田　太郎</td>
+                  <td>{resturentWonerSettings?.owner_name || "山田　太郎"}</td>
                   <td className=" text-center">
-                    <p className="border py-1">情報の編集</p>
+                    <Link to="name/change">
+                      <p className="border py-1">情報の編集</p>
+                    </Link>
                   </td>
                 </tr>
                 {/* row 8 */}
                 <tr className="hover ">
                   <td>メールアドレス</td>
-                  <td>aaa@free-company.co.jp</td>
+                  <td>
+                    {resturentWonerSettings?.email || "aaa@free-company.co.jp"}
+                  </td>
                   <td className=" text-center">
-                    <p className="border py-1 px-[14px]">
-                      メールアドレスの変更
-                    </p>
+                    <Link to="email/change">
+                      <p className="border py-1 px-[14px]">
+                        メールアドレスの変更
+                      </p>
+                    </Link>
                   </td>
                 </tr>
                 {/* row 9 */}
@@ -73,7 +94,12 @@ const DeSeetings = () => {
                 {/* row 10 */}
                 <tr className="hover ">
                   <td>振込先口座情報</td>
-                  <td>三菱UFJ銀行　あいう支店　普通　3329580</td>
+                  <td>
+                    {resturentWonerSettings?.bank_name || "未登録"} 銀行　
+                    {resturentWonerSettings?.branch_name || "未登録"} 支店　
+                    {resturentWonerSettings?.account_type || "未登録"}　
+                    {resturentWonerSettings?.account_number || "未登録"}
+                  </td>
                   <td className=" text-center">
                     {" "}
                     <p className="border py-1 px-[14px]">情報の編集</p>

@@ -59,6 +59,8 @@ import MemberAccount from "../pages/Dashboard/MemberAccount/MemberAccount";
 import MemberReg from "../pages/Dashboard/MemberAccount/MemberReg";
 import SingUp from "../pages/Dashboard/SalesAgent/SingUp";
 import ResturentStore from "../pages/Dashboard/ResturentStore/ResturentStore";
+import DaNameChange from "../pages/Dashboard/Seetings/DaNameChange";
+import AdminEmailChange from "../pages/Dashboard/Seetings/AdminEmailChange";
 
 export const Routes = createBrowserRouter([
   {
@@ -275,7 +277,7 @@ export const Routes = createBrowserRouter([
           {
             path: "m_account",
             element: <MemberAccount />,
-          },         
+          },
           {
             path: "/dashboard/account/:id/creat_newStaff",
             element: <MemberReg />,
@@ -329,6 +331,14 @@ export const Routes = createBrowserRouter([
           {
             path: "settings",
             element: <DeSeetings />,
+          },
+          {
+            path: "/dashboard/settings/name/change",
+            element: <DaNameChange />,
+          },
+          {
+            path: "/dashboard/settings/email/change",
+            element: <AdminEmailChange />,
           },
         ],
       },
