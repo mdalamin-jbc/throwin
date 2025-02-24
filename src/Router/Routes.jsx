@@ -275,12 +275,12 @@ export const Routes = createBrowserRouter([
           {
             path: "m_account",
             element: <MemberAccount />,
-          },
-          //---------------------------------update part
+          },         
           {
             path: "/dashboard/account/:id/creat_newStaff",
             element: <MemberReg />,
           },
+          // fc/glow admin
           {
             path: "client",
             element: <Client />,

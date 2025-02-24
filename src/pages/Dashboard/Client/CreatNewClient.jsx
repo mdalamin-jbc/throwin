@@ -2,9 +2,12 @@ import { useForm } from "react-hook-form";
 import ButtonPrimary from "../../../components/ButtonPrimary";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import useAxiosPrivate from "../../../hooks/axiousPrivate";
 
 const CreatNewClient = () => {
   const navigate = useNavigate();
+
+  const axiosPrivate = useAxiosPrivate();
   const {
     register,
     handleSubmit,
@@ -16,15 +19,59 @@ const CreatNewClient = () => {
     console.log("Form Data:", data);
   };
 
-  const handleCreatNewClient = () => {
-    toast.success("New client creat successfully!", {
-      duration: 3000,
-      position: "top-center",
-    });
+  // const handleCreatNewClient = (data) => {
+  //   console.log("Submitted Data:", data); // Log the data
 
-    setTimeout(() => {
-      navigate("/dashboard/client");
-    }, 1500);
+  //   toast.success("New client created successfully!", {
+  //     duration: 3000,
+  //     position: "top-center",
+  //   });
+
+  //   setTimeout(() => {
+  //     // navigate("/dashboard/client");
+  //   }, 1500);
+  // };
+
+  const handleCreatNewClient = async (data) => {
+    const requestBody = {
+      company_name: data.companyName,
+      address: data.address,
+      agency_code: data.agencyCode,
+      post_code: data.postCode,
+      industry: data.industry,
+      invoice_number: data.invoiceNumber,
+      corporate_number: data.corporateNumber || "N/A", // Assuming this is missing in the form
+      owner_name: data.contactName,
+      telephone_number: data.telephoneNumber,
+      email: data.email,
+      bank_name: data.bancAccountInfo,
+      branch_name: data.storeName,
+      account_type: "futsuu", // Assuming a default value
+      account_number: data.accountNumber || "N/A",
+      account_holder_name: data.accountHolderName || "N/A",
+    };
+    console.log(requestBody);
+
+    try {
+      // const response = await axiosPrivate.post(
+      //   "https://api-dev.throwin-glow.com/admins/organizations",
+      //   {
+      //     body: JSON.stringify(requestBody),
+      //   }
+      // );
+
+      const result = await response.json();
+      console.log("Response:", result);
+
+      if (response.ok) {
+        toast.success("New client created successfully!");
+      } else {
+        toast.error(result.message || "Failed to create client.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("An error occurred. Please try again.");
+    }
   };
 
   return (
