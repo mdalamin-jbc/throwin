@@ -61,6 +61,7 @@ import SingUp from "../pages/Dashboard/SalesAgent/SingUp";
 import ResturentStore from "../pages/Dashboard/ResturentStore/ResturentStore";
 import DaNameChange from "../pages/Dashboard/Seetings/DaNameChange";
 import AdminEmailChange from "../pages/Dashboard/Seetings/AdminEmailChange";
+import ActiveAdminMail from "../pages/Dashboard/ActiveAdminMail/ActiveAdminMail";
 
 export const Routes = createBrowserRouter([
   {
@@ -253,6 +254,10 @@ export const Routes = createBrowserRouter([
       {
         path: "admin/login",
         element: <AdminLogin />,
+      },
+      {
+        path: "admins/activate/:uid/:token",
+        element: <ActiveAdminMail />,
       },
       {
         path: "/dashboard",

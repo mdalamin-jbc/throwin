@@ -8,9 +8,8 @@ import UseGetStaffByStoreCode from "../../../hooks/Dashboard/UseGetStaffByStoreC
 const ResturentStore = () => {
   const store_code = useParams();
   const store = JSON.parse(localStorage.getItem("store"));
-  const { restaurantStaffListByStoreCode } = UseGetStaffByStoreCode(
-    store_code.store_code
-  );
+  const { restaurantStaffListByStoreCode, refetch, isLoading, isError, error } =
+    UseGetStaffByStoreCode(store_code.store_code);
   console.log(restaurantStaffListByStoreCode);
 
   const {
@@ -92,10 +91,11 @@ const ResturentStore = () => {
                       <Link>
                         <td className="flex items-center gap-[17px]">
                           <img
-                            src={img}
-                            alt=""
+                            src={staff.image?.small || img}
+                            alt={staff.name}
                             className="w-[29px] rounded-full"
                           />
+
                           <p>{staff.name}</p>
                         </td>
                       </Link>

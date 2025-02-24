@@ -19,6 +19,7 @@ const UseGetResturentWonerSettings = () => {
 
       try {
         const response = await AxiosPrivate.get("/restaurant-owner/settings");
+        console.log(response);
         return response.data;
       } catch (error) {
         console.error(

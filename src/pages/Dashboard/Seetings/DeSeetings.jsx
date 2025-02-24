@@ -1,98 +1,168 @@
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import useAxiosPrivate from "../../../hooks/axiousPrivate";
 import UseGetResturentWonerSettings from "../../../hooks/Dashboard/UseGetResturentWonerSettings";
 
-const DeSeetings = () => {
-  const { resturentWonerSettings } = UseGetResturentWonerSettings();
-  console.log(resturentWonerSettings);
+const DeSettings = () => {
+  const { resturentWonerSettings, refetch, isLoading } = UseGetResturentWonerSettings();
+  const axiosPrivate = useAxiosPrivate();
+
+  // Name change states
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [name, setName] = useState("");
+
+  // Email change states
+  const [isEditingEmail, setIsEditingEmail] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    if (resturentWonerSettings) {
+      setName(resturentWonerSettings.owner_name || "");
+      setEmail(resturentWonerSettings.email || "");
+    }
+  }, [resturentWonerSettings]);
+
+  // Handle Name Change
+  const handleSaveName = async () => {
+    if (!name.trim()) return alert("ご担当者名を入力してください。");
+    
+    try {
+      await axiosPrivate.post("/restaurant-owner/settings/change-name", { name });
+      console.log("Name changed successfully");
+      setIsEditingName(false);
+      refetch();
+    } catch (error) {
+      console.error("Error changing name", error);
+    }
+  };
+
+  // Handle Email Change
+  const handleSubmitEmail = async (e) => {
+    e.preventDefault();
+    if (!email.trim() || !password.trim()) return alert("メールアドレスとパスワードを入力してください。");
+
+    try {
+      const response = await axiosPrivate.post("/restaurant-owner/settings/change-email-request", { email, password });
+      console.log("Email change request sent successfully", response.data);
+      setIsEditingEmail(false);
+      refetch();
+    } catch (error) {
+      console.error("Error changing email", error);
+    }
+  };
+
+  if (isLoading) return <p>Loading...</p>;
+
   return (
     <div>
       <h2 className="font-semibold text-[27px] text-[#73879C]">設定</h2>
       <div className="bg-white mt-[27px] rounded-xl pb-8 mr-[54px]">
-        <h4 className="font-semibold text-[18px] text-[#73879C] pt-[30px] pl-[33px] pb-[21px] ">
+        <h4 className="font-semibold text-[18px] text-[#73879C] pt-[30px] pl-[33px] pb-[21px]">
           ご登録情報の閲覧・編集
         </h4>
         <div className="border-b-[3px] mx-5"></div>
 
         <div className="mx-[33px]">
           <div className="overflow-x-auto mt-6">
-            <table className="table   font-semibold  text-[#58687A]">
-              {/* head */}
-
+            <table className="table font-semibold text-[#58687A]">
               <tbody>
-                {/* row 1 */}
-                <tr className="hover ">
+                <tr className="hover">
                   <td>企業名・屋号</td>
-                  <td>{resturentWonerSettings?.company_name}</td>
+                  <td>{resturentWonerSettings?.company_name || "未登録"}</td>
                 </tr>
-                {/* row 2 */}
-                <tr className="hover ">
+                <tr className="hover">
                   <td>代表電話番号</td>
-                  <td>{resturentWonerSettings?.phone_number}</td>
+                  <td>{resturentWonerSettings?.phone_number || "未登録"}</td>
                 </tr>
-                {/* row 3 */}
-                <tr className="hover ">
+                <tr className="hover">
                   <td>所在地</td>
-                  <td>
-                    {resturentWonerSettings?.location ||
-                      "〒555-0000 大阪市〇〇"}
-                  </td>
+                  <td>{resturentWonerSettings?.location || "〒555-0000 大阪市〇〇"}</td>
                 </tr>
-                {/* row 4 */}
-                <tr className="hover ">
+                <tr className="hover">
                   <td>業種</td>
-                  <td>
-                    {resturentWonerSettings?.industry ||
-                      "バスケットボールチーム運営"}
-                  </td>
+                  <td>{resturentWonerSettings?.industry || "未登録"}</td>
                 </tr>
-                {/* row 5 */}
-                <tr className="hover ">
+                <tr className="hover">
                   <td>法人番号</td>
-                  <td>
-                    {resturentWonerSettings?.corporate_number || "000000000000"}
-                  </td>
+                  <td>{resturentWonerSettings?.corporate_number || "000000000000"}</td>
                 </tr>
-                {/* row 6 */}
-                <tr className="hover ">
+                <tr className="hover">
                   <td>インボイス適格請求書番号</td>
-                  <td>
-                    {resturentWonerSettings?.invoice_number || "T000000000000"}
-                  </td>
+                  <td>{resturentWonerSettings?.invoice_number || "T000000000000"}</td>
                 </tr>
-                {/* row 7 */}
-                <tr className="hover ">
+
+                {/* Name Change */}
+                <tr className="hover">
                   <td>ご担当者名</td>
-                  <td>{resturentWonerSettings?.owner_name || "山田　太郎"}</td>
-                  <td className=" text-center">
-                    <Link to="name/change">
-                      <p className="border py-1">情報の編集</p>
-                    </Link>
+                  <td>
+                    {isEditingName ? (
+                      <input
+                        type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="border p-1 w-full rounded-md"
+                      />
+                    ) : (
+                      name || "未登録"
+                    )}
+                  </td>
+                  <td className="text-center">
+                    <button
+                      onClick={() => (isEditingName ? handleSaveName() : setIsEditingName(true))}
+                      className="border py-1 px-3 rounded-md bg-gray-200"
+                    >
+                      {isEditingName ? "OK" : "情報の編集"}
+                    </button>
                   </td>
                 </tr>
-                {/* row 8 */}
-                <tr className="hover ">
+
+                {/* Email Change */}
+                <tr className="hover">
                   <td>メールアドレス</td>
                   <td>
-                    {resturentWonerSettings?.email || "aaa@free-company.co.jp"}
+                    {isEditingEmail ? (
+                      <form onSubmit={handleSubmitEmail}>
+                        <input
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          className="border p-1 w-full rounded-md mb-2"
+                        />
+                        <input
+                          type="password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          placeholder="パスワード"
+                          className="border p-1 w-full rounded-md mb-2"
+                        />
+                        <button type="submit" className="border py-1 px-3 rounded-md bg-blue-500 text-white">
+                          OK
+                        </button>
+                      </form>
+                    ) : (
+                      resturentWonerSettings?.email || "aaa@free-company.co.jp"
+                    )}
                   </td>
-                  <td className=" text-center">
-                    <Link to="email/change">
-                      <p className="border py-1 px-[14px]">
+                  <td className="text-center">
+                    {!isEditingEmail && (
+                      <button onClick={() => setIsEditingEmail(true)} className="border py-1 px-3 rounded-md bg-gray-200">
                         メールアドレスの変更
-                      </p>
-                    </Link>
+                      </button>
+                    )}
                   </td>
                 </tr>
-                {/* row 9 */}
-                <tr className="hover ">
+
+                <tr className="hover">
                   <td>パスワード</td>
                   <td>********</td>
-                  <td className=" text-center">
-                    <p className="border py-1 px-[14px]">パスワードの変更</p>
+                  <td className="text-center">
+                    <button className="border py-1 px-3 rounded-md bg-gray-200">
+                      パスワードの変更
+                    </button>
                   </td>
                 </tr>
-                {/* row 10 */}
-                <tr className="hover ">
+
+                <tr className="hover">
                   <td>振込先口座情報</td>
                   <td>
                     {resturentWonerSettings?.bank_name || "未登録"} 銀行　
@@ -100,9 +170,10 @@ const DeSeetings = () => {
                     {resturentWonerSettings?.account_type || "未登録"}　
                     {resturentWonerSettings?.account_number || "未登録"}
                   </td>
-                  <td className=" text-center">
-                    {" "}
-                    <p className="border py-1 px-[14px]">情報の編集</p>
+                  <td className="text-center">
+                    <button className="border py-1 px-3 rounded-md bg-gray-200">
+                      情報の編集
+                    </button>
                   </td>
                 </tr>
               </tbody>
@@ -114,4 +185,4 @@ const DeSeetings = () => {
   );
 };
 
-export default DeSeetings;
+export default DeSettings;

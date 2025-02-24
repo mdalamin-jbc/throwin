@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../../../hooks/axiousPrivate";
 import UseGetResturentWonerSettings from "../../../hooks/Dashboard/UseGetResturentWonerSettings";
@@ -23,12 +23,7 @@ const AdminEmailChange = () => {
     try {
       const response = await axiosPrivate.post(
         "/restaurant-owner/settings/change-email-request",
-        { email, password },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        { email, password }
       );
       console.log("Email change request sent successfully", response.data);
       navigate("/dashboard/settings");
