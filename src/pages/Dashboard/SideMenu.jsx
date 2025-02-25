@@ -1,4 +1,4 @@
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import logo from "../../assets/images/socialLogin/logo2.png";
 import management from "../../assets/icons/management.png";
@@ -11,11 +11,15 @@ import gacha from "../../assets/icons/gachan.png";
 import payment from "../../assets/icons/payment_management.png";
 import UseUserDetails from "../../hooks/UseUserDetails";
 
-const SideMenu = () => {
+const SideMenu = ({ isOpen, onClose }) => {
   const location = useLocation();
-  const navigate = useNavigate();
   const { userDetails, isLoading } = UseUserDetails();
   const userRole = localStorage.getItem("userRole");
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    onClose();
+  }, [location.pathname]);
 
   // Helper function to check if a path is active
   const isPathActive = (path, subPaths = []) => {
@@ -37,7 +41,7 @@ const SideMenu = () => {
       icon: <img src={management} alt="" className="mr-4 w-[30px]" />,
       path: "/dashboard/account",
       subPaths: ["/creat_new"],
-      roles: ["restaurant_owner"],
+      roles: ["sales_agent", "restaurant_owner"],
     },
     {
       label: "営業代理店",
@@ -46,14 +50,12 @@ const SideMenu = () => {
       subPaths: ["/sales_agent"],
       roles: ["glow_admin", "fc_admin"],
     },
-
-    // common account
     {
       label: "クライアント",
       icon: <img src={management} alt="" className="mr-4 w-[30px]" />,
       path: "/dashboard/client",
       subPaths: ["/creat_new"],
-      roles: ["fc_admin", "glow_admin", "sales_agent"],
+      roles: ["fc_admin", "glow_admin"],
     },
     {
       label: "コメント",
@@ -98,32 +100,12 @@ const SideMenu = () => {
     item.roles.includes(userRole)
   );
 
-  // Check if current path is valid
-  const isValidPath = (currentPath) => {
-    // First check if the exact path exists
-    const exactPathExists = menuItems.some((item) => item.path === currentPath);
-    if (exactPathExists) return true;
-
-    // Then check for subpaths
-    return menuItems.some((item) => {
-      if (!item.subPaths) return false;
-      return item.subPaths.some(
-        (subPath) => currentPath === item.path + subPath
-      );
-    });
-  };
-
-  // Only redirect to sales_management on initial load or direct dashboard access
-  useEffect(() => {
-    // Only redirect if we're at the root dashboard path
-    if (location.pathname === "/dashboard") {
-      navigate("/dashboard/sales_management");
-    }
-  }, []);
-
   return (
-    <div className="fixed top-0 left-0 h-screen w-[300px]">
-      <div className="shadow-lg flex flex-col justify-between bg-white h-full">
+    <div 
+      className={`fixed top-0 left-0 h-screen w-[300px] z-40 transform transition-transform duration-300 ease-in-out
+        ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
+    >
+      <div className="shadow-lg flex flex-col justify-between bg-white h-full overflow-y-auto">
         <div>
           <div className="mt-6 ml-9 border-gray-300 text-center">
             <img
@@ -137,9 +119,9 @@ const SideMenu = () => {
             チーム名（企業名）が入ります
           </h4>
 
-          <ul className="flex-1 list-none p-0 m-0 bg-white">
+          <ul className="list-none p-0 m-0 bg-white">
             {menuItems.map((item) => (
-              <li key={item.path}>
+              <li key={item.path} onClick={onClose}>
                 <NavLink
                   to={item.path}
                   className={({ isActive }) => `
@@ -162,6 +144,7 @@ const SideMenu = () => {
         <Link
           to={"/admin/login"}
           className="text-center py-3 cursor-pointer bg-[#49BBDF] hover:bg-[#3aa0bf] mt-auto"
+          onClick={onClose}
         >
           <span className="text-white text-lg font-semibold">ログアウト</span>
         </Link>
