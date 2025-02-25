@@ -5,7 +5,6 @@ import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import UseGetOrganizations from "../../../hooks/Dashboard/UseGetOrganizations";
 const SalesAgent = () => {
-  
   const { organizations } = UseGetOrganizations();
 
   console.log(organizations);
@@ -25,7 +24,7 @@ const SalesAgent = () => {
         <div className="mx-[33px]">
           <div className="mt-[22px]  flex justify-between ">
             <Link
-              to="creat_new"
+              to="sign_up"
               className="bg-[#49BBDF] text-white py-[6px] px-[36px] rounded flex items-center gap-3"
             >
               <p>新規登録</p> <FaPlus />
