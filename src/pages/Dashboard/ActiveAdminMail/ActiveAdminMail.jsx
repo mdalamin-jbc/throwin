@@ -12,18 +12,20 @@ const ActiveAdminMail = () => {
   useEffect(() => {
     const activateAdmin = async () => {
       try {
+        // Make the API call
         const response = await axiosPublic.get(
           `https://api-dev.throwin-glow.com/admins/activate/${uid}/${token}`
         );
 
-        if (!response.ok) {
-          throw new Error("Activation failed. Invalid or expired token.");
-        }
-
+        // Axios doesn't use response.ok - if we get here, it was successful
+        // as Axios throws errors for non-2xx status codes
         setMessage("Activation successful! Redirecting...");
         setTimeout(() => navigate("/admin/login"), 2000); // Redirect after 2 sec
       } catch (error) {
-        setMessage(error.message);
+        // Get detailed error message if available from the API response
+        const errorMsg = error.response?.data?.message || 
+                         "Activation failed. Invalid or expired token.";
+        setMessage(errorMsg);
       } finally {
         setLoading(false);
       }
