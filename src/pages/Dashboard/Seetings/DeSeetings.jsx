@@ -3,7 +3,8 @@ import useAxiosPrivate from "../../../hooks/axiousPrivate";
 import UseGetResturentWonerSettings from "../../../hooks/Dashboard/UseGetResturentWonerSettings";
 
 const DeSettings = () => {
-  const { resturentWonerSettings, refetch, isLoading } = UseGetResturentWonerSettings();
+  const { resturentWonerSettings, refetch, isLoading } =
+    UseGetResturentWonerSettings();
   const axiosPrivate = useAxiosPrivate();
 
   // Name change states
@@ -25,9 +26,11 @@ const DeSettings = () => {
   // Handle Name Change
   const handleSaveName = async () => {
     if (!name.trim()) return alert("ご担当者名を入力してください。");
-    
+
     try {
-      await axiosPrivate.post("/restaurant-owner/settings/change-name", { name });
+      await axiosPrivate.post("/restaurant-owner/settings/change-name", {
+        name,
+      });
       console.log("Name changed successfully");
       setIsEditingName(false);
       refetch();
@@ -39,15 +42,62 @@ const DeSettings = () => {
   // Handle Email Change
   const handleSubmitEmail = async (e) => {
     e.preventDefault();
-    if (!email.trim() || !password.trim()) return alert("メールアドレスとパスワードを入力してください。");
+    if (!email.trim() || !password.trim())
+      return alert("メールアドレスとパスワードを入力してください。");
 
     try {
-      const response = await axiosPrivate.post("/restaurant-owner/settings/change-email-request", { email, password });
+      const response = await axiosPrivate.post(
+        "/restaurant-owner/settings/change-email-request",
+        { email, password }
+      );
       console.log("Email change request sent successfully", response.data);
       setIsEditingEmail(false);
       refetch();
     } catch (error) {
       console.error("Error changing email", error);
+    }
+  };
+
+  // change password
+  const [isEditingPassword, setIsEditingPassword] = useState(false);
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  // Handle Password Change
+  const handleSubmitPassword = async (e) => {
+    e.preventDefault();
+    if (!oldPassword.trim() || !newPassword.trim() || !confirmPassword.trim()) {
+      return alert("全てのフィールドを入力してください。");
+    }
+    if (newPassword !== confirmPassword) {
+      return alert("新しいパスワードが一致しません。");
+    }
+
+    try {
+      await axiosPrivate.put(
+        "/auth/password/change",
+        {
+          old_password: oldPassword,
+          new_password: newPassword,
+          confirm_password: confirmPassword, // Include confirm_password
+        },
+        {
+          headers: {
+            "X-CSRFTOKEN":
+              "dOnIlLo4jSZVOaj9f8ENx9bg54q9FTJb8OFO1KiCnjlAUJqIz6TMPpzLuJhCVGGb", // Include CSRF token if required
+          },
+        }
+      );
+
+      console.log("Password changed successfully");
+      setIsEditingPassword(false);
+      setOldPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (error) {
+      console.error("Error changing password", error);
+      alert("パスワードの変更に失敗しました。");
     }
   };
 
@@ -76,7 +126,10 @@ const DeSettings = () => {
                 </tr>
                 <tr className="hover">
                   <td>所在地</td>
-                  <td>{resturentWonerSettings?.location || "〒555-0000 大阪市〇〇"}</td>
+                  <td>
+                    {resturentWonerSettings?.location ||
+                      "〒555-0000 大阪市〇〇"}
+                  </td>
                 </tr>
                 <tr className="hover">
                   <td>業種</td>
@@ -84,11 +137,15 @@ const DeSettings = () => {
                 </tr>
                 <tr className="hover">
                   <td>法人番号</td>
-                  <td>{resturentWonerSettings?.corporate_number || "000000000000"}</td>
+                  <td>
+                    {resturentWonerSettings?.corporate_number || "000000000000"}
+                  </td>
                 </tr>
                 <tr className="hover">
                   <td>インボイス適格請求書番号</td>
-                  <td>{resturentWonerSettings?.invoice_number || "T000000000000"}</td>
+                  <td>
+                    {resturentWonerSettings?.invoice_number || "T000000000000"}
+                  </td>
                 </tr>
 
                 {/* Name Change */}
@@ -108,7 +165,11 @@ const DeSettings = () => {
                   </td>
                   <td className="text-center">
                     <button
-                      onClick={() => (isEditingName ? handleSaveName() : setIsEditingName(true))}
+                      onClick={() =>
+                        isEditingName
+                          ? handleSaveName()
+                          : setIsEditingName(true)
+                      }
                       className="border py-1 px-3 rounded-md bg-gray-200"
                     >
                       {isEditingName ? "OK" : "情報の編集"}
@@ -135,8 +196,11 @@ const DeSettings = () => {
                           placeholder="パスワード"
                           className="border p-1 w-full rounded-md mb-2"
                         />
-                        <button type="submit" className="border py-1 px-3 rounded-md bg-blue-500 text-white">
-                          OK
+                        <button
+                          type="submit"
+                          className="border py-1 px-3 rounded-md bg-[#49bbdf] text-white"
+                        >
+                          Submit
                         </button>
                       </form>
                     ) : (
@@ -145,7 +209,10 @@ const DeSettings = () => {
                   </td>
                   <td className="text-center">
                     {!isEditingEmail && (
-                      <button onClick={() => setIsEditingEmail(true)} className="border py-1 px-3 rounded-md bg-gray-200">
+                      <button
+                        onClick={() => setIsEditingEmail(true)}
+                        className="border py-1 px-3 rounded-md bg-gray-200"
+                      >
                         メールアドレスの変更
                       </button>
                     )}
@@ -154,11 +221,50 @@ const DeSettings = () => {
 
                 <tr className="hover">
                   <td>パスワード</td>
-                  <td>********</td>
+                  <td>
+                    {isEditingPassword ? (
+                      <form onSubmit={handleSubmitPassword}>
+                        <input
+                          type="password"
+                          value={oldPassword}
+                          onChange={(e) => setOldPassword(e.target.value)}
+                          placeholder="現在のパスワード"
+                          className="border p-1 w-full rounded-md mb-2"
+                        />
+                        <input
+                          type="password"
+                          value={newPassword}
+                          onChange={(e) => setNewPassword(e.target.value)}
+                          placeholder="新しいパスワード"
+                          className="border p-1 w-full rounded-md mb-2"
+                        />
+                        <input
+                          type="password"
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          placeholder="新しいパスワード（確認）"
+                          className="border p-1 w-full rounded-md mb-2"
+                        />
+                        <button
+                          type="submit"
+                          className="border py-1 px-3 rounded-md bg-[#49bbdf] text-white"
+                        >
+                          Submit
+                        </button>
+                      </form>
+                    ) : (
+                      "********"
+                    )}
+                  </td>
                   <td className="text-center">
-                    <button className="border py-1 px-3 rounded-md bg-gray-200">
-                      パスワードの変更
-                    </button>
+                    {!isEditingPassword && (
+                      <button
+                        onClick={() => setIsEditingPassword(true)}
+                        className="border py-1 px-3 rounded-md bg-gray-200"
+                      >
+                        パスワードの変更
+                      </button>
+                    )}
                   </td>
                 </tr>
 

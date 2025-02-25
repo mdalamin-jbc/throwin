@@ -44,19 +44,20 @@ const SideMenu = ({ isOpen, onClose }) => {
       roles: ["sales_agent", "restaurant_owner"],
     },
     {
-      label: "営業代理店",
-      icon: <img src={management} alt="" className="mr-4 w-[30px]" />,
-      path: "/dashboard/sales_agent",
-      subPaths: ["/sales_agent"],
-      roles: ["glow_admin", "fc_admin"],
-    },
-    {
       label: "クライアント",
       icon: <img src={management} alt="" className="mr-4 w-[30px]" />,
       path: "/dashboard/client",
       subPaths: ["/creat_new"],
       roles: ["fc_admin", "glow_admin"],
     },
+    {
+      label: "営業代理店",
+      icon: <img src={management} alt="" className="mr-4 w-[30px]" />,
+      path: "/dashboard/sales_agent",
+      subPaths: ["/sales_agent"],
+      roles: ["glow_admin", "fc_admin"],
+    },
+    
     {
       label: "コメント",
       icon: <img src={message} alt="" className="mr-4 w-[30px]" />,

@@ -3,11 +3,11 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import search from "../../../assets/icons/search_3.png";
 import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import UseGetAdminClients from "../../../hooks/Dashboard/UseGetAdminClients";
+import UseGetSalesAgents from "../../../hooks/Dashboard/UseGetSalesAgents";
 
 const Client = () => {
-  const { adminClients } = UseGetAdminClients();
-  console.log(adminClients);
+  const { salesAgents, isLoading, isError, error } = UseGetSalesAgents();
+
   const {
     register,
     formState: { errors },
@@ -83,8 +83,8 @@ const Client = () => {
                 </tr>
               </thead>
               <tbody>
-                {adminClients.length > 0 ? (
-                  adminClients.map((store) => (
+                {salesAgents.length > 0 ? (
+                  salesAgents?.map((store) => (
                     <tr key={store.uid} className="hover border ">
                       <Link
                         onClick={() =>
@@ -93,8 +93,7 @@ const Client = () => {
                         to={`${store.code}`}
                       >
                         <td className="flex items-center gap-[17px] ">
-                          
-                          <p >{store.name}</p>
+                          <p>{store.name}</p>
                         </td>
                       </Link>
                       <td>{store.code}</td>

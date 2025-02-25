@@ -4,87 +4,94 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../../../hooks/axiousPrivate";
 
-const CreatNewClient = () => {
+const CreateNewSalesAgent = () => {
   const navigate = useNavigate();
-
   const axiosPrivate = useAxiosPrivate();
+
   const {
     register,
     handleSubmit,
+    formState: { errors, isValid },
+  } = useForm({
+    mode: "onChange",
+  });
 
-    formState: { errors },
-  } = useForm();
-
-  const onSubmit = (data) => {
-    console.log("Form Data:", data);
-  };
-
-  // const handleCreatNewClient = (data) => {
-  //   console.log("Submitted Data:", data); // Log the data
-
-  //   toast.success("New client created successfully!", {
-  //     duration: 3000,
-  //     position: "top-center",
-  //   });
-
-  //   setTimeout(() => {
-  //     // navigate("/dashboard/client");
-  //   }, 1500);
-  // };
-
-  const handleCreatNewClient = async (data) => {
+  const onSubmit = async (data) => {
     const requestBody = {
-      company_name: data.companyName,
-      address: data.address,
-      agency_code: data.agencyCode,
-      post_code: data.postCode,
-      industry: data.industry,
-      invoice_number: data.invoiceNumber,
-      corporate_number: data.corporateNumber || "N/A", // Assuming this is missing in the form
-      owner_name: data.contactName,
-      telephone_number: data.telephoneNumber,
       email: data.email,
-      bank_name: data.bancAccountInfo,
-      branch_name: data.storeName,
-      account_type: "futsuu", // Assuming a default value
-      account_number: data.accountNumber || "N/A",
-      account_holder_name: data.accountHolderName || "N/A",
+      name: data.name,
+      phone_number: data.phoneNumber,
+      post_code: data.postCode,
+      company_name: data.companyName,
+      agency_code: data.agencyCode,
+      industry: data.industry,
+      address: data.address,
+      invoice_number: data.invoiceNumber,
+      corporate_number: data.corporateNumber,
+      bank_name: data.bankName,
+      branch_name: data.branchName,
+      account_type: data.accountType,
+      account_number: data.accountNumber,
+      account_holder_name: data.accountHolderName,
     };
-    console.log(requestBody);
+
+    console.log("Submitting data:", requestBody);
 
     try {
-      // const response = await axiosPrivate.post(
-      //   "https://api-dev.throwin-glow.com/admins/organizations",
-      //   {
-      //     body: JSON.stringify(requestBody),
-      //   }
-      // );
+      const response = await axiosPrivate.post(
+        "/admins/sales-agents",
+        requestBody
+      );
 
-      const result = await response.json();
-      console.log("Response:", result);
+      console.log("API Response:", response);
 
-      if (response.ok) {
-        toast.success("New client created successfully!");
+      if (response.status === 200 || response.status === 201) {
+        toast.success("新しい営業担当者が作成されました！");
+        navigate("/dashboard/client");
       } else {
-        toast.error(result.message || "Failed to create client.");
+        // Show detailed error if available
+        const errorMessage =
+          response.data?.detail ||
+          response.data?.message ||
+          "Failed to create sales agent.";
+        toast.error(errorMessage);
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error("An error occurred. Please try again.");
+      // Show more detailed error messages from API if available
+      const errorMessage =
+        error.response?.data?.detail ||
+        error.response?.data?.message ||
+        Object.entries(error.response?.data || {})
+          .map(([key, value]) => `${key}: ${value}`)
+          .join(", ") ||
+        "エラーが発生しました。もう一度お試しください。";
+      toast.error(errorMessage);
     }
   };
+
+  // Function to handle form submission from modal
+  const submitForm = () => {
+    handleSubmit(onSubmit)();
+    document.getElementById("sales_agent_modal").close();
+  };
+
+  // Valid account type choices - adjusted based on API error
+  const accountTypeChoices = [
+    { value: "futsuu", label: "普通" },
+    { value: "chochiku", label: "貯蓄" },
+    // "touza" removed as it's not a valid choice according to the error
+  ];
 
   return (
     <div className="">
       <div className="">
-        <h2 className="font-semibold text-[27px] text-[#73879C]">アカウント</h2>
+        <h2 className="font-semibold text-[27px] text-[#73879C]">営業担当者</h2>
         <div className="bg-white mt-[27px] rounded-xl pb-8 mr-[54px] p-10 ">
           <h4 className="font-semibold text-[18px] text-[#73879C] pb-4">
-            クライアントアカウント新規登録
+            営業担当者アカウント新規登録
           </h4>
           <div className="border-b-[3px] mb-5"></div>
-
-          {/* Tabs */}
 
           {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -93,51 +100,49 @@ const CreatNewClient = () => {
                 {/* row 1 */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
-                    <label className="block text-gray-700">
-                      企業名（屋号）
-                    </label>
+                    <label className="block text-gray-700">名前</label>
                   </td>
                   <td>
-                    <div className="">
-                      <input
-                        {...register("companyName", {
-                          required: "株式会社フリーカンパニー",
-                        })}
-                        type="text"
-                        placeholder="居酒屋ABC 梅田店"
-                        className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-                      />
-                    </div>
-                    <div className="flex justify-between text-xs text-gray-500 mt-1">
-                      {errors.companyName && (
-                        <p className="text-red-500">
-                          {errors.companyName.message}
-                        </p>
-                      )}
-                    </div>
+                    <input
+                      {...register("name", {
+                        required: "必須入力項目です",
+                      })}
+                      type="text"
+                      placeholder="山田 太郎"
+                      className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+                    />
+                    {errors.name && (
+                      <p className="text-red-500 text-xs">
+                        {errors.name.message}
+                      </p>
+                    )}
                   </td>
                 </tr>
                 {/* row 2 */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
-                    <label className="block text-gray-700">担当者名</label>
+                    <label className="block text-gray-700">
+                      メールアドレス
+                    </label>
                   </td>
                   <td>
                     <div className="">
                       <input
-                        {...register("contactName", {
-                          required: "株式会社フリーカンパニー",
+                        {...register("email", {
+                          required: "必須入力項目です",
+                          pattern: {
+                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                            message: "有効なメールアドレスを入力してください",
+                          },
                         })}
-                        type="text"
-                        placeholder="中嶋　祐介"
+                        type="email"
+                        placeholder="yamada@example.com"
                         className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
                       />
                     </div>
                     <div className="flex justify-between text-xs text-gray-500 mt-1">
-                      {errors.contactName && (
-                        <p className="text-red-500">
-                          {errors.contactName.message}
-                        </p>
+                      {errors.email && (
+                        <p className="text-red-500">{errors.email.message}</p>
                       )}
                     </div>
                   </td>
@@ -150,18 +155,47 @@ const CreatNewClient = () => {
                   <td>
                     <div className="">
                       <input
-                        {...register("telephoneNumber", {
-                          required: "株式会社フリーカンパニー",
+                        {...register("phoneNumber", {
+                          required: "必須入力項目です",
+                          maxLength: {
+                            value: 15,
+                            message: "電話番号は15文字以内で入力してください",
+                          },
                         })}
-                        type="number"
+                        type="tel"
                         placeholder="0666935869"
                         className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
                       />
                     </div>
                     <div className="flex justify-between text-xs text-gray-500 mt-1">
-                      {errors.telephoneNumber && (
+                      {errors.phoneNumber && (
                         <p className="text-red-500">
-                          {errors.telephoneNumber.message}
+                          {errors.phoneNumber.message}
+                        </p>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+                {/* Agency code - Added based on error */}
+                <tr className="hover">
+                  <td className="flex items-center gap-[17px]">
+                    <label className="block text-gray-700">代理店コード</label>
+                  </td>
+                  <td>
+                    <div className="">
+                      <input
+                        {...register("agencyCode", {
+                          required: "必須入力項目です",
+                        })}
+                        type="text"
+                        placeholder="AG12345"
+                        className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                    <div className="flex justify-between text-xs text-gray-500 mt-1">
+                      {errors.agencyCode && (
+                        <p className="text-red-500">
+                          {errors.agencyCode.message}
                         </p>
                       )}
                     </div>
@@ -170,24 +204,49 @@ const CreatNewClient = () => {
                 {/* row 4 */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
-                    <label className="block text-gray-700">
-                      メールアドレス
-                    </label>
+                    <label className="block text-gray-700">会社名</label>
                   </td>
                   <td>
                     <div className="">
                       <input
-                        {...register("email", {
-                          required: "株式会社フリーカンパニー",
+                        {...register("companyName", {
+                          required: "必須入力項目です",
                         })}
-                        type="mail"
-                        placeholder="ggu.bbel@free-company.co.jp"
+                        type="text"
+                        placeholder="株式会社フリーカンパニー"
                         className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
                       />
                     </div>
                     <div className="flex justify-between text-xs text-gray-500 mt-1">
-                      {errors.email && (
-                        <p className="text-red-500">{errors.email.message}</p>
+                      {errors.companyName && (
+                        <p className="text-red-500">
+                          {errors.companyName.message}
+                        </p>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+                {/* Industry field - Added based on error */}
+                <tr className="hover">
+                  <td className="flex items-center gap-[17px]">
+                    <label className="block text-gray-700">業種</label>
+                  </td>
+                  <td>
+                    <div className="">
+                      <input
+                        {...register("industry", {
+                          required: "必須入力項目です",
+                        })}
+                        type="text"
+                        placeholder="サービス業"
+                        className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                    <div className="flex justify-between text-xs text-gray-500 mt-1">
+                      {errors.industry && (
+                        <p className="text-red-500">
+                          {errors.industry.message}
+                        </p>
                       )}
                     </div>
                   </td>
@@ -201,7 +260,11 @@ const CreatNewClient = () => {
                     <div className="">
                       <input
                         {...register("postCode", {
-                          required: "株式会社フリーカンパニー",
+                          required: "必須入力項目です",
+                          maxLength: {
+                            value: 10,
+                            message: "郵便番号は10文字以内で入力してください",
+                          },
                         })}
                         type="text"
                         placeholder="554-0095"
@@ -226,7 +289,7 @@ const CreatNewClient = () => {
                     <div className="">
                       <input
                         {...register("address", {
-                          required: "株式会社フリーカンパニー",
+                          required: "必須入力項目です",
                         })}
                         type="text"
                         placeholder="大阪市住吉区長居東3-4059"
@@ -240,32 +303,7 @@ const CreatNewClient = () => {
                     </div>
                   </td>
                 </tr>
-                {/* row 7 */}
-                <tr className="hover">
-                  <td className="flex items-center gap-[17px]">
-                    <label className="block text-gray-700">業種</label>
-                  </td>
-                  <td>
-                    <div className="">
-                      <input
-                        {...register("industry", {
-                          required: "株式会社フリーカンパニー",
-                        })}
-                        type="text"
-                        placeholder="バスケットボールチーム"
-                        className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-                      />
-                    </div>
-                    <div className="flex justify-between text-xs text-gray-500 mt-1">
-                      {errors.industry && (
-                        <p className="text-red-500">
-                          {errors.industry.message}
-                        </p>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-                {/* row 8 */}
+                {/* row 7 - Invoice Number */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
                     <label className="block text-gray-700">
@@ -276,10 +314,10 @@ const CreatNewClient = () => {
                     <div className="">
                       <input
                         {...register("invoiceNumber", {
-                          required: "株式会社フリーカンパニー",
+                          required: "必須入力項目です", // Changed to required based on error
                         })}
                         type="text"
-                        placeholder="バスケットボールチーム"
+                        placeholder="T1234567890123"
                         className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
                       />
                     </div>
@@ -292,65 +330,45 @@ const CreatNewClient = () => {
                     </div>
                   </td>
                 </tr>
-                {/* row 9 */}
+                {/* row 8 - Corporate Number */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
-                    <label className="block text-gray-700">代理店コード</label>
+                    <label className="block text-gray-700">
+                      法人番号（任意）
+                    </label>
                   </td>
                   <td>
                     <div className="">
                       <input
-                        {...register("agencyCode", {
-                          required: "株式会社フリーカンパニー",
-                        })}
+                        {...register("corporateNumber")}
                         type="text"
-                        placeholder="1485980（代理店がログインしている場合は自動表示）"
+                        placeholder="1234567890123"
                         className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
                       />
                     </div>
                     <div className="flex justify-between text-xs text-gray-500 mt-1">
-                      {errors.agencyCode && (
+                      {errors.corporateNumber && (
                         <p className="text-red-500">
-                          {errors.agencyCode.message}
+                          {errors.corporateNumber.message}
                         </p>
                       )}
                     </div>
                   </td>
                 </tr>
-                {/* row 10 */}
+                {/* row 9 - Bank account information section */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
                     <label className="block text-gray-700">
-                      振込先口座情報
+                      振込先口座情報*
                     </label>
                   </td>
                   <td>
-                    <div className="grid grid-cols-3 gap-16">
+                    <div className="grid grid-cols-3 gap-8 md:gap-16">
                       <div>
                         <div className="flex items-center gap-[14px]">
                           <input
-                            {...register("bancAccountInfo", {
-                              required: "株式会社フリーカンパニー",
-                            })}
-                            type="text"
-                            placeholder="三井住友"
-                            className=" w-[94px] border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-                          />
-                          <label className="block text-black">銀行</label>
-                        </div>
-                        <div className="flex justify-between text-xs text-gray-500 mt-1">
-                          {errors.bancAccountInfo && (
-                            <p className="text-red-500">
-                              {errors.bancAccountInfo.message}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-[14px]">
-                          <input
-                            {...register("storeName", {
-                              required: "株式会社フリーカンパニー",
+                            {...register("bankName", {
+                              required: "必須入力項目です",
                             })}
                             type="text"
                             placeholder="三井住友"
@@ -359,9 +377,9 @@ const CreatNewClient = () => {
                           <label className="block text-black">銀行</label>
                         </div>
                         <div className="flex justify-between text-xs text-gray-500 mt-1">
-                          {errors.storeName && (
+                          {errors.bankName && (
                             <p className="text-red-500">
-                              {errors.storeName.message}
+                              {errors.bankName.message}
                             </p>
                           )}
                         </div>
@@ -369,40 +387,64 @@ const CreatNewClient = () => {
                       <div>
                         <div className="flex items-center gap-[14px]">
                           <input
-                            {...register("storeName", {
-                              required: "株式会社フリーカンパニー",
+                            {...register("branchName", {
+                              required: "必須入力項目です",
                             })}
                             type="text"
-                            placeholder="三井住友"
+                            placeholder="梅田支店"
                             className="w-[94px] border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
                           />
-                          <label className="block text-black">銀行</label>
+                          <label className="block text-black">支店</label>
                         </div>
                         <div className="flex justify-between text-xs text-gray-500 mt-1">
-                          {errors.storeName && (
+                          {errors.branchName && (
                             <p className="text-red-500">
-                              {errors.storeName.message}
+                              {errors.branchName.message}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-[14px]">
+                          <select
+                            {...register("accountType", {
+                              required: "アカウントタイプを選択してください",
+                            })}
+                            className="w-[120px] md:w-[150px] border rounded px-2 md:px-4 py-2 focus:outline-none focus:border-blue-500"
+                          >
+                            {accountTypeChoices.map((type) => (
+                              <option key={type.value} value={type.value}>
+                                {type.label}
+                              </option>
+                            ))}
+                          </select>
+                          <label className="block text-black">種別</label>
+                        </div>
+                        <div className="flex justify-between text-xs text-gray-500 mt-1">
+                          {errors.accountType && (
+                            <p className="text-red-500">
+                              {errors.accountType.message}
                             </p>
                           )}
                         </div>
                       </div>
                     </div>
-                    <div className="flex gap-5 mt-3">
+                    <div className="flex flex-col md:flex-row gap-5 mt-3">
                       <div>
                         <div className="">
                           <input
-                            {...register("storeName", {
-                              required: "株式会社フリーカンパニー",
+                            {...register("accountNumber", {
+                              required: "必須入力項目です",
                             })}
                             type="text"
-                            placeholder="三井住友"
-                            className="w-[245px]  border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+                            placeholder="口座番号"
+                            className="w-full md:w-[245px] border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
                           />
                         </div>
                         <div className="flex justify-between text-xs text-gray-500 mt-1">
-                          {errors.storeName && (
+                          {errors.accountNumber && (
                             <p className="text-red-500">
-                              {errors.storeName.message}
+                              {errors.accountNumber.message}
                             </p>
                           )}
                         </div>
@@ -410,18 +452,18 @@ const CreatNewClient = () => {
                       <div>
                         <div className="">
                           <input
-                            {...register("storeName", {
-                              required: "株式会社フリーカンパニー",
+                            {...register("accountHolderName", {
+                              required: "必須入力項目です",
                             })}
                             type="text"
-                            placeholder="三井住友"
-                            className="w-[245px] border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+                            placeholder="口座名義"
+                            className="w-full md:w-[245px] border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
                           />
                         </div>
                         <div className="flex justify-between text-xs text-gray-500 mt-1">
-                          {errors.storeName && (
+                          {errors.accountHolderName && (
                             <p className="text-red-500">
-                              {errors.storeName.message}
+                              {errors.accountHolderName.message}
                             </p>
                           )}
                         </div>
@@ -435,8 +477,9 @@ const CreatNewClient = () => {
             {/* Submit Button */}
             <div className="flex justify-center mt-5 ">
               <button
+                type="button"
                 onClick={() =>
-                  document.getElementById("my_modal_9").showModal()
+                  document.getElementById("sales_agent_modal").showModal()
                 }
               >
                 <ButtonPrimary
@@ -447,18 +490,16 @@ const CreatNewClient = () => {
             </div>
           </form>
 
-          {/* ------------------------- */}
-
-          <dialog id="my_modal_9" className="modal w-[400px] mx-auto ">
+          {/* Modal */}
+          <dialog id="sales_agent_modal" className="modal w-[400px] mx-auto ">
             <div className="modal-box bg-[#F9F9F9] p-0 pt-7">
-              {/* Modal box with green background */}
               <div className="pb-8">
                 <p className="text-center ">
-                  こちらの内容でメンバーを
+                  こちらの内容で営業担当者を
                   <br /> 新規作成しますか？
                 </p>
                 <p className="text-center  mt-7">
-                  入力されたクライアントのメールアドレスに、
+                  入力された営業担当者のメールアドレスに、
                   <br />
                   パスワード設定用のメールが送信されます。
                 </p>
@@ -470,14 +511,14 @@ const CreatNewClient = () => {
                     <span className="mr-10">編集する</span>
                   </button>
                 </form>
-                <form method="dialog">
+                <div>
                   <button
-                    onClick={handleCreatNewClient}
+                    onClick={submitForm}
                     className="px-4 py-4 flex items-center justify-center text-[#2976EA]"
                   >
                     <span className="ml-8">登録する</span>
                   </button>
-                </form>
+                </div>
               </div>
             </div>
           </dialog>
@@ -487,4 +528,4 @@ const CreatNewClient = () => {
   );
 };
 
-export default CreatNewClient;
+export default CreateNewSalesAgent;
