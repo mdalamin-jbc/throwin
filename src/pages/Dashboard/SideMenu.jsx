@@ -30,7 +30,7 @@ const SideMenu = () => {
 
   const allMenuItems = [
     {
-      label: "ご利用状況・請求",
+      label: "売上管理",
       icon: <img src={streamline} alt="" className="mr-4 w-[30px]" />,
       path: "/dashboard/sales_management",
       roles: ["restaurant_owner", "sales_agent", "fc_admin", "glow_admin"],

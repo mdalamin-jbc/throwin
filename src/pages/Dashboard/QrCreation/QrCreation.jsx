@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-import { BiSolidDownArrow } from "react-icons/bi";
 import logo from "../../../assets/images/socialLogin/logo2.png";
 import QRCode from "react-qr-code";
 import ButtonPrimary from "../../../components/ButtonPrimary";

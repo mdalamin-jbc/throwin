@@ -94,7 +94,7 @@ const SalesAgent = () => {
                         onClick={() =>
                           localStorage.setItem("store", JSON.stringify(store))
                         }
-                        to={`${store.code}`}
+                        // to={`${store.code}`}
                       >
                         <td className="flex items-center gap-[17px] ">
                           <p>{store.name}</p>

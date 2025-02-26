@@ -90,7 +90,7 @@ const PaymentManagement = () => {
 
                   <td>
                     <p className="bg-[#49BBDF] text-white rounded-full text-center py-1">
-                      かりん
+                    詳細
                     </p>
                   </td>
                 </tr>
@@ -108,7 +108,7 @@ const PaymentManagement = () => {
 
                   <td>
                     <p className="bg-[#49BBDF] text-white rounded-full text-center py-1">
-                      かりん
+                    詳細
                     </p>
                   </td>
                 </tr>
@@ -126,7 +126,7 @@ const PaymentManagement = () => {
 
                   <td>
                     <p className="bg-[#49BBDF] text-white rounded-full text-center py-1">
-                      かりん
+                    詳細
                     </p>
                   </td>
                 </tr>

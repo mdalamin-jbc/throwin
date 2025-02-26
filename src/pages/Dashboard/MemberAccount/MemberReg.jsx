@@ -14,7 +14,7 @@ const MemberReg = () => {
 
   const [topImage, setTopImage] = useState(null);
   const [nameCount, setNameCount] = useState(0);
-  const [emailCount, setEmailCount] = useState(0);
+
   const [bioCount, setBioCount] = useState(0);
   const [thanksMessageCount, setThanksMessageCount] = useState(0);
 
@@ -31,7 +31,6 @@ const MemberReg = () => {
   const handleMemberReg = async (data) => {
     const formData = new FormData();
     formData.append("name", data.name);
-    formData.append("email", data.email);
     formData.append("public_status", "public");
     formData.append("introduction", data.bio);
     formData.append("fun_fact", data.gacha);
@@ -105,7 +104,7 @@ const MemberReg = () => {
                 </td>
               </tr>
 
-              <tr className="hover">
+              {/* <tr className="hover">
                 <td className="flex items-center gap-[17px]">
                   <label className="block text-gray-700">
                     メンバーのメール
@@ -127,7 +126,7 @@ const MemberReg = () => {
                     <p className="text-red-500">{errors.email.message}</p>
                   )}
                 </td>
-              </tr>
+              </tr> */}
 
               <tr className="hover">
                 <td className="flex items-center gap-[17px]">
@@ -199,8 +198,8 @@ const MemberReg = () => {
                         {...register("gacha")}
                         className="bg-transparent w-full focus:outline-none appearance-none text-right"
                       >
-                        <option value="yes">有り</option>
-                        <option value="no">無し</option>
+                        <option value="public">公開</option>
+                        <option value="private">プライベート</option>
                       </select>
                     </div>
                   </div>
