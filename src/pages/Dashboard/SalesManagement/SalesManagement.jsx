@@ -10,6 +10,8 @@ import {
   Title,
   Tooltip,
   Legend,
+  BarController,
+  LineController,
 } from "chart.js";
 import TeamChart from "./TeamChart";
 import MemberChart from "./MemberChart";
@@ -24,7 +26,9 @@ ChartJS.register(
   PointElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  BarController,
+  LineController
 );
 
 const SalesManagement = () => {
@@ -37,28 +41,28 @@ const SalesManagement = () => {
     restaurant_owner: [
       { id: "overall", label: "全体の数字" },
       { id: "team", label: "チーム（店舗）" },
-      { id: "member", label: "メンバー" }
+      { id: "member", label: "メンバー" },
     ],
     sales_agent: [
       { id: "whole", label: "全体" },
       { id: "client", label: "クライアント" },
       { id: "store_team", label: "店舗（チーム）" },
-      { id: "member", label: "メンバー" }
+      { id: "member", label: "メンバー" },
     ],
     fc_admin: [
       { id: "whole", label: "全体" },
       { id: "sales_agent", label: "営業代理店" },
       { id: "client", label: "クライアント" },
       { id: "store_team", label: "店舗（チーム）" },
-      { id: "member", label: "メンバー" }
+      { id: "member", label: "メンバー" },
     ],
     glow_admin: [
       { id: "whole", label: "全体" },
       { id: "sales_agent", label: "営業代理店" },
       { id: "client", label: "クライアント" },
       { id: "store_team", label: "店舗（チーム）" },
-      { id: "member", label: "メンバー" }
-    ]
+      { id: "member", label: "メンバー" },
+    ],
   };
 
   // Get available tabs based on user role
@@ -68,9 +72,33 @@ const SalesManagement = () => {
   // Common chart data
   const chartData = {
     labels: [
-      "1 火", "2 水", "3 木", "4 金", "5 土", "6 日", "7 月",
-      "9", "10", "11", "12", "13", "14", "15", "16", "17", "18",
-      "18", "20", "21", "22", "23", "24", "25", "26", "27", "28",
+      "1 火",
+      "2 水",
+      "3 木",
+      "4 金",
+      "5 土",
+      "6 日",
+      "7 月",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "16",
+      "17",
+      "18",
+      "18",
+      "20",
+      "21",
+      "22",
+      "23",
+      "24",
+      "25",
+      "26",
+      "27",
+      "28",
     ],
     datasets: [
       {
@@ -80,14 +108,20 @@ const SalesManagement = () => {
         borderWidth: 2,
         pointRadius: 4,
         fill: false,
-        data: [2.1, 2.5, 3.6, 2, 0, 0, 2.4, 2.9, 2, 2.5, 0, 0, 2.6, 2.8, 1.7, 2, 1.8, 0, 0, 2.5, 2.9, 0, 0, 2.7, 2.2, 0, 3.7],
+        data: [
+          2.1, 2.5, 3.6, 2, 0, 0, 2.4, 2.9, 2, 2.5, 0, 0, 2.6, 2.8, 1.7, 2, 1.8,
+          0, 0, 2.5, 2.9, 0, 0, 2.7, 2.2, 0, 3.7,
+        ],
         yAxisID: "y1",
       },
       {
         type: "bar",
         label: "売上",
         backgroundColor: "#49BBDF",
-        data: [12, 14.5, 17.5, 11, 0, 0, 14, 17, 11, 13, 0, 0, 15, 16.2, 9, 12, 10.5, 0, 0, 15, 17, 0, 0, 15.5, 13, 0, 21],
+        data: [
+          12, 14.5, 17.5, 11, 0, 0, 14, 17, 11, 13, 0, 0, 15, 16.2, 9, 12, 10.5,
+          0, 0, 15, 17, 0, 0, 15.5, 13, 0, 21,
+        ],
         yAxisID: "y",
       },
     ],
@@ -149,7 +183,10 @@ const SalesManagement = () => {
   const StatsCards = ({ stats }) => (
     <div className="mt-[33px] grid grid-cols-3 gap-[17px]">
       {stats.map((item, i) => (
-        <div key={i} className="bg-[#F9F9F9] py-[47px] text-center rounded-[20px]">
+        <div
+          key={i}
+          className="bg-[#F9F9F9] py-[47px] text-center rounded-[20px]"
+        >
           <p className="font-semibold text-lg">{item.title}</p>
           <div className="flex justify-center items-center gap-6">
             <h3 className="text-[#49BBDF] font-semibold text-[36px] mt-[28px] ml-10">
@@ -178,7 +215,12 @@ const SalesManagement = () => {
               ]}
             />
             <div className="mt-[27px]">
-              <Bar height={200} width={600} data={chartData} options={chartOptions} />
+              <Bar
+                height={200}
+                width={600}
+                data={chartData}
+                options={chartOptions}
+              />
             </div>
           </>
         );
@@ -205,7 +247,12 @@ const SalesManagement = () => {
               ]}
             />
             <div className="mt-[27px]">
-              <Bar height={200} width={600} data={chartData} options={chartOptions} />
+              <Bar
+                height={200}
+                width={600}
+                data={chartData}
+                options={chartOptions}
+              />
             </div>
           </>
         );
@@ -234,7 +281,12 @@ const SalesManagement = () => {
               ]}
             />
             <div className="mt-[27px]">
-              <Bar height={200} width={600} data={chartData} options={chartOptions} />
+              <Bar
+                height={200}
+                width={600}
+                data={chartData}
+                options={chartOptions}
+              />
             </div>
           </>
         );
@@ -281,9 +333,7 @@ const SalesManagement = () => {
           ))}
         </div>
         <div className="border-b-[3px] mx-5"></div>
-        <div className="mx-[33px]">
-          {renderContent()}
-        </div>
+        <div className="mx-[33px]">{renderContent()}</div>
       </div>
     </div>
   );
