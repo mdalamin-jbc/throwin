@@ -7,34 +7,30 @@ import useAxiosPrivate from "../../../hooks/axiousPrivate";
 const SingUp = () => {
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
-  
+
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
   } = useForm({
-    mode: "onChange", // Validate on change for better user experience
-    defaultValues: {
-      accountType: "futsuu" // Set default account type
-    }
+    mode: "onChange",
   });
 
   const onSubmit = async (data) => {
-    // Create API request body with all required fields
     const requestBody = {
-      company_name: data.companyName,
-      address: data.address || "", // Default to empty string if not provided
-      agency_code: data.agencyCode || "", // Default to empty string if not provided
-      post_code: data.postCode,
-      industry: data.industry,
-      invoice_number: data.invoiceNumber || "", // Default to empty string if not provided
-      corporate_number: data.corporateNumber || "", // Default to empty string if not provided
-      owner_name: data.contactName,
-      telephone_number: data.telephoneNumber,
       email: data.email,
+      name: data.name,
+      phone_number: data.phoneNumber,
+      post_code: data.postCode,
+      company_name: data.companyName,
+      agency_code: data.agencyCode,
+      industry: data.industry,
+      address: data.address,
+      invoice_number: data.invoiceNumber,
+      corporate_number: data.corporateNumber,
       bank_name: data.bankName,
       branch_name: data.branchName,
-      account_type: data.accountType || "futsuu",
+      account_type: data.accountType,
       account_number: data.accountNumber,
       account_holder_name: data.accountHolderName,
     };
@@ -43,28 +39,33 @@ const SingUp = () => {
 
     try {
       const response = await axiosPrivate.post(
-        "/admins/organizations",
+        "/admins/sales-agents",
         requestBody
       );
 
       console.log("API Response:", response);
 
       if (response.status === 200 || response.status === 201) {
-        toast.success("New client created successfully!");
+        toast.success("新しい営業担当者が作成されました！");
+        navigate("/dashboard/sales_agent");
       } else {
         // Show detailed error if available
-        const errorMessage = response.data?.detail || response.data?.message || "Failed to create client.";
+        const errorMessage =
+          response.data?.detail ||
+          response.data?.message ||
+          "Failed to create sales agent.";
         toast.error(errorMessage);
       }
     } catch (error) {
       console.error("Error:", error);
       // Show more detailed error messages from API if available
-      const errorMessage = error.response?.data?.detail || 
-                           error.response?.data?.message || 
-                           Object.entries(error.response?.data || {}).map(([key, value]) => 
-                             `${key}: ${value}`
-                           ).join(', ') || 
-                           "An error occurred. Please try again.";
+      const errorMessage =
+        error.response?.data?.detail ||
+        error.response?.data?.message ||
+        Object.entries(error.response?.data || {})
+          .map(([key, value]) => `${key}: ${value}`)
+          .join(", ") ||
+        "エラーが発生しました。もう一度お試しください。";
       toast.error(errorMessage);
     }
   };
@@ -72,18 +73,23 @@ const SingUp = () => {
   // Function to handle form submission from modal
   const submitForm = () => {
     handleSubmit(onSubmit)();
-    document.getElementById("my_modal_9").close();
+    document.getElementById("sales_agent_modal").close();
   };
+
+  // Valid account type choices - adjusted based on API error
+  const accountTypeChoices = [
+    { value: "futsuu", label: "普通" },
+    { value: "chochiku", label: "貯蓄" },
+    // "touza" removed as it's not a valid choice according to the error
+  ];
 
   return (
     <div className="">
       <div className="">
-        <h2 className="font-semibold text-[27px] text-[#73879C]">
-          クライアント
-        </h2>
+        <h2 className="font-semibold text-[27px] text-[#73879C]">営業代理店</h2>
         <div className="bg-white mt-[27px] rounded-xl pb-8 mr-[54px] p-10 ">
           <h4 className="font-semibold text-[18px] text-[#73879C] pb-4">
-            クライアントアカウント新規登録
+          営業代理店アカウント新規登録
           </h4>
           <div className="border-b-[3px] mb-5"></div>
 
@@ -94,22 +100,20 @@ const SingUp = () => {
                 {/* row 1 */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
-                    <label className="block text-gray-700">
-                      企業名（屋号）*
-                    </label>
+                    <label className="block text-gray-700">名前</label>
                   </td>
                   <td>
                     <input
-                      {...register("companyName", {
+                      {...register("name", {
                         required: "必須入力項目です",
                       })}
                       type="text"
-                      placeholder="居酒屋ABC 梅田店"
+                      placeholder="山田 太郎"
                       className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
                     />
-                    {errors.companyName && (
+                    {errors.name && (
                       <p className="text-red-500 text-xs">
-                        {errors.companyName.message}
+                        {errors.name.message}
                       </p>
                     )}
                   </td>
@@ -117,58 +121,8 @@ const SingUp = () => {
                 {/* row 2 */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
-                    <label className="block text-gray-700">担当者名*</label>
-                  </td>
-                  <td>
-                    <div className="">
-                      <input
-                        {...register("contactName", {
-                          required: "必須入力項目です",
-                        })}
-                        type="text"
-                        placeholder="中嶋　祐介"
-                        className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-                      />
-                    </div>
-                    <div className="flex justify-between text-xs text-gray-500 mt-1">
-                      {errors.contactName && (
-                        <p className="text-red-500">
-                          {errors.contactName.message}
-                        </p>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-                {/* row 3 */}
-                <tr className="hover">
-                  <td className="flex items-center gap-[17px]">
-                    <label className="block text-gray-700">電話番号*</label>
-                  </td>
-                  <td>
-                    <div className="">
-                      <input
-                        {...register("telephoneNumber", {
-                          required: "必須入力項目です",
-                        })}
-                        type="tel"
-                        placeholder="0666935869"
-                        className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-                      />
-                    </div>
-                    <div className="flex justify-between text-xs text-gray-500 mt-1">
-                      {errors.telephoneNumber && (
-                        <p className="text-red-500">
-                          {errors.telephoneNumber.message}
-                        </p>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-                {/* row 4 */}
-                <tr className="hover">
-                  <td className="flex items-center gap-[17px]">
                     <label className="block text-gray-700">
-                      メールアドレス*
+                      メールアドレス
                     </label>
                   </td>
                   <td>
@@ -182,7 +136,7 @@ const SingUp = () => {
                           },
                         })}
                         type="email"
-                        placeholder="ggu.bbel@free-company.co.jp"
+                        placeholder="yamada@example.com"
                         className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
                       />
                     </div>
@@ -193,16 +147,124 @@ const SingUp = () => {
                     </div>
                   </td>
                 </tr>
+                {/* row 3 */}
+                <tr className="hover">
+                  <td className="flex items-center gap-[17px]">
+                    <label className="block text-gray-700">電話番号</label>
+                  </td>
+                  <td>
+                    <div className="">
+                      <input
+                        {...register("phoneNumber", {
+                          required: "必須入力項目です",
+                          maxLength: {
+                            value: 15,
+                            message: "電話番号は15文字以内で入力してください",
+                          },
+                        })}
+                        type="tel"
+                        placeholder="0666935869"
+                        className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                    <div className="flex justify-between text-xs text-gray-500 mt-1">
+                      {errors.phoneNumber && (
+                        <p className="text-red-500">
+                          {errors.phoneNumber.message}
+                        </p>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+                {/* Agency code - Added based on error */}
+                <tr className="hover">
+                  <td className="flex items-center gap-[17px]">
+                    <label className="block text-gray-700">代理店コード</label>
+                  </td>
+                  <td>
+                    <div className="">
+                      <input
+                        {...register("agencyCode", {
+                          required: "必須入力項目です",
+                        })}
+                        type="text"
+                        placeholder="AG12345"
+                        className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                    <div className="flex justify-between text-xs text-gray-500 mt-1">
+                      {errors.agencyCode && (
+                        <p className="text-red-500">
+                          {errors.agencyCode.message}
+                        </p>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+                {/* row 4 */}
+                <tr className="hover">
+                  <td className="flex items-center gap-[17px]">
+                    <label className="block text-gray-700">会社名</label>
+                  </td>
+                  <td>
+                    <div className="">
+                      <input
+                        {...register("companyName", {
+                          required: "必須入力項目です",
+                        })}
+                        type="text"
+                        placeholder="株式会社フリーカンパニー"
+                        className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                    <div className="flex justify-between text-xs text-gray-500 mt-1">
+                      {errors.companyName && (
+                        <p className="text-red-500">
+                          {errors.companyName.message}
+                        </p>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+                {/* Industry field - Added based on error */}
+                <tr className="hover">
+                  <td className="flex items-center gap-[17px]">
+                    <label className="block text-gray-700">業種</label>
+                  </td>
+                  <td>
+                    <div className="">
+                      <input
+                        {...register("industry", {
+                          required: "必須入力項目です",
+                        })}
+                        type="text"
+                        placeholder="サービス業"
+                        className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                    <div className="flex justify-between text-xs text-gray-500 mt-1">
+                      {errors.industry && (
+                        <p className="text-red-500">
+                          {errors.industry.message}
+                        </p>
+                      )}
+                    </div>
+                  </td>
+                </tr>
                 {/* row 5 */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
-                    <label className="block text-gray-700">郵便番号*</label>
+                    <label className="block text-gray-700">郵便番号</label>
                   </td>
                   <td>
                     <div className="">
                       <input
                         {...register("postCode", {
                           required: "必須入力項目です",
+                          maxLength: {
+                            value: 10,
+                            message: "郵便番号は10文字以内で入力してください",
+                          },
                         })}
                         type="text"
                         placeholder="554-0095"
@@ -221,7 +283,7 @@ const SingUp = () => {
                 {/* row 6 */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
-                    <label className="block text-gray-700">住所*</label>
+                    <label className="block text-gray-700">住所</label>
                   </td>
                   <td>
                     <div className="">
@@ -241,32 +303,7 @@ const SingUp = () => {
                     </div>
                   </td>
                 </tr>
-                {/* row 7 */}
-                <tr className="hover">
-                  <td className="flex items-center gap-[17px]">
-                    <label className="block text-gray-700">業種*</label>
-                  </td>
-                  <td>
-                    <div className="">
-                      <input
-                        {...register("industry", {
-                          required: "必須入力項目です",
-                        })}
-                        type="text"
-                        placeholder="バスケットボールチーム"
-                        className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-                      />
-                    </div>
-                    <div className="flex justify-between text-xs text-gray-500 mt-1">
-                      {errors.industry && (
-                        <p className="text-red-500">
-                          {errors.industry.message}
-                        </p>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-                {/* row 8 */}
+                {/* row 7 - Invoice Number */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
                     <label className="block text-gray-700">
@@ -276,7 +313,9 @@ const SingUp = () => {
                   <td>
                     <div className="">
                       <input
-                        {...register("invoiceNumber")}
+                        {...register("invoiceNumber", {
+                          required: "必須入力項目です", // Changed to required based on error
+                        })}
                         type="text"
                         placeholder="T1234567890123"
                         className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
@@ -291,33 +330,12 @@ const SingUp = () => {
                     </div>
                   </td>
                 </tr>
-                {/* row 9 */}
+                {/* row 8 - Corporate Number */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
-                    <label className="block text-gray-700">代理店コード</label>
-                  </td>
-                  <td>
-                    <div className="">
-                      <input
-                        {...register("agencyCode")}
-                        type="text"
-                        placeholder="1485980（代理店がログインしている場合は自動表示）"
-                        className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-                      />
-                    </div>
-                    <div className="flex justify-between text-xs text-gray-500 mt-1">
-                      {errors.agencyCode && (
-                        <p className="text-red-500">
-                          {errors.agencyCode.message}
-                        </p>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-                {/* Corporate Number Field */}
-                <tr className="hover">
-                  <td className="flex items-center gap-[17px]">
-                    <label className="block text-gray-700">法人番号</label>
+                    <label className="block text-gray-700">
+                      法人番号（任意）
+                    </label>
                   </td>
                   <td>
                     <div className="">
@@ -337,7 +355,7 @@ const SingUp = () => {
                     </div>
                   </td>
                 </tr>
-                {/* row 10 - Bank account information section */}
+                {/* row 9 - Bank account information section */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
                     <label className="block text-gray-700">
@@ -394,7 +412,11 @@ const SingUp = () => {
                             })}
                             className="w-[120px] md:w-[150px] border rounded px-2 md:px-4 py-2 focus:outline-none focus:border-blue-500"
                           >
-                            <option value="futsuu">普通</option>
+                            {accountTypeChoices.map((type) => (
+                              <option key={type.value} value={type.value}>
+                                {type.label}
+                              </option>
+                            ))}
                           </select>
                           <label className="block text-black">種別</label>
                         </div>
@@ -457,7 +479,7 @@ const SingUp = () => {
               <button
                 type="button"
                 onClick={() =>
-                  document.getElementById("my_modal_9").showModal()
+                  document.getElementById("sales_agent_modal").showModal()
                 }
               >
                 <ButtonPrimary
@@ -469,15 +491,15 @@ const SingUp = () => {
           </form>
 
           {/* Modal */}
-          <dialog id="my_modal_9" className="modal w-[400px] mx-auto ">
+          <dialog id="sales_agent_modal" className="modal w-[400px] mx-auto ">
             <div className="modal-box bg-[#F9F9F9] p-0 pt-7">
               <div className="pb-8">
                 <p className="text-center ">
-                  こちらの内容でメンバーを
+                  こちらの内容で営業担当者を
                   <br /> 新規作成しますか？
                 </p>
                 <p className="text-center  mt-7">
-                  入力されたクライアントのメールアドレスに、
+                  入力された営業担当者のメールアドレスに、
                   <br />
                   パスワード設定用のメールが送信されます。
                 </p>
@@ -504,6 +526,7 @@ const SingUp = () => {
       </div>
     </div>
   );
-  };
+};
+
 
 export default SingUp;

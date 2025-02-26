@@ -3,21 +3,25 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import search from "../../../assets/icons/search_3.png";
 import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import UseGetOrganizations from "../../../hooks/Dashboard/UseGetOrganizations";
-const SalesAgent = () => {
-  const { organizations } = UseGetOrganizations();
 
-  console.log(organizations);
+import UseGetSalesAgents from "../../../hooks/Dashboard/UseGetSalesAgents";
+const SalesAgent = () => {
+  
+  const { salesAgents, isLoading, isError, error } = UseGetSalesAgents();
+
+  
+
+  console.log(salesAgents);
   const {
     register,
     formState: { errors },
   } = useForm();
   return (
     <div>
-      <h2 className="font-semibold text-[27px] text-[#73879C]">クライアント</h2>
+      <h2 className="font-semibold text-[27px] text-[#73879C]">営業代理店</h2>
       <div className="bg-white mt-[27px] rounded-xl pb-8 mr-[54px]">
         <h4 className="font-semibold text-[18px] text-[#73879C] pt-[30px] pl-[33px] pb-[21px] ">
-          クライアントリスト
+        営業代理店アカウント新規登録
         </h4>
         <div className="border-b-[3px] mx-5"></div>
 
@@ -83,8 +87,8 @@ const SalesAgent = () => {
                 </tr>
               </thead>
               <tbody>
-                {organizations.length > 0 ? (
-                  organizations.map((store) => (
+                {salesAgents.length > 0 ? (
+                  salesAgents.map((store) => (
                     <tr key={store.uid} className="hover border ">
                       <Link
                         onClick={() =>

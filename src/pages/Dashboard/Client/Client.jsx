@@ -4,9 +4,11 @@ import search from "../../../assets/icons/search_3.png";
 import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import UseGetSalesAgents from "../../../hooks/Dashboard/UseGetSalesAgents";
+import UseGetOrganizations from "../../../hooks/Dashboard/UseGetOrganizations";
 
 const Client = () => {
-  const { salesAgents, isLoading, isError, error } = UseGetSalesAgents();
+  const { organizations, refetch, isLoading, isError, error } =
+    UseGetOrganizations();
 
   const {
     register,
@@ -83,8 +85,8 @@ const Client = () => {
                 </tr>
               </thead>
               <tbody>
-                {salesAgents.length > 0 ? (
-                  salesAgents?.map((store) => (
+                {organizations.length > 0 ? (
+                  organizations?.map((store) => (
                     <tr key={store.uid} className="hover border ">
                       <Link
                         onClick={() =>

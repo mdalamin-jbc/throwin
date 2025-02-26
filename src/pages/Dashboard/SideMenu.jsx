@@ -40,6 +40,13 @@ const SideMenu = () => {
       roles: ["restaurant_owner"],
     },
     {
+      label: "クライアント",
+      icon: <img src={management} alt="" className="mr-4 w-[30px]" />,
+      path: "/dashboard/client",
+      subPaths: ["/creat_new"],
+      roles: ["fc_admin", "glow_admin", "sales_agent"],
+    },
+    {
       label: "営業代理店",
       icon: <img src={management} alt="" className="mr-4 w-[30px]" />,
       path: "/dashboard/sales_agent",
@@ -48,13 +55,6 @@ const SideMenu = () => {
     },
 
     // common account
-    {
-      label: "クライアント",
-      icon: <img src={management} alt="" className="mr-4 w-[30px]" />,
-      path: "/dashboard/client",
-      subPaths: ["/creat_new"],
-      roles: ["fc_admin", "glow_admin", "sales_agent"],
-    },
     {
       label: "コメント",
       icon: <img src={message} alt="" className="mr-4 w-[30px]" />,

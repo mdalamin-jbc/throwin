@@ -13,24 +13,28 @@ const CreateNewSalesAgent = () => {
     handleSubmit,
     formState: { errors, isValid },
   } = useForm({
-    mode: "onChange",
+    mode: "onChange", // Validate on change for better user experience
+    defaultValues: {
+      accountType: "futsuu", // Set default account type
+    },
   });
 
   const onSubmit = async (data) => {
+    // Create API request body with all required fields
     const requestBody = {
-      email: data.email,
-      name: data.name,
-      phone_number: data.phoneNumber,
-      post_code: data.postCode,
       company_name: data.companyName,
-      agency_code: data.agencyCode,
+      address: data.address || "", // Default to empty string if not provided
+      agency_code: data.agencyCode || "", // Default to empty string if not provided
+      post_code: data.postCode,
       industry: data.industry,
-      address: data.address,
-      invoice_number: data.invoiceNumber,
-      corporate_number: data.corporateNumber,
+      invoice_number: data.invoiceNumber || "", // Default to empty string if not provided
+      corporate_number: data.corporateNumber || "", // Default to empty string if not provided
+      owner_name: data.contactName,
+      telephone_number: data.telephoneNumber,
+      email: data.email,
       bank_name: data.bankName,
       branch_name: data.branchName,
-      account_type: data.accountType,
+      account_type: data.accountType || "futsuu",
       account_number: data.accountNumber,
       account_holder_name: data.accountHolderName,
     };
@@ -39,21 +43,21 @@ const CreateNewSalesAgent = () => {
 
     try {
       const response = await axiosPrivate.post(
-        "/admins/sales-agents",
+        "/admins/organizations",
         requestBody
       );
 
       console.log("API Response:", response);
 
       if (response.status === 200 || response.status === 201) {
-        toast.success("新しい営業担当者が作成されました！");
-        navigate("/dashboard/client");
+        toast.success("New client created successfully!");
+        navigate('/dashboard/client')
       } else {
         // Show detailed error if available
         const errorMessage =
           response.data?.detail ||
           response.data?.message ||
-          "Failed to create sales agent.";
+          "Failed to create client.";
         toast.error(errorMessage);
       }
     } catch (error) {
@@ -65,7 +69,7 @@ const CreateNewSalesAgent = () => {
         Object.entries(error.response?.data || {})
           .map(([key, value]) => `${key}: ${value}`)
           .join(", ") ||
-        "エラーが発生しました。もう一度お試しください。";
+        "An error occurred. Please try again.";
       toast.error(errorMessage);
     }
   };
@@ -73,23 +77,16 @@ const CreateNewSalesAgent = () => {
   // Function to handle form submission from modal
   const submitForm = () => {
     handleSubmit(onSubmit)();
-    document.getElementById("sales_agent_modal").close();
+    document.getElementById("my_modal_9").close();
   };
-
-  // Valid account type choices - adjusted based on API error
-  const accountTypeChoices = [
-    { value: "futsuu", label: "普通" },
-    { value: "chochiku", label: "貯蓄" },
-    // "touza" removed as it's not a valid choice according to the error
-  ];
 
   return (
     <div className="">
       <div className="">
-        <h2 className="font-semibold text-[27px] text-[#73879C]">営業担当者</h2>
+        <h2 className="font-semibold text-[27px] text-[#73879C]">クライアント</h2>
         <div className="bg-white mt-[27px] rounded-xl pb-8 mr-[54px] p-10 ">
           <h4 className="font-semibold text-[18px] text-[#73879C] pb-4">
-            営業担当者アカウント新規登録
+          クライアントアカウント新規登録
           </h4>
           <div className="border-b-[3px] mb-5"></div>
 
@@ -100,20 +97,22 @@ const CreateNewSalesAgent = () => {
                 {/* row 1 */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
-                    <label className="block text-gray-700">名前</label>
+                    <label className="block text-gray-700">
+                      企業名（屋号）*
+                    </label>
                   </td>
                   <td>
                     <input
-                      {...register("name", {
+                      {...register("companyName", {
                         required: "必須入力項目です",
                       })}
                       type="text"
-                      placeholder="山田 太郎"
+                      placeholder="居酒屋ABC 梅田店"
                       className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
                     />
-                    {errors.name && (
+                    {errors.companyName && (
                       <p className="text-red-500 text-xs">
-                        {errors.name.message}
+                        {errors.companyName.message}
                       </p>
                     )}
                   </td>
@@ -121,8 +120,58 @@ const CreateNewSalesAgent = () => {
                 {/* row 2 */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
+                    <label className="block text-gray-700">担当者名*</label>
+                  </td>
+                  <td>
+                    <div className="">
+                      <input
+                        {...register("contactName", {
+                          required: "必須入力項目です",
+                        })}
+                        type="text"
+                        placeholder="中嶋　祐介"
+                        className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                    <div className="flex justify-between text-xs text-gray-500 mt-1">
+                      {errors.contactName && (
+                        <p className="text-red-500">
+                          {errors.contactName.message}
+                        </p>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+                {/* row 3 */}
+                <tr className="hover">
+                  <td className="flex items-center gap-[17px]">
+                    <label className="block text-gray-700">電話番号*</label>
+                  </td>
+                  <td>
+                    <div className="">
+                      <input
+                        {...register("telephoneNumber", {
+                          required: "必須入力項目です",
+                        })}
+                        type="tel"
+                        placeholder="0666935869"
+                        className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                    <div className="flex justify-between text-xs text-gray-500 mt-1">
+                      {errors.telephoneNumber && (
+                        <p className="text-red-500">
+                          {errors.telephoneNumber.message}
+                        </p>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+                {/* row 4 */}
+                <tr className="hover">
+                  <td className="flex items-center gap-[17px]">
                     <label className="block text-gray-700">
-                      メールアドレス
+                      メールアドレス*
                     </label>
                   </td>
                   <td>
@@ -136,7 +185,7 @@ const CreateNewSalesAgent = () => {
                           },
                         })}
                         type="email"
-                        placeholder="yamada@example.com"
+                        placeholder="ggu.bbel@free-company.co.jp"
                         className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
                       />
                     </div>
@@ -147,124 +196,16 @@ const CreateNewSalesAgent = () => {
                     </div>
                   </td>
                 </tr>
-                {/* row 3 */}
-                <tr className="hover">
-                  <td className="flex items-center gap-[17px]">
-                    <label className="block text-gray-700">電話番号</label>
-                  </td>
-                  <td>
-                    <div className="">
-                      <input
-                        {...register("phoneNumber", {
-                          required: "必須入力項目です",
-                          maxLength: {
-                            value: 15,
-                            message: "電話番号は15文字以内で入力してください",
-                          },
-                        })}
-                        type="tel"
-                        placeholder="0666935869"
-                        className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-                      />
-                    </div>
-                    <div className="flex justify-between text-xs text-gray-500 mt-1">
-                      {errors.phoneNumber && (
-                        <p className="text-red-500">
-                          {errors.phoneNumber.message}
-                        </p>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-                {/* Agency code - Added based on error */}
-                <tr className="hover">
-                  <td className="flex items-center gap-[17px]">
-                    <label className="block text-gray-700">代理店コード</label>
-                  </td>
-                  <td>
-                    <div className="">
-                      <input
-                        {...register("agencyCode", {
-                          required: "必須入力項目です",
-                        })}
-                        type="text"
-                        placeholder="AG12345"
-                        className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-                      />
-                    </div>
-                    <div className="flex justify-between text-xs text-gray-500 mt-1">
-                      {errors.agencyCode && (
-                        <p className="text-red-500">
-                          {errors.agencyCode.message}
-                        </p>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-                {/* row 4 */}
-                <tr className="hover">
-                  <td className="flex items-center gap-[17px]">
-                    <label className="block text-gray-700">会社名</label>
-                  </td>
-                  <td>
-                    <div className="">
-                      <input
-                        {...register("companyName", {
-                          required: "必須入力項目です",
-                        })}
-                        type="text"
-                        placeholder="株式会社フリーカンパニー"
-                        className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-                      />
-                    </div>
-                    <div className="flex justify-between text-xs text-gray-500 mt-1">
-                      {errors.companyName && (
-                        <p className="text-red-500">
-                          {errors.companyName.message}
-                        </p>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-                {/* Industry field - Added based on error */}
-                <tr className="hover">
-                  <td className="flex items-center gap-[17px]">
-                    <label className="block text-gray-700">業種</label>
-                  </td>
-                  <td>
-                    <div className="">
-                      <input
-                        {...register("industry", {
-                          required: "必須入力項目です",
-                        })}
-                        type="text"
-                        placeholder="サービス業"
-                        className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-                      />
-                    </div>
-                    <div className="flex justify-between text-xs text-gray-500 mt-1">
-                      {errors.industry && (
-                        <p className="text-red-500">
-                          {errors.industry.message}
-                        </p>
-                      )}
-                    </div>
-                  </td>
-                </tr>
                 {/* row 5 */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
-                    <label className="block text-gray-700">郵便番号</label>
+                    <label className="block text-gray-700">郵便番号*</label>
                   </td>
                   <td>
                     <div className="">
                       <input
                         {...register("postCode", {
                           required: "必須入力項目です",
-                          maxLength: {
-                            value: 10,
-                            message: "郵便番号は10文字以内で入力してください",
-                          },
                         })}
                         type="text"
                         placeholder="554-0095"
@@ -283,7 +224,7 @@ const CreateNewSalesAgent = () => {
                 {/* row 6 */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
-                    <label className="block text-gray-700">住所</label>
+                    <label className="block text-gray-700">住所*</label>
                   </td>
                   <td>
                     <div className="">
@@ -303,7 +244,32 @@ const CreateNewSalesAgent = () => {
                     </div>
                   </td>
                 </tr>
-                {/* row 7 - Invoice Number */}
+                {/* row 7 */}
+                <tr className="hover">
+                  <td className="flex items-center gap-[17px]">
+                    <label className="block text-gray-700">業種*</label>
+                  </td>
+                  <td>
+                    <div className="">
+                      <input
+                        {...register("industry", {
+                          required: "必須入力項目です",
+                        })}
+                        type="text"
+                        placeholder="バスケットボールチーム"
+                        className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                    <div className="flex justify-between text-xs text-gray-500 mt-1">
+                      {errors.industry && (
+                        <p className="text-red-500">
+                          {errors.industry.message}
+                        </p>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+                {/* row 8 */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
                     <label className="block text-gray-700">
@@ -313,9 +279,7 @@ const CreateNewSalesAgent = () => {
                   <td>
                     <div className="">
                       <input
-                        {...register("invoiceNumber", {
-                          required: "必須入力項目です", // Changed to required based on error
-                        })}
+                        {...register("invoiceNumber")}
                         type="text"
                         placeholder="T1234567890123"
                         className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
@@ -330,12 +294,33 @@ const CreateNewSalesAgent = () => {
                     </div>
                   </td>
                 </tr>
-                {/* row 8 - Corporate Number */}
+                {/* row 9 */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
-                    <label className="block text-gray-700">
-                      法人番号（任意）
-                    </label>
+                    <label className="block text-gray-700">代理店コード</label>
+                  </td>
+                  <td>
+                    <div className="">
+                      <input
+                        {...register("agencyCode")}
+                        type="text"
+                        placeholder="1485980（代理店がログインしている場合は自動表示）"
+                        className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                    <div className="flex justify-between text-xs text-gray-500 mt-1">
+                      {errors.agencyCode && (
+                        <p className="text-red-500">
+                          {errors.agencyCode.message}
+                        </p>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+                {/* Corporate Number Field */}
+                <tr className="hover">
+                  <td className="flex items-center gap-[17px]">
+                    <label className="block text-gray-700">法人番号</label>
                   </td>
                   <td>
                     <div className="">
@@ -355,7 +340,7 @@ const CreateNewSalesAgent = () => {
                     </div>
                   </td>
                 </tr>
-                {/* row 9 - Bank account information section */}
+                {/* row 10 - Bank account information section */}
                 <tr className="hover">
                   <td className="flex items-center gap-[17px]">
                     <label className="block text-gray-700">
@@ -412,11 +397,7 @@ const CreateNewSalesAgent = () => {
                             })}
                             className="w-[120px] md:w-[150px] border rounded px-2 md:px-4 py-2 focus:outline-none focus:border-blue-500"
                           >
-                            {accountTypeChoices.map((type) => (
-                              <option key={type.value} value={type.value}>
-                                {type.label}
-                              </option>
-                            ))}
+                            <option value="futsuu">普通</option>
                           </select>
                           <label className="block text-black">種別</label>
                         </div>
@@ -479,7 +460,7 @@ const CreateNewSalesAgent = () => {
               <button
                 type="button"
                 onClick={() =>
-                  document.getElementById("sales_agent_modal").showModal()
+                  document.getElementById("my_modal_9").showModal()
                 }
               >
                 <ButtonPrimary
@@ -491,15 +472,15 @@ const CreateNewSalesAgent = () => {
           </form>
 
           {/* Modal */}
-          <dialog id="sales_agent_modal" className="modal w-[400px] mx-auto ">
+          <dialog id="my_modal_9" className="modal w-[400px] mx-auto ">
             <div className="modal-box bg-[#F9F9F9] p-0 pt-7">
               <div className="pb-8">
                 <p className="text-center ">
-                  こちらの内容で営業担当者を
+                  こちらの内容でメンバーを
                   <br /> 新規作成しますか？
                 </p>
                 <p className="text-center  mt-7">
-                  入力された営業担当者のメールアドレスに、
+                  入力されたクライアントのメールアドレスに、
                   <br />
                   パスワード設定用のメールが送信されます。
                 </p>
