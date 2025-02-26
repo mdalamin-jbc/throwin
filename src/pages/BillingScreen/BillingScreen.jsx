@@ -49,25 +49,40 @@ const BillingScreen = () => {
   const [selectedAmount, setSelectedAmount] = useState("0");
   const [message, setMessage] = useState("");
 
-  // Modified Visa payment handler
   const handleVisaPayment = () => {
-    // Close the modal first
-    const modal = document.getElementById("visa_payment_modal");
-    if (modal) {
-      modal.close();
+    try {
+      // Close the modal first
+      const modal = document.getElementById("visa_payment_modal");
+      if (modal) {
+        modal.close();
+      }
+  
+      // Save current staff details to localStorage
+      if (staff_details) {
+        localStorage.setItem("staff_details", JSON.stringify(staff_details));
+      }
+  
+      // Generate a mock payment ID with timestamp
+      const mockPaymentId = `VISA_${Date.now()}`;
+  
+      // Create URL parameters
+      const params = new URLSearchParams({
+        paymentId: mockPaymentId,
+        PayerID: "VISA_DIRECT",
+        amount: selectedAmount,
+        timestamp: Date.now(),
+        payment_method: "visa" // Add payment method indicator
+      });
+  
+      // Navigate using window.location.replace for a clean state reset
+      window.location.replace(`/store/${store_code}/staff/${username}/chargeCompleted?${params.toString()}`);
+    } catch (error) {
+      console.error("Navigation error:", error);
+      toast.error("エラーが発生しました。もう一度お試しください。", {
+        position: "top-center",
+        duration: 3000,
+      });
     }
-
-    // Generate a mock payment ID
-    const mockPaymentId = `VISA_${Date.now()}`;
-
-    // Store payment ID in URL params like PayPal does
-    const params = new URLSearchParams();
-    params.append("paymentId", mockPaymentId);
-    params.append("PayerID", "VISA_DIRECT");
-
-    // Navigate to success page with params
-    //navigate(`/staff/${staff?.username}/chargeCompleted?${params.toString()}`);
-    navigate(`/store/${store_code}/staff/${username}/chargeCompleted?${params.toString()}`);
   };
 
   const handleHeartToggle = async () => {

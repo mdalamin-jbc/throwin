@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { Helmet } from "react-helmet";
-import { useSearchParams, Link, useParams } from "react-router-dom";
+import { useSearchParams, Link, useLocation, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import TitleBar from "../../components/TitleBar";
 import ButtonPrimary from "../../components/ButtonPrimary";
@@ -9,9 +9,9 @@ import useAxiosPrivate from "../../hooks/axiousPrivate";
 import toast from "react-hot-toast";
 import Confetti from "react-confetti";
 import useWindowSize from "react-use/lib/useWindowSize";
-import UseGetUserDetails from "../../hooks/Staff/UseGetUserDetails";
+import confetti from "canvas-confetti";
 
-// Animation configurations remain unchanged
+// Animation configurations
 const pageTransition = {
   hidden: { opacity: 0 },
   visible: {
@@ -23,26 +23,65 @@ const pageTransition = {
       delayChildren: 0.3,
     },
   },
-  exit: { opacity: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
+  exit: {
+    opacity: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
 };
 
 const fadeInUp = {
-  hidden: { opacity: 0, y: 20, scale: 0.98 },
+  hidden: {
+    opacity: 0,
+    y: 20,
+    scale: 0.98,
+  },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] },
+    transition: {
+      duration: 1.2,
+      ease: [0.16, 1, 0.3, 1],
+    },
   },
 };
 
 const imageScale = {
-  hidden: { scale: 0.9, opacity: 0, rotateZ: -2 },
+  hidden: {
+    scale: 0.9,
+    opacity: 0,
+    rotateZ: -2,
+  },
   visible: {
     scale: 1,
     opacity: 1,
     rotateZ: 0,
-    transition: { duration: 1.4, ease: [0.34, 1.56, 0.64, 1] },
+    transition: {
+      duration: 1.4,
+      ease: [0.34, 1.56, 0.64, 1],
+    },
+  },
+};
+
+const pulseAnimation = {
+  scale: [1, 1.02, 1],
+  opacity: [0.5, 0.6, 0.5],
+  transition: {
+    duration: 4,
+    repeat: Infinity,
+    ease: "easeInOut",
+  },
+};
+
+const gradientRotation = {
+  rotate: [0, 360],
+  transition: {
+    duration: 12,
+    repeat: Infinity,
+    ease: "linear",
   },
 };
 
@@ -50,14 +89,37 @@ const ChargeCompleted = () => {
   const [searchParams] = useSearchParams();
   const axiosPrivate = useAxiosPrivate();
   const [paymentStatus, setPaymentStatus] = useState(null);
+  const [showConfetti, setShowConfetti] = useState(false);
   const validatedRef = useRef(false);
   const { width, height } = useWindowSize();
 
-  const { store_codes, username } = useParams();
-  const { staff_details } = UseGetUserDetails(username, store_codes);
-  console.log(store_codes, username, "charge complete");
+  const staff_details = JSON.parse(localStorage.getItem("staff_details"));
 
-  console.log("Staff Details:", staff_details); // Debugging output
+  const fireConfetti = () => {
+    const count = 200;
+    const defaults = {
+      origin: { y: 0.7 },
+      colors: ["#65D0F2", "#2399F4", "#ffffff", "#91E3FF"],
+      spread: 70,
+      ticks: 200,
+      gravity: 0.8,
+      scalar: 0.8,
+    };
+
+    function fire(particleRatio, opts) {
+      confetti({
+        ...defaults,
+        ...opts,
+        particleCount: Math.floor(count * particleRatio),
+      });
+    }
+
+    fire(0.25, { spread: 26, startVelocity: 45 });
+    fire(0.2, { spread: 50, startVelocity: 40 });
+    fire(0.35, { spread: 80, decay: 0.92, scalar: 0.8 });
+    fire(0.1, { spread: 100, startVelocity: 25, decay: 0.92 });
+    fire(0.1, { spread: 100, startVelocity: 35 });
+  };
 
   const validatePayment = useCallback(async () => {
     if (validatedRef.current) return;
@@ -76,8 +138,11 @@ const ChargeCompleted = () => {
     }
 
     try {
+      // Check if it's a Visa payment
       if (paymentId.startsWith("VISA_")) {
         setPaymentStatus("success");
+        setShowConfetti(true);
+        setTimeout(fireConfetti, 800);
         toast.success(`取引ID: ${paymentId}`, {
           position: "top-center",
           duration: 4000,
@@ -85,15 +150,16 @@ const ChargeCompleted = () => {
         return;
       }
 
+      // Regular PayPal payment validation
       const response = await axiosPrivate.get(
         "/payment_service/paypal-success/",
-        {
-          params: { paymentId, PayerID: payerId },
-        }
+        { params: { paymentId, PayerID: payerId } }
       );
 
       if (response.status === 200) {
         setPaymentStatus("success");
+        setShowConfetti(true);
+        setTimeout(fireConfetti, 800);
         toast.success(`取引ID: ${paymentId}`, {
           position: "top-center",
           duration: 4000,
@@ -105,10 +171,7 @@ const ChargeCompleted = () => {
         error.response?.data?.detail ||
           error.message ||
           "支払いの検証に失敗しました！",
-        {
-          position: "top-center",
-          duration: 4000,
-        }
+        { position: "top-center", duration: 4000 }
       );
     }
   }, [searchParams, axiosPrivate]);
@@ -145,45 +208,46 @@ const ChargeCompleted = () => {
               />
             }
           />
-          <Confetti
-            width={width}
-            height={height}
-            recycle={false}
-            numberOfPieces={200}
-            gravity={0.12}
-            colors={["#65D0F2", "#2399F4", "#ffffff", "#91E3FF"]}
-          />
+          {showConfetti && (
+            <Confetti
+              width={width}
+              height={height}
+              recycle={false}
+              numberOfPieces={200}
+              gravity={0.12}
+              colors={["#65D0F2", "#2399F4", "#ffffff", "#91E3FF"]}
+            />
+          )}
         </header>
 
         <main className="min-w-[375px] mx-auto text-[#44495B] mt-11 px-4">
           <motion.div variants={pageTransition} className="text-center">
             <motion.h3 variants={fadeInUp} className="font-bold text-2xl">
-              {staff_details?.name || "ゲスト"}
+              {staff_details?.name}
             </motion.h3>
 
             <motion.div
               variants={fadeInUp}
               className="relative w-40 h-40 mx-auto mt-8"
             >
-              <motion.div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#65D0F2] to-[#2399F4] blur-xl" />
-              <motion.div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#65D0F2] to-[#2399F4] opacity-30 blur-lg" />
-
-              {staff_details ? (
-                <motion.img
-                  variants={imageScale}
-                  className="rounded-full w-40 h-40 relative z-10 object-cover border-4 border-white shadow-xl"
-                  src={
-                    staff_details.image?.medium ||
-                    "https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
-                  }
-                  alt={`${staff_details?.name || "User"}'s profile`}
-                  loading="eager"
-                />
-              ) : (
-                <p className="text-gray-500 text-center">
-                  No staff details available
-                </p>
-              )}
+              <motion.div
+                className="absolute inset-0 rounded-full bg-gradient-to-r from-[#65D0F2] to-[#2399F4] blur-xl"
+                animate={pulseAnimation}
+              />
+              <motion.div
+                className="absolute inset-0 rounded-full bg-gradient-to-r from-[#65D0F2] to-[#2399F4] opacity-30 blur-lg"
+                animate={gradientRotation}
+              />
+              <motion.img
+                variants={imageScale}
+                className="rounded-full w-40 h-40 relative z-10 object-cover border-4 border-white shadow-xl"
+                src={
+                  staff_details?.image?.medium ||
+                  "https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
+                }
+                alt={`${staff_details?.name}'s profile`}
+                loading="eager"
+              />
             </motion.div>
 
             <motion.h3
