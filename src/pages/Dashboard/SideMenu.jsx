@@ -1,5 +1,5 @@
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import logo from "../../assets/images/socialLogin/logo2.png";
 import management from "../../assets/icons/management.png";
 import ep_seeting from "../../assets/icons/ep_setting.png";
@@ -16,6 +16,9 @@ const SideMenu = () => {
   const navigate = useNavigate();
   const { userDetails, isLoading } = UseUserDetails();
   const userRole = localStorage.getItem("userRole");
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  console.log(userDetails);
 
   // Helper function to check if a path is active
   const isPathActive = (path, subPaths = []) => {
@@ -113,6 +116,63 @@ const SideMenu = () => {
     });
   };
 
+  // Handle logout
+  const handleLogout = async () => {
+    try {
+      setIsLoggingOut(true);
+
+      // Get the refresh token - you might store this in localStorage or elsewhere
+      const refreshToken = localStorage.getItem("refreshToken") || "string";
+
+      // Get the access token
+      const accessToken = localStorage.getItem("accessToken");
+
+      if (!accessToken) {
+        // If no access token, just redirect to login
+        localStorage.clear();
+        navigate("/admin/login");
+        return;
+      }
+
+      // Call the logout API
+      const response = await fetch(
+        "https://api-dev.throwin-glow.com/auth/logout",
+        {
+          method: "POST",
+          headers: {
+            accept: "*/*",
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+            "X-CSRFTOKEN":
+              document
+                .querySelector('meta[name="csrf-token"]')
+                ?.getAttribute("content") || "",
+          },
+          body: JSON.stringify({
+            refresh: refreshToken,
+          }),
+        }
+      );
+
+      // Clear all local storage items related to authentication
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("userRole");
+      localStorage.removeItem("userId");
+      // Add any other auth-related items you might have stored
+
+      // Redirect to login page
+      navigate("/admin/login");
+    } catch (error) {
+      console.error("Logout failed:", error);
+      // Even if the API call fails, clear local storage and redirect
+      localStorage.clear();
+      navigate("/admin/login");
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
+
   // Only redirect to sales_management on initial load or direct dashboard access
   useEffect(() => {
     // Only redirect if we're at the root dashboard path
@@ -134,7 +194,7 @@ const SideMenu = () => {
           </div>
 
           <h4 className="text-sm font-semibold pl-6 mb-6">
-            チーム名（企業名）が入ります
+            {userDetails?.name}
           </h4>
 
           <ul className="flex-1 list-none p-0 m-0 bg-white">
@@ -159,12 +219,15 @@ const SideMenu = () => {
           </ul>
         </div>
 
-        <Link
-          to={"/admin/login"}
-          className="text-center py-3 cursor-pointer bg-[#49BBDF] hover:bg-[#3aa0bf] mt-auto"
+        <button
+          onClick={handleLogout}
+          disabled={isLoggingOut}
+          className="text-center py-3 cursor-pointer bg-[#49BBDF] hover:bg-[#3aa0bf] mt-auto w-full"
         >
-          <span className="text-white text-lg font-semibold">ログアウト</span>
-        </Link>
+          <span className="text-white text-lg font-semibold">
+            {isLoggingOut ? "ログアウト中..." : "ログアウト"}
+          </span>
+        </button>
       </div>
     </div>
   );
