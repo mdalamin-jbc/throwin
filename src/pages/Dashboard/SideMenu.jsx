@@ -1,5 +1,5 @@
-import { FaSignOutAlt } from "react-icons/fa";
-import { NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import logo from "../../assets/images/socialLogin/logo2.png";
 import management from "../../assets/icons/management.png";
 import ep_seeting from "../../assets/icons/ep_setting.png";
@@ -9,11 +9,21 @@ import qr from "../../assets/icons/qr.png";
 import history from "../../assets/icons/historyn.png";
 import gacha from "../../assets/icons/gachan.png";
 import payment from "../../assets/icons/payment_management.png";
+import UseUserDetails from "../../hooks/UseUserDetails";
 
 const SideMenu = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { userDetails, isLoading } = UseUserDetails();
   const userRole = localStorage.getItem("userRole");
-  console.log(userRole);
+
+  // Helper function to check if a path is active
+  const isPathActive = (path, subPaths = []) => {
+    if (location.pathname === path) return true;
+    return subPaths.some((subPath) =>
+      location.pathname.startsWith(path + subPath)
+    );
+  };
 
   const allMenuItems = [
     {
@@ -26,14 +36,25 @@ const SideMenu = () => {
       label: "アカウント",
       icon: <img src={management} alt="" className="mr-4 w-[30px]" />,
       path: "/dashboard/account",
-      roles: ["restaurant_owner", "sales_agent", "fc_admin", "glow_admin"],
+      subPaths: ["/creat_new"],
+      roles: ["restaurant_owner"],
     },
     {
       label: "クライアント",
       icon: <img src={management} alt="" className="mr-4 w-[30px]" />,
       path: "/dashboard/client",
-      roles: ["fc_admin", "glow_admin"],
+      subPaths: ["/creat_new"],
+      roles: ["fc_admin", "glow_admin", "sales_agent"],
     },
+    {
+      label: "営業代理店",
+      icon: <img src={management} alt="" className="mr-4 w-[30px]" />,
+      path: "/dashboard/sales_agent",
+      subPaths: ["/sales_agent"],
+      roles: ["glow_admin", "fc_admin"],
+    },
+
+    // common account
     {
       label: "コメント",
       icon: <img src={message} alt="" className="mr-4 w-[30px]" />,
@@ -74,48 +95,76 @@ const SideMenu = () => {
 
   // Filter menu items based on role
   const menuItems = allMenuItems.filter((item) =>
-    item.roles.includes(
-      "restaurant_owner",
-      "sales_agent",
-      "fc_admin",
-      "glow_admin"
-    )
+    item.roles.includes(userRole)
   );
 
+  // Check if current path is valid
+  const isValidPath = (currentPath) => {
+    // First check if the exact path exists
+    const exactPathExists = menuItems.some((item) => item.path === currentPath);
+    if (exactPathExists) return true;
+
+    // Then check for subpaths
+    return menuItems.some((item) => {
+      if (!item.subPaths) return false;
+      return item.subPaths.some(
+        (subPath) => currentPath === item.path + subPath
+      );
+    });
+  };
+
+  // Only redirect to sales_management on initial load or direct dashboard access
+  useEffect(() => {
+    // Only redirect if we're at the root dashboard path
+    if (location.pathname === "/dashboard") {
+      navigate("/dashboard/sales_management");
+    }
+  }, []);
+
   return (
-    <div className="w-[300px] h-[900px] shadow-lg flex flex-col justify-between bg-white">
-      {/* Logo Section */}
-      <div className="mt-6 ml-9 border-gray-300 text-center ">
-        <img src={logo} alt="Logo" className="w-[221px] mb-[61px]" />
-      </div>
+    <div className="fixed top-0 left-0 h-screen w-[300px]">
+      <div className="shadow-lg flex flex-col justify-between bg-white h-full">
+        <div>
+          <div className="mt-6 ml-9 border-gray-300 text-center">
+            <img
+              src={logo}
+              alt="Logo"
+              className="w-[50%] lg:w-[221px] mb-[30px] lg:mb-[61px]"
+            />
+          </div>
 
-      <h4 className="text-sm font-semibold pl-6 mb-6">
-        チーム名（企業名）が入ります
-      </h4>
+          <h4 className="text-sm font-semibold pl-6 mb-6">
+            チーム名（企業名）が入ります
+          </h4>
 
-      {/* Menu Items */}
-      <ul className="flex-1 list-none p-0 m-0">
-        {menuItems.map((item) => (
-          <li key={item.path}>
-            <NavLink
-              to={item.path}
-              className={`flex items-center px-10 py-4 border-t border-b hover:bg-[#edf9fc] cursor-pointer ${
-                location.pathname === item.path
-                  ? "bg-[#edf9fc] font-semibold"
-                  : ""
-              }`}
-            >
-              <span className="text-blue-500">{item.icon}</span>
-              <span className="text-[#434343] text-base ">{item.label}</span>
-            </NavLink>
-          </li>
-        ))}
-      </ul>
+          <ul className="flex-1 list-none p-0 m-0 bg-white">
+            {menuItems.map((item) => (
+              <li key={item.path}>
+                <NavLink
+                  to={item.path}
+                  className={({ isActive }) => `
+                    flex items-center px-6 py-2 lg:px-10 lg:py-4 border-t border-b hover:bg-[#edf9fc] cursor-pointer
+                    ${
+                      isPathActive(item.path, item.subPaths || [])
+                        ? "bg-[#edf9fc] font-semibold"
+                        : ""
+                    }
+                  `}
+                >
+                  <span className="text-blue-500">{item.icon}</span>
+                  <span className="text-[#434343] text-base">{item.label}</span>
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        </div>
 
-      {/* Logout */}
-      <div className="text-center py-3  cursor-pointer bg-[#49BBDF]">
-        {/* <FaSignOutAlt className="text-blue-500 text-xl mr-4" /> */}
-        <span className="text-white text-lg font-semibold">ログアウト</span>
+        <Link
+          to={"/admin/login"}
+          className="text-center py-3 cursor-pointer bg-[#49BBDF] hover:bg-[#3aa0bf] mt-auto"
+        >
+          <span className="text-white text-lg font-semibold">ログアウト</span>
+        </Link>
       </div>
     </div>
   );

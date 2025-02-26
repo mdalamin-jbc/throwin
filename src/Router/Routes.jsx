@@ -54,6 +54,15 @@ import DeHistory from "../pages/Dashboard/DeHistory/DeHistory";
 import CreateANewTeam from "../pages/Dashboard/CreatANewTeam/CreatANewTeam";
 import DeGacha from "../pages/Dashboard/DeGacha/DeGacha";
 import PaymentManagement from "../pages/Dashboard/PaymentManagement/PaymentManagement";
+import ActiveAdminMail from "../pages/Dashboard/ActiveAdminMail/ActiveAdminMail";
+import ActivateNewAccount from "../pages/Dashboard/ActivateNewAccount/ActivateNewAccount";
+import CreateANewAccount from "../pages/Dashboard/Account/CreatANewAccount";
+import ResturentStore from "../pages/Dashboard/ResturentStore/ResturentStore";
+import MemberAccount from "../pages/Dashboard/MemberAccount/MemberAccount";
+import MemberReg from "../pages/Dashboard/MemberAccount/MemberReg";
+import SingUp from "../pages/Dashboard/SalesAgent/SingUp";
+import DaNameChange from "../pages/Dashboard/Seetings/DaNameChange";
+import AdminEmailChange from "../pages/Dashboard/Seetings/AdminEmailChange";
 
 export const Routes = createBrowserRouter([
   {
@@ -245,8 +254,16 @@ export const Routes = createBrowserRouter([
 
       // -------------------------------------dashboard
       {
-        path: "admin_login",
+        path: "admin/login",
         element: <AdminLogin />,
+      },
+      {
+        path: "admins/activate/:uid/:token",
+        element: <ActiveAdminMail />,
+      },
+      {
+        path: "admins/activate/new/account/:uid/:token",
+        element: <ActivateNewAccount />,
       },
       {
         path: "/dashboard",
@@ -261,6 +278,23 @@ export const Routes = createBrowserRouter([
             element: <Account />,
           },
           {
+            path: "account/creat_newStore",
+            element: <CreateANewAccount />,
+          },
+          {
+            path: "/dashboard/account/:store_code",
+            element: <ResturentStore />,
+          },
+          {
+            path: "m_account",
+            element: <MemberAccount />,
+          },
+          {
+            path: "/dashboard/account/:id/creat_newStaff",
+            element: <MemberReg />,
+          },
+          // fc/glow admin
+          {
             path: "client",
             element: <Client />,
           },
@@ -271,6 +305,10 @@ export const Routes = createBrowserRouter([
           {
             path: "sales_agent",
             element: <SalesAgent />,
+          },
+          {
+            path: "sales_agent/sign_up",
+            element: <SingUp />,
           },
           {
             path: "comments",
@@ -304,6 +342,14 @@ export const Routes = createBrowserRouter([
           {
             path: "settings",
             element: <DeSeetings />,
+          },
+          {
+            path: "/dashboard/settings/name/change",
+            element: <DaNameChange />,
+          },
+          {
+            path: "/dashboard/settings/email/change",
+            element: <AdminEmailChange />,
           },
         ],
       },

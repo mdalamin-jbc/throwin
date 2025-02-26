@@ -4,7 +4,7 @@ const DaComments = () => {
   return (
     <div>
       <h2 className="font-semibold text-[27px] text-[#73879C]">コメント</h2>
-      <div className="bg-white mt-[27px] rounded-lg pb-8 mr-[54px] ">
+      <div className="bg-white mt-[27px] rounded-lg pb-8  ">
         <div className="flex pt-10">
           <div>
             <div className="flex border-r bg-[#F8F9FB]  py-4">

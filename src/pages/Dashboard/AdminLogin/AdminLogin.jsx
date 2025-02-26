@@ -4,10 +4,13 @@ import { toast } from "react-hot-toast";
 import logo from "../../../assets/images/socialLogin/logo2.png";
 import ButtonPrimary from "../../../components/ButtonPrimary";
 import useAxiosPublic from "../../../hooks/axiosPublic";
+import { useContext } from "react";
+import AuthContext from "../../../contexts/AuthContext";
 
 const AdminLogin = () => {
   const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   const {
     register,
@@ -22,18 +25,20 @@ const AdminLogin = () => {
         password: data.password,
       });
 
-      console.log("Response:", response); // Debugging
+      console.log("Response:", response);
 
       if (response.status === 200) {
         const result = response.data;
+        login(response.data.data);
 
         // Extract user role and tokens
         const userRole = result.data?.role;
         localStorage.setItem("userRole", userRole);
-        localStorage.setItem("accessToken", result.data?.access);
-        localStorage.setItem("refreshToken", result.data?.refresh);
+        // localStorage.setItem("accessToken", result.data?.access);
+        // localStorage.setItem("refreshToken", result.data?.refresh);
+        console.log(result);
 
-        toast.success(`ようこそ, ${userRole}`, {
+        toast.success(`ようこそ, ${result.data?.role}`, {
           position: "top-center",
           duration: 3000,
         });

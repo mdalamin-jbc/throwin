@@ -3,8 +3,13 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import search from "../../../assets/icons/search_3.png";
 import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import UseGetSalesAgents from "../../../hooks/Dashboard/UseGetSalesAgents";
+import UseGetOrganizations from "../../../hooks/Dashboard/UseGetOrganizations";
 
 const Client = () => {
+  const { organizations, refetch, isLoading, isError, error } =
+    UseGetOrganizations();
+
   const {
     register,
     formState: { errors },
@@ -20,7 +25,10 @@ const Client = () => {
 
         <div className="mx-[33px]">
           <div className="mt-[22px]  flex justify-between ">
-            <Link to="creat_new" className="bg-[#49BBDF] text-white py-[6px] px-[36px] rounded flex items-center gap-3">
+            <Link
+              to="creat_new"
+              className="bg-[#49BBDF] text-white py-[6px] px-[36px] rounded flex items-center gap-3"
+            >
               <p>新規登録</p> <FaPlus />
             </Link>
             <div className="relative flex flex-col justify-center mr-[100px]">
@@ -55,29 +63,56 @@ const Client = () => {
           </div>
 
           <div className="overflow-x-auto mt-6">
-            <table className="table ">
-              {/* head */}
-              <thead className=" bg-[#EEE] text-[#434343] ">
+            <table className="table">
+              <thead className="bg-[#EEEEEE] text-[#434343] font-semibold">
                 <tr>
                   <th>
-                    <button className="flex items-center ">
+                    <button className="flex items-center">
                       クライアント名 <MdKeyboardArrowDown />
                     </button>
                   </th>
-
+                  <th>
+                    <button className="flex items-center">
+                      ステータス <MdKeyboardArrowDown />
+                    </button>
+                  </th>
+                  <th>
+                    <button className="flex items-center">
+                      クライアントコード <MdKeyboardArrowDown />
+                    </button>
+                  </th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
-                {/* row 1 */}
-                {/* <tr className="hover border">
-                  <td className="flex items-center gap-[17px]">
-                    <img src={img} alt="" className="w-[29px] rounded-full" />
-                    <p>かりん</p>
-                  </td>
-                  <td>公開</td>
-                  
-                </tr> */}
+                {organizations.length > 0 ? (
+                  organizations?.map((store) => (
+                    <tr key={store.uid} className="hover border ">
+                      <Link
+                        onClick={() =>
+                          localStorage.setItem("store", JSON.stringify(store))
+                        }
+                        to={`${store.code}`}
+                      >
+                        <td className="flex items-center gap-[17px] ">
+                          <p>{store.name}</p>
+                        </td>
+                      </Link>
+                      <td>{store.code}</td>
+                      <td>
+                        <button className="bg-[#ABABAB] rounded-full px-3 py-1 text-white">
+                          {store.exposure}
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="3" className="text-center text-[#B5B5B5] py-4">
+                      現在登録されている店舗（チーム）はありません
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
