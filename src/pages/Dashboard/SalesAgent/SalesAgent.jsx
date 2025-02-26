@@ -80,7 +80,7 @@ const SalesAgent = () => {
                   </th>
                   <th>
                     <button className="flex items-center">
-                      クライアントコード <MdKeyboardArrowDown />
+                    代理店コード <MdKeyboardArrowDown />
                     </button>
                   </th>
                   <th></th>
@@ -103,7 +103,7 @@ const SalesAgent = () => {
                       <td>{store.code}</td>
                       <td>
                         <button className="bg-[#ABABAB] rounded-full px-3 py-1 text-white">
-                          {store.exposure}
+                          {store.agency_code}
                         </button>
                       </td>
                     </tr>
