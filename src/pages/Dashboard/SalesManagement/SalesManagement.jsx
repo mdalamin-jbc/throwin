@@ -318,7 +318,7 @@ const SalesManagement = () => {
   return (
     <div>
       <h2 className="font-semibold text-[27px] text-[#73879C]">売上管理</h2>
-      <div className="bg-white mt-[27px] rounded-xl pb-8 mr-[54px]">
+      <div className="bg-white mt-[27px] rounded-xl pb-8 ">
         <div className="flex">
           {availableTabs.map((tab) => (
             <h4
