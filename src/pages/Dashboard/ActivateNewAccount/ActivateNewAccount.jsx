@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import useAxiosPrivate from "../../../hooks/axiousPrivate";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -42,17 +41,19 @@ const ActivateNewAccount = () => {
           token: token,
           password: formData.password,
           confirm_password: formData.confirm_password,
-        } // Send this directly as an object, not stringified
+        }
       );
 
-      if (!response.ok) {
-        throw new Error(response.data.message || "Failed to activate account");
+      // Check for success status directly, not response.ok
+      if (response.status === 200) {
+        setMessage("Account activated successfully! You can now log in.");
+        navigate("/admin/login");
+      } else {
+        throw new Error(response.data?.message || "Failed to activate account");
       }
-      navigate("/admin/login");
-      setMessage("Account activated successfully! You can now log in.");
     } catch (err) {
       setError(
-        err.message || "An error occurred while activating your account"
+        err.response?.data?.detail || err.message || "An error occurred while activating your account"
       );
     } finally {
       setLoading(false);
