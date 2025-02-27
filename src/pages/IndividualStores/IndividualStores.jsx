@@ -3,6 +3,7 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import useGetStuffsByStoreCode from "../../hooks/UseGetStuffsByStoreCode";
 import { Circles } from "react-loader-spinner";
 import UseGetStoreDetailsByStoreCode from "../../hooks/UseGetStoreDetailsByStoreCode";
+import banner from "../../assets/images/store&staff/store_banner.png";
 
 const IndividualStores = () => {
   const location = useLocation();
@@ -37,10 +38,7 @@ const IndividualStores = () => {
         {/* Store Image with Gradient Overlay and Store Name */}
         <div className="relative">
           <img
-            src={
-              storeDetails?.banner?.large ||
-              "https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
-            }
+            src={storeDetails?.banner?.large || { banner }}
             alt={storeDetails?.name || "Store Image"}
             className="w-full"
           />
