@@ -139,7 +139,7 @@ const Search = () => {
       setErrorMessage("");
       // Store data in localStorage
       localStorage.setItem("storeData", JSON.stringify(response.data));
-      navigate(`/store`, { state: { storeData: response.data } });
+      navigate(`/store/${searchValue}`, { state: { storeData: response.data } });
     } catch (error) {
       setErrorMessage("店舗が見つからないか、エラーが発生しました。");
       console.error("Error fetching store:", error);

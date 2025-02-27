@@ -10,24 +10,33 @@ const QrCreation = () => {
   const { storeList } = UseGetRestaurantOwnerStoreList();
   const [store_code, setStore_code] = useState("");
   const [member_username, setMemberUsername] = useState("");
-  const [qrLink, setQrLink] = useState(
-    "https://alpha.throwin-glow.com/store/31316765/staff/mHAcohV2nb"
-  );
+  const [qrLink, setQrLink] = useState("https://alpha.throwin-glow.com");
 
   const { restaurantStaffListByStoreCode = [], refetch } =
     UseGetStaffByStoreCode(store_code);
-  console.log(restaurantStaffListByStoreCode);
 
+  // Update QR link when store_code or member_username changes
+  useEffect(() => {
+    if (store_code && member_username) {
+      // If both store and member are selected
+      setQrLink(`https://alpha.throwin-glow.com/store/${store_code}/staff/${member_username}`);
+    } else if (store_code) {
+      // If only store is selected
+      setQrLink(`https://alpha.throwin-glow.com/store/${store_code}`);
+    } else {
+      // Default link if nothing is selected
+      setQrLink("https://alpha.throwin-glow.com");
+    }
+  }, [store_code, member_username]);
+
+  // Fetch staff list when store code changes
   useEffect(() => {
     if (store_code) {
       refetch();
-      setQrLink(
-        `https://alpha.throwin-glow.com/store/${store_code}/staff/${
-          member_username || "mHAcohV2nb"
-        }`
-      );
+      // Reset member username when store changes
+      setMemberUsername("");
     }
-  }, [store_code, member_username, refetch]);
+  }, [store_code, refetch]);
 
   const handleStoreCode = (event) => {
     const selectedStore = storeList.find(
@@ -35,6 +44,9 @@ const QrCreation = () => {
     );
     if (selectedStore) {
       setStore_code(selectedStore.code);
+    } else {
+      // Clear store code if "選択してください" is selected
+      setStore_code("");
     }
   };
 
@@ -53,7 +65,7 @@ const QrCreation = () => {
   const member = watch("member");
 
   const onSubmit = (data) => {
-    console.log("Selected Store:", data.team);
+    console.log("Form submitted with data:", data);
   };
 
   return (
@@ -97,9 +109,10 @@ const QrCreation = () => {
               <div className="relative">
                 <select
                   {...register("member", {
-                    required: "メンバーの選択は必須です",
+                    required: store_code ? "メンバーの選択は必須です" : false,
                   })}
                   onChange={handleMemberChange}
+                  disabled={!store_code}
                   className="w-full mt-[9px] rounded py-[6px] pl-10 pr-12 border border-[#D9D9D9]"
                 >
                   <option value="">選択してください</option>
@@ -164,11 +177,10 @@ const QrCreation = () => {
           </div>
           <div className="mt-8 flex justify-center">
             <button onClick={() => console.log("Downloading...")}>
-              {" "}
               <ButtonPrimary
                 btnText="ダウンロードする"
                 style="bg-[#49BBDF] text-white rounded-full "
-              />{" "}
+              />
             </button>
           </div>
         </div>

@@ -179,7 +179,7 @@ export const Routes = createBrowserRouter([
         element: <MemberList />,
       },
       {
-        path: "/store",
+        path: "/store/:store_code",
         element: <IndividualStores />,
       },
       // staff details page
