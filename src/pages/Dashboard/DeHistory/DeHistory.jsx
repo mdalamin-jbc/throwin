@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 const DeHistory = () => {
   const { PaymentHistoryResturentWoner, refetch, isLoading, isError, error } =
     UseGetPaymentHistoryResturentWoner();
-  console.log(PaymentHistoryResturentWoner);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);

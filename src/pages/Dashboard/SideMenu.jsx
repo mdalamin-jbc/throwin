@@ -18,7 +18,7 @@ const SideMenu = () => {
   const userRole = localStorage.getItem("userRole");
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  console.log(userDetails);
+
 
   // Helper function to check if a path is active
   const isPathActive = (path, subPaths = []) => {
