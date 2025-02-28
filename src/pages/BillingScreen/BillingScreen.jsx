@@ -171,7 +171,6 @@ const BillingScreen = () => {
       store_uid: staff?.store_uid,
       message: message,
       amount: persAmount,
-      // amount: 1000,
       currency: "JPY",
       payment_method: "paypal",
       return_url: `https://alpha.throwin-glow.com/store/${staff.store_codes}/staff/${staff.username}/chargeCompleted`,
@@ -185,7 +184,7 @@ const BillingScreen = () => {
     staff?.store_uid,
     staff?.username,
     message,
-    staff.store_codes
+    staff.store_codes,
   ]);
 
   // paypal payment
@@ -294,9 +293,13 @@ const BillingScreen = () => {
   };
 
   // Handle credit card payment
+
   const handleCreditCardPayment = async (data) => {
     try {
       setIsProcessing(true);
+
+      // Show a loading toast while processing the payment
+      const loadingToast = toast.loading("Processing payment...");
 
       // Process card data first if we don't already have a token
       let paymentToken = token;
@@ -304,7 +307,8 @@ const BillingScreen = () => {
         try {
           paymentToken = await processCardData(data);
         } catch (error) {
-          setCardError(error.message);
+          toast.dismiss(loadingToast);
+          toast.error(error.message);
           setIsProcessing(false);
           return;
         }
@@ -320,18 +324,6 @@ const BillingScreen = () => {
         token: paymentToken,
       };
 
-      // If Multipayment isn't available and we're using the direct API approach,
-      // we may need to include additional fields that your backend expects
-      if (!window.Multipayment) {
-        // This approach depends on your server implementation
-        // Your server might expect card details in a specific format
-        console.log("Using direct API payment approach");
-
-        // You might need to include additional data for server-side processing
-        // IMPORTANT: In production, you should use a proper secure tokenization solution
-        // This is just a placeholder for development purposes
-      }
-
       console.log("Sending Credit Card Payment Data:", creditCardPaymentData);
 
       // Call credit card payment API
@@ -341,18 +333,17 @@ const BillingScreen = () => {
       );
 
       console.log("Credit Card Payment Response:", response);
+      toast.dismiss(loadingToast);
 
       if (response.status === 200 || response.status === 201) {
         // Payment successful
-        Swal.fire({
-          icon: "success",
-          title: "支払い成功!",
-          text: "クレジットカード決済が完了しました。",
-          confirmButtonText: "はい",
-        }).then(() => {
-          // Redirect to completion page
-          navigate(`/staff/${staff?.username}/chargeCompleted`);
-        });
+        toast.success("クレジットカード決済が完了しました！");
+
+        setTimeout(() => {
+          navigate(
+            `/store/${staff.store_codes}/staff/${staff.username}/chargeCompleted`
+          );
+        }, 1500);
       } else {
         throw new Error(response.data?.detail || "Payment failed");
       }
@@ -362,12 +353,10 @@ const BillingScreen = () => {
         error.response?.data?.detail || error.message
       );
 
-      Swal.fire({
-        icon: "error",
-        title: "支払いの処理に失敗しました！",
-        text: error.response?.data?.detail || error.message,
-        confirmButtonText: "はい",
-      });
+      toast.dismiss();
+      toast.error(
+        error.response?.data?.detail || "支払いの処理に失敗しました！"
+      );
     } finally {
       setIsProcessing(false);
     }
@@ -757,12 +746,12 @@ const BillingScreen = () => {
 
                       <dialog
                         id="my_modal_1"
-                        className="modal max-w-[343px] mx-auto "
+                        className="modal max-w-[343px] mx-auto"
                       >
-                        <div className="modal-box p-0 ">
+                        <div className="modal-box p-0">
                           <div className="px-10 pt-10 pb-6">
-                            <p className=" text-lg  ">
-                              <span className="underline ">{staff?.name}</span>{" "}
+                            <p className="text-lg">
+                              <span className="underline">{staff?.name}</span>{" "}
                               に、スローインします。 よろしいですか？
                             </p>
                             <p>金額 : {selectedAmount}円</p>
@@ -782,27 +771,25 @@ const BillingScreen = () => {
                           </div>
 
                           <div className="flex justify-center gap-4 border-t-2">
-                            <form method="dialog">
-                              <button className="px-4 py-4  border-r-2 border-gray-300 flex items-center justify-center">
-                                <span className="mr-10">キャンセル</span>{" "}
-                              </button>
-                            </form>
-                            <form method="dialog">
-                              <button
-                                type="button" // Changed to button type
-                                className="px-4 py-4 text-blue-500 flex items-center justify-center"
-                                disabled={isProcessing || tokenProcessing}
-                              >
-                                <span
-                                  onClick={() => handleSubmit(handlePayment)()}
-                                  className="ml-8"
-                                >
-                                  {isProcessing || tokenProcessing
-                                    ? "処理中..."
-                                    : "確定"}
-                                </span>
-                              </button>
-                            </form>
+                            <button
+                              className="px-4 py-4 border-r-2 border-gray-300 flex items-center justify-center"
+                              onClick={() =>
+                                document.getElementById("my_modal_1").close()
+                              }
+                            >
+                              <span className="mr-10">キャンセル</span>
+                            </button>
+                            <button
+                              type="button"
+                              className="px-4 py-4 text-blue-500 flex items-center justify-center"
+                              disabled={isProcessing || tokenProcessing}
+                              onClick={async () => {
+                                await handleSubmit(handlePayment)();
+                                document.getElementById("my_modal_1").close();
+                              }}
+                            >
+                              <span className="ml-8">確定</span>
+                            </button>
                           </div>
                         </div>
                       </dialog>
