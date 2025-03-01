@@ -341,7 +341,7 @@ const BillingScreen = () => {
 
         setTimeout(() => {
           navigate(
-            `/store/${staff.store_codes}/staff/${staff.username}/chargeCompleted`
+            `/store/${staff.store_code}/staff/${staff.username}/chargeCompleted`
           );
         }, 1500);
       } else {
@@ -370,7 +370,7 @@ const BillingScreen = () => {
       // Handle payment with existing card
       // For simplicity, we're using the same function but you might need to adjust this
       await handleCreditCardPayment({
-        cardNumber: "4111111111111111", // Placeholder for stored card
+        cardNumber: "card number", // Placeholder for stored card
         expiryMonth: "12",
         expiryYear: "25",
         securityCode: "123",
