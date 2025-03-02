@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import logo from "../../assets/images/home/logo.png";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaApple } from "react-icons/fa";
@@ -18,7 +18,6 @@ import { Circles } from "react-loader-spinner";
 import StaffProfileCard from "../../components/StaffProfileCard/StaffProfileCard";
 import toast from "react-hot-toast";
 import UseGetUserDetails from "../../hooks/Staff/UseGetUserDetails";
-import useAxiosPublic from "../../hooks/axiosPublic";
 
 const BillingScreen = () => {
   const { store_code, username } = useParams();
@@ -35,11 +34,11 @@ const BillingScreen = () => {
     isLoading,
   } = useGetFavoriteStuff();
   const axiosPrivate = useAxiosPrivate();
-  const axiosPublic = useAxiosPublic();
   const { userDetails } = UseUserDetails();
   const navigate = useNavigate();
 
   // billing data
+  const [billingData, setBillingData] = useState({});
   const [selectedAmount, setSelectedAmount] = useState("0");
   const [message, setMessage] = useState("");
 
@@ -57,33 +56,6 @@ const BillingScreen = () => {
     }
   }, []);
 
-  const billingData = useMemo(
-    () => ({
-      nickname: userDetails?.name || "Guest",
-      staff_uid: staff?.uid,
-      restaurant_uid: staff?.restaurant_uid,
-      store_uid: staff?.store_uid,
-      message: message,
-      amount: parseInt(selectedAmount.replace(/,/g, ""), 10),
-      currency: "JPY",
-      payment_method: "paypal",
-      return_url: `https://alpha.throwin-glow.com/store/${encodeURIComponent(
-        store_code
-      )}/staff/${username}/chargeCompleted`,
-      cancel_url: "https://alpha.throwin-glow.com/payment-cancle",
-    }),
-    [
-      store_code,
-      username,
-      userDetails?.name,
-      staff?.uid,
-      staff?.restaurant_uid,
-      staff?.store_uid,
-      message,
-      selectedAmount,
-    ]
-  );
-
   const handleVisaPayment = () => {
     try {
       const modal = document.getElementById("visa_payment_modal");
@@ -94,16 +66,17 @@ const BillingScreen = () => {
       }
 
       const mockPaymentId = `VISA_${Date.now()}`;
-      navigate(`/store/${store_code}/staff/${username}/chargeCompleted`, {
-        state: {
-          paymentId: mockPaymentId,
-          PayerID: "VISA_DIRECT",
-          amount: selectedAmount,
-          timestamp: Date.now(),
-          payment_method: "visa",
-        },
-        replace: true,
+      const params = new URLSearchParams({
+        paymentId: mockPaymentId,
+        PayerID: "VISA_DIRECT",
+        amount: selectedAmount,
+        timestamp: Date.now(),
+        payment_method: "visa",
       });
+
+      window.location.replace(
+        `/store/${store_code}/staff/${username}/chargeCompleted?${params.toString()}`
+      );
     } catch (error) {
       console.error("Navigation error:", error);
       toast.error("エラーが発生しました。もう一度お試しください。", {
@@ -205,6 +178,7 @@ const BillingScreen = () => {
     }
   };
 
+  // New Credit Card Payment Handling
   const handleCreditCardPayment = async (data) => {
     if (!window.Multipayment) {
       toast.error("決済サービスが利用できません。", {
@@ -215,85 +189,77 @@ const BillingScreen = () => {
     }
 
     try {
-      const paymentPromise = new Promise((resolve, reject) => {
-        window.Multipayment.getToken(
-          {
-            cardno: data.cardNumber,
-            expire: `${data.expiryYear}${data.expiryMonth}`,
-            securitycode: data.securityCode,
-            holdername: data.cardHolder,
-            tokennumber: "1",
-          },
-          async (result) => {
-            try {
-              if (result.resultCode !== "000") {
-                throw new Error(
-                  `トークン生成に失敗しました: ${result.resultCode}`
-                );
-              }
+      // Generate Token
+      window.Multipayment.getToken(
+        {
+          cardno: data.cardNumber,
+          expire: `${data.expiryYear}${data.expiryMonth}`,
+          securitycode: data.securityCode,
+          holdername: data.cardHolder,
+          tokennumber: "1",
+        },
+        async (result) => {
+          if (result.resultCode !== "000") {
+            toast.error(`トークン生成に失敗しました: ${result.resultCode}`, {
+              position: "top-center",
+              duration: 3000,
+            });
+            return;
+          }
 
-              let generatedToken = result.tokenObject.token;
-              if (Array.isArray(generatedToken)) {
-                generatedToken = generatedToken[0];
-              }
+          // Extract token and ensure it's a string
+        let generatedToken = result.tokenObject.token;
+        if (Array.isArray(generatedToken)) {
+          generatedToken = generatedToken[0]; // Take the first token if it's an array
+        }
+        setToken(generatedToken);
 
-              const paymentData = {
-                nickname: userDetails?.name || "Guest",
-                staff_uid: staff?.uid,
-                store_uid: staff?.store_uid,
-                amount: billingData.amount.toString(),
-                currency: "JPY",
-                token: generatedToken,
-              };
+          // Prepare payment data
+          const paymentData = {
+            nickname: userDetails?.name || "Guest",
+            staff_uid: staff?.uid,
+            store_uid: staff?.store_uid,
+            amount: billingData.amount.toString(),
+            currency: "JPY",
+            token: generatedToken,
+          };
 
-              const response = await fetch(
-                "https://api-dev.throwin-glow.com/payment_service/gmo-pg/credit-card/",
-                {
-                  method: "POST",
-                  headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    "X-CSRFTOKEN":
-                      "52lTqE40NxrGov3V6vNRhyoPzHt5qaJvuYQWctutnsipJMjrzImbsWqYD5Uu7Xml",
-                  },
-                  body: JSON.stringify(paymentData),
-                }
-              );
-
-              const resultData = await response.json();
-
-              if (!response.ok) {
-                throw new Error(`支払い失敗: ${JSON.stringify(resultData)}`);
-              }
-
-              resolve(resultData);
-            } catch (error) {
-              reject(error);
+          // Make payment request
+          const response = await fetch(
+            "https://api-dev.throwin-glow.com/payment_service/gmo-pg/credit-card/",
+            {
+              method: "POST",
+              headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-CSRFTOKEN":
+                  "52lTqE40NxrGov3V6vNRhyoPzHt5qaJvuYQWctutnsipJMjrzImbsWqYD5Uu7Xml",
+              },
+              body: JSON.stringify(paymentData),
             }
+          );
+
+          const resultData = await response.json();
+
+          if (!response.ok) {
+            throw new Error(
+              `支払い失敗: ${JSON.stringify(resultData)}`
+            );
           }
-        );
-      });
 
-      const resultData = await paymentPromise;
-
-      if (resultData.transaction_id) {
-        toast.success("支払いが成功しました！", {
-          position: "top-center",
-          duration: 3000,
-        });
-
-        const modal = document.getElementById("visa_payment_modal");
-        if (modal) modal.close();
-
-        navigate(
-          `/store/${store_code}/staff/${username}/chargeCompleted?paymentId=${resultData.transaction_id}`,
-          {
-            replace: true,
+          if (resultData.success) {
+            toast.success("支払いが成功しました！", {
+              position: "top-center",
+              duration: 3000,
+            });
+            const modal = document.getElementById("visa_payment_modal");
+            if (modal) modal.close();
+            navigate(`/store/${store_code}/staff/${username}/chargeCompleted`);
+          } else {
+            throw new Error("支払い処理に失敗しました。");
           }
-        );
-      } else {
-        throw new Error("支払い処理に失敗しました。");
-      }
+        }
+      );
     } catch (error) {
       toast.error(error.message || "支払い処理中にエラーが発生しました。", {
         position: "top-center",
@@ -306,6 +272,23 @@ const BillingScreen = () => {
   const handleClick = (amount) => setSelectedAmount(amount);
   const handleMessage = (event) => setMessage(event.target.value);
   const persAmount = parseInt(selectedAmount.replace(/,/g, ""), 10);
+
+  useEffect(() => {
+    setBillingData({
+      nickname: userDetails?.name || "Guest",
+      staff_uid: staff?.uid,
+      restaurant_uid: staff?.restaurant_uid,
+      store_uid: staff?.store_uid,
+      message: message,
+      amount: persAmount,
+      currency: "JPY",
+      payment_method: "paypal",
+      return_url: `https://alpha.throwin-glow.com/store/${encodeURIComponent(
+        store_code
+      )}/staff/${username}/chargeCompleted`,
+      cancel_url: "https://alpha.throwin-glow.com/payment-cancle",
+    });
+  }, [persAmount, store_code, username, userDetails, staff, message]);
 
   const buttonStyle = `flex justify-center w-full rounded-full font-hiragino py-[12px] font-bold text-white ${
     selectedPaymentMethod
@@ -332,23 +315,14 @@ const BillingScreen = () => {
           </Helmet>
           <TitleBar
             style="mb-0 w-full"
-            back={
-              <RiArrowLeftSLine
-                onClick={() => navigate(-1)}
-                style={{ cursor: "pointer" }}
-              />
-            }
+            back={<RiArrowLeftSLine onClick={() => navigate(-1)} style={{ cursor: "pointer" }} />}
             title=""
-            icon={
-              <img className="w-[110px] items-center" src={logo} alt="logo" />
-            }
+            icon={<img className="w-[110px] items-center" src={logo} alt="logo" />}
           />
           <div className="max-w-[430px] mx-auto mb-[120px] text-[#44495B]">
             <div className="py-4 text-center">
               <h2 className="font-bold text-[25px]">{staff_details?.name}</h2>
-              <p className="font-bold text-[10px]">
-                {staff_details?.introduction}
-              </p>
+              <p className="font-bold text-[10px]">{staff_details?.introduction}</p>
             </div>
             <div className="max-w-[430px] mx-auto">
               <StaffProfileCard
@@ -377,11 +351,7 @@ const BillingScreen = () => {
                       key={index}
                       onClick={() => handleClick(amount)}
                       className={`border rounded-lg mt-[22px] px-4 py-2 whitespace-nowrap cursor-pointer 
-                      ${
-                        selectedAmount === amount
-                          ? "bg-[#49BBDF] text-white"
-                          : "border-[#49BBDF] text-[#49BBDF]"
-                      }`}
+                      ${selectedAmount === amount ? "bg-[#49BBDF] text-white" : "border-[#49BBDF] text-[#49BBDF]"}`}
                     >
                       {amount}円
                     </h4>
@@ -389,9 +359,7 @@ const BillingScreen = () => {
                 </div>
 
                 <div className="mt-7">
-                  <h2 className="font-semibold text-lg text-[#44495B] mb-2">
-                    応援メッセージ
-                  </h2>
+                  <h2 className="font-semibold text-lg text-[#44495B] mb-2">応援メッセージ</h2>
                   <textarea
                     onChange={handleMessage}
                     value={message}
@@ -406,38 +374,21 @@ const BillingScreen = () => {
                 </div>
 
                 <div className="flex gap-[9px] text-3xl font-semibold">
-                  <h3 className="flex items-center border rounded px-3 py-2 gap-1">
-                    <FaApple />
-                    <span>Pay</span>
-                  </h3>
-                  <h3 className="flex items-center border rounded px-3 py-2 gap-1">
-                    <FcGoogle />
-                    <span>Pay</span>
-                  </h3>
+                  <h3 className="flex items-center border rounded px-3 py-2 gap-1"><FaApple /><span>Pay</span></h3>
+                  <h3 className="flex items-center border rounded px-3 py-2 gap-1"><FcGoogle /><span>Pay</span></h3>
                   <div className="text-[#44495B] p-0">
                     <button
                       className="w-full"
-                      onClick={() =>
-                        document.getElementById("my_modal_6").showModal()
-                      }
+                      onClick={() => document.getElementById("my_modal_6").showModal()}
                     >
                       <button
-                        onClick={() =>
-                          localStorage.setItem(
-                            "staff_details",
-                            JSON.stringify(staff_details)
-                          )
-                        }
+                        onClick={() => localStorage.setItem("staff_details", JSON.stringify(staff_details))}
                         className="flex items-center border rounded px-3 py-2 gap-1"
                       >
-                        <SlPaypal />
-                        <span>Pay</span>
+                        <SlPaypal /><span>Pay</span>
                       </button>
                     </button>
-                    <dialog
-                      id="my_modal_6"
-                      className="modal max-w-[343px] mx-auto rounded-lg shadow-lg"
-                    >
+                    <dialog id="my_modal_6" className="modal max-w-[343px] mx-auto rounded-lg shadow-lg">
                       <div className="modal-box p-0 rounded-lg overflow-hidden">
                         <div className="bg-[#49BBDF] text-white flex items-center justify-center py-4">
                           <img
@@ -448,31 +399,19 @@ const BillingScreen = () => {
                         </div>
                         <div className="px-6 pt-4 pb-4">
                           <p className="text-base font-medium">
-                            <span className="underline font-semibold">
-                              {staff?.name}
-                            </span>{" "}
-                            に、スローインします。 よろしいですか？
+                            <span className="underline font-semibold">{staff?.name}</span> に、スローインします。 よろしいですか？
                           </p>
                           <div className="flex justify-between items-center text-sm mt-4">
-                            <p className="text-sm font-medium">
-                              金額 : {selectedAmount}円
-                            </p>
+                            <p className="text-sm font-medium">金額 : {selectedAmount}円</p>
                             <p>決済方法 : PayPal</p>
                           </div>
                         </div>
                         <div className="flex justify-center gap-4 border-t border-gray-200">
                           <form method="dialog" className="w-1/2">
-                            <button className="px-4 py-3 w-full text-red-600 border-r border-gray-300 text-center text-[15px]">
-                              キャンセル
-                            </button>
+                            <button className="px-4 py-3 w-full text-red-600 border-r border-gray-300 text-center text-[15px]">キャンセル</button>
                           </form>
                           <form method="dialog" className="w-1/2">
-                            <button
-                              onClick={handlePaypalPayment}
-                              className="px-4 py-3 w-full text-blue-600 text-[15px] text-center"
-                            >
-                              確定
-                            </button>
+                            <button onClick={handlePaypalPayment} className="px-4 py-3 w-full text-blue-600 text-[15px] text-center">確定</button>
                           </form>
                         </div>
                       </div>
@@ -481,9 +420,7 @@ const BillingScreen = () => {
                 </div>
 
                 <div className="p-4">
-                  <h3 className="font-bold text-sm text-gray-700 mb-4">
-                    クレジットカード決済
-                  </h3>
+                  <h3 className="font-bold text-sm text-gray-700 mb-4">クレジットカード決済</h3>
                   <div className="flex items-start mb-4">
                     <input
                       type="radio"
@@ -494,12 +431,8 @@ const BillingScreen = () => {
                       onChange={handlePaymentMethodChange}
                     />
                     <label htmlFor="existing-card" className="flex flex-col">
-                      <span className="font-medium text-sm text-gray-800">
-                        Visa (オーナーズカード)
-                      </span>
-                      <span className="text-gray-500 text-xs">
-                        Visa 下4桁 1234
-                      </span>
+                      <span className="font-medium text-sm text-gray-800">Visa (オーナーズカード)</span>
+                      <span className="text-gray-500 text-xs">Visa 下4桁 1234</span>
                     </label>
                   </div>
                   <hr className="my-4 border-gray-300" />
@@ -512,39 +445,23 @@ const BillingScreen = () => {
                       className="mt-1 mr-3"
                       onChange={handlePaymentMethodChange}
                     />
-                    <label
-                      htmlFor="new-card"
-                      className="font-medium text-sm text-gray-800"
-                    >
-                      新規クレジットカード
-                    </label>
+                    <label htmlFor="new-card" className="font-medium text-sm text-gray-800">新規クレジットカード</label>
                   </div>
 
                   {selectedPaymentMethod === "new-card" && (
-                    <form
-                      onSubmit={handleSubmit(handleCreditCardPayment)}
-                      className="mt-4"
-                    >
+                    <form onSubmit={handleSubmit(handleCreditCardPayment)} className="mt-4">
                       <div className="form-control">
                         <h4 className="mb-2">クレジットカード番号入力</h4>
                         <input
                           {...register("cardNumber", {
                             required: "カード番号は必須です",
-                            pattern: {
-                              value: /^[0-9]{16}$/,
-                              message:
-                                "有効な16桁のカード番号を入力してください",
-                            },
+                            pattern: { value: /^[0-9]{16}$/, message: "有効な16桁のカード番号を入力してください" },
                           })}
                           type="text"
                           placeholder="1234 5678 1234 5678"
                           className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
                         />
-                        {errors.cardNumber && (
-                          <span className="text-[#F43C3C] text-sm mt-2">
-                            {errors.cardNumber.message}
-                          </span>
-                        )}
+                        {errors.cardNumber && <span className="text-[#F43C3C] text-sm mt-2">{errors.cardNumber.message}</span>}
                       </div>
                       <h4 className="mb-2">有効期限</h4>
                       <div className="flex items-center gap-3">
@@ -552,40 +469,26 @@ const BillingScreen = () => {
                           <input
                             {...register("expiryMonth", {
                               required: "月は必須です",
-                              pattern: {
-                                value: /^(0[1-9]|1[0-2])$/,
-                                message: "有効な月 (01-12) を入力してください",
-                              },
+                              pattern: { value: /^(0[1-9]|1[0-2])$/, message: "有効な月 (01-12) を入力してください" },
                             })}
                             type="text"
                             placeholder="MM"
                             className="input rounded-[5px] py-4 mt-1 mb-[9px] w-[68px] pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
                           />
-                          {errors.expiryMonth && (
-                            <span className="text-[#F43C3C] text-sm mt-2">
-                              {errors.expiryMonth.message}
-                            </span>
-                          )}
+                          {errors.expiryMonth && <span className="text-[#F43C3C] text-sm mt-2">{errors.expiryMonth.message}</span>}
                         </div>
                         <p>月</p>
                         <div className="form-control">
                           <input
                             {...register("expiryYear", {
                               required: "年は必須です",
-                              pattern: {
-                                value: /^[0-9]{2}$/,
-                                message: "有効な年 (YY) を入力してください",
-                              },
+                              pattern: { value: /^[0-9]{2}$/, message: "有効な年 (YY) を入力してください" },
                             })}
                             type="text"
                             placeholder="YY"
                             className="input rounded-[5px] py-4 mt-1 mb-[9px] w-[94px] pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
                           />
-                          {errors.expiryYear && (
-                            <span className="text-[#F43C3C] text-sm mt-2">
-                              {errors.expiryYear.message}
-                            </span>
-                          )}
+                          {errors.expiryYear && <span className="text-[#F43C3C] text-sm mt-2">{errors.expiryYear.message}</span>}
                         </div>
                       </div>
                       <div className="form-control">
@@ -593,41 +496,26 @@ const BillingScreen = () => {
                         <input
                           {...register("securityCode", {
                             required: "セキュリティコードは必須です",
-                            pattern: {
-                              value: /^[0-9]{3,4}$/,
-                              message:
-                                "有効なセキュリティコードを入力してください",
-                            },
+                            pattern: { value: /^[0-9]{3,4}$/, message: "有効なセキュリティコードを入力してください" },
                           })}
                           type="text"
                           placeholder="123"
                           className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
                         />
-                        {errors.securityCode && (
-                          <span className="text-[#F43C3C] text-sm mt-2">
-                            {errors.securityCode.message}
-                          </span>
-                        )}
+                        {errors.securityCode && <span className="text-[#F43C3C] text-sm mt-2">{errors.securityCode.message}</span>}
                       </div>
                       <div className="form-control">
                         <h4 className="mb-2">クレジットカード名義</h4>
                         <input
                           {...register("cardHolder", {
                             required: "カード名義は必須です",
-                            pattern: {
-                              value: /^[a-zA-Z\s]+$/,
-                              message: "英文字で名前を入力してください",
-                            },
+                            pattern: { value: /^[a-zA-Z\s]+$/, message: "英文字で名前を入力してください" },
                           })}
                           type="text"
                           placeholder="名前"
                           className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
                         />
-                        {errors.cardHolder && (
-                          <span className="text-[#F43C3C] text-sm mt-2">
-                            {errors.cardHolder.message}
-                          </span>
-                        )}
+                        {errors.cardHolder && <span className="text-[#F43C3C] text-sm mt-2">{errors.cardHolder.message}</span>}
                       </div>
                     </form>
                   )}
@@ -637,40 +525,24 @@ const BillingScreen = () => {
                   <div className="text-[#44495B] p-0">
                     <button
                       className="w-full"
-                      onClick={() =>
-                        document
-                          .getElementById("visa_payment_modal")
-                          .showModal()
-                      }
+                      onClick={() => document.getElementById("visa_payment_modal").showModal()}
                     >
                       <ButtonPrimary
-                        icon={
-                          <img
-                            className="mr-4"
-                            src={throws}
-                            alt="search icon"
-                          />
-                        }
+                        icon={<img className="mr-4" src={throws} alt="search icon" />}
                         btnText="スローインする！"
                         style={buttonStyle}
                       />
                     </button>
-                    <dialog
-                      id="visa_payment_modal"
-                      className="modal max-w-[343px] mx-auto"
-                    >
+                    <dialog id="visa_payment_modal" className="modal max-w-[343px] mx-auto">
                       <div className="modal-box p-0">
                         <div className="px-10 pt-10 pb-6">
                           <p className="text-lg">
-                            <span className="underline">{staff?.name}</span>{" "}
-                            に、スローインします。よろしいですか？
+                            <span className="underline">{staff?.name}</span> に、スローインします。よろしいですか？
                           </p>
                           <p>金額 : {selectedAmount}円</p>
                           <div className="flex gap-1">
                             <p>決済方法 : VISA </p>
-                            {selectedPaymentMethod === "existing-card" && (
-                              <p>下4桁 : 1234</p>
-                            )}
+                            {selectedPaymentMethod === "existing-card" && <p>下4桁 : 1234</p>}
                           </div>
                         </div>
                         <div className="flex justify-center gap-4 border-t-2">
@@ -679,16 +551,18 @@ const BillingScreen = () => {
                               <span className="mr-10">キャンセル</span>
                             </button>
                           </form>
-                          <button
-                            onClick={
-                              selectedPaymentMethod === "existing-card"
-                                ? handleVisaPayment
-                                : handleSubmit(handleCreditCardPayment)
-                            }
-                            className="px-4 py-4 text-blue-500"
-                          >
-                            <span className="ml-8">確定</span>
-                          </button>
+                          <form method="dialog">
+                            <button
+                              onClick={
+                                selectedPaymentMethod === "existing-card"
+                                  ? handleVisaPayment
+                                  : handleSubmit(handleCreditCardPayment)
+                              }
+                              className="px-4 py-4 text-blue-500"
+                            >
+                              <span className="ml-8">確定</span>
+                            </button>
+                          </form>
                         </div>
                       </div>
                     </dialog>

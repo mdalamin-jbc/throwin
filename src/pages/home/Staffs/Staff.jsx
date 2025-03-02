@@ -127,7 +127,9 @@ const Staff = () => {
                   ))}
                 </div>
               </div>
-              <Link to={`/store/${store_code}/staff/${username}/billing_screen`}>
+              <Link
+                to={`/store/${store_code}/staff/${username}/billing_screen`}
+              >
                 <button className="mt-6 w-full">
                   <ButtonPrimary
                     icon={
@@ -137,6 +139,9 @@ const Staff = () => {
                     style="flex justify-center bg-gradient-to-r from-[#65D0F2] to-[#2399F4] w-full rounded-full font-hiragino py-[12px] font-bold text-white"
                   />
                 </button>
+              </Link>
+              <Link to={`/store/:store_code/staff/:username/ck`}>
+                check payment
               </Link>
             </div>
           </div>
