@@ -86,7 +86,7 @@ const BillingScreen = () => {
 
   const validatePayment = (amount, paymentMethod) => {
     const numAmount = parseInt(amount.replace(/,/g, ""), 10);
-    
+
     if (!paymentMethod) {
       toast.error("決済方法を選択してください。", {
         position: "top-center",
@@ -94,7 +94,7 @@ const BillingScreen = () => {
       });
       return false;
     }
-    
+
     if (numAmount < 500) {
       toast.error("金額は500円以上でなければなりません。", {
         position: "top-center",
@@ -102,7 +102,7 @@ const BillingScreen = () => {
       });
       return false;
     }
-    
+
     if (numAmount > 50000) {
       toast.error("金額は50,000円以下でなければなりません。", {
         position: "top-center",
@@ -110,39 +110,8 @@ const BillingScreen = () => {
       });
       return false;
     }
-    
+
     return true;
-  };
-
-  const handleVisaPayment = () => {
-    try {
-      if (!validatePayment(selectedAmount, selectedPaymentMethod)) return;
-
-      const modal = document.getElementById("visa_payment_modal");
-      if (staff_details) {
-        localStorage.setItem("staff_details", JSON.stringify(staff_details));
-      }
-
-      const mockPaymentId = `VISA_${Date.now()}`;
-      navigate(`/store/${store_code}/staff/${username}/chargeCompleted`, {
-        state: {
-          paymentId: mockPaymentId,
-          PayerID: "VISA_DIRECT",
-          amount: selectedAmount,
-          timestamp: Date.now(),
-          payment_method: "visa",
-        },
-        replace: true,
-      });
-      
-      if (modal) modal.close();
-    } catch (error) {
-      console.error("Navigation error:", error);
-      toast.error("エラーが発生しました。もう一度お試しください。", {
-        position: "top-center",
-        duration: 3000,
-      });
-    }
   };
 
   const handleHeartToggle = async () => {
@@ -205,9 +174,168 @@ const BillingScreen = () => {
     }
   };
 
+  // const handlePaypalPayment = async () => {
+  //   try {
+  //     if (!validatePayment(selectedAmount, "paypal")) return;
+
+  //     const response = await axiosPrivate.post(
+  //       `/payment_service/make-payment/`,
+  //       billingData
+  //     );
+
+  //     if (response.status === 200 || response.status === 201) {
+  //       window.location.href = response.data.approval_url;
+  //       const modal = document.getElementById("my_modal_6");
+  //       if (modal) modal.close();
+  //     } else {
+  //       throw new Error("Failed to create payment. Please try again.");
+  //     }
+  //   } catch (error) {
+  //     toast.error(
+  //       error.response?.data?.detail ||
+  //         error.message ||
+  //         "支払いの作成に失敗しました！",
+  //       { position: "top-center", duration: 3000 }
+  //     );
+  //   }
+  // };
+
+  // const handleVisaPayment = () => {
+  //   try {
+  //     if (!validatePayment(selectedAmount, selectedPaymentMethod)) return;
+
+  //     const modal = document.getElementById("visa_payment_modal");
+  //     if (staff_details) {
+  //       localStorage.setItem("staff_details", JSON.stringify(staff_details));
+  //     }
+
+  //     const mockPaymentId = `VISA_${Date.now()}`;
+  //     navigate(`/store/${store_code}/staff/${username}/chargeCompleted`, {
+  //       state: {
+  //         paymentId: mockPaymentId,
+  //         PayerID: "VISA_DIRECT",
+  //         amount: selectedAmount,
+  //         timestamp: Date.now(),
+  //         payment_method: "visa",
+  //       },
+  //       replace: true,
+  //     });
+
+  //     if (modal) modal.close();
+  //   } catch (error) {
+  //     console.error("Navigation error:", error);
+  //     toast.error("エラーが発生しました。もう一度お試しください。", {
+  //       position: "top-center",
+  //       duration: 3000,
+  //     });
+  //   }
+  // };
+
+  // const handleCreditCardPayment = async (data) => {
+  //   if (!window.Multipayment) {
+  //     toast.error("決済サービスが利用できません。", {
+  //       position: "top-center",
+  //       duration: 3000,
+  //     });
+  //     return;
+  //   }
+
+  //   if (!validatePayment(selectedAmount, selectedPaymentMethod)) return;
+
+  //   try {
+  //     const paymentPromise = new Promise((resolve, reject) => {
+  //       window.Multipayment.getToken(
+  //         {
+  //           cardno: data.cardNumber,
+  //           expire: `${data.expiryYear}${data.expiryMonth}`,
+  //           securitycode: data.securityCode,
+  //           holdername: data.cardHolder,
+  //           tokennumber: "1",
+  //         },
+  //         async (result) => {
+  //           try {
+  //             if (result.resultCode !== "000") {
+  //               throw new Error(
+  //                 `トークン生成に失敗しました: ${result.resultCode}`
+  //               );
+  //             }
+
+  //             let generatedToken = result.tokenObject.token;
+  //             if (Array.isArray(generatedToken)) {
+  //               generatedToken = generatedToken[0];
+  //             }
+
+  //             const paymentData = {
+  //               nickname: userDetails?.name || "Guest",
+  //               staff_uid: staff?.uid,
+  //               store_uid: staff?.store_uid,
+  //               amount: billingData.amount.toString(),
+  //               currency: "JPY",
+  //               token: generatedToken,
+  //             };
+
+  //             const response = await fetch(
+  //               "https://api-dev.throwin-glow.com/payment_service/gmo-pg/credit-card/",
+  //               {
+  //                 method: "POST",
+  //                 headers: {
+  //                   Accept: "application/json",
+  //                   "Content-Type": "application/json",
+  //                   "X-CSRFTOKEN":
+  //                     "52lTqE40NxrGov3V6vNRhyoPzHt5qaJvuYQWctutnsipJMjrzImbsWqYD5Uu7Xml",
+  //                 },
+  //                 body: JSON.stringify(paymentData),
+  //               }
+  //             );
+
+  //             const resultData = await response.json();
+
+  //             if (!response.ok) {
+  //               throw new Error(`支払い失敗: ${JSON.stringify(resultData)}`);
+  //             }
+
+  //             resolve(resultData);
+  //           } catch (error) {
+  //             reject(error);
+  //           }
+  //         }
+  //       );
+  //     });
+
+  //     const resultData = await paymentPromise;
+
+  //     if (resultData.transaction_id) {
+  //       toast.success("支払いが成功しました！", {
+  //         position: "top-center",
+  //         duration: 3000,
+  //       });
+
+  //       const modal = document.getElementById("visa_payment_modal");
+  //       if (modal) modal.close();
+
+  //       navigate(
+  //         `/store/${store_code}/staff/${username}/chargeCompleted?paymentId=${resultData.transaction_id}`,
+  //         {
+  //           replace: true,
+  //         }
+  //       );
+  //     }
+  //   } catch (error) {
+  //     toast.error(error.message || "支払い処理中にエラーが発生しました。", {
+  //       position: "top-center",
+  //       duration: 3000,
+  //     });
+  //   }
+  // };
+
   const handlePaypalPayment = async () => {
+    const modal = document.getElementById("my_modal_6");
+
     try {
-      if (!validatePayment(selectedAmount, "paypal")) return;
+      if (!validatePayment(selectedAmount, "paypal")) {
+        if (modal) modal.close();
+        return;
+      }
 
       const response = await axiosPrivate.post(
         `/payment_service/make-payment/`,
@@ -216,12 +344,12 @@ const BillingScreen = () => {
 
       if (response.status === 200 || response.status === 201) {
         window.location.href = response.data.approval_url;
-        const modal = document.getElementById("my_modal_6");
         if (modal) modal.close();
       } else {
         throw new Error("Failed to create payment. Please try again.");
       }
     } catch (error) {
+      if (modal) modal.close();
       toast.error(
         error.response?.data?.detail ||
           error.message ||
@@ -231,8 +359,47 @@ const BillingScreen = () => {
     }
   };
 
+  const handleVisaPayment = () => {
+    const modal = document.getElementById("visa_payment_modal");
+
+    try {
+      if (!validatePayment(selectedAmount, selectedPaymentMethod)) {
+        if (modal) modal.close();
+        return;
+      }
+
+      if (staff_details) {
+        localStorage.setItem("staff_details", JSON.stringify(staff_details));
+      }
+
+      const mockPaymentId = `VISA_${Date.now()}`;
+      navigate(`/store/${store_code}/staff/${username}/chargeCompleted`, {
+        state: {
+          paymentId: mockPaymentId,
+          PayerID: "VISA_DIRECT",
+          amount: selectedAmount,
+          timestamp: Date.now(),
+          payment_method: "visa",
+        },
+        replace: true,
+      });
+
+      if (modal) modal.close();
+    } catch (error) {
+      if (modal) modal.close();
+      console.error("Navigation error:", error);
+      toast.error("エラーが発生しました。もう一度お試しください。", {
+        position: "top-center",
+        duration: 3000,
+      });
+    }
+  };
+
   const handleCreditCardPayment = async (data) => {
+    const modal = document.getElementById("visa_payment_modal");
+
     if (!window.Multipayment) {
+      if (modal) modal.close();
       toast.error("決済サービスが利用できません。", {
         position: "top-center",
         duration: 3000,
@@ -240,7 +407,10 @@ const BillingScreen = () => {
       return;
     }
 
-    if (!validatePayment(selectedAmount, selectedPaymentMethod)) return;
+    if (!validatePayment(selectedAmount, selectedPaymentMethod)) {
+      if (modal) modal.close();
+      return;
+    }
 
     try {
       const paymentPromise = new Promise((resolve, reject) => {
@@ -305,13 +475,11 @@ const BillingScreen = () => {
       const resultData = await paymentPromise;
 
       if (resultData.transaction_id) {
+        if (modal) modal.close();
         toast.success("支払いが成功しました！", {
           position: "top-center",
           duration: 3000,
         });
-
-        const modal = document.getElementById("visa_payment_modal");
-        if (modal) modal.close();
 
         navigate(
           `/store/${store_code}/staff/${username}/chargeCompleted?paymentId=${resultData.transaction_id}`,
@@ -321,6 +489,7 @@ const BillingScreen = () => {
         );
       }
     } catch (error) {
+      if (modal) modal.close();
       toast.error(error.message || "支払い処理中にエラーが発生しました。", {
         position: "top-center",
         duration: 3000,
@@ -346,7 +515,7 @@ const BillingScreen = () => {
         return "VISA (下4桁: 1234)";
       case "new-card":
         return "VISA";
-      case "paypal":  // Added for PayPal case
+      case "paypal": // Added for PayPal case
         return "PayPal";
       default:
         return "";
@@ -693,6 +862,7 @@ const BillingScreen = () => {
                         style={buttonStyle}
                       />
                     </button>
+
                     <dialog
                       id="visa_payment_modal"
                       className="modal max-w-[343px] mx-auto"
@@ -709,20 +879,28 @@ const BillingScreen = () => {
                           </div>
                         </div>
                         <div className="flex justify-center gap-4 border-t-2">
-                          <form method="dialog">
-                            <button className="px-4 py-4 border-r-2 border-gray-300">
-                              <span className="mr-10">キャンセル</span>
+                          <form method="dialog" className="w-1/2">
+                            <button className="px-4 py-4 w-full border-r-2 border-gray-300">
+                              <span>キャンセル</span>
                             </button>
                           </form>
                           <button
-                            onClick={
-                              selectedPaymentMethod === "existing-card"
-                                ? handleVisaPayment
-                                : () => handleSubmit(handleCreditCardPayment)()
-                            }
-                            className="px-4 py-4 text-blue-500"
+                            onClick={() => {
+                              const modal =
+                                document.getElementById("visa_payment_modal");
+                              if (selectedPaymentMethod === "existing-card") {
+                                handleVisaPayment();
+                              } else {
+                                handleSubmit(handleCreditCardPayment)();
+                              }
+                              // Ensure the modal closes even if there's an error in the payment handlers
+                              setTimeout(() => {
+                                if (modal) modal.close();
+                              }, 100);
+                            }}
+                            className="px-4 py-4 text-blue-500 w-1/2"
                           >
-                            <span className="ml-8">確定</span>
+                            <span>確定</span>
                           </button>
                         </div>
                       </div>
