@@ -84,11 +84,41 @@ const BillingScreen = () => {
     ]
   );
 
+  const validatePayment = (amount, paymentMethod) => {
+    const numAmount = parseInt(amount.replace(/,/g, ""), 10);
+    
+    if (!paymentMethod) {
+      toast.error("決済方法を選択してください。", {
+        position: "top-center",
+        duration: 3000,
+      });
+      return false;
+    }
+    
+    if (numAmount < 500) {
+      toast.error("金額は500円以上でなければなりません。", {
+        position: "top-center",
+        duration: 3000,
+      });
+      return false;
+    }
+    
+    if (numAmount > 50000) {
+      toast.error("金額は50,000円以下でなければなりません。", {
+        position: "top-center",
+        duration: 3000,
+      });
+      return false;
+    }
+    
+    return true;
+  };
+
   const handleVisaPayment = () => {
     try {
-      const modal = document.getElementById("visa_payment_modal");
-      if (modal) modal.close();
+      if (!validatePayment(selectedAmount, selectedPaymentMethod)) return;
 
+      const modal = document.getElementById("visa_payment_modal");
       if (staff_details) {
         localStorage.setItem("staff_details", JSON.stringify(staff_details));
       }
@@ -104,6 +134,8 @@ const BillingScreen = () => {
         },
         replace: true,
       });
+      
+      if (modal) modal.close();
     } catch (error) {
       console.error("Navigation error:", error);
       toast.error("エラーが発生しました。もう一度お試しください。", {
@@ -175,15 +207,7 @@ const BillingScreen = () => {
 
   const handlePaypalPayment = async () => {
     try {
-      if (billingData.amount < 500) {
-        throw new Error("金額は500円以上でなければなりません。");
-      }
-      if (billingData.amount > 49999) {
-        throw new Error("金額は 50,000円以下でなければなりません。");
-      }
-      if (!billingData.staff_uid) {
-        throw new Error("Staff ID is required.");
-      }
+      if (!validatePayment(selectedAmount, "paypal")) return;
 
       const response = await axiosPrivate.post(
         `/payment_service/make-payment/`,
@@ -192,6 +216,8 @@ const BillingScreen = () => {
 
       if (response.status === 200 || response.status === 201) {
         window.location.href = response.data.approval_url;
+        const modal = document.getElementById("my_modal_6");
+        if (modal) modal.close();
       } else {
         throw new Error("Failed to create payment. Please try again.");
       }
@@ -213,6 +239,8 @@ const BillingScreen = () => {
       });
       return;
     }
+
+    if (!validatePayment(selectedAmount, selectedPaymentMethod)) return;
 
     try {
       const paymentPromise = new Promise((resolve, reject) => {
@@ -291,8 +319,6 @@ const BillingScreen = () => {
             replace: true,
           }
         );
-      } else {
-        throw new Error("支払い処理に失敗しました。");
       }
     } catch (error) {
       toast.error(error.message || "支払い処理中にエラーが発生しました。", {
@@ -312,6 +338,20 @@ const BillingScreen = () => {
       ? "bg-gradient-to-r from-[#65D0F2] to-[#2399F4]"
       : "bg-gray-400 text-gray-700"
   }`;
+
+  // Dynamic payment method display
+  const getPaymentMethodDisplay = () => {
+    switch (selectedPaymentMethod) {
+      case "existing-card":
+        return "VISA (下4桁: 1234)";
+      case "new-card":
+        return "VISA";
+      case "paypal":  // Added for PayPal case
+        return "PayPal";
+      default:
+        return "";
+    }
+  };
 
   return (
     <>
@@ -466,14 +506,12 @@ const BillingScreen = () => {
                               キャンセル
                             </button>
                           </form>
-                          <form method="dialog" className="w-1/2">
-                            <button
-                              onClick={handlePaypalPayment}
-                              className="px-4 py-3 w-full text-blue-600 text-[15px] text-center"
-                            >
-                              確定
-                            </button>
-                          </form>
+                          <button
+                            onClick={handlePaypalPayment}
+                            className="px-4 py-3 w-full text-blue-600 text-[15px] text-center"
+                          >
+                            確定
+                          </button>
                         </div>
                       </div>
                     </dialog>
@@ -667,10 +705,7 @@ const BillingScreen = () => {
                           </p>
                           <p>金額 : {selectedAmount}円</p>
                           <div className="flex gap-1">
-                            <p>決済方法 : VISA </p>
-                            {selectedPaymentMethod === "existing-card" && (
-                              <p>下4桁 : 1234</p>
-                            )}
+                            <p>決済方法 : {getPaymentMethodDisplay()}</p>
                           </div>
                         </div>
                         <div className="flex justify-center gap-4 border-t-2">
@@ -683,7 +718,7 @@ const BillingScreen = () => {
                             onClick={
                               selectedPaymentMethod === "existing-card"
                                 ? handleVisaPayment
-                                : handleSubmit(handleCreditCardPayment)
+                                : () => handleSubmit(handleCreditCardPayment)()
                             }
                             className="px-4 py-4 text-blue-500"
                           >
