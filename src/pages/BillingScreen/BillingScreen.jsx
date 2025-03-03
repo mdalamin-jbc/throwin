@@ -27,6 +27,7 @@ const BillingScreen = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
   const [token, setToken] = useState("");
+  console.log(staff_details.throwin_amounts);
 
   const staff = JSON.parse(localStorage.getItem("staff"));
   const {
@@ -497,7 +498,7 @@ const BillingScreen = () => {
     }
   };
 
-  const amounts = ["1,000", "3,000", "5,000", "10,000"];
+  const amounts = staff_details?.throwin_amounts;
   const handleClick = (amount) => setSelectedAmount(amount);
   const handleMessage = (event) => setMessage(event.target.value);
   const persAmount = parseInt(selectedAmount.replace(/,/g, ""), 10);
