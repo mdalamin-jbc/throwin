@@ -120,7 +120,7 @@ const StaffPreviewSection = ({ previewData = {} }) => {
               </div>
               <div>
                 <div className="flex gap-[14px] overflow-x-auto scrollbar-hide font-semibold text-sm text-[#49BBDF]">
-                  {amounts.map((amount, index) => (
+                  {amounts?.map((amount, index) => (
                     <h4
                       key={index}
                       onClick={() => handleClick(amount)}

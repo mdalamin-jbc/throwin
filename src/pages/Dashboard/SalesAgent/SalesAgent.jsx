@@ -6,10 +6,7 @@ import { Link } from "react-router-dom";
 
 import UseGetSalesAgents from "../../../hooks/Dashboard/UseGetSalesAgents";
 const SalesAgent = () => {
-  
   const { salesAgents, isLoading, isError, error } = UseGetSalesAgents();
-
-  
 
   console.log(salesAgents);
   const {
@@ -21,7 +18,7 @@ const SalesAgent = () => {
       <h2 className="font-semibold text-[27px] text-[#73879C]">営業代理店</h2>
       <div className="bg-white mt-[27px] rounded-xl pb-8 mr-[54px]">
         <h4 className="font-semibold text-[18px] text-[#73879C] pt-[30px] pl-[33px] pb-[21px] ">
-        営業代理店アカウント新規登録
+          営業代理店アカウント新規登録
         </h4>
         <div className="border-b-[3px] mx-5"></div>
 
@@ -80,7 +77,7 @@ const SalesAgent = () => {
                   </th>
                   <th>
                     <button className="flex items-center">
-                    代理店コード <MdKeyboardArrowDown />
+                      代理店コード <MdKeyboardArrowDown />
                     </button>
                   </th>
                   <th></th>
@@ -117,11 +114,6 @@ const SalesAgent = () => {
                 )}
               </tbody>
             </table>
-          </div>
-          <div className="flex justify-center items-center h-[calc(100vh-128px)]">
-            <p className="text-[#B5B5B5]">
-              現在登録されている店舗（チーム）はありません
-            </p>
           </div>
         </div>
       </div>

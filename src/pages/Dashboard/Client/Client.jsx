@@ -14,6 +14,7 @@ const Client = () => {
     register,
     formState: { errors },
   } = useForm();
+
   return (
     <div>
       <h2 className="font-semibold text-[27px] text-[#73879C]">クライアント</h2>
@@ -32,10 +33,7 @@ const Client = () => {
               <p>新規登録</p> <FaPlus />
             </Link>
             <div className="relative flex flex-col justify-center mr-[100px]">
-              <div
-                // onClick={handleSearchStuff}
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
-              >
+              <div className="absolute left-3 top-1/2 transform -translate-y-1/2 cursor-pointer">
                 <img
                   className="w-5 h-5 opacity-70"
                   src={search}
@@ -50,8 +48,6 @@ const Client = () => {
                 type="text"
                 placeholder="検索"
                 className="w-full rounded-[8px] py-[6px] pl-9 pr-10 border border-[#D9D9D9] text-[#44495B] text-sm placeholder-gray-400 focus:outline-none focus:border-[#707070] shadow-sm"
-                // value={searchByStuffName}
-                // onChange={(e) => setSearchByStuffName(e.target.value)}
               />
 
               {errors.searchMember && (
@@ -88,16 +84,15 @@ const Client = () => {
                 {organizations.length > 0 ? (
                   organizations?.map((store) => (
                     <tr key={store.uid} className="hover border ">
-                      <Link
-                        onClick={() =>
-                          localStorage.setItem("store", JSON.stringify(store))
-                        }
-                        // to={`${store.code}`}
-                      >
-                        <td className="flex items-center gap-[17px] ">
+                      <td className="flex items-center gap-[17px] ">
+                        <Link
+                          onClick={() =>
+                            localStorage.setItem("store", JSON.stringify(store))
+                          }
+                        >
                           <p>{store.name}</p>
-                        </td>
-                      </Link>
+                        </Link>
+                      </td>
                       <td>{store.code}</td>
                       <td>
                         <button className="bg-[#ABABAB] rounded-full px-3 py-1 text-white">
@@ -108,18 +103,13 @@ const Client = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="3" className="text-center text-[#B5B5B5] py-4">
+                    <td colSpan="4" className="text-center text-[#B5B5B5] py-4">
                       現在登録されている店舗（チーム）はありません
                     </td>
                   </tr>
                 )}
               </tbody>
             </table>
-          </div>
-          <div className="flex justify-center items-center h-[calc(100vh-128px)]">
-            <p className="text-[#B5B5B5]">
-              現在登録されている店舗（チーム）はありません
-            </p>
           </div>
         </div>
       </div>
