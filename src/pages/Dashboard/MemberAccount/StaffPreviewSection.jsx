@@ -6,18 +6,25 @@ import TitleBar from "../../../components/TitleBar";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import { IoMdStar } from "react-icons/io";
 import { FaHeart } from "react-icons/fa";
+import { useParams } from "react-router-dom";
+import UseGetStoreDetailsByStoreCode from "../../../hooks/UseGetStoreDetailsByStoreCode";
 
 const StaffPreviewSection = ({ previewData = {} }) => {
+  const { id } = useParams();
+  const { storeDetails, refetch } = UseGetStoreDetailsByStoreCode(id);
   const [activeTab, setActiveTab] = useState("profile");
   const [selectedAmount, setSelectedAmount] = useState("0");
-  const amounts = ["1,000", "3,000", "5,000", "10,000"];
-  
+  const amounts = storeDetails?.throwin_amounts;
+
+  console.log(storeDetails);
+
   const handleClick = (amount) => {
     setSelectedAmount(amount);
   };
 
   // Default placeholder image
-  const defaultImage = "https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg";
+  const defaultImage =
+    "https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg";
 
   return (
     <div className="w-[340px] mx-auto">
@@ -91,7 +98,8 @@ const StaffPreviewSection = ({ previewData = {} }) => {
               <div className="bg-[#80D0E91A] pt-2 pb-[14px] px-[12px] w-full max-w-[430px]">
                 <h2 className="font-semibold text-lg mb-2">自己紹介</h2>
                 <p className="font-light text-sm">
-                  {previewData.bio || "こんにちは、かりんです！店長を始めて3年目です。お客様の笑顔をみ"}
+                  {previewData.bio ||
+                    "こんにちは、かりんです！店長を始めて3年目です。お客様の笑顔をみ"}
                 </p>
               </div>
               {/* Amount section */}
@@ -117,7 +125,9 @@ const StaffPreviewSection = ({ previewData = {} }) => {
                       key={index}
                       onClick={() => handleClick(amount)}
                       className={`border rounded-lg mt-[22px] px-4 py-2 whitespace-nowrap cursor-pointer ${
-                        selectedAmount === amount ? "bg-[#49BBDF] text-white" : ""
+                        selectedAmount === amount
+                          ? "bg-[#49BBDF] text-white"
+                          : ""
                       }`}
                     >
                       {amount}円
@@ -153,7 +163,8 @@ const StaffPreviewSection = ({ previewData = {} }) => {
             </div>
             <div className="text-center">
               <p className="w-[70%] mx-auto font-semibold mt-5">
-                {previewData.thanksMessage || "ありがとうございます！ スタッフにこちらの画面を提示してください。"}
+                {previewData.thanksMessage ||
+                  "ありがとうございます！ スタッフにこちらの画面を提示してください。"}
               </p>
               <p className="text-[#5297FF] mt-1 font-bold text-xs">
                 履歴を見る

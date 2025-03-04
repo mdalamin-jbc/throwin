@@ -63,7 +63,6 @@ import MemberReg from "../pages/Dashboard/MemberAccount/MemberReg";
 import SingUp from "../pages/Dashboard/SalesAgent/SingUp";
 import DaNameChange from "../pages/Dashboard/Seetings/DaNameChange";
 import AdminEmailChange from "../pages/Dashboard/Seetings/AdminEmailChange";
-import CheckPaymentFunction from "../pages/BillingScreen/CheckPaymentFunction";
 
 export const Routes = createBrowserRouter([
   {
@@ -188,11 +187,6 @@ export const Routes = createBrowserRouter([
         path: "/store/:store_code/staff/:username",
         element: <Staff />,
       },
-      {
-        path: "/store/:store_code/staff/:username/ck",
-        element: <CheckPaymentFunction />,
-      },
-      
       {
         path: "/store/:store_code/staff/:username/billing_screen",
         element: <BillingScreen />,

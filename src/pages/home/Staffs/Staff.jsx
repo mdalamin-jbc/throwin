@@ -140,9 +140,6 @@ const Staff = () => {
                   />
                 </button>
               </Link>
-              <Link to={`/store/:store_code/staff/:username/ck`}>
-                check payment
-              </Link>
             </div>
           </div>
         </div>

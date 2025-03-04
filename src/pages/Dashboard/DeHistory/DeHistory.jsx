@@ -66,10 +66,10 @@ const DeHistory = () => {
                 {PaymentHistoryResturentWoner.length > 0 ? (
                   PaymentHistoryResturentWoner.map((payment, index) => (
                     <tr key={index} className="hover border">
-                      <td>{formatDate(payment.payment_date)}</td>
+                      <td>{formatDate(payment.created_at)}</td>
 
                       <td>
-                        <p className="text-[#49BBDF]">{payment.store_name}</p>
+                        <p className="text-[#49BBDF]">{payment.restaurant_name}</p>
                       </td>
                       <td>
                         <p>{payment.amount ? `${payment.amount}円` : "N/A"}</p>
