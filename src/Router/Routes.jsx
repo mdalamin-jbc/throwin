@@ -197,6 +197,10 @@ export const Routes = createBrowserRouter([
         element: <ChargeCompleted />,
       },
       {
+        path: "/store/:store_codes/staff/:username/PaymentCompleted",
+        element: <ChargeCompleted />,
+      },
+      {
         path: "payment-cancle",
         element: <PaymentCancel />,
       },

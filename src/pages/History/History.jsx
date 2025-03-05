@@ -78,7 +78,7 @@ const History = () => {
                     {payment.customer_name} 店舗名
                   </h3>
                   <p className="font-normal text-xs text-[#9C9C9C]">
-                    {formatDate(payment.created_at)}
+                    {formatDate(payment?.process_date)}
                   </p>
                 </div>
                 <div className="flex flex-col items-end">
