@@ -1,6 +1,11 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { Helmet } from "react-helmet";
-import { useSearchParams, Link, useLocation, useParams } from "react-router-dom";
+import {
+  useSearchParams,
+  Link,
+  useLocation,
+  useParams,
+} from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import TitleBar from "../../components/TitleBar";
 import ButtonPrimary from "../../components/ButtonPrimary";
@@ -10,6 +15,7 @@ import toast from "react-hot-toast";
 import Confetti from "react-confetti";
 import useWindowSize from "react-use/lib/useWindowSize";
 import confetti from "canvas-confetti";
+import UseGetUserDetails from "../../hooks/Staff/UseGetUserDetails";
 
 // Animation configurations
 const pageTransition = {
@@ -86,14 +92,14 @@ const gradientRotation = {
 };
 
 const ChargeCompleted = () => {
+  const { store_code, username } = useParams();
+  const { staff_details } = UseGetUserDetails(username, store_code);
   const [searchParams] = useSearchParams();
   const axiosPrivate = useAxiosPrivate();
   const [paymentStatus, setPaymentStatus] = useState(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const validatedRef = useRef(false);
   const { width, height } = useWindowSize();
-
-  const staff_details = JSON.parse(localStorage.getItem("staff_details"));
 
   const fireConfetti = () => {
     const count = 200;
