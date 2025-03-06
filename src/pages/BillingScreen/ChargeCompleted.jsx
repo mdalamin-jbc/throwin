@@ -11,13 +11,13 @@ import TitleBar from "../../components/TitleBar";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import logo from "../../assets/images/home/logo.png";
 import useAxiosPrivate from "../../hooks/axiousPrivate";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import Confetti from "react-confetti";
 import useWindowSize from "react-use/lib/useWindowSize";
 import confetti from "canvas-confetti";
 import UseGetUserDetails from "../../hooks/Staff/UseGetUserDetails";
 
-// Animation configurations
+// Animation configurations remain the same
 const pageTransition = {
   hidden: { opacity: 0 },
   visible: {
@@ -133,26 +133,70 @@ const ChargeCompleted = () => {
 
     const paymentId = searchParams.get("paymentId");
     const payerId = searchParams.get("PayerID");
-
+    
+    // Check if either parameter is missing
     if (!paymentId || !payerId) {
-      toast.error("有効な支払いIDまたは支払者IDが見つかりません。", {
-        position: "top-center",
-        duration: 4000,
-      });
+      // Try to get payment details from localStorage as a fallback
+      const storedPayment = localStorage.getItem("payment_details");
+      
+      if (storedPayment) {
+        try {
+          const paymentDetails = JSON.parse(storedPayment);
+          
+          // Use stored payment details instead
+          setPaymentStatus("success");
+          setShowConfetti(true);
+          
+          // Show only the success toast
+          toast.success(`取引ID: ${paymentDetails.paymentId}`, {
+            position: "top-center",
+            duration: 6000,
+          });
+          
+          // Clear the stored payment to prevent reuse
+          localStorage.removeItem("payment_details");
+          
+          // Trigger confetti with a slight delay
+          setTimeout(fireConfetti, 500);
+          return;
+        } catch (e) {
+          console.error("Error parsing stored payment details", e);
+        }
+      }
+      
+      // No error toast - just set failure state
       setPaymentStatus("failed");
       return;
     }
 
     try {
-      // Check if it's a Visa payment
-      if (paymentId.startsWith("VISA_")) {
+      // Handle Visa direct payment
+      if (payerId === "VISA_DIRECT") {
         setPaymentStatus("success");
         setShowConfetti(true);
-        setTimeout(fireConfetti, 800);
-        toast.success(`取引ID: ${paymentId}`, {
+        
+        // Show only the success toast
+        toast.success(`取引ID:`, {
           position: "top-center",
-          duration: 4000,
+          duration: 6000,
         });
+        
+        setTimeout(fireConfetti, 500);
+        return;
+      }
+      
+      // Handle credit card direct payment
+      if (payerId === "CREDIT_CARD_DIRECT") {
+        setPaymentStatus("success");
+        setShowConfetti(true);
+        
+        // Show only the success toast
+        toast.success(`支払いが成功しました`, {
+          position: "top-center",
+          duration: 6000,
+        });
+        
+        setTimeout(fireConfetti, 500);
         return;
       }
 
@@ -161,29 +205,28 @@ const ChargeCompleted = () => {
         "/payment_service/paypal-success/",
         { params: { paymentId, PayerID: payerId } }
       );
-
+      
       if (response.status === 200) {
         setPaymentStatus("success");
         setShowConfetti(true);
-        setTimeout(fireConfetti, 800);
+        
+        // Show only the success toast
         toast.success(`取引ID: ${paymentId}`, {
           position: "top-center",
-          duration: 4000,
+          duration: 6000,
         });
+        
+        setTimeout(fireConfetti, 500);
       }
     } catch (error) {
+      // No error toast - just set failure state
       setPaymentStatus("failed");
-      toast.error(
-        error.response?.data?.detail ||
-          error.message ||
-          "支払いの検証に失敗しました！",
-        { position: "top-center", duration: 4000 }
-      );
     }
   }, [searchParams, axiosPrivate]);
 
   useEffect(() => {
     if (paymentStatus === null) {
+      // Validate payment immediately
       validatePayment();
     }
   }, [validatePayment, paymentStatus]);
@@ -197,6 +240,9 @@ const ChargeCompleted = () => {
         exit="exit"
         className="relative min-h-screen pb-32 overflow-hidden bg-gradient-to-b from-white to-blue-50"
       >
+        {/* Add the Toaster component for toast notifications */}
+        <Toaster />
+        
         <Helmet>
           <title>Throwin | Billing Page</title>
         </Helmet>

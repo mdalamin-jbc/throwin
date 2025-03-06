@@ -131,7 +131,7 @@ const BankChargeCompleted = () => {
     // Show success toast with payment ID if available
     if (paymentId && !toastTriggeredRef.current) {
       toastTriggeredRef.current = true;
-      toast.success(`取引ID: ${paymentId}`, {
+      toast.success(`支払いが成功しました`, {
         position: "top-center",
         duration: 4000,
       });

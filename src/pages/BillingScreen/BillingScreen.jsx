@@ -175,160 +175,6 @@ const BillingScreen = () => {
     }
   };
 
-  // const handlePaypalPayment = async () => {
-  //   try {
-  //     if (!validatePayment(selectedAmount, "paypal")) return;
-
-  //     const response = await axiosPrivate.post(
-  //       `/payment_service/make-payment/`,
-  //       billingData
-  //     );
-
-  //     if (response.status === 200 || response.status === 201) {
-  //       window.location.href = response.data.approval_url;
-  //       const modal = document.getElementById("my_modal_6");
-  //       if (modal) modal.close();
-  //     } else {
-  //       throw new Error("Failed to create payment. Please try again.");
-  //     }
-  //   } catch (error) {
-  //     toast.error(
-  //       error.response?.data?.detail ||
-  //         error.message ||
-  //         "支払いの作成に失敗しました！",
-  //       { position: "top-center", duration: 3000 }
-  //     );
-  //   }
-  // };
-
-  // const handleVisaPayment = () => {
-  //   try {
-  //     if (!validatePayment(selectedAmount, selectedPaymentMethod)) return;
-
-  //     const modal = document.getElementById("visa_payment_modal");
-  //     if (staff_details) {
-  //       localStorage.setItem("staff_details", JSON.stringify(staff_details));
-  //     }
-
-  //     const mockPaymentId = `VISA_${Date.now()}`;
-  //     navigate(`/store/${store_code}/staff/${username}/chargeCompleted`, {
-  //       state: {
-  //         paymentId: mockPaymentId,
-  //         PayerID: "VISA_DIRECT",
-  //         amount: selectedAmount,
-  //         timestamp: Date.now(),
-  //         payment_method: "visa",
-  //       },
-  //       replace: true,
-  //     });
-
-  //     if (modal) modal.close();
-  //   } catch (error) {
-  //     console.error("Navigation error:", error);
-  //     toast.error("エラーが発生しました。もう一度お試しください。", {
-  //       position: "top-center",
-  //       duration: 3000,
-  //     });
-  //   }
-  // };
-
-  // const handleCreditCardPayment = async (data) => {
-  //   if (!window.Multipayment) {
-  //     toast.error("決済サービスが利用できません。", {
-  //       position: "top-center",
-  //       duration: 3000,
-  //     });
-  //     return;
-  //   }
-
-  //   if (!validatePayment(selectedAmount, selectedPaymentMethod)) return;
-
-  //   try {
-  //     const paymentPromise = new Promise((resolve, reject) => {
-  //       window.Multipayment.getToken(
-  //         {
-  //           cardno: data.cardNumber,
-  //           expire: `${data.expiryYear}${data.expiryMonth}`,
-  //           securitycode: data.securityCode,
-  //           holdername: data.cardHolder,
-  //           tokennumber: "1",
-  //         },
-  //         async (result) => {
-  //           try {
-  //             if (result.resultCode !== "000") {
-  //               throw new Error(
-  //                 `トークン生成に失敗しました: ${result.resultCode}`
-  //               );
-  //             }
-
-  //             let generatedToken = result.tokenObject.token;
-  //             if (Array.isArray(generatedToken)) {
-  //               generatedToken = generatedToken[0];
-  //             }
-
-  //             const paymentData = {
-  //               nickname: userDetails?.name || "Guest",
-  //               staff_uid: staff?.uid,
-  //               store_uid: staff?.store_uid,
-  //               amount: billingData.amount.toString(),
-  //               currency: "JPY",
-  //               token: generatedToken,
-  //             };
-
-  //             const response = await fetch(
-  //               "https://api-dev.throwin-glow.com/payment_service/gmo-pg/credit-card/",
-  //               {
-  //                 method: "POST",
-  //                 headers: {
-  //                   Accept: "application/json",
-  //                   "Content-Type": "application/json",
-  //                   "X-CSRFTOKEN":
-  //                     "52lTqE40NxrGov3V6vNRhyoPzHt5qaJvuYQWctutnsipJMjrzImbsWqYD5Uu7Xml",
-  //                 },
-  //                 body: JSON.stringify(paymentData),
-  //               }
-  //             );
-
-  //             const resultData = await response.json();
-
-  //             if (!response.ok) {
-  //               throw new Error(`支払い失敗: ${JSON.stringify(resultData)}`);
-  //             }
-
-  //             resolve(resultData);
-  //           } catch (error) {
-  //             reject(error);
-  //           }
-  //         }
-  //       );
-  //     });
-
-  //     const resultData = await paymentPromise;
-
-  //     if (resultData.transaction_id) {
-  //       toast.success("支払いが成功しました！", {
-  //         position: "top-center",
-  //         duration: 3000,
-  //       });
-
-  //       const modal = document.getElementById("visa_payment_modal");
-  //       if (modal) modal.close();
-
-  //       navigate(
-  //         `/store/${store_code}/staff/${username}/chargeCompleted?paymentId=${resultData.transaction_id}`,
-  //         {
-  //           replace: true,
-  //         }
-  //       );
-  //     }
-  //   } catch (error) {
-  //     toast.error(error.message || "支払い処理中にエラーが発生しました。", {
-  //       position: "top-center",
-  //       duration: 3000,
-  //     });
-  //   }
-  // };
-
   const handlePaypalPayment = async () => {
     const modal = document.getElementById("my_modal_6");
 
@@ -396,9 +242,11 @@ const BillingScreen = () => {
     }
   };
 
+  // Replace the handleCreditCardPayment function with this improved version
+
   const handleCreditCardPayment = async (data) => {
     const modal = document.getElementById("visa_payment_modal");
-
+  
     if (!window.Multipayment) {
       if (modal) modal.close();
       toast.error("決済サービスが利用できません。", {
@@ -407,13 +255,18 @@ const BillingScreen = () => {
       });
       return;
     }
-
+  
     if (!validatePayment(selectedAmount, selectedPaymentMethod)) {
       if (modal) modal.close();
       return;
     }
-
+  
     try {
+      // Show loading indicator
+      const loadingToast = toast.loading("処理中...", {
+        position: "top-center",
+      });
+  
       const paymentPromise = new Promise((resolve, reject) => {
         window.Multipayment.getToken(
           {
@@ -430,12 +283,12 @@ const BillingScreen = () => {
                   `トークン生成に失敗しました: ${result.resultCode}`
                 );
               }
-
+  
               let generatedToken = result.tokenObject.token;
               if (Array.isArray(generatedToken)) {
                 generatedToken = generatedToken[0];
               }
-
+  
               const paymentData = {
                 nickname: userDetails?.name || "Guest",
                 staff_uid: staff?.uid,
@@ -444,53 +297,55 @@ const BillingScreen = () => {
                 currency: "JPY",
                 token: generatedToken,
               };
-
-              const response = await fetch(
-                "https://api-dev.throwin-glow.com/payment_service/gmo-pg/credit-card/",
-                {
-                  method: "POST",
-                  headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    "X-CSRFTOKEN":
-                      "52lTqE40NxrGov3V6vNRhyoPzHt5qaJvuYQWctutnsipJMjrzImbsWqYD5Uu7Xml",
-                  },
-                  body: JSON.stringify(paymentData),
-                }
+  
+              // Use axiosPrivate for consistent authorization handling
+              const response = await axiosPrivate.post(
+                "/payment_service/gmo-pg/credit-card/",
+                paymentData
               );
-
-              const resultData = await response.json();
-
-              if (!response.ok) {
-                throw new Error(`支払い失敗: ${JSON.stringify(resultData)}`);
-              }
-
-              resolve(resultData);
+  
+              resolve(response.data);
             } catch (error) {
               reject(error);
             }
           }
         );
       });
-
+  
       const resultData = await paymentPromise;
-
+      toast.dismiss(loadingToast);
+  
       if (resultData.transaction_id) {
         if (modal) modal.close();
-        toast.success("支払いが成功しました！", {
-          position: "top-center",
-          duration: 3000,
-        });
-
-        navigate(
-          `/store/${store_code}/staff/${username}/PaymentCompleted?paymentId=${resultData.transaction_id}`,
-          {
-            replace: true,
-          }
-        );
+        
+        // No success toast here - let the completion page handle it
+        
+        // Store staff_details in localStorage as done elsewhere in the code
+        if (staff_details) {
+          localStorage.setItem("staff_details", JSON.stringify(staff_details));
+        }
+  
+        // Store payment details to localStorage as backup
+        localStorage.setItem("payment_details", JSON.stringify({
+          paymentId: resultData.transaction_id,
+          PayerID: "CREDIT_CARD_DIRECT",
+          amount: selectedAmount.replace(/,/g, ""),
+          timestamp: Date.now(),
+          payment_method: "credit_card"
+        }));
+  
+        // Use React Router navigate without reloading the page but with the same URL format
+        // Create the URL with query parameters format
+        const chargeCompletedUrl = `/store/${store_code}/staff/${username}/chargeCompleted?paymentId=${resultData.transaction_id}&PayerID=CREDIT_CARD_DIRECT`;
+        
+        // Navigate to the URL with replace to avoid browser history issues
+        navigate(chargeCompletedUrl, { replace: true });
+      } else {
+        throw new Error("Transaction ID missing from response");
       }
     } catch (error) {
       if (modal) modal.close();
+      
       toast.error(error.message || "支払い処理中にエラーが発生しました。", {
         position: "top-center",
         duration: 3000,
