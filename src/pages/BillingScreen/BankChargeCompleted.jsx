@@ -91,7 +91,7 @@ const BankChargeCompleted = () => {
   const { width, height } = useWindowSize();
   const confettiTriggeredRef = useRef(false);
   const toastTriggeredRef = useRef(false);
-  console.log(store_code, username);
+  console.log(staff_details)
 
   const fireConfetti = () => {
     const count = 200;
