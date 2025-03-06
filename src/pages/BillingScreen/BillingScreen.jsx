@@ -336,7 +336,7 @@ const BillingScreen = () => {
   
         // Use React Router navigate without reloading the page but with the same URL format
         // Create the URL with query parameters format
-        const chargeCompletedUrl = `/store/${store_code}/staff/${username}/chargeCompleted?paymentId=${resultData.transaction_id}&PayerID=CREDIT_CARD_DIRECT`;
+        const chargeCompletedUrl = `/store/${store_code}/staff/${username}/PaymentCompleted?paymentId=${resultData.transaction_id}&PayerID=CREDIT_CARD_DIRECT`;
         
         // Navigate to the URL with replace to avoid browser history issues
         navigate(chargeCompletedUrl, { replace: true });
