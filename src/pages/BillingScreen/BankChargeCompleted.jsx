@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import TitleBar from "../../components/TitleBar";
 import ButtonPrimary from "../../components/ButtonPrimary";
@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import Confetti from "react-confetti";
 import useWindowSize from "react-use/lib/useWindowSize";
 import confetti from "canvas-confetti";
+import UseGetUserDetails from "../../hooks/Staff/UseGetUserDetails";
 
 // Animation configurations
 const pageTransition = {
@@ -85,11 +86,12 @@ const gradientRotation = {
 };
 
 const BankChargeCompleted = () => {
-  const [showConfetti, setShowConfetti] = useState(true);
+  const { store_code, username } = useParams();
+  const { staff_details } = UseGetUserDetails(username, store_code);
   const { width, height } = useWindowSize();
   const confettiTriggeredRef = useRef(false);
-
-  const staff_details = JSON.parse(localStorage.getItem("staff_details"));
+  const toastTriggeredRef = useRef(false);
+  console.log(store_code, username);
 
   const fireConfetti = () => {
     const count = 200;
@@ -122,25 +124,25 @@ const BankChargeCompleted = () => {
     // Get paymentId from URL
     const url = new URL(window.location.href);
     const paymentId = url.searchParams.get("paymentId");
-    
+
     // Log payment ID to console
     console.log("Payment ID:", paymentId);
-    
+
     // Show success toast with payment ID if available
-    if (paymentId) {
+    if (paymentId && !toastTriggeredRef.current) {
+      toastTriggeredRef.current = true;
       toast.success(`取引ID: ${paymentId}`, {
         position: "top-center",
         duration: 4000,
       });
     }
-    
+
     // Ensure confetti shows regardless of URL parameters
     if (!confettiTriggeredRef.current) {
       confettiTriggeredRef.current = true;
       setTimeout(fireConfetti, 500);
     }
   }, []);
-  
 
   return (
     <AnimatePresence mode="wait">
