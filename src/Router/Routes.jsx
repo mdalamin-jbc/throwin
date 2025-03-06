@@ -63,6 +63,7 @@ import MemberReg from "../pages/Dashboard/MemberAccount/MemberReg";
 import SingUp from "../pages/Dashboard/SalesAgent/SingUp";
 import DaNameChange from "../pages/Dashboard/Seetings/DaNameChange";
 import AdminEmailChange from "../pages/Dashboard/Seetings/AdminEmailChange";
+import BankChargeCompleted from "../pages/BillingScreen/BankChargeCompleted";
 
 export const Routes = createBrowserRouter([
   {
@@ -198,7 +199,7 @@ export const Routes = createBrowserRouter([
       },
       {
         path: "/store/:store_codes/staff/:username/PaymentCompleted",
-        element: <ChargeCompleted />,
+        element: <BankChargeCompleted />,
       },
       {
         path: "payment-cancle",

@@ -123,6 +123,9 @@ const BankChargeCompleted = () => {
     const url = new URL(window.location.href);
     const paymentId = url.searchParams.get("paymentId");
     
+    // Log payment ID to console
+    console.log("Payment ID:", paymentId);
+    
     // Show success toast with payment ID if available
     if (paymentId) {
       toast.success(`取引ID: ${paymentId}`, {
@@ -137,6 +140,7 @@ const BankChargeCompleted = () => {
       setTimeout(fireConfetti, 500);
     }
   }, []);
+  
 
   return (
     <AnimatePresence mode="wait">
