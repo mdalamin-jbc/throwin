@@ -110,6 +110,15 @@ const ClientChart_admin = () => {
           </div>
           {/* ------------------------------- */}
           <div className="mt-[px] flex items-center gap-4 font-semibold text-xs">
+            <label className="text-[#434343]">営業代理店　　</label>
+            <div className="flex items-center gap-2  py-[5px] px-2 rounded-md">
+              <select className="border rounded px-2 py-1 w-[295px]">
+                <option value="">株式会社セールスラボ</option>
+              </select>
+            </div>
+          </div>
+          {/* ------------------------------- */}
+          <div className="mt-[px] flex items-center gap-4 font-semibold text-xs">
             <label className="text-[#434343]">クライアント　</label>
             <div className="flex items-center gap-2  py-[5px] px-2 rounded-md">
               <select className="border rounded px-2 py-1 w-[295px]">
@@ -124,8 +133,7 @@ const ClientChart_admin = () => {
                 value: "1,000,000",
                 unit: "円",
               },
-              { title: "利益額", value: "15,00", unit: "" },
-              { title: "Throwin回数", value: "1,500", unit: "回" },
+              { title: "利益額", value: "3000,000", unit: "円" },
               { title: "稼働店舗（チーム）数", value: "5", unit: "" },
             ].map((item, i) => (
               <div
