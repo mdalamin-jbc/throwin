@@ -361,18 +361,6 @@ export const Routes = createBrowserRouter([
           },
         ],
       },
-      {
-        path: "memberChart_sa",
-        element: <MemberChart_sa />,
-      },
-      {
-        path: "storeTeamChart_sa",
-        element: <StoreTeamChart_sa />,
-      },
-      {
-        path: "clientChart_sa",
-        element: <ClientChart_sa />,
-      },
     ],
   },
 ]);

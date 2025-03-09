@@ -79,7 +79,6 @@ const MemberChart_sa = () => {
 
   return (
     <div>
-      MemberChart_sa
       <div className="mt-[22px] flex items-center gap-4 font-semibold text-xs">
         <label className="text-[#434343] mr-9">期間指定</label>
         <div className="flex items-center gap-2  py-[5px] px-2 rounded-md">
