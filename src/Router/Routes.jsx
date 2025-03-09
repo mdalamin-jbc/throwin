@@ -64,6 +64,9 @@ import SingUp from "../pages/Dashboard/SalesAgent/SingUp";
 import DaNameChange from "../pages/Dashboard/Seetings/DaNameChange";
 import AdminEmailChange from "../pages/Dashboard/Seetings/AdminEmailChange";
 import BankChargeCompleted from "../pages/BillingScreen/BankChargeCompleted";
+import MemberChart_sa from "../pages/Dashboard/SalesManagement/MemberChart_sa";
+import StoreTeamChart_sa from "../pages/Dashboard/SalesManagement/StoreTeamChart_sa";
+import ClientChart_sa from "../pages/Dashboard/SalesManagement/ClientChart_sa";
 
 export const Routes = createBrowserRouter([
   {
@@ -357,6 +360,18 @@ export const Routes = createBrowserRouter([
             element: <AdminEmailChange />,
           },
         ],
+      },
+      {
+        path: "memberChart_sa",
+        element: <MemberChart_sa />,
+      },
+      {
+        path: "storeTeamChart_sa",
+        element: <StoreTeamChart_sa />,
+      },
+      {
+        path: "clientChart_sa",
+        element: <ClientChart_sa />,
       },
     ],
   },

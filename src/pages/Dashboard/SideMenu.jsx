@@ -18,8 +18,6 @@ const SideMenu = () => {
   const userRole = localStorage.getItem("userRole");
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-
-
   // Helper function to check if a path is active
   const isPathActive = (path, subPaths = []) => {
     if (location.pathname === path) return true;
@@ -198,6 +196,7 @@ const SideMenu = () => {
           </h4>
 
           <ul className="flex-1 list-none p-0 m-0 bg-white">
+            {/* change when dynamic */}
             {menuItems.map((item) => (
               <li key={item.path}>
                 <NavLink

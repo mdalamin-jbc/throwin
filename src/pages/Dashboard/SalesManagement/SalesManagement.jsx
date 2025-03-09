@@ -17,6 +17,12 @@ import TeamChart from "./TeamChart";
 import MemberChart from "./MemberChart";
 import ClientChart from "./ClientChart_sa";
 import ClientChart_sa from "./ClientChart_sa";
+import StoreTeamChart_sa from "./StoreTeamChart_sa";
+import MemberChart_sa from "./MemberChart_sa";
+import SalesAgentChart_admin from "./FcGlowAdimnChart/SalesAgentChart_admin";
+import ClientChart_admin from "./FcGlowAdimnChart/ClientChart_admin";
+import StoreTeamChart_admin from "./FcGlowAdimnChart/StoreTeamChart_admin";
+import MemberChart_admin from "./FcGlowAdimnChart/MemberChart_admin";
 
 ChartJS.register(
   CategoryScale,
@@ -241,9 +247,13 @@ const SalesManagement = () => {
             <PeriodSelector />
             <StatsCards
               stats={[
-                { title: "総売上", value: "2,500,000", unit: "円" },
-                { title: "総クライアント数", value: "25", unit: "" },
-                { title: "アクティブクライアント", value: "20", unit: "" },
+                {
+                  title: "売上額(Throwin額)",
+                  value: "1,000,000",
+                  unit: "円",
+                },
+                { title: "利益額", value: "300,000", unit: "円" },
+                { title: "稼働メンバー数", value: "5", unit: "" },
               ]}
             />
             <div className="mt-[27px]">
@@ -259,8 +269,9 @@ const SalesManagement = () => {
       case "client":
         return <ClientChart_sa />;
       case "store_team":
+        return <StoreTeamChart_sa />;
       case "member":
-        return <MemberChart />;
+        return <MemberChart_sa />;
       default:
         return null;
     }
@@ -274,10 +285,11 @@ const SalesManagement = () => {
             <PeriodSelector />
             <StatsCards
               stats={[
-                { title: "総売上", value: "5,000,000", unit: "円" },
-                { title: "営業代理店数", value: "30", unit: "" },
-                { title: "総クライアント数", value: "150", unit: "" },
-                { title: "アクティブ率", value: "85", unit: "%" },
+                { title: "合計売上", value: "1,000,000", unit: "円" },
+                { title: "稼働クライアント数", value: "5", unit: "" },
+                { title: "glow利益", value: "140,000", unit: "円" },
+                { title: "Free Company 利益", value: "140,000", unit: "円" },
+                { title: "クライアント 利益", value: "7000,000", unit: "円" },
               ]}
             />
             <div className="mt-[27px]">
@@ -291,10 +303,13 @@ const SalesManagement = () => {
           </>
         );
       case "sales_agent":
+        return <SalesAgentChart_admin />;
       case "client":
+        return <ClientChart_admin />;
       case "store_team":
+        return <StoreTeamChart_admin />;
       case "member":
-        return <MemberChart />;
+        return <MemberChart_admin />;
       default:
         return null;
     }

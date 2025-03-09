@@ -1,6 +1,7 @@
+import React from "react";
 import { Bar } from "react-chartjs-2";
 
-const ClientChart_sa = () => {
+const MemberChart_sa = () => {
   const dataOverall = {
     labels: [
       "1 火",
@@ -78,7 +79,7 @@ const ClientChart_sa = () => {
 
   return (
     <div>
-      Alamin
+      MemberChart_sa
       <div className="mt-[22px] flex items-center gap-4 font-semibold text-xs">
         <label className="text-[#434343] mr-9">期間指定</label>
         <div className="flex items-center gap-2  py-[5px] px-2 rounded-md">
@@ -109,10 +110,28 @@ const ClientChart_sa = () => {
       </div>
       {/* ------------------------------- */}
       <div className="mt-[px] flex items-center gap-4 font-semibold text-xs">
-        <label className="text-[#434343]">営業代理店　　</label>
+        <label className="text-[#434343]">クライアント　</label>
         <div className="flex items-center gap-2  py-[5px] px-2 rounded-md">
           <select className="border rounded px-2 py-1 w-[295px]">
-            <option value="">株式会社セールスラボ</option>
+            <option value="">居酒屋ABC</option>
+          </select>
+        </div>
+      </div>
+      {/* ------------------------------- */}
+      <div className="mt-[px] flex items-center gap-4 font-semibold text-xs">
+        <label className="text-[#434343]">店舗(チーム)　</label>
+        <div className="flex items-center gap-2  py-[5px] px-2 rounded-md">
+          <select className="border rounded px-2 py-1 w-[295px]">
+            <option value="">居酒屋ABC_大阪店</option>
+          </select>
+        </div>
+      </div>
+      {/* ------------------------------- */}
+      <div className="mt-[px] flex items-center gap-4 font-semibold text-xs">
+        <label className="text-[#434343]">メンバー　　　</label>
+        <div className="flex items-center gap-2  py-[5px] px-2 rounded-md">
+          <select className="border rounded px-2 py-1 w-[295px]">
+            <option value="">かりん</option>
           </select>
         </div>
       </div>
@@ -124,7 +143,6 @@ const ClientChart_sa = () => {
             unit: "円",
           },
           { title: "利益額", value: "300,000", unit: "円" },
-          { title: "稼働メンバー数", value: "5", unit: "" },
         ].map((item, i) => (
           <div
             key={i}
@@ -147,4 +165,4 @@ const ClientChart_sa = () => {
   );
 };
 
-export default ClientChart_sa;
+export default MemberChart_sa;
