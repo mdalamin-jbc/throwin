@@ -42,11 +42,11 @@ jobs:
           name: build
           path: dist/
 
-  cd:
-    name: Continuous Deployment
+  deploy_prod:
+    name: Deploy to Prod
     runs-on: ubuntu-latest
     needs: ci
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/prod'  # Check for both main and prod branches
+    if: github.ref == 'refs/heads/prod'  # Only runs for prod branch
 
     steps:
       - name: Checkout repository
@@ -57,17 +57,52 @@ jobs:
         with:
           name: build
 
-      - name: Set Environment Variables
+      - name: Set Environment Variables for Prod
         run: |
-          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
-            echo "ENVIRONMENT=alpha" >> $GITHUB_ENV
-            echo "AWS_S3_BUCKET=${{ secrets.ALPHA_AWS_S3_BUCKET }}" >> $GITHUB_ENV
-            echo "CLOUDFRONT_DISTRIBUTION=${{ secrets.ALPHA_CLOUDFRONT_DISTRIBUTION_ID }}" >> $GITHUB_ENV
-          elif [ "${{ github.ref }}" == "refs/heads/prod" ]; then
-            echo "ENVIRONMENT=prod" >> $GITHUB_ENV
-            echo "AWS_S3_BUCKET=${{ secrets.PROD_AWS_S3_BUCKET }}" >> $GITHUB_ENV
-            echo "CLOUDFRONT_DISTRIBUTION=${{ secrets.PROD_CLOUDFRONT_DISTRIBUTION_ID }}" >> $GITHUB_ENV
-          fi
+          echo "ENVIRONMENT=prod" >> $GITHUB_ENV
+          echo "AWS_S3_BUCKET=${{ secrets.PROD_AWS_S3_BUCKET }}" >> $GITHUB_ENV
+          echo "CLOUDFRONT_DISTRIBUTION=${{ secrets.PROD_CLOUDFRONT_DISTRIBUTION_ID }}" >> $GITHUB_ENV
+
+      - name: Deploy to S3
+        uses: jakejarvis/s3-sync-action@v0.5.1
+        with:
+          args: --delete
+        env:
+          AWS_S3_BUCKET: ${{ env.AWS_S3_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ap-northeast-1
+          AWS_S3_ACL: public-read
+
+      - name: Invalidate CloudFront Cache
+        uses: chetan/invalidate-cloudfront-action@v2
+        env:
+          DISTRIBUTION: ${{ env.CLOUDFRONT_DISTRIBUTION }}
+          PATHS: '/*'
+          AWS_REGION: ap-northeast-1
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  deploy_main:
+    name: Deploy to Main
+    runs-on: ubuntu-latest
+    needs: ci
+    if: github.ref == 'refs/heads/main'  # Only runs for main branch
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+
+      - name: Set Environment Variables for Main
+        run: |
+          echo "ENVIRONMENT=main" >> $GITHUB_ENV
+          echo "AWS_S3_BUCKET=${{ secrets.MAIN_AWS_S3_BUCKET }}" >> $GITHUB_ENV
+          echo "CLOUDFRONT_DISTRIBUTION=${{ secrets.MAIN_CLOUDFRONT_DISTRIBUTION_ID }}" >> $GITHUB_ENV
 
       - name: Deploy to S3
         uses: jakejarvis/s3-sync-action@v0.5.1
