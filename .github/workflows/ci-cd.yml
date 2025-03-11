@@ -1,9 +1,13 @@
 name: CI/CD Pipeline
 
 on:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
-      - prod  # Only deploy on push to 'prod' branch
+      - main
+      - prod  # Add prod to trigger CD for the prod branch
 
 jobs:
   ci:
@@ -11,14 +15,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout the code
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Step 2: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22.11.0
+          node-version: 22.11.0 # Match your local Node.js version
 
+      # Step 3: Cache Node Modules
       - name: Cache Node Modules
         uses: actions/cache@v4
         with:
@@ -27,57 +34,84 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
+      # Step 4: Install Dependencies
       - name: Install dependencies
         run: |
           npm cache clean --force
-          npm ci --legacy-peer-deps
+          npm ci --legacy-peer-deps # Ensures consistent dependency installation
 
+      # Step 5: Build the project
       - name: Build the project
         run: npm run build
 
+      # Step 6: Upload Build Artifact
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
           name: build
-          path: dist/
+          path: dist/ # Ensure this matches your actual output directory
 
-  deploy_prod:
-    name: Deploy to Prod
+  cd:
+    name: Continuous Deployment
     runs-on: ubuntu-latest
-    needs: ci
-    if: github.ref == 'refs/heads/prod'  # Only runs for prod branch
+    needs: ci # Ensures CD only runs if CI is successful
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/prod' # Run CD on both main and prod branches
 
     steps:
+      # Step 1: Checkout the code
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Step 2: Download Build Artifact
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:
           name: build
 
-      - name: Set Environment Variables for Prod
-        run: |
-          echo "ENVIRONMENT=prod" >> $GITHUB_ENV
-          echo "AWS_S3_BUCKET=${{ secrets.PROD_AWS_S3_BUCKET }}" >> $GITHUB_ENV
-          echo "CLOUDFRONT_DISTRIBUTION=${{ secrets.PROD_CLOUDFRONT_DISTRIBUTION_ID }}" >> $GITHUB_ENV
-
+      # Step 3: Deploy to S3
       - name: Deploy to S3
         uses: jakejarvis/s3-sync-action@v0.5.1
         with:
           args: --delete
         env:
-          AWS_S3_BUCKET: ${{ env.AWS_S3_BUCKET }}
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ap-northeast-1
-          AWS_S3_ACL: public-read
+          AWS_REGION: ap-northeast-1 # Set your AWS region
+          AWS_S3_ACL: public-read # Add this line for public read access
+        if: github.ref == 'refs/heads/main' # Deploy to main branch
 
+      # Step 4: Invalidate CloudFront Cache
       - name: Invalidate CloudFront Cache
         uses: chetan/invalidate-cloudfront-action@v2
         env:
-          DISTRIBUTION: ${{ env.CLOUDFRONT_DISTRIBUTION }}
+          DISTRIBUTION: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
           PATHS: '/*'
           AWS_REGION: ap-northeast-1
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        if: github.ref == 'refs/heads/main' # Invalidate cache for main branch
+
+      # Step 5: Deploy to S3 (prod) for prod branch
+      - name: Deploy to S3 (prod)
+        uses: jakejarvis/s3-sync-action@v0.5.1
+        with:
+          args: --delete
+        env:
+          AWS_S3_BUCKET: ${{ secrets.PROD_AWS_S3_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ap-northeast-1 # Set your AWS region
+          AWS_S3_ACL: public-read
+        if: github.ref == 'refs/heads/prod' # Deploy to prod branch
+
+      # Step 6: Invalidate CloudFront Cache (prod)
+      - name: Invalidate CloudFront Cache (prod)
+        uses: chetan/invalidate-cloudfront-action@v2
+        env:
+          DISTRIBUTION: ${{ secrets.PROD_CLOUDFRONT_DISTRIBUTION_ID }}
+          PATHS: '/*'
+          AWS_REGION: ap-northeast-1
+          AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
+        if: github.ref == 'refs/heads/prod' # Invalidate cache for prod branch
