@@ -29,6 +29,43 @@ const NewReg = () => {
   } = useForm();
   const password = watch("password");
 
+  // Function to translate password error messages to Japanese
+  const translatePasswordError = (errorMessage) => {
+    // Check for specific error patterns and return appropriate Japanese translations
+    if (errorMessage.includes("at least 8 characters, one number, one uppercase letter")) {
+      return "パスワードは8文字以上で、数字1つと大文字1つを含む必要があります。";
+    }
+    
+    if (errorMessage.includes("at least 8 characters, one number, one lowercase letter")) {
+      return "パスワードは8文字以上で、数字1つと小文字1つを含む必要があります。";
+    }
+    
+    if (errorMessage.includes("at least 8 characters, one uppercase letter, one lowercase letter")) {
+      return "パスワードは8文字以上で、大文字1つと小文字1つを含む必要があります。";
+    }
+    
+    if (errorMessage.includes("at least 8 characters")) {
+      return "パスワードは8文字以上である必要があります。";
+    }
+    
+    // Default case if no specific match is found
+    return "パスワードの形式が正しくありません。";
+  };
+
+  // Additional function to handle other common error messages
+  const translateErrorMessage = (message) => {
+    // You can add more translations for other common error messages here
+    if (message.includes("Email already exists")) {
+      return "このメールアドレスは既に登録されています。";
+    }
+    if (message.includes("Invalid email format")) {
+      return "メールアドレスの形式が正しくありません。";
+    }
+    
+    // Return the original message if no translation is available
+    return message || "エラーが発生しました。";
+  };
+
   const onSubmit = async (data) => {
     const requestData = {
       email,
@@ -60,13 +97,17 @@ const NewReg = () => {
           "Password validation errors:",
           error.response.data.password
         );
+        
+        // Translate the error message to Japanese
+        const japaneseErrorMessage = translatePasswordError(error.response.data.password.join(" "));
+        
         setError("password", {
           type: "manual",
-          message: error.response.data.password.join(" "),
+          message: japaneseErrorMessage,
         });
       } else {
         setErrorMessage(
-          error.response ? error.response.data.msg : "エラーが発生しました。"
+          error.response ? translateErrorMessage(error.response.data.msg) : "エラーが発生しました。"
         );
       }
       console.error("Registration error:", error);
@@ -100,7 +141,7 @@ const NewReg = () => {
                 <span className="label-text font-hiragino">パスワード設定</span>
               </label>
               <input
-                {...register("password", { required: "Password is required" })}
+                {...register("password", { required: "パスワードを入力してください" })}
                 type="password"
                 placeholder="パスワード"
                 className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
@@ -114,7 +155,7 @@ const NewReg = () => {
             <div className="form-control">
               <input
                 {...register("confirmPassword", {
-                  required: "Confirmation is required",
+                  required: "確認用パスワードを入力してください",
                   validate: (value) =>
                     value === password || "パスワードが一致しません",
                 })}

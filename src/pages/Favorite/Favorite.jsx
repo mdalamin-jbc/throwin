@@ -67,7 +67,7 @@ const Favorite = () => {
             <TitleBar title="お気に入り" />
           </div>
           {favoriteStuffs.length === 0 ? (
-            <p className="text-center mt-10">No favorite stuffs found.</p>
+            <p className="text-center mt-10">お気に入りのものが見つかりませんでした。</p>
           ) : (
             favoriteStuffs.map((staff) => (
               <div key={staff.uid} className="px-4">

@@ -94,7 +94,7 @@ const History = () => {
           ))
         ) : (
           <div className="text-center mt-10 text-[#9C9C9C]">
-            <p>No history available</p>
+            <p>利用可能な履歴はありません</p>
           </div>
         )}
       </div>

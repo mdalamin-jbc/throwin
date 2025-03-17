@@ -84,7 +84,7 @@ const DisplayName = () => {
         >
           <div className="form-control">
             <input
-              {...register("name", { required: "Name is required" })}
+              {...register("name", { required: "名前が必要です" })}
               name="name"
               type="text"
               placeholder="名前"
