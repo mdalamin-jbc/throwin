@@ -64,11 +64,13 @@ import SingUp from "../pages/Dashboard/SalesAgent/SingUp";
 import DaNameChange from "../pages/Dashboard/Seetings/DaNameChange";
 import AdminEmailChange from "../pages/Dashboard/Seetings/AdminEmailChange";
 import BankChargeCompleted from "../pages/BillingScreen/BankChargeCompleted";
+import ErrorPage from "../pages/ErrorPage/ErrorPage";
 
 export const Routes = createBrowserRouter([
   {
     path: "/",
-    element: <Root></Root>,
+    element: <Root />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "/",
