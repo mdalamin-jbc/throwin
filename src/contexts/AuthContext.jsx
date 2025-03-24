@@ -31,10 +31,10 @@ export const AuthProvider = ({ children }) => {
     Cookies.set("refresh_token", userData.refresh, { expires: 7 });
   };
 
-  const socialLogin=(data)=>{
-    Cookies.set("email", data.email, { expires: 7 });
-    Cookies.set("access_token", data.access, { expires: 7 });
-    Cookies.set("refresh_token", data.refresh, { expires: 7 });
+  const socialLogin=(socialData)=>{
+    Cookies.set("email", socialData.email, { expires: 7 });
+    Cookies.set("access_token", socialData.access, { expires: 7 });
+    Cookies.set("refresh_token", socialData.refresh, { expires: 7 });
   }
 
   const logout = () => {

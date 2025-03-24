@@ -46,7 +46,7 @@ const SocialLogin = () => {
       const tokenData = JSON.parse(tokenString);
       
       if (tokenData.msg === "Login Successful") {
-        console.log(tokenData)
+        console.log(tokenData.data)
         
         socialLogin(tokenData.data);
         toast.success("ログインに成功しました。", {
