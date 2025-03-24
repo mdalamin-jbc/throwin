@@ -16,7 +16,7 @@ import AuthContext from "../../contexts/AuthContext";
 import toast from "react-hot-toast";
 
 const SocialLogin = () => {
-  const { login } = useContext(AuthContext);
+  const { socialLogin } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const axiosPublic = useAxiosPublic();
@@ -32,19 +32,18 @@ const SocialLogin = () => {
   const handleGoogleLoginSuccess = async (response) => {
     console.log(response);
     try {
-      // Log the credential for debugging
       console.log("Google Credential (ID Token):", response.credential);
-
+  
       // Send the ID token to the backend
       const res = await axios.post(
         "https://api-dev.throwin-glow.com/auth/social/google",
-        {
-          access_token: response.credential,
-        }
+        { access_token: response.credential }
       );
-      console.log(res.data.access_token);
-      if (res.data.access_token.msg === "Login Successful") {
-        login(res.data.access_token);
+  
+      
+      if (res.data.msg === "Login Successful") {
+        socialLogin(res.data.data.access); // Use correct token path
+        console.log(res.data.data);
         toast.success("ログインに成功しました。", {
           position: "top-center",
           duration: 1500,
@@ -52,13 +51,11 @@ const SocialLogin = () => {
         });
         navigate("/search");
       }
-
-      console.log("Google Login Successful:", res);
-      navigate("/search");
     } catch (error) {
       console.error("Google Login Failed:", error.response?.data || error);
     }
   };
+  
 
   const handleGoogleLoginFailure = (error) => {
     console.error("Google Login Failed:", error);

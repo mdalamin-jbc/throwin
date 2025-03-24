@@ -31,6 +31,12 @@ export const AuthProvider = ({ children }) => {
     Cookies.set("refresh_token", userData.refresh, { expires: 7 });
   };
 
+  const socialLogin=(data)=>{
+    Cookies.set("email", data.email, { expires: 7 });
+    Cookies.set("access_token", data.access, { expires: 7 });
+    Cookies.set("refresh_token", data.refresh, { expires: 7 });
+  }
+
   const logout = () => {
     setUser(null);
     Cookies.remove("email");
@@ -43,6 +49,7 @@ export const AuthProvider = ({ children }) => {
     loading,
     login,
     logout,
+    socialLogin
   };
 
   return (
