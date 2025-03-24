@@ -11,9 +11,14 @@ import closeIcon from "../../assets/icons/close.png";
 import { motion } from "framer-motion";
 import useAxiosPublic from "../../hooks/axiosPublic";
 import axios from "axios";
+import { useContext } from "react";
+import AuthContext from "../../contexts/AuthContext";
+import toast from "react-hot-toast";
 
 const SocialLogin = () => {
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+
   const axiosPublic = useAxiosPublic();
 
   const handleClose = () => {
@@ -25,17 +30,27 @@ const SocialLogin = () => {
   };
 
   const handleGoogleLoginSuccess = async (response) => {
-    console.log(response)
+    console.log(response);
     try {
       // Log the credential for debugging
       console.log("Google Credential (ID Token):", response.credential);
 
       // Send the ID token to the backend
-      const res = await axios.post('https://api-dev.throwin-glow.com/auth/social/google', {
-        access_token: response.credential,
-      });
+      const res = await axios.post(
+        "https://api-dev.throwin-glow.com/auth/social/google",
+        {
+          access_token: response.credential,
+        }
+      );
       console.log(response);
-      
+      if (res.data.msg === "Login Successful") {
+        login(res.data);
+        toast.success("ログインに成功しました。", {
+          position: "top-center",
+          duration: 1500,
+          id: "login-success",
+        });
+      }
 
       console.log("Google Login Successful:", res);
       navigate("/search");
