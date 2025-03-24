@@ -32,6 +32,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const socialLogin=(socialData)=>{
+    console.log(socialData)
     Cookies.set("email", socialData.email, { expires: 7 });
     Cookies.set("access_token", socialData.access, { expires: 7 });
     Cookies.set("refresh_token", socialData.refresh, { expires: 7 });
