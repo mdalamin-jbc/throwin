@@ -130,7 +130,7 @@ const Account = () => {
                           <img
                             src={
                               store.banner?.small ||
-                              "https://s3-alpha-sig.figma.com/img/a8e5/b83e/e461f47e6b5f7786158f8f5f3eb4817d?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=CI6U4GQBbgwQyv9Ju2E4xXJLONjRqa4zuZEPN7W6cVylnjTo2tkEWz73wXqYGDhjreEUZxncRElUwnoP1rB3Vc~ugFHqYqU4-AuycHXPZvQOsmg~Q0jf~lE46bCwQtm3mFqy-Z2ZyXXBE8IxhdVIO85xQIPiyuJTT2Hlh1u9dwRJJQ9DRmmIOQBE9~mNklM7ju4HY2JlMNpEbRaJuwJLDvH~W9h4KMHjVPdn2NsTUZY~PWNGyNokCFNz221O989do5FUQDI1kBevwX3Cgiu4Bv81sHkHcCLWbhJs4zHIjhvE1-MplyKfEmZPTP~MM-4xTj8q2EZ4aHCPsrzz352eOw__"
+                              "https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
                             }
                             alt={store.name}
                             className="w-[29px] rounded-full"

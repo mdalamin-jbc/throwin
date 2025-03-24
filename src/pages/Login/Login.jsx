@@ -10,6 +10,9 @@ import useAxiosPublic from "../../hooks/axiosPublic";
 import AuthContext from "../../contexts/AuthContext";
 import toast from "react-hot-toast";
 import UseUserDetails from "../../hooks/UseUserDetails";
+import ButtonSecondary from "../../components/ButtonSecondary";
+import { RiArrowLeftSLine } from "react-icons/ri";
+import { FaAngleRight } from "react-icons/fa";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -31,7 +34,7 @@ const Login = () => {
         duration: 3000,
         id: "already-logged-in",
       });
-      
+
       // Ask if they want to go to search page
       const confirmRedirect = window.confirm("検索ページに移動しますか？");
       if (confirmRedirect) {
@@ -283,7 +286,8 @@ const Login = () => {
                 whileTap={{ scale: 0.98 }}
                 className="w-full"
               >
-                <ButtonPrimary
+                
+                <ButtonSecondary
                   btnText="ログイン"
                   disabled={isSubmitting}
                   style={`font-hiragino bg-gradient-to-r from-[#65D0F2] to-[#2399F4] min-w-[253px] rounded-full text-center py-[10px] font-bold text-white transition-all duration-500 ${
@@ -291,6 +295,7 @@ const Login = () => {
                       ? "opacity-70 cursor-not-allowed"
                       : "hover:shadow-[0_0_20px_rgba(101,208,242,0.4),0_0_40px_rgba(101,208,242,0.2)]"
                   }`}
+                  icon={<FaAngleRight />}
                 />
               </motion.button>
             </div>
