@@ -32,27 +32,36 @@ const SocialLogin = () => {
   const handleGoogleLoginSuccess = async (response) => {
     console.log(response);
     try {
-      console.log("Google Credential (ID Token):", response.credential);
-  
       // Send the ID token to the backend
       const res = await axios.post(
         "https://api-dev.throwin-glow.com/auth/social/google",
         { access_token: response.credential }
       );
-  
       
-      if (res.data.msg === "Login Successful") {
-        socialLogin(res.data.data.access); // Use correct token path
-        console.log(res.data.data);
+      console.log(res.data);
+      
+      // Parse the access_token string to an object
+      // First replace single quotes with double quotes to make it valid JSON
+      const tokenString = res.data.access_token.replace(/'/g, '"');
+      const tokenData = JSON.parse(tokenString);
+      
+      if (tokenData.msg === "Login Successful") {
+        // Log the email, access, and refresh tokens
+        console.log("User Email:", tokenData.data.email);
+        console.log("Access Token:", tokenData.data.access);
+        console.log("Refresh Token:", tokenData.data.refresh);
+        
+        socialLogin(tokenData.data.access);
         toast.success("ログインに成功しました。", {
           position: "top-center",
           duration: 1500,
           id: "login-success",
         });
-        navigate("/search");
+        // navigate("/search");
       }
     } catch (error) {
       console.error("Google Login Failed:", error.response?.data || error);
+      console.error("Error details:", error);
     }
   };
   
