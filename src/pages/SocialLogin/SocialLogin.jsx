@@ -43,13 +43,14 @@ const SocialLogin = () => {
         }
       );
       console.log(response);
-      if (res.data.msg === "Login Successful") {
-        login(res.data);
+      if (res.data.access_token.msg === "Login Successful") {
+        login(res.data.access_token);
         toast.success("ログインに成功しました。", {
           position: "top-center",
           duration: 1500,
           id: "login-success",
         });
+        navigate("/search");
       }
 
       console.log("Google Login Successful:", res);
