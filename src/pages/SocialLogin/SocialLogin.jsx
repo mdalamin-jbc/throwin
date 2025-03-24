@@ -42,7 +42,7 @@ const SocialLogin = () => {
           access_token: response.credential,
         }
       );
-      console.log(response);
+      console.log(res.data.access_token);
       if (res.data.access_token.msg === "Login Successful") {
         login(res.data.access_token);
         toast.success("ログインに成功しました。", {
