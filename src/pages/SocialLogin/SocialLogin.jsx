@@ -46,12 +46,9 @@ const SocialLogin = () => {
       const tokenData = JSON.parse(tokenString);
       
       if (tokenData.msg === "Login Successful") {
-        // Log the email, access, and refresh tokens
-        console.log("User Email:", tokenData.data.email);
-        console.log("Access Token:", tokenData.data.access);
-        console.log("Refresh Token:", tokenData.data.refresh);
+        console.log(tokenData)
         
-        socialLogin(tokenData.data.access);
+        socialLogin(tokenData.data);
         toast.success("ログインに成功しました。", {
           position: "top-center",
           duration: 1500,
