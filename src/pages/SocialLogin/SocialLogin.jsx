@@ -57,7 +57,7 @@ const SocialLogin = () => {
           duration: 1500,
           id: "login-success",
         });
-        // navigate("/search");
+        navigate("/search");
       }
     } catch (error) {
       console.error("Google Login Failed:", error.response?.data || error);
