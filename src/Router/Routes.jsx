@@ -274,89 +274,165 @@ export const Routes = createBrowserRouter([
       },
       {
         path: "/dashboard",
-        element: <Dashboard />,
+        element: (
+          <PrivateRoute>
+            <Dashboard />
+          </PrivateRoute>
+        ),
         children: [
           {
             path: "sales_management",
-            element: <SalesManagement />,
+            element: (
+              <PrivateRoute>
+                <SalesManagement />
+              </PrivateRoute>
+            ),
           },
           {
             path: "account",
-            element: <Account />,
+            element: (
+              <PrivateRoute>
+                <Account />
+              </PrivateRoute>
+            ),
           },
           {
             path: "account/creat_newStore",
-            element: <CreateANewAccount />,
+            element: (
+              <PrivateRoute>
+                <CreateANewAccount />
+              </PrivateRoute>
+            ),
           },
           {
             path: "/dashboard/account/:store_code",
-            element: <ResturentStore />,
+            element: (
+              <PrivateRoute>
+                <ResturentStore />
+              </PrivateRoute>
+            ),
           },
           {
             path: "m_account",
-            element: <MemberAccount />,
+            element: (
+              <PrivateRoute>
+                <MemberAccount />
+              </PrivateRoute>
+            ),
           },
           {
             path: "/dashboard/account/:id/creat_newStaff",
-            element: <MemberReg />,
+            element: (
+              <PrivateRoute>
+                <MemberReg />
+              </PrivateRoute>
+            ),
           },
           // fc/glow admin
           {
             path: "client",
-            element: <Client />,
+            element: (
+              <PrivateRoute>
+                <Client />
+              </PrivateRoute>
+            ),
           },
           {
             path: "client/creat_new",
-            element: <CreatNewClient />,
+            element: (
+              <PrivateRoute>
+                <CreatNewClient />
+              </PrivateRoute>
+            ),
           },
           {
             path: "sales_agent",
-            element: <SalesAgent />,
+            element: (
+              <PrivateRoute>
+                <SalesAgent />
+              </PrivateRoute>
+            ),
           },
           {
             path: "sales_agent/sign_up",
-            element: <SingUp />,
+            element: (
+              <PrivateRoute>
+                <SingUp />
+              </PrivateRoute>
+            ),
           },
           {
             path: "comments",
-            element: <DaComments />,
+            element: (
+              <PrivateRoute>
+                <DaComments />
+              </PrivateRoute>
+            ),
           },
           {
             path: "qr_creation",
-            element: <QrCreation />,
+            element: (
+              <PrivateRoute>
+                <QrCreation />
+              </PrivateRoute>
+            ),
           },
           {
             path: "deHistorys",
-            element: <DeHistory />,
+            element: (
+              <PrivateRoute>
+                <DeHistory />
+              </PrivateRoute>
+            ),
           },
           {
             path: "creat_a_new_team",
-            element: <CreateANewTeam />,
+            element: (
+              <PrivateRoute>
+                <CreateANewTeam />
+              </PrivateRoute>
+            ),
           },
 
           {
-            path: "adminLogin",
-            element: <AdminLogin />,
-          },
-          {
             path: "deGacha",
-            element: <DeGacha />,
+            element: (
+              <PrivateRoute>
+                <DeGacha />
+              </PrivateRoute>
+            ),
           },
           {
             path: "payment_management",
-            element: <PaymentManagement />,
+            element: (
+              <PrivateRoute>
+                <PaymentManagement />
+              </PrivateRoute>
+            ),
           },
           {
             path: "settings",
-            element: <DeSeetings />,
+            element: (
+              <PrivateRoute>
+                <DeSeetings />
+              </PrivateRoute>
+            ),
           },
           {
             path: "/dashboard/settings/name/change",
-            element: <DaNameChange />,
+            element: (
+              <PrivateRoute>
+                <DaNameChange />
+              </PrivateRoute>
+            ),
           },
           {
             path: "/dashboard/settings/email/change",
-            element: <AdminEmailChange />,
+            element: (
+              <PrivateRoute>
+                <AdminEmailChange />
+              </PrivateRoute>
+            ),
           },
         ],
       },

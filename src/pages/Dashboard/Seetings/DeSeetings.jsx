@@ -172,7 +172,7 @@ const DeSettings = () => {
                       }
                       className="border py-1 px-3 rounded-md bg-gray-200"
                     >
-                      {isEditingName ? "OK" : "情報の編集"}
+                      {isEditingName ? "提出する" : "情報の編集"}
                     </button>
                   </td>
                 </tr>
@@ -200,7 +200,7 @@ const DeSettings = () => {
                           type="submit"
                           className="border py-1 px-3 rounded-md bg-[#49bbdf] text-white"
                         >
-                          Submit
+                          提出する
                         </button>
                       </form>
                     ) : (
@@ -249,7 +249,7 @@ const DeSettings = () => {
                           type="submit"
                           className="border py-1 px-3 rounded-md bg-[#49bbdf] text-white"
                         >
-                          Submit
+                          提出する
                         </button>
                       </form>
                     ) : (
