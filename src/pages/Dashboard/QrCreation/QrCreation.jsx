@@ -5,6 +5,8 @@ import ButtonPrimary from "../../../components/ButtonPrimary";
 import UseGetRestaurantOwnerStoreList from "../../../hooks/Dashboard/UseGetRestaurantOwnerStoreList";
 import UseGetStaffByStoreCode from "../../../hooks/Dashboard/UseGetStaffByStoreCode";
 import { useState, useEffect } from "react";
+import { FaCaretDown } from "react-icons/fa";
+import { BiSolidDownArrow } from "react-icons/bi";
 
 const QrCreation = () => {
   const { storeList } = UseGetRestaurantOwnerStoreList();
@@ -19,7 +21,9 @@ const QrCreation = () => {
   useEffect(() => {
     if (store_code && member_username) {
       // If both store and member are selected
-      setQrLink(`https://alpha.throwin-glow.com/store/${store_code}/staff/${member_username}`);
+      setQrLink(
+        `https://alpha.throwin-glow.com/store/${store_code}/staff/${member_username}`
+      );
     } else if (store_code) {
       // If only store is selected
       setQrLink(`https://alpha.throwin-glow.com/store/${store_code}`);
@@ -82,10 +86,11 @@ const QrCreation = () => {
                 チーム（店舗）の選択
               </label>
               <div className="relative">
+                <BiSolidDownArrow className="absolute left-3 top-[60%] transform -translate-y-1/2  text-[#3BC2EE]" />
                 <select
                   {...register("team", { required: "チームの選択は必須です" })}
                   onChange={handleStoreCode}
-                  className="w-full mt-[9px] rounded py-[6px] pl-10 pr-12 border border-[#D9D9D9]"
+                  className="w-full mt-[9px] rounded py-[6px] pl-10 pr-3 border border-[#D9D9D9] appearance-none"
                 >
                   <option value="">選択してください</option>
                   {storeList.map((store) => (
@@ -107,13 +112,14 @@ const QrCreation = () => {
                 メンバーの選択
               </label>
               <div className="relative">
+              <BiSolidDownArrow className="absolute left-3 top-[60%] transform -translate-y-1/2 text-[#3BC2EE]" />
                 <select
                   {...register("member", {
                     required: store_code ? "メンバーの選択は必須です" : false,
                   })}
                   onChange={handleMemberChange}
                   disabled={!store_code}
-                  className="w-full mt-[9px] rounded py-[6px] pl-10 pr-12 border border-[#D9D9D9]"
+                  className="appearance-none w-full mt-[9px] rounded py-[6px] pl-10 pr-12 border border-[#D9D9D9]"
                 >
                   <option value="">選択してください</option>
                   {restaurantStaffListByStoreCode.map((staff) => (
