@@ -1,10 +1,8 @@
-
-import PropTypes from "prop-types";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { Circles } from "react-loader-spinner";
 
-const PrivateRoute = ({ children }) => {
+const AdminPrivateRoute = (children) => {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -21,12 +19,7 @@ const PrivateRoute = ({ children }) => {
     );
   }
 
-  return user ? children : <Navigate to="/" />;
+  return user ? children : <Navigate to="admin/login" />;
 };
 
-// Define PropTypes
-PrivateRoute.propTypes = {
-  children: PropTypes.node.isRequired,
-};
-
-export default PrivateRoute;
+export default AdminPrivateRoute;

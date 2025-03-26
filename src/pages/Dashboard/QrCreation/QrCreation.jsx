@@ -112,7 +112,7 @@ const QrCreation = () => {
                 メンバーの選択
               </label>
               <div className="relative">
-              <BiSolidDownArrow className="absolute left-3 top-[60%] transform -translate-y-1/2 text-[#3BC2EE]" />
+              <FaCaretDown className="absolute left-3 top-[60%] transform -translate-y-1/2 text-[#3BC2EE]" />
                 <select
                   {...register("member", {
                     required: store_code ? "メンバーの選択は必須です" : false,

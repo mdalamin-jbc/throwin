@@ -14,13 +14,18 @@ export const AuthProvider = ({ children }) => {
     const checkUser = () => {
       const email = Cookies.get("email");
       const accessToken = Cookies.get("access_token");
-
+      const refreshToken = Cookies.get("refresh_token");
+  
       if (email && accessToken) {
-        setUser({ email, access: accessToken });
+        setUser({ 
+          email, 
+          access: accessToken, 
+          refresh: refreshToken 
+        });
       }
       setLoading(false);
     };
-
+  
     checkUser();
   }, []);
 
@@ -31,12 +36,17 @@ export const AuthProvider = ({ children }) => {
     Cookies.set("refresh_token", userData.refresh, { expires: 7 });
   };
 
-  const socialLogin=(socialData)=>{
-    console.log(socialData)
+  const socialLogin = (socialData) => {
+    console.log(socialData);
+    setUser({
+      email: socialData.email,
+      access: socialData.access,
+      refresh: socialData.refresh
+    });
     Cookies.set("email", socialData.email, { expires: 7 });
     Cookies.set("access_token", socialData.access, { expires: 7 });
     Cookies.set("refresh_token", socialData.refresh, { expires: 7 });
-  }
+  };
 
   const logout = () => {
     setUser(null);

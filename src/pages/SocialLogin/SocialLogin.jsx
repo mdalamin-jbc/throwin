@@ -9,17 +9,16 @@ import googleLogo from "../../assets/icons/google.png";
 import appleLogo from "../../assets/icons/apple.png";
 import closeIcon from "../../assets/icons/close.png";
 import { motion } from "framer-motion";
-import useAxiosPublic from "../../hooks/axiosPublic";
 import axios from "axios";
 import { useContext } from "react";
 import AuthContext from "../../contexts/AuthContext";
 import toast from "react-hot-toast";
+import UseUserDetails from "../../hooks/UseUserDetails";
 
 const SocialLogin = () => {
   const { socialLogin } = useContext(AuthContext);
+  const { refetch } = UseUserDetails();
   const navigate = useNavigate();
-
-  const axiosPublic = useAxiosPublic();
 
   const handleClose = () => {
     navigate("/");
@@ -37,17 +36,18 @@ const SocialLogin = () => {
         "https://api-dev.throwin-glow.com/auth/social/google",
         { access_token: response.credential }
       );
-      
+
       console.log(res.data);
-      
+
       // Parse the access_token string to an object
       // First replace single quotes with double quotes to make it valid JSON
       const tokenString = res.data.access_token.replace(/'/g, '"');
       const tokenData = JSON.parse(tokenString);
-      
+
       if (tokenData.msg === "Login Successful") {
-        console.log(tokenData.data)
-        
+        console.log(tokenData.data);
+        refetch();
+
         socialLogin(tokenData.data);
         toast.success("ログインに成功しました。", {
           position: "top-center",
@@ -61,7 +61,6 @@ const SocialLogin = () => {
       console.error("Error details:", error);
     }
   };
-  
 
   const handleGoogleLoginFailure = (error) => {
     console.error("Google Login Failed:", error);
