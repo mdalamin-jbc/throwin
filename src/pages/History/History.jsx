@@ -3,6 +3,8 @@ import TitleBar from "../../components/TitleBar";
 import useAxiosPrivate from "../../hooks/axiousPrivate";
 import { useQuery } from "@tanstack/react-query";
 import { Circles } from "react-loader-spinner";
+import { useAuth } from "../../hooks/useAuth";
+import { useEffect } from "react";
 
 // Helper function to format date
 const formatDate = (dateString) => {
@@ -16,10 +18,15 @@ const formatDate = (dateString) => {
 };
 
 const History = () => {
+  const { user } = useAuth();
   const axiosPrivate = useAxiosPrivate();
 
   // Fetch payments data
-  const { data: payments = [], isLoading } = useQuery({
+  const {
+    data: payments = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["payments data"],
     queryFn: async () => {
       const res = await axiosPrivate.get("/payment_service/payment-histories/");
@@ -32,6 +39,12 @@ const History = () => {
     },
     enabled: true,
   });
+
+  useEffect(() => {
+    if (user) {
+      refetch();
+    }
+  }, [user, refetch]);
 
   console.log(payments);
   if (isLoading) {
