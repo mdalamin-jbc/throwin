@@ -25,19 +25,21 @@ const AdminLogin = () => {
         password: data.password,
       });
 
-      console.log("Response:", response);
+      console.log("Response:", response.data.data.role);
+      if (response.data.data.role == "consumer") {
+        toast.error("許可されていないアクセス", {
+          position: "top-right",
+          duration: 3000,
+        });
+      }
 
-      if (response.status === 200) {
+      if (response.status === 200 && response.data.data.role !== "consumer") {
         const result = response.data;
         login(response.data.data);
 
         // Extract user role and tokens
         const userRole = result.data?.role;
         localStorage.setItem("userRole", userRole);
-        // localStorage.setItem("accessToken", result.data?.access);
-        // localStorage.setItem("refreshToken", result.data?.refresh);
-        console.log(result);
-
         toast.success(`ようこそ, ${result.data?.role}`, {
           position: "top-center",
           duration: 3000,
@@ -50,13 +52,10 @@ const AdminLogin = () => {
       console.error("Error:", error); // Debugging
 
       if (error.response) {
-        toast.error(
-          error.response.data.detail || "無効なメールまたはパスワード",
-          {
-            position: "top-right",
-            duration: 3000,
-          }
-        );
+        toast.error("無効なメールまたはパスワード", {
+          position: "top-right",
+          duration: 3000,
+        });
       } else {
         toast.error("サーバーに接続できません。後でもう一度お試しください。", {
           position: "top-right",

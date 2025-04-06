@@ -5,13 +5,11 @@ import { useContext, useState, useEffect } from "react";
 import closeIcon from "../../assets/icons/close.png";
 import logo from "../../assets/images/socialLogin/logo2.png";
 import socialBg from "../../assets/images/socialLogin/social bg.jpeg";
-import ButtonPrimary from "../../components/ButtonPrimary";
 import useAxiosPublic from "../../hooks/axiosPublic";
 import AuthContext from "../../contexts/AuthContext";
 import toast from "react-hot-toast";
 import UseUserDetails from "../../hooks/UseUserDetails";
 import ButtonSecondary from "../../components/ButtonSecondary";
-import { RiArrowLeftSLine } from "react-icons/ri";
 import { FaAngleRight } from "react-icons/fa";
 
 const Login = () => {
@@ -69,8 +67,21 @@ const Login = () => {
         email: data.mail,
         password: data.password,
       });
+      console.log(response.data.data.role);
 
-      if (response.data.msg === "Login Successful") {
+      if (response.data.data.role !== "consumer") {
+        toast.error("許可されていないアクセス", {
+          position: "top-right",
+          duration: 3000,
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
+      if (
+        response.data.msg === "Login Successful" &&
+        response.data.data.role == "consumer"
+      ) {
         setValidFields({ mail: true, password: true });
 
         login(response.data.data);
@@ -286,7 +297,6 @@ const Login = () => {
                 whileTap={{ scale: 0.98 }}
                 className="w-full"
               >
-                
                 <ButtonSecondary
                   btnText="ログイン"
                   disabled={isSubmitting}
