@@ -25,7 +25,6 @@ const AdminLogin = () => {
         password: data.password,
       });
 
-      console.log("Response:", response.data.data.role);
       if (response.data.data.role == "consumer") {
         toast.error("許可されていないアクセス", {
           position: "top-right",
