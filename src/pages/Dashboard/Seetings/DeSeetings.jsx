@@ -3,9 +3,11 @@ import useAxiosPrivate from "../../../hooks/axiousPrivate";
 import UseGetResturentWonerSettings from "../../../hooks/Dashboard/UseGetResturentWonerSettings";
 
 const DeSettings = () => {
+  const userRole = localStorage.getItem("userRole");
   const { resturentWonerSettings, refetch, isLoading } =
     UseGetResturentWonerSettings();
   const axiosPrivate = useAxiosPrivate();
+  console.log(userRole);
 
   // Name change states
   const [isEditingName, setIsEditingName] = useState(false);
@@ -28,7 +30,14 @@ const DeSettings = () => {
     if (!name.trim()) return alert("ご担当者名を入力してください。");
 
     try {
-      await axiosPrivate.post("/restaurant-owner/settings/change-name", {
+      let endpoint = "";
+      if (userRole === "fc_admin" || userRole === "glow_admin") {
+        endpoint = "/admins/settings/change-name";
+      } else {
+        endpoint = "/restaurant-owner/settings/change-name";
+      }
+
+      await axiosPrivate.post(endpoint, {
         name,
       });
       console.log("Name changed successfully");
@@ -46,6 +55,7 @@ const DeSettings = () => {
       return alert("メールアドレスとパスワードを入力してください。");
 
     try {
+      
       const response = await axiosPrivate.post(
         "/restaurant-owner/settings/change-email-request",
         { email, password }
@@ -160,7 +170,7 @@ const DeSettings = () => {
                         className="border p-1 w-full rounded-md"
                       />
                     ) : (
-                      name || "未登録"
+                      resturentWonerSettings.name || "未登録"
                     )}
                   </td>
                   <td className="text-center">

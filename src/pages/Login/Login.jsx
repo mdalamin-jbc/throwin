@@ -71,7 +71,7 @@ const Login = () => {
 
       if (response.data.data.role !== "consumer") {
         toast.error("許可されていないアクセス", {
-          position: "top-right",
+          position: "top-center",
           duration: 3000,
         });
         setIsSubmitting(false);

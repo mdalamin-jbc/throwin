@@ -27,9 +27,10 @@ const AdminLogin = () => {
 
       if (response.data.data.role == "consumer") {
         toast.error("許可されていないアクセス", {
-          position: "top-right",
+          position: "top-center",
           duration: 3000,
         });
+        return;
       }
 
       if (response.status === 200 && response.data.data.role !== "consumer") {
@@ -52,12 +53,12 @@ const AdminLogin = () => {
 
       if (error.response) {
         toast.error("無効なメールまたはパスワード", {
-          position: "top-right",
+          position: "top-center",
           duration: 3000,
         });
       } else {
         toast.error("サーバーに接続できません。後でもう一度お試しください。", {
-          position: "top-right",
+          position: "top-center",
           duration: 3000,
         });
       }

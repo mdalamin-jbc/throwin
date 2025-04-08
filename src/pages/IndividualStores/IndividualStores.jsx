@@ -14,7 +14,7 @@ const IndividualStores = () => {
   const { storeDetails } = UseGetStoreDetailsByStoreCode(store_code);
   console.log(store);
 
-  // Prioritize location state, otherwise fallback to localStorage
+
 
   if (isLoading) {
     return (

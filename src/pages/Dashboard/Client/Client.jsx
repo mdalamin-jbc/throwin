@@ -5,15 +5,33 @@ import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import UseGetSalesAgents from "../../../hooks/Dashboard/UseGetSalesAgents";
 import UseGetOrganizations from "../../../hooks/Dashboard/UseGetOrganizations";
+import { Circles } from "react-loader-spinner";
 
 const Client = () => {
-  const { organizations, refetch, isLoading, isError, error } =
-    UseGetOrganizations();
+  const { organizations, refetch, isLoading } = UseGetOrganizations();
 
   const {
     register,
+    watch,
     formState: { errors },
   } = useForm();
+
+  const searchValue = watch("searchMember");
+  console.log("Search Input:", searchValue);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Circles
+          height="80"
+          width="80"
+          color="#49BBDF"
+          ariaLabel="circles-loading"
+          visible={true}
+        />
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -82,25 +100,34 @@ const Client = () => {
               </thead>
               <tbody>
                 {organizations.length > 0 ? (
-                  organizations?.map((store) => (
-                    <tr key={store.uid} className="hover border ">
-                      <td className="flex items-center gap-[17px] ">
-                        <Link
-                          onClick={() =>
-                            localStorage.setItem("store", JSON.stringify(store))
-                          }
-                        >
-                          <p>{store.name}</p>
-                        </Link>
-                      </td>
-                      <td>{store.code}</td>
-                      <td>
-                        <button className="bg-[#ABABAB] rounded-full px-3 py-1 text-white">
-                          {store.exposure}
-                        </button>
-                      </td>
-                    </tr>
-                  ))
+                  organizations
+                    .filter((store) =>
+                      store.name
+                        .toLowerCase()
+                        .includes(searchValue?.toLowerCase() || "")
+                    )
+                    .map((store) => (
+                      <tr key={store.uid} className="hover border ">
+                        <td className="flex items-center gap-[17px] ">
+                          <Link
+                            onClick={() =>
+                              localStorage.setItem(
+                                "store",
+                                JSON.stringify(store)
+                              )
+                            }
+                          >
+                            <p>{store.name}</p>
+                          </Link>
+                        </td>
+                        <td>{store.code}</td>
+                        <td>
+                          <button className="bg-[#ABABAB] rounded-full px-3 py-1 text-white">
+                            {store.exposure}
+                          </button>
+                        </td>
+                      </tr>
+                    ))
                 ) : (
                   <tr>
                     <td colSpan="4" className="text-center text-[#B5B5B5] py-4">
