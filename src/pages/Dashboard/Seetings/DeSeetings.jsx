@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivate from "../../../hooks/axiousPrivate";
 import UseGetResturentWonerSettings from "../../../hooks/Dashboard/UseGetResturentWonerSettings";
+import toast from "react-hot-toast";
+import { Circles } from "react-loader-spinner";
+import UseUserDetails from "../../../hooks/UseUserDetails";
 
 const DeSettings = () => {
+  const { refetch: userRefetch } = UseUserDetails();
   const userRole = localStorage.getItem("userRole");
   const { resturentWonerSettings, refetch, isLoading } =
     UseGetResturentWonerSettings();
@@ -25,9 +29,18 @@ const DeSettings = () => {
     }
   }, [resturentWonerSettings]);
 
+  // Handle edit name button click
+  const handleEditName = () => {
+    setName(""); // Clear name to show placeholder
+    setIsEditingName(true);
+  };
+
   // Handle Name Change
   const handleSaveName = async () => {
-    if (!name.trim()) return alert("ご担当者名を入力してください。");
+    if (!name.trim()) {
+      toast.error("ご担当者名を入力してください。");
+      return;
+    }
 
     try {
       let endpoint = "";
@@ -37,13 +50,18 @@ const DeSettings = () => {
         endpoint = "/restaurant-owner/settings/change-name";
       }
 
-      await axiosPrivate.post(endpoint, {
-        name,
-      });
-      console.log("Name changed successfully");
+      const response = await axiosPrivate.post(endpoint, { name });
+
+      if (response.status === 201) {
+        toast.success("ご担当者名が正常に変更されました！");
+        refetch();
+        userRefetch();
+      }
+
+      console.log("Name changed successfully", response.status);
       setIsEditingName(false);
-      refetch();
     } catch (error) {
+      toast.error("名前の変更に失敗しました。");
       console.error("Error changing name", error);
     }
   };
@@ -51,20 +69,33 @@ const DeSettings = () => {
   // Handle Email Change
   const handleSubmitEmail = async (e) => {
     e.preventDefault();
-    if (!email.trim() || !password.trim())
-      return alert("メールアドレスとパスワードを入力してください。");
+
+    if (!email.trim() || !password.trim()) {
+      toast.error("メールアドレスとパスワードを入力してください。");
+      return;
+    }
+
+    const toastId = toast.loading("変更を送信中...");
 
     try {
-      
       const response = await axiosPrivate.post(
-        "/restaurant-owner/settings/change-email-request",
+        "admins/settings/change-email-request",
         { email, password }
       );
-      console.log("Email change request sent successfully", response.data);
+
+      if (response.status === 200) {
+        toast.success("確認メールを送信しました！", { id: toastId });
+      }
+
       setIsEditingEmail(false);
       refetch();
     } catch (error) {
       console.error("Error changing email", error);
+
+      const errorMessage =
+        error?.response?.data?.message ||
+        "メールアドレスの変更に失敗しました。";
+      toast.error(errorMessage, { id: toastId });
     }
   };
 
@@ -78,40 +109,50 @@ const DeSettings = () => {
   const handleSubmitPassword = async (e) => {
     e.preventDefault();
     if (!oldPassword.trim() || !newPassword.trim() || !confirmPassword.trim()) {
-      return alert("全てのフィールドを入力してください。");
+      toast.error("全てのフィールドを入力してください。");
+      return;
     }
     if (newPassword !== confirmPassword) {
-      return alert("新しいパスワードが一致しません。");
+      toast.error("新しいパスワードが一致しません。");
+      return;
     }
 
-    try {
-      await axiosPrivate.put(
-        "/auth/password/change",
-        {
-          old_password: oldPassword,
-          new_password: newPassword,
-          confirm_password: confirmPassword, // Include confirm_password
-        },
-        {
-          headers: {
-            "X-CSRFTOKEN":
-              "dOnIlLo4jSZVOaj9f8ENx9bg54q9FTJb8OFO1KiCnjlAUJqIz6TMPpzLuJhCVGGb", // Include CSRF token if required
-          },
-        }
-      );
+    const toastId = toast.loading("パスワードを変更中...");
 
-      console.log("Password changed successfully");
+    try {
+      const response = await axiosPrivate.put("/auth/password/change", {
+        old_password: oldPassword,
+        new_password: newPassword,
+        confirm_password: confirmPassword,
+      });
+
+      if (response.status === 200) {
+        toast.success("パスワードが正常に変更されました！", { id: toastId });
+      }
+
       setIsEditingPassword(false);
       setOldPassword("");
       setNewPassword("");
       setConfirmPassword("");
     } catch (error) {
       console.error("Error changing password", error);
-      alert("パスワードの変更に失敗しました。");
+      toast.error("パスワードの変更に失敗しました。", { id: toastId });
     }
   };
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Circles
+          height="80"
+          width="80"
+          color="#49BBDF"
+          ariaLabel="circles-loading"
+          visible={true}
+        />
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -168,17 +209,18 @@ const DeSettings = () => {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         className="border p-1 w-full rounded-md"
+                        placeholder={
+                          resturentWonerSettings?.owner_name || "ご担当者名"
+                        }
                       />
                     ) : (
-                      resturentWonerSettings.name || "未登録"
+                      resturentWonerSettings?.owner_name
                     )}
                   </td>
                   <td className="text-center">
                     <button
                       onClick={() =>
-                        isEditingName
-                          ? handleSaveName()
-                          : setIsEditingName(true)
+                        isEditingName ? handleSaveName() : handleEditName()
                       }
                       className="border py-1 px-3 rounded-md bg-gray-200"
                     >
@@ -198,6 +240,9 @@ const DeSettings = () => {
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           className="border p-1 w-full rounded-md mb-2"
+                          placeholder={
+                            resturentWonerSettings?.email || "メールアドレス"
+                          }
                         />
                         <input
                           type="password"
@@ -220,7 +265,11 @@ const DeSettings = () => {
                   <td className="text-center">
                     {!isEditingEmail && (
                       <button
-                        onClick={() => setIsEditingEmail(true)}
+                        onClick={() => {
+                          setEmail("");
+                          setPassword("");
+                          setIsEditingEmail(true);
+                        }}
                         className="border py-1 px-3 rounded-md bg-gray-200"
                       >
                         メールアドレスの変更

@@ -14,7 +14,7 @@ import UseUserDetails from "../../hooks/UseUserDetails";
 const SideMenu = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { userDetails, isLoading } = UseUserDetails();
+  const { userDetails } = UseUserDetails();
   const userRole = localStorage.getItem("userRole");
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
@@ -192,7 +192,7 @@ const SideMenu = () => {
           </div>
 
           <h4 className="text-sm font-semibold pl-6 mb-6">
-            {userDetails?.name}
+            {userDetails?.kind} : <span className="font-bold">{userDetails?.name}</span>
           </h4>
 
           <ul className="flex-1 list-none p-0 m-0 bg-white">

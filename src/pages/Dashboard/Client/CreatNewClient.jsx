@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../../../hooks/axiousPrivate";
 import UseGetOrganizations from "../../../hooks/Dashboard/UseGetOrganizations";
+import { Circles } from "react-loader-spinner";
 
 const CreateNewSalesAgent = () => {
   const { refetch, isLoading, isError, error } = UseGetOrganizations();
@@ -25,12 +26,12 @@ const CreateNewSalesAgent = () => {
     // Create API request body with all required fields
     const requestBody = {
       company_name: data.companyName,
-      address: data.address || "", // Default to empty string if not provided
-      agency_code: data.agencyCode || "", // Default to empty string if not provided
+      address: data.address || "",
+      agency_code: data.agencyCode || "",
       post_code: data.postCode,
       industry: data.industry,
-      invoice_number: data.invoiceNumber || "", // Default to empty string if not provided
-      corporate_number: data.corporateNumber || "", // Default to empty string if not provided
+      invoice_number: data.invoiceNumber || "",
+      corporate_number: data.corporateNumber || "",
       owner_name: data.contactName,
       telephone_number: data.telephoneNumber,
       email: data.email,
@@ -82,6 +83,20 @@ const CreateNewSalesAgent = () => {
     handleSubmit(onSubmit)();
     document.getElementById("my_modal_9").close();
   };
+
+  if (isLoading) {
+      return (
+        <div className="flex justify-center items-center h-screen">
+          <Circles
+            height="80"
+            width="80"
+            color="#49BBDF"
+            ariaLabel="circles-loading"
+            visible={true}
+          />
+        </div>
+      );
+    }
 
   return (
     <div className="">
