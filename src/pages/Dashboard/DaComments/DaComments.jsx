@@ -1,6 +1,9 @@
 import img from "../../../assets/images/store&staff/image.png";
+import UseGetRestaurantOwnerReviews from "../../../hooks/Dashboard/RestaurantOwner/UseGetRestaurantOwnerReviews";
 
 const DaComments = () => {
+  const { review } = UseGetRestaurantOwnerReviews();
+  console.log(review);
   return (
     <div>
       <h2 className="font-semibold text-[27px] text-[#73879C]">コメント</h2>

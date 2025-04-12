@@ -246,7 +246,7 @@ const BillingScreen = () => {
 
   const handleCreditCardPayment = async (data) => {
     const modal = document.getElementById("visa_payment_modal");
-  
+
     if (!window.Multipayment) {
       if (modal) modal.close();
       toast.error("決済サービスが利用できません。", {
@@ -255,18 +255,18 @@ const BillingScreen = () => {
       });
       return;
     }
-  
+
     if (!validatePayment(selectedAmount, selectedPaymentMethod)) {
       if (modal) modal.close();
       return;
     }
-  
+
     try {
       // Show loading indicator
       const loadingToast = toast.loading("処理中...", {
         position: "top-center",
       });
-  
+
       const paymentPromise = new Promise((resolve, reject) => {
         window.Multipayment.getToken(
           {
@@ -283,12 +283,12 @@ const BillingScreen = () => {
                   `トークン生成に失敗しました: ${result.resultCode}`
                 );
               }
-  
+
               let generatedToken = result.tokenObject.token;
               if (Array.isArray(generatedToken)) {
                 generatedToken = generatedToken[0];
               }
-  
+
               const paymentData = {
                 nickname: userDetails?.name || "Guest",
                 staff_uid: staff?.uid,
@@ -296,14 +296,18 @@ const BillingScreen = () => {
                 amount: billingData.amount.toString(),
                 currency: "JPY",
                 token: generatedToken,
+                message,
               };
-  
+
+              console.log(paymentData, "paymnet data");
+
               // Use axiosPrivate for consistent authorization handling
               const response = await axiosPrivate.post(
                 "/payment_service/gmo-pg/credit-card/",
                 paymentData
               );
-  
+              console.log(response, "payment response");
+
               resolve(response.data);
             } catch (error) {
               reject(error);
@@ -311,33 +315,36 @@ const BillingScreen = () => {
           }
         );
       });
-  
+
       const resultData = await paymentPromise;
       toast.dismiss(loadingToast);
-  
+
       if (resultData.transaction_id) {
         if (modal) modal.close();
-        
+
         // No success toast here - let the completion page handle it
-        
+
         // Store staff_details in localStorage as done elsewhere in the code
         if (staff_details) {
           localStorage.setItem("staff_details", JSON.stringify(staff_details));
         }
-  
+
         // Store payment details to localStorage as backup
-        localStorage.setItem("payment_details", JSON.stringify({
-          paymentId: resultData.transaction_id,
-          PayerID: "CREDIT_CARD_DIRECT",
-          amount: selectedAmount.replace(/,/g, ""),
-          timestamp: Date.now(),
-          payment_method: "credit_card"
-        }));
-  
+        localStorage.setItem(
+          "payment_details",
+          JSON.stringify({
+            paymentId: resultData.transaction_id,
+            PayerID: "CREDIT_CARD_DIRECT",
+            amount: selectedAmount.replace(/,/g, ""),
+            timestamp: Date.now(),
+            payment_method: "credit_card",
+          })
+        );
+
         // Use React Router navigate without reloading the page but with the same URL format
         // Create the URL with query parameters format
         const chargeCompletedUrl = `/store/${store_code}/staff/${username}/chargeCompleted?paymentId=${resultData.transaction_id}&PayerID=CREDIT_CARD_DIRECT`;
-        
+
         // Navigate to the URL with replace to avoid browser history issues
         navigate(chargeCompletedUrl, { replace: true });
       } else {
@@ -345,7 +352,7 @@ const BillingScreen = () => {
       }
     } catch (error) {
       if (modal) modal.close();
-      
+
       toast.error(error.message || "支払い処理中にエラーが発生しました。", {
         position: "top-center",
         duration: 3000,
