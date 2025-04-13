@@ -7,7 +7,7 @@ const UseGetRestaurantOwnerReviews = () => {
   const { user } = useAuth();
   const {
     refetch,
-    data: review = [],
+    data: reviews = [],
     isLoading,
     isError,
     error,
@@ -17,8 +17,7 @@ const UseGetRestaurantOwnerReviews = () => {
       if (!user?.access) return [];
       try {
         const response = await axiousPrivate.get("/restaurant-owner/reviews");
-        console.log(response);
-        return response.data.results;
+        return response.data;
       } catch (error) {
         console.error(
           "Error fetching restaurant owner review",
@@ -29,7 +28,7 @@ const UseGetRestaurantOwnerReviews = () => {
     },
     enabled: Boolean(user?.access),
   });
-  return { review, refetch, isLoading, isError, error };
+  return { reviews, refetch, isLoading, isError, error };
 };
 
 export default UseGetRestaurantOwnerReviews;

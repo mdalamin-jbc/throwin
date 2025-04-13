@@ -111,14 +111,14 @@ const Staff = () => {
                   応援メッセージ
                 </h2>
                 <div className="mt-4">
-                  {userReview?.map((review, index) => (
+                  {staff_details?.reviews?.map((review, index) => (
                     <div
                       key={index}
                       className="border-b-[2px] border-[#E0EAED]"
                     >
                       <h4 className="flex justify-between mt-4 font-medium text-xs text-[#9C9C9C]">
-                        <span>ユーザーネーム：{review?.nickname}</span>
-                        <span>{formatDate(review?.date)}</span>
+                        <span>ユーザーネーム：{review?.consumer_name}</span>
+                        <span>{formatDate(review?.created_at)}</span>
                       </h4>
                       <p className="font-medium text-sm text-[#44495B] mt-2 mb-4">
                         {review?.message}
