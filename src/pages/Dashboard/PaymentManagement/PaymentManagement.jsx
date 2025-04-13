@@ -1,5 +1,24 @@
 import { MdKeyboardArrowDown } from "react-icons/md";
+import { useState, useEffect } from "react";
+
 const PaymentManagement = () => {
+  const [years, setYears] = useState([]);
+  const [selectedYear, setSelectedYear] = useState("");
+  
+  useEffect(() => {
+    // Get current year
+    const currentYear = new Date().getFullYear();
+    
+    // Generate years array (current year and 10 years back)
+    const yearsArray = [];
+    for (let i = 0; i <= 10; i++) {
+      yearsArray.push(currentYear - i);
+    }
+    
+    setYears(yearsArray);
+    setSelectedYear(currentYear);
+  }, []);
+
   return (
     <div>
       <h2 className="font-semibold text-[27px] text-[#73879C]">支払い管理</h2>
@@ -15,36 +34,24 @@ const PaymentManagement = () => {
             <div>
               <select
                 className="font-semibold text-[#73879C] border-2 py-[6px] px-4 rounded"
-                name=""
-                id=""
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(e.target.value)}
               >
-                <option selected value="">
-                  2024年
-                </option>
-                <option selected value="">
-                  2023年
-                </option>
-                <option selected value="">
-                  2022年
-                </option>
+                {years.map((year) => (
+                  <option key={year} value={year}>
+                    {year}年
+                  </option>
+                ))}
               </select>
               <select
                 className="font-semibold text-[#73879C] border-2 py-[6px] px-4 rounded mx-4"
                 name=""
                 id=""
               >
-                <option selected value="">
-                  5月
-                </option>
-                <option selected value="">
-                  8月
-                </option>
-                <option selected value="">
-                  10月
-                </option>
-                <option selected value="">
-                  12月
-                </option>
+                <option value="5">5月</option>
+                <option value="8">8月</option>
+                <option value="10">10月</option>
+                <option value="12">12月</option>
               </select>
             </div>
             <button className="py-2 px-6 bg-[#49BBDF] rounded text-white">

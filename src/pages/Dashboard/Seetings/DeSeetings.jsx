@@ -11,7 +11,7 @@ const DeSettings = () => {
   const { resturentWonerSettings, refetch, isLoading } =
     UseGetResturentWonerSettings();
   const axiosPrivate = useAxiosPrivate();
-  console.log(userRole);
+  console.log(resturentWonerSettings);
 
   // Name change states
   const [isEditingName, setIsEditingName] = useState(false);

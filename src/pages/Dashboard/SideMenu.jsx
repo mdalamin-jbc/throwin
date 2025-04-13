@@ -10,8 +10,11 @@ import history from "../../assets/icons/historyn.png";
 import gacha from "../../assets/icons/gachan.png";
 import payment from "../../assets/icons/payment_management.png";
 import UseUserDetails from "../../hooks/UseUserDetails";
+import toast from "react-hot-toast";
+import { useAuth } from "../../hooks/useAuth";
 
 const SideMenu = () => {
+  const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const { userDetails } = UseUserDetails();
@@ -115,57 +118,54 @@ const SideMenu = () => {
   };
 
   // Handle logout
+
   const handleLogout = async () => {
     try {
       setIsLoggingOut(true);
+      toast.loading("ログアウト中...");
 
-      // Get the refresh token - you might store this in localStorage or elsewhere
       const refreshToken = localStorage.getItem("refreshToken") || "string";
+      const csrfToken =
+        document
+          .querySelector('meta[name="csrf-token"]')
+          ?.getAttribute("content") || "";
 
-      // Get the access token
-      const accessToken = localStorage.getItem("accessToken");
+      console.log("User Info:", user);
+      console.log("Refresh Token:", refreshToken);
 
-      if (!accessToken) {
-        // If no access token, just redirect to login
-        localStorage.clear();
-        navigate("/admin/login");
-        return;
-      }
-
-      // Call the logout API
       const response = await fetch(
         "https://api-dev.throwin-glow.com/auth/logout",
         {
           method: "POST",
           headers: {
-            accept: "*/*",
-            Authorization: `Bearer ${accessToken}`,
+            Accept: "*/*",
+            Authorization: `Bearer ${user.access}`,
             "Content-Type": "application/json",
-            "X-CSRFTOKEN":
-              document
-                .querySelector('meta[name="csrf-token"]')
-                ?.getAttribute("content") || "",
+            "X-CSRFTOKEN": csrfToken,
           },
           body: JSON.stringify({
-            refresh: refreshToken,
+            refresh: user.refresh,
           }),
         }
       );
 
-      // Clear all local storage items related to authentication
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      localStorage.removeItem("userRole");
-      localStorage.removeItem("userId");
-      // Add any other auth-related items you might have stored
+      console.log("Logout status:", response.status);
 
-      // Redirect to login page
-      navigate("/admin/login");
+      if (response.ok) {
+        logout(); // ローカルの認証データをクリア
+        toast.dismiss();
+        toast.success("正常にログアウトしました");
+        // オプション: リダイレクト処理
+        // navigate("/admin/login");
+      } else {
+        throw new Error(
+          `ログアウトに失敗しました（ステータス: ${response.status}）`
+        );
+      }
     } catch (error) {
-      console.error("Logout failed:", error);
-      // Even if the API call fails, clear local storage and redirect
-      localStorage.clear();
-      navigate("/admin/login");
+      console.error("ログアウトエラー:", error);
+      toast.dismiss();
+      toast.error("ログアウトに失敗しました。もう一度お試しください。");
     } finally {
       setIsLoggingOut(false);
     }
@@ -192,7 +192,8 @@ const SideMenu = () => {
           </div>
 
           <h4 className="text-sm font-semibold pl-6 mb-6">
-            {userDetails?.kind} : <span className="font-bold">{userDetails?.name}</span>
+            {userDetails?.kind} :{" "}
+            <span className="font-bold">{userDetails?.name}</span>
           </h4>
 
           <ul className="flex-1 list-none p-0 m-0 bg-white">

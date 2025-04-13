@@ -80,7 +80,7 @@ const MemberList = () => {
                 })}
                 name="name"
                 type="text"
-                placeholder="店舗コードを入力"
+                placeholder="スタッフ名を入力してください"
                 className="w-full rounded-[8px] py-3 pl-4 pr-10 border border-[#D9D9D9] text-[#44495B] text-sm placeholder-gray-400 focus:outline-none focus:border-[#707070] shadow-sm"
                 value={searchTerm}
                 onChange={handleSearchByUserName}
@@ -149,7 +149,7 @@ const MemberList = () => {
             ))
           ) : (
             <div className="text-center text-gray-500 col-span-2 sm:col-span-3">
-              No results found.
+              結果が見つかりません。
             </div>
           )}
         </div>
