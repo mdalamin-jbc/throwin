@@ -14,11 +14,10 @@ const Search = () => {
   const [searchByStuffName, setSearchByStuffName] = useState("");
   const [searchStore, setSearchStore] = useState("");
   const [isScannerOpen, setIsScannerOpen] = useState(false);
-
-  const [errorMessage, setErrorMessage] = useState("");
+  const [qrErrorMessage, setQrErrorMessage] = useState("");
   const videoRef = useRef(null);
   const codeReaderRef = useRef(null);
-  const { storeId, isLoading, isError, refetch } =
+  const { storeId, isLoading, error, isError, refetch } =
     UseStaffDetailsWithStoreId(searchByStuffName);
 
   const axiosPublic = useAxiosPublic();
@@ -26,6 +25,8 @@ const Search = () => {
 
   const {
     register,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm();
 
@@ -39,11 +40,8 @@ const Search = () => {
 
   const handleQRCodeResult = (result) => {
     console.log("QR Code Result:", result.text);
-
-    // Check if result.text is a valid URL
     try {
       const url = new URL(result.text);
-      // Redirect to the URL
       window.location.href = url.href;
     } catch (error) {
       console.error("Invalid URL in QR Code:", result.text);
@@ -62,12 +60,12 @@ const Search = () => {
       const devices = await codeReader.listVideoInputDevices();
 
       if (devices.length === 0) {
-        setErrorMessage("カメラが見つかりませんでした。");
+        setQrErrorMessage("カメラが見つかりませんでした。");
         return;
       }
 
       setIsScannerOpen(true);
-      setErrorMessage("");
+      setQrErrorMessage("");
 
       await new Promise((resolve) => setTimeout(resolve, 100));
 
@@ -81,36 +79,36 @@ const Search = () => {
           setIsScannerOpen(false);
         } catch (err) {
           console.error("QR code scan failed", err);
-          setErrorMessage("QRコードのスキャンに失敗しました。");
+          setQrErrorMessage("QRコードのスキャンに失敗しました。");
         }
       }
     } catch (error) {
       console.error("Error initializing camera:", error);
-      setErrorMessage("カメラの初期化にエラーが発生しました。");
+      setQrErrorMessage("カメラの初期化にエラーが発生しました。");
     }
   };
-  
 
   const handleCloseScanner = () => {
     if (codeReaderRef.current) {
       codeReaderRef.current.reset();
     }
     setIsScannerOpen(false);
-    setErrorMessage("");
+    setQrErrorMessage("");
   };
 
-  // search by staff name
   const handleSearchStuff = async (staffName = null) => {
     const searchValue = staffName || searchByStuffName;
 
-    console.log(storeId);
-
     if (!searchValue) {
-      setErrorMessage("メンバー名は必須です");
+      setError("searchMember", {
+        type: "manual",
+        message: "メンバー名は必須です",
+      });
       return;
+    } else {
+      clearErrors("searchMember");
     }
 
-    // Update the search input if the name came from QR code
     if (staffName) {
       setSearchByStuffName(staffName);
     }
@@ -118,10 +116,12 @@ const Search = () => {
     refetch();
 
     if (!isLoading && !isError) {
-      setErrorMessage("");
       navigate(`/member_list/${searchValue}`);
     } else if (isError) {
-      setErrorMessage("スタッフが見つかりませんでした。");
+      setError("searchMember", {
+        type: "manual",
+        message: "スタッフが見つかりませんでした。",
+      });
     }
   };
 
@@ -129,19 +129,26 @@ const Search = () => {
     const searchValue = storeCode || searchStore;
 
     if (!searchValue) {
-      setErrorMessage("店舗コードは必須です");
+      setError("searchStore", {
+        type: "manual",
+        message: "店舗コードは必須です",
+      });
       return;
+    } else {
+      clearErrors("searchStore");
     }
 
     try {
       const response = await axiosPublic.get(`/stores/${searchValue}`);
-
-      setErrorMessage("");
-      // Store data in localStorage
       localStorage.setItem("storeData", JSON.stringify(response.data));
-      navigate(`/store/${searchValue}`, { state: { storeData: response.data } });
+      navigate(`/store/${searchValue}`, {
+        state: { storeData: response.data },
+      });
     } catch (error) {
-      setErrorMessage("店舗が見つからないか、エラーが発生しました。");
+      setError("searchStore", {
+        type: "manual",
+        message: "店舗が見つからないか、エラーが発生しました。",
+      });
       console.error("Error fetching store:", error);
     }
   };
@@ -198,14 +205,14 @@ const Search = () => {
           </motion.div>
         )}
 
-        {errorMessage && (
+        {qrErrorMessage && (
           <motion.p
             className="text-red-500 mt-2"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
           >
-            {errorMessage}
+            {qrErrorMessage}
           </motion.p>
         )}
       </motion.div>
@@ -215,39 +222,40 @@ const Search = () => {
         className="w-[342px] mx-auto"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration:1 }}
+        transition={{ duration: 1 }}
       >
         <h4 className="mt-8 mb-4 font-semibold font-hiragino">
           メンバー名から探す
         </h4>
-        <div className="relative flex flex-col justify-center">
-          <input
-            {...register("searchMember", {
-              required: "メンバー名は必須です",
-            })}
-            name="searchMember"
-            type="text"
-            placeholder="メンバー名を入力"
-            className="w-full rounded-[8px] py-3 pl-4 pr-10 border border-[#D9D9D9] text-[#44495B] text-sm placeholder-gray-400 focus:outline-none focus:border-[#707070] shadow-sm"
-            value={searchByStuffName}
-            onChange={(e) => setSearchByStuffName(e.target.value)}
-          />
-          <div
-            onClick={() => handleSearchStuff()}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
-          >
-            <img
-              className="w-5 h-5 opacity-70"
-              src={search}
-              alt="search icon"
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSearchStuff();
+          }}
+        >
+          <div className="relative">
+            <input
+              {...register("searchMember")}
+              name="searchMember"
+              type="text"
+              placeholder="メンバー名を入力"
+              className="w-full rounded-[8px] py-3 pl-4 pr-10 border border-[#D9D9D9] text-[#44495B] text-sm placeholder-gray-400 focus:outline-none focus:border-[#707070] shadow-sm"
+              value={searchByStuffName}
+              onChange={(e) => setSearchByStuffName(e.target.value)}
             />
+            <div
+              onClick={() => handleSearchStuff()}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+            >
+              <img className="w-5 h-5 opacity-70" src={search} alt="search icon" />
+            </div>
           </div>
           {errors.searchMember && (
-            <span className="text-red-500 mt-1">
+            <span className="text-red-500 text-sm">
               {errors.searchMember.message}
             </span>
           )}
-        </div>
+        </form>
       </motion.div>
 
       {/* Store Code Search */}
@@ -260,34 +268,35 @@ const Search = () => {
         <h4 className="mt-8 mb-4 font-semibold font-hiragino">
           店舗(チーム）コードから探す
         </h4>
-        <div className="relative flex flex-col justify-center">
-          <input
-            {...register("searchStore", {
-              required: "店舗コードは必須です",
-            })}
-            name="searchStore"
-            type="text"
-            placeholder="店舗(チーム)コードを入力"
-            className="w-full rounded-[8px] py-3 pl-4 pr-10 border border-[#D9D9D9] text-[#44495B] text-sm placeholder-gray-400 focus:outline-none focus:border-[#707070] shadow-sm"
-            value={searchStore}
-            onChange={(e) => setSearchStore(e.target.value)}
-          />
-          <div
-            onClick={() => handleSearchStore()}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
-          >
-            <img
-              className="w-5 h-5 opacity-70"
-              src={search}
-              alt="search icon"
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSearchStore();
+          }}
+        >
+          <div className="relative">
+            <input
+              {...register("searchStore")}
+              name="searchStore"
+              type="text"
+              placeholder="店舗(チーム)コードを入力"
+              className="w-full rounded-[8px] py-3 pl-4 pr-10 border border-[#D9D9D9] text-[#44495B] text-sm placeholder-gray-400 focus:outline-none focus:border-[#707070] shadow-sm"
+              value={searchStore}
+              onChange={(e) => setSearchStore(e.target.value)}
             />
+            <div
+              onClick={() => handleSearchStore()}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+            >
+              <img className="w-5 h-5 opacity-70" src={search} alt="search icon" />
+            </div>
           </div>
           {errors.searchStore && (
-            <span className="text-red-500 mt-1">
+            <span className="text-red-500 text-sm">
               {errors.searchStore.message}
             </span>
           )}
-        </div>
+        </form>
       </motion.div>
     </div>
   );
