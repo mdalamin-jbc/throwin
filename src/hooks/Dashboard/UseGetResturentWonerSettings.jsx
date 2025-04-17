@@ -6,6 +6,7 @@ const UseGetResturentWonerSettings = () => {
   const userRole = localStorage.getItem("userRole");
   const AxiosPrivate = useAxiosPrivate();
   const { user } = useAuth();
+  console.log(user);
 
   const {
     refetch,
@@ -23,13 +24,8 @@ const UseGetResturentWonerSettings = () => {
 
         if (userRole === "fc_admin" || userRole === "glow_admin") {
           endpoint = "/admins/settings";
-        } else if (
-          userRole === "restaurant_owner" ||
-          userRole === "sales_agent"
-        ) {
-          endpoint = "/restaurant-owner/settings";
         } else {
-          throw new Error("Invalid user role");
+          endpoint = "/restaurant-owner/settings";
         }
 
         const response = await AxiosPrivate.get(endpoint);
@@ -39,9 +35,7 @@ const UseGetResturentWonerSettings = () => {
           "Error fetching settings:",
           error.response?.data || error.message
         );
-        throw new Error(
-          "Failed to fetch user settings. Please try again."
-        );
+        throw new Error("Failed to fetch user settings. Please try again.");
       }
     },
     enabled: Boolean(user?.access),

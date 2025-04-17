@@ -1,15 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import search from "../../../assets/icons/search_3.png";
-import img from "../../../assets/images/store&staff/image.png";
 import { Link } from "react-router-dom";
 import UseGetRestaurantOwnerStoreList from "../../../hooks/Dashboard/UseGetRestaurantOwnerStoreList";
 import Pagination from "./Pagination";
 
 const Account = () => {
-  const { storeList, refetch, isLoading, isError, error } =
-    UseGetRestaurantOwnerStoreList();
+  const { storeList } = UseGetRestaurantOwnerStoreList();
 
   // Add pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -21,22 +19,6 @@ const Account = () => {
     watch,
   } = useForm();
   const searchQuery = watch("searchMember", "");
-
-  const [teams, setTeams] = useState([]);
-
-  useEffect(() => {
-    // Fetch or set data dynamically
-    const fetchTeams = async () => {
-      // Replace with real API call
-      const data = [
-        { id: 1, name: "かりん", status: "公開" },
-        { id: 2, name: "さくら", status: "非公開" },
-        { id: 3, name: "たけし", status: "公開" },
-      ];
-      setTeams(data);
-    };
-    fetchTeams();
-  }, []);
 
   // Calculate pagination
   const filteredStores = storeList.filter(

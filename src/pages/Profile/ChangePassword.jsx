@@ -34,7 +34,7 @@ const ChangePassword = () => {
           confirm_password: data.confirmPassword,
         });
         console.log(response);
-        
+
         // Show success notification with react-hot-toast
         toast.success("パスワードが正常に変更されました", {
           position: "top-center",
@@ -112,7 +112,7 @@ const ChangePassword = () => {
                       required: "新しいパスワードを入力してください",
                       minLength: {
                         value: 6,
-                        message: "Password must be at least 6 characters",
+                        message: "パスワードは6文字以上でなければなりません。",
                       },
                     })}
                     name="password"

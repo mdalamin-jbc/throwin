@@ -53,6 +53,7 @@ export const AuthProvider = ({ children }) => {
     Cookies.remove("email");
     Cookies.remove("access_token");
     Cookies.remove("refresh_token");
+    localStorage.removeItem("userRole")
   };
 
   const authInfo = {

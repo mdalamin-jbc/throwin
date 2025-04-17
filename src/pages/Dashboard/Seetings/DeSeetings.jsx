@@ -210,11 +210,13 @@ const DeSettings = () => {
                         onChange={(e) => setName(e.target.value)}
                         className="border p-1 w-full rounded-md"
                         placeholder={
-                          resturentWonerSettings?.owner_name || "ご担当者名"
+                          resturentWonerSettings?.owner_name ||
+                          resturentWonerSettings?.name
                         }
                       />
                     ) : (
-                      resturentWonerSettings?.owner_name
+                      resturentWonerSettings?.owner_name ||
+                      resturentWonerSettings?.name
                     )}
                   </td>
                   <td className="text-center">
