@@ -17,9 +17,8 @@ const Search = () => {
   const [qrErrorMessage, setQrErrorMessage] = useState("");
   const videoRef = useRef(null);
   const codeReaderRef = useRef(null);
-  const { storeId, isLoading, error, isError, refetch } =
-    UseStaffDetailsWithStoreId(searchByStuffName);
 
+  const { refetch } = UseStaffDetailsWithStoreId(searchByStuffName);
   const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
 
@@ -113,11 +112,14 @@ const Search = () => {
       setSearchByStuffName(staffName);
     }
 
-    refetch();
-
-    if (!isLoading && !isError) {
-      navigate(`/member_list/${searchValue}`);
-    } else if (isError) {
+    try {
+      const { data } = await refetch();
+      if (data?.storeId) {
+        navigate(`/member_list/${searchValue}`);
+      } else {
+        throw new Error("スタッフが見つかりませんでした。");
+      }
+    } catch (error) {
       setError("searchMember", {
         type: "manual",
         message: "スタッフが見つかりませんでした。",
