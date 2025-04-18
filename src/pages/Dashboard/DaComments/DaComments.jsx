@@ -13,8 +13,6 @@ const DaComments = () => {
   const axiosPrivate = useAxiosPrivate();
   const { register, handleSubmit, reset } = useForm();
 
-  console.log(replies);
-
   const [replyingToReplyId, setReplyingToReplyId] = useState(null);
 
   const handleReviewClick = (uid) => {
@@ -93,67 +91,116 @@ const DaComments = () => {
             <div className="w-[400px]">
               {activeReviewUid && (
                 <>
-                  {/* Replies List */}
-                  {replies?.review_replies &&
-                  replies?.review_replies?.length > 0 ? (
-                    replies.review_replies.map((reply, index) => (
-                      <div
-                        key={index}
-                        className="mt-4 border-b-[2px] border-[#E0EAED] pb-2"
-                      >
-                        <h4 className="flex justify-between mt-4 font-medium text-xs text-[#9C9C9C]">
-                          <span>
-                            ユーザーネーム：
-                            {reply?.restaurant_owner_name ||
-                              reply?.consumer_name ||
-                              "ゲスト"}
-                          </span>
-                          <span>
-                            {new Date(reply?.created_at).toLocaleDateString(
-                              "ja-JP"
+                  {/* Always show the original review */}
+                  <div className="mt-4 border-b-[2px] border-[#E0EAED] pb-2">
+                    <h4 className="flex justify-between mt-4 font-medium text-xs text-[#9C9C9C]">
+                      <span>
+                        ユーザーネーム：
+                        {reviews.find((r) => r.uid === activeReviewUid)
+                          ?.consumer_name || "ゲスト"}
+                      </span>
+                      <span>
+                        {new Date(
+                          reviews.find(
+                            (r) => r.uid === activeReviewUid
+                          )?.created_at
+                        ).toLocaleDateString("ja-JP")}
+                      </span>
+                    </h4>
+                    <div className="flex justify-between items-center">
+                      <h2 className="font-medium text-sm text-[#44495B] mt-2">
+                        {
+                          reviews.find((r) => r.uid === activeReviewUid)
+                            ?.message
+                        }
+                      </h2>
+                      {replyingToReplyId !== "main" && (
+                        <HiReply
+                          className="cursor-pointer text-[#49BBDF]"
+                          onClick={() => setReplyingToReplyId("main")}
+                        />
+                      )}
+                    </div>
+
+                    {/* Reply to main review */}
+                    {replyingToReplyId === "main" && (
+                      <form onSubmit={handleSubmit(onSubmit)} className="mt-2">
+                        <div className="flex items-center border border-gray-300 rounded w-full">
+                          <input
+                            {...register("reply", { required: true })}
+                            placeholder="返信を入力してください"
+                            className="p-2 text-sm w-full outline-none"
+                          />
+                          <button
+                            type="submit"
+                            className="p-2 text-gray-600 hover:text-black"
+                          >
+                            <HiReply />
+                          </button>
+                        </div>
+                      </form>
+                    )}
+                  </div>
+
+                  {/* Show replies if available */}
+                  {replies?.review_replies?.length > 0 &&
+                    replies.review_replies.map((reply, index) => {
+                      const isLastReply =
+                        index === replies.review_replies.length - 1;
+                      return (
+                        <div
+                          key={index}
+                          className="mt-4 border-b-[2px] border-[#E0EAED] pb-2"
+                        >
+                          <h4 className="flex justify-between mt-4 font-medium text-xs text-[#9C9C9C]">
+                            <span>
+                              ユーザーネーム：
+                              {reply?.restaurant_owner_name ||
+                                reply?.consumer_name ||
+                                "ゲスト"}
+                            </span>
+                            <span>
+                              {new Date(reply?.created_at).toLocaleDateString(
+                                "ja-JP"
+                              )}
+                            </span>
+                          </h4>
+                          <div className="flex justify-between items-center">
+                            <h2 className="font-medium text-sm text-[#44495B] mt-2">
+                              {reply?.message}
+                            </h2>
+                            {isLastReply && replyingToReplyId !== reply?.id && (
+                              <HiReply
+                                className="cursor-pointer text-[#49BBDF]"
+                                onClick={() => setReplyingToReplyId(reply?.id)}
+                              />
                             )}
-                          </span>
-                        </h4>
-                        <div className="flex justify-between items-center">
-                          <h2 className="font-medium text-sm text-[#44495B] mt-2">
-                            {reply?.message}
-                          </h2>
-                          {replyingToReplyId !== reply?.id && (
-                            <HiReply
-                              className="cursor-pointer text-[#49BBDF]"
-                              onClick={() => setReplyingToReplyId(reply?.id)}
-                            />
+                          </div>
+
+                          {/* Only show input if replying to the last reply */}
+                          {isLastReply && replyingToReplyId === reply?.id && (
+                            <form
+                              onSubmit={handleSubmit(onSubmit)}
+                              className="mt-2"
+                            >
+                              <div className="flex items-center border border-gray-300 rounded w-full">
+                                <input
+                                  {...register("reply", { required: true })}
+                                  placeholder="返信を入力してください"
+                                  className="p-2 text-sm w-full outline-none"
+                                />
+                                <button
+                                  type="submit"
+                                  className="p-2 text-gray-600 hover:text-black"
+                                >
+                                  <HiReply />
+                                </button>
+                              </div>
+                            </form>
                           )}
                         </div>
-
-                        {/* Conditional Reply Input */}
-                        {replyingToReplyId === reply?.id && (
-                          <form
-                            onSubmit={handleSubmit(onSubmit)}
-                            className="mt-2"
-                          >
-                            <div className="flex items-center border border-gray-300 rounded w-full">
-                              <input
-                                {...register("reply", { required: true })}
-                                placeholder="返信を入力してください"
-                                className="p-2 text-sm w-full outline-none"
-                              />
-                              <button
-                                type="submit"
-                                className="p-2 text-gray-600 hover:text-black"
-                              >
-                                <HiReply />
-                              </button>
-                            </div>
-                          </form>
-                        )}
-                      </div>
-                    ))
-                  ) : (
-                    <div className="mt-4 text-[#9C9C9C] text-sm">
-                      まだ応援メッセージがありません
-                    </div>
-                  )}
+                      );
+                    })}
                 </>
               )}
             </div>
