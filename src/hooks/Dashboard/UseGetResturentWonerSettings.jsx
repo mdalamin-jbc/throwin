@@ -22,7 +22,11 @@ const UseGetResturentWonerSettings = () => {
       try {
         let endpoint = "";
 
-        if (userRole === "fc_admin" || userRole === "glow_admin") {
+        if (
+          userRole === "fc_admin" ||
+          userRole === "glow_admin" ||
+          userRole === "sales_agent"
+        ) {
           endpoint = "/admins/settings";
         } else {
           endpoint = "/restaurant-owner/settings";

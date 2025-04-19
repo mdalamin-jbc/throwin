@@ -44,7 +44,7 @@ const DeSettings = () => {
 
     try {
       let endpoint = "";
-      if (userRole === "fc_admin" || userRole === "glow_admin") {
+      if (userRole === "fc_admin" || userRole === "glow_admin"||userRole === "sales_agent") {
         endpoint = "/admins/settings/change-name";
       } else {
         endpoint = "/restaurant-owner/settings/change-name";
