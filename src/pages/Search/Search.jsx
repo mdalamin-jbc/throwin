@@ -18,9 +18,11 @@ const Search = () => {
   const videoRef = useRef(null);
   const codeReaderRef = useRef(null);
 
-  const { refetch } = UseStaffDetailsWithStoreId(searchByStuffName);
+  const { storeId, refetch, isLoading, isError } =
+    UseStaffDetailsWithStoreId(searchByStuffName);
   const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
+  console.log(storeId);
 
   const {
     register,
@@ -113,13 +115,12 @@ const Search = () => {
     }
 
     try {
-      const { data } = await refetch();
-      if (data?.storeId) {
+      if (!isLoading && !isError) {
         navigate(`/member_list/${searchValue}`);
       } else {
         throw new Error("スタッフが見つかりませんでした。");
       }
-    } catch (error) {
+    } catch (isError) {
       setError("searchMember", {
         type: "manual",
         message: "スタッフが見つかりませんでした。",
@@ -249,7 +250,11 @@ const Search = () => {
               onClick={() => handleSearchStuff()}
               className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
             >
-              <img className="w-5 h-5 opacity-70" src={search} alt="search icon" />
+              <img
+                className="w-5 h-5 opacity-70"
+                src={search}
+                alt="search icon"
+              />
             </div>
           </div>
           {errors.searchMember && (
@@ -290,7 +295,11 @@ const Search = () => {
               onClick={() => handleSearchStore()}
               className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
             >
-              <img className="w-5 h-5 opacity-70" src={search} alt="search icon" />
+              <img
+                className="w-5 h-5 opacity-70"
+                src={search}
+                alt="search icon"
+              />
             </div>
           </div>
           {errors.searchStore && (
