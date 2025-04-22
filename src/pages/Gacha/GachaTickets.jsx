@@ -6,12 +6,13 @@ import silver from "../../assets/images/gacha/lation_silver_card.png";
 import bronze from "../../assets/images/gacha/lation_bronze_card.png";
 import UseGetSpins from "../../hooks/Gacha/UseGetSpins";
 import { Circles } from "react-loader-spinner";
-import { FaArrowLeft } from "react-icons/fa";
 import { RiArrowLeftSLine } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
 
 const GachaTickets = () => {
   const { tickets, isLoading, isError } = UseGetSpins();
   console.log(tickets);
+  const navigate = useNavigate();
 
   return (
     <motion.div
