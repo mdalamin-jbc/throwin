@@ -14,7 +14,7 @@ const formatDate = (dateString) => {
   const day = String(date.getDate()).padStart(2, "0");
   const hours = String(date.getHours()).padStart(2, "0");
   const minutes = String(date.getMinutes()).padStart(2, "0");
-  return `${year}/${day}/${month} ${hours}:${minutes}`;
+  return `${year}/${month}/${day} ${hours}:${minutes}`;
 };
 
 const History = () => {
@@ -46,7 +46,6 @@ const History = () => {
     }
   }, [user, refetch]);
 
-  console.log(payments);
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -65,16 +64,17 @@ const History = () => {
   return (
     <div className="w-full mb-[120px]">
       <Helmet>
-        <title>Throwin | History</title>
+        <title>Throwin | 履歴</title>
       </Helmet>
-      <TitleBar style="mb-0 w-full" title="履歴" icon={null}></TitleBar>
+      
+      <TitleBar style="mb-0 w-full" title="履歴" icon={null} />
 
       <div className="w-full max-w-[430px] mx-auto px-4 sm:px-6 mt-7 text-[#44495B] grid gap-2">
         {payments.length > 0 ? (
           payments.map((payment) => (
             <div
               key={payment.transaction_id}
-              className="flex items-center  shadow-md rounded-lg p-4"
+              className="flex items-center shadow-md rounded-lg p-4"
             >
               <img
                 className="w-12 h-12 rounded-full object-cover"

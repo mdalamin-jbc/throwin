@@ -6,13 +6,13 @@ import { useState } from "react";
 import { Circles } from "react-loader-spinner";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
+import { Helmet } from "react-helmet";
 
 const Favorite = () => {
   const { favoriteStuffs, refetch, isLoading } = useGetFavoriteStuff();
   const axiosPrivate = useAxiosPrivate();
   const [isProcessing, setIsProcessing] = useState(false);
-
-  console.log(favoriteStuffs);
+  console.log(favoriteStuffs)
 
   const handleLikeDelete = async (id) => {
     if (isProcessing) return; // Prevent duplicate requests
@@ -50,7 +50,13 @@ const Favorite = () => {
   };
 
   return (
-    <>
+    <div className="w-full mb-[120px]">
+      <Helmet>
+        <title>Throwin | お気に入り</title>
+      </Helmet>
+
+      <TitleBar style="mb-0 w-full" title="お気に入り" icon={null} />
+
       {isLoading ? (
         <div className="flex justify-center items-center h-screen">
           <Circles
@@ -62,52 +68,45 @@ const Favorite = () => {
           />
         </div>
       ) : (
-        <div className="mb-[120px]">
-          <div>
-            <TitleBar title="お気に入り" />
-          </div>
+        <div className="w-full max-w-[430px] mx-auto px-4 sm:px-6 mt-7 text-[#44495B] grid gap-2">
           {favoriteStuffs.length === 0 ? (
-            <p className="text-center mt-10">お気に入りのものが見つかりませんでした。</p>
+            <div className="text-center mt-10 text-[#9C9C9C]">
+              <p>お気に入りのものが見つかりませんでした。</p>
+            </div>
           ) : (
             favoriteStuffs.map((staff) => (
-              <div key={staff.uid} className="px-4">
-                <div className=" max-w-[430px] mx-auto px-[25px]  grid  shadow-md rounded-lg p-4 ">
-                  <div className="flex items-center justify-between">
-                    <Link
-                      to={{
-                        pathname: `/store/${staff.store_code}/staff/${staff.username}`,
-                      }}
-                      className="flex"
-                    >
-                      <img
-                        className="w-[49px] h-[49px] rounded-full"
-                        src={
-                          staff.image?.small
-                            ? staff.image.small
-                            : "https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
-                        }
-                        alt=""
-                      />
-                      <div className="flex-1 flex justify-between items-center">
-                        <div className="ml-[13px]">
-                          <h3 className="font-bold text-sm">{staff.name}</h3>
-                          <p className="font-normal text-sm text-[#9C9C9C]">
-                            {staff.introduction}
-                          </p>
-                        </div>
-                      </div>
-                    </Link>
-                    <button onClick={() => handleLikeDelete(staff.uid)}>
-                      <FaHeart className="text-[#F24E1E] text-[20px] mt-4" />
-                    </button>
+              <div key={staff.uid} className="flex items-center shadow-md rounded-lg p-4">
+                <Link
+                  to={{
+                    pathname: `/store/${staff.store_code}/staff/${staff.username}`,
+                  }}
+                  className="flex-1 flex items-center"
+                >
+                  <img
+                    className="w-12 h-12 rounded-full object-cover"
+                    src={
+                      staff?.image?.small
+                        ? staff?.image?.small
+                        : "https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
+                    }
+                    alt="staff"
+                  />
+                  <div className="ml-4">
+                    <h3 className="font-bold text-sm">{staff.name}</h3>
+                    <p className="font-normal text-xs text-[#9C9C9C]">
+                      {staff.introduction}
+                    </p>
                   </div>
-                </div>
+                </Link>
+                <button onClick={() => handleLikeDelete(staff.uid)} className="ml-2">
+                  <FaHeart className="text-[#F24E1E] text-xl" />
+                </button>
               </div>
             ))
           )}
         </div>
       )}
-    </>
+    </div>
   );
 };
 

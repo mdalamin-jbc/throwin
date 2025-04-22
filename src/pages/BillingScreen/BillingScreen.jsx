@@ -5,7 +5,6 @@ import { FaApple } from "react-icons/fa";
 import { SlPaypal } from "react-icons/sl";
 import { FcGoogle } from "react-icons/fc";
 import throws from "../../assets/icons/Throw .png";
-import throw_wh from "../../assets/icons/throw_white.png";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import TitleBar from "../../components/TitleBar";
 import { useForm } from "react-hook-form";
@@ -26,7 +25,6 @@ const BillingScreen = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
-  const [token, setToken] = useState("");
   console.log(staff_details.throwin_amounts);
 
   const staff = JSON.parse(localStorage.getItem("staff"));
@@ -42,7 +40,8 @@ const BillingScreen = () => {
 
   // billing data
   const [selectedAmount, setSelectedAmount] = useState("0");
-  const [message, setMessage] = useState("");
+  // const [message, setMessage] = useState("");
+  const [review, setReview] = useState("");
 
   // Form handling
   const {
@@ -64,7 +63,7 @@ const BillingScreen = () => {
       staff_uid: staff?.uid,
       restaurant_uid: staff?.restaurant_uid,
       store_uid: staff?.store_uid,
-      message: message,
+      message: review,
       amount: parseInt(selectedAmount.replace(/,/g, ""), 10),
       currency: "JPY",
       payment_method: "paypal",
@@ -80,7 +79,7 @@ const BillingScreen = () => {
       staff?.uid,
       staff?.restaurant_uid,
       staff?.store_uid,
-      message,
+      review,
       selectedAmount,
     ]
   );
@@ -246,7 +245,7 @@ const BillingScreen = () => {
 
   const handleCreditCardPayment = async (data) => {
     const modal = document.getElementById("visa_payment_modal");
-
+  
     if (!window.Multipayment) {
       if (modal) modal.close();
       toast.error("決済サービスが利用できません。", {
@@ -255,19 +254,19 @@ const BillingScreen = () => {
       });
       return;
     }
-
+  
     if (!validatePayment(selectedAmount, selectedPaymentMethod)) {
       if (modal) modal.close();
       return;
     }
-
+  
     try {
-      // Show loading indicator
       const loadingToast = toast.loading("処理中...", {
         position: "top-center",
       });
-
+  
       const paymentPromise = new Promise((resolve, reject) => {
+        // ✅ Only send necessary fields for token generation
         window.Multipayment.getToken(
           {
             cardno: data.cardNumber,
@@ -283,12 +282,13 @@ const BillingScreen = () => {
                   `トークン生成に失敗しました: ${result.resultCode}`
                 );
               }
-
+  
               let generatedToken = result.tokenObject.token;
               if (Array.isArray(generatedToken)) {
                 generatedToken = generatedToken[0];
               }
-
+  
+              // ✅ Prepare billing data here and include `message`
               const paymentData = {
                 nickname: userDetails?.name || "Guest",
                 staff_uid: staff?.uid,
@@ -296,40 +296,35 @@ const BillingScreen = () => {
                 amount: billingData.amount.toString(),
                 currency: "JPY",
                 token: generatedToken,
-                message,
+                message: review, 
               };
-
-              console.log(paymentData, "paymnet data");
-
-              // Use axiosPrivate for consistent authorization handling
+  
+              console.log("Payment payload:", paymentData);
+  
               const response = await axiosPrivate.post(
                 "/payment_service/gmo-pg/credit-card/",
                 paymentData
               );
-              console.log(response, "payment response");
-
+  
               resolve(response.data);
             } catch (error) {
               reject(error);
+              toast.dismiss(loadingToast);
             }
           }
         );
       });
-
+  
       const resultData = await paymentPromise;
       toast.dismiss(loadingToast);
-
+  
       if (resultData.transaction_id) {
         if (modal) modal.close();
-
-        // No success toast here - let the completion page handle it
-
-        // Store staff_details in localStorage as done elsewhere in the code
+  
         if (staff_details) {
           localStorage.setItem("staff_details", JSON.stringify(staff_details));
         }
-
-        // Store payment details to localStorage as backup
+  
         localStorage.setItem(
           "payment_details",
           JSON.stringify({
@@ -340,29 +335,27 @@ const BillingScreen = () => {
             payment_method: "credit_card",
           })
         );
-
-        // Use React Router navigate without reloading the page but with the same URL format
-        // Create the URL with query parameters format
+  
         const chargeCompletedUrl = `/store/${store_code}/staff/${username}/chargeCompleted?paymentId=${resultData.transaction_id}&PayerID=CREDIT_CARD_DIRECT`;
-
-        // Navigate to the URL with replace to avoid browser history issues
+  
         navigate(chargeCompletedUrl, { replace: true });
       } else {
         throw new Error("Transaction ID missing from response");
       }
     } catch (error) {
       if (modal) modal.close();
-
+  
       toast.error(error.message || "支払い処理中にエラーが発生しました。", {
         position: "top-center",
         duration: 3000,
       });
     }
   };
+  
 
   const amounts = staff_details?.throwin_amounts;
   const handleClick = (amount) => setSelectedAmount(amount);
-  const handleMessage = (event) => setMessage(event.target.value);
+  const handleReview = (event) => setReview(event.target.value);
   const persAmount = parseInt(selectedAmount.replace(/,/g, ""), 10);
 
   const buttonStyle = `flex justify-center w-full rounded-full font-hiragino py-[12px] font-bold text-white ${
@@ -378,7 +371,7 @@ const BillingScreen = () => {
         return "VISA (下4桁: 1234)";
       case "new-card":
         return "VISA";
-      case "paypal": // Added for PayPal case
+      case "paypal": 
         return "PayPal";
       default:
         return "";
@@ -465,8 +458,8 @@ const BillingScreen = () => {
                     応援メッセージ
                   </h2>
                   <textarea
-                    onChange={handleMessage}
-                    value={message}
+                    onChange={handleReview}
+                    value={review}
                     className="border-[1px] rounded-md w-full h-[200px] px-5 py-3 text-[#434343] text-sm"
                     placeholder="メッセージを書く..."
                   />

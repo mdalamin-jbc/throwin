@@ -122,8 +122,8 @@ const Account = () => {
                       </Link>
                       <td>{store.code}</td>
                       <td>
-                        <button className="bg-[#ABABAB] rounded-full px-3 py-1 text-white">
-                          {store.exposure}
+                        <button className="bg-[#ABABAB] rounded-full px-3 pb-1 text-white">
+                          {store.status}
                         </button>
                       </td>
                     </tr>
