@@ -36,8 +36,8 @@ const GachaTwo = () => {
         </h3>
 
         <div className="grid gap-4 max-w-[351px] mx-auto">
-          {tickets && tickets.length > 0 ? (
-            tickets.map((ticket) => (
+          {availableSpins  ? (
+            availableSpins.map((ticket) => (
               <Link to={`ticket/${ticket.id}`} key={ticket.id}>
                 <div className="flex justify-between items-center font-bold text-base border border-[#49BBDF] rounded-lg shadow-md px-5 py-4 bg-[#EAF8FD]">
                   <h3 className="text-[#585858]">{ticket.name}</h3>
