@@ -6,7 +6,12 @@ const UseGetSpins = () => {
   const axiosPrivate = useAxiosPrivate();
   const { user } = useAuth();
 
-  const { refetch, data, isLoading, isError } = useQuery({
+  const {
+    data: tickets, // aliasing `data` as `tickets`
+    refetch,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["availableTickets", user?.access],
     queryFn: async () => {
       const res = await axiosPrivate.get(`/gacha/tickets`);
@@ -15,7 +20,7 @@ const UseGetSpins = () => {
     enabled: !!user?.access,
   });
 
-  return { availableTickets: data?.results || [], refetch, isLoading, isError };
+  return { tickets, refetch, isLoading, isError };
 };
 
 export default UseGetSpins;

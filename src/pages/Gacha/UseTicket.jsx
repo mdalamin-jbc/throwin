@@ -24,6 +24,7 @@ const UseTicket = () => {
   const handlePlayGacha = async () => {
     try {
       const response = await axiosPrivate.post("/gacha/play", { store_uid });
+      refetch();
       navigate("processing", { state: { ticketResponse: response.data } });
     } catch (error) {
       console.error("Error playing gacha:", error);
@@ -33,7 +34,13 @@ const UseTicket = () => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-[80vh]">
-        <Circles height="80" width="80" color="#49BBDF" ariaLabel="circles-loading" visible />
+        <Circles
+          height="80"
+          width="80"
+          color="#49BBDF"
+          ariaLabel="circles-loading"
+          visible
+        />
       </div>
     );
   }
@@ -47,12 +54,25 @@ const UseTicket = () => {
   }
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }} className="mb-[120px]">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1 }}
+      className="mb-[120px]"
+    >
       <TitleBar
         style="mb-0 w-full"
         back={
-          <motion.div initial={{ x: -10, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ duration: 1 }}>
-            <RiArrowLeftSLine onClick={() => navigate(-1)} style={{ cursor: "pointer" }} aria-label="Go Back" />
+          <motion.div
+            initial={{ x: -10, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 1 }}
+          >
+            <RiArrowLeftSLine
+              onClick={() => navigate(-1)}
+              style={{ cursor: "pointer" }}
+              aria-label="Go Back"
+            />
           </motion.div>
         }
         title=""
@@ -68,23 +88,42 @@ const UseTicket = () => {
         }
       />
       <div className="max-w-[430px] mx-auto">
-        <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1 }} className="flex justify-center">
+        <motion.div
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 1 }}
+          className="flex justify-center"
+        >
           <img src={img} alt="Gacha Machine" />
         </motion.div>
-        <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 1 }} className="mx-8">
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 1 }}
+          className="mx-8"
+        >
           <div className="flex justify-between items-center font-bold text-base border border-[#49BBDF] rounded-lg shadow-md px-5 py-4 bg-[#EAF8FD]">
             <h3 className="text-[#585858]">{ticket.store_name}</h3>
             <h4 className="flex gap-1 items-center border-l-2 border-[#49BBDF] border-dashed pl-5 text-[#585858]">
               x
-              <span className="text-2xl font-bold">{ticket.available_spin}</span>
+              <span className="text-2xl font-bold">
+                {ticket.available_spin}
+              </span>
             </h4>
           </div>
         </motion.div>
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }} className="mt-[43px] relative">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+          className="mt-[43px] relative"
+        >
           <div className="absolute left-1/2 transform -translate-x-1/2 -mt-5 w-[240px] rounded text-center">
             <h4 className="w-full text-[#36ABE0] relative rounded-full bg-white p-[2px]">
               <span className="absolute inset-0 bg-gradient-to-r from-[#3BAFE0] to-[#209AE1] rounded-full"></span>
-              <span className="relative block bg-white rounded-full px-4">ガチャ券を1枚使って</span>
+              <span className="relative block bg-white rounded-full px-4">
+                ガチャ券を1枚使って
+              </span>
             </h4>
           </div>
           <motion.button

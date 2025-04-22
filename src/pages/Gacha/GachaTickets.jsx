@@ -6,9 +6,12 @@ import silver from "../../assets/images/gacha/lation_silver_card.png";
 import bronze from "../../assets/images/gacha/lation_bronze_card.png";
 import UseGetSpins from "../../hooks/Gacha/UseGetSpins";
 import { Circles } from "react-loader-spinner";
+import { FaArrowLeft } from "react-icons/fa";
+import { RiArrowLeftSLine } from "react-icons/ri";
 
 const GachaTickets = () => {
-  const { availableTickets, isLoading, isError } = UseGetSpins();
+  const { tickets, isLoading, isError } = UseGetSpins();
+  console.log(tickets);
 
   return (
     <motion.div
@@ -19,7 +22,12 @@ const GachaTickets = () => {
     >
       <TitleBar
         style="mb-0 w-full"
-        back={""}
+        back={
+          <RiArrowLeftSLine
+            onClick={() => navigate(-1)}
+            style={{ cursor: "pointer" }}
+          />
+        }
         title=""
         icon={<img className="w-[110px] items-center" src={logo} alt="logo" />}
       />
@@ -30,7 +38,7 @@ const GachaTickets = () => {
           transition={{ duration: 0.5 }}
           className="mx-[10px]"
         >
-          <h4 className="text-center mb-3">TICKET BOX</h4>
+          <h4 className="text-center mb-3">チケットボックス</h4>
 
           {isLoading ? (
             <div className="flex justify-center items-center h-[80vh]">
@@ -44,10 +52,12 @@ const GachaTickets = () => {
             </div>
           ) : isError ? (
             <p className="text-center text-red-500">
-              Failed to load tickets. Please try again.
+              チケットの読み込みに失敗しました。もう一度お試しください。
             </p>
-          ) : availableTickets.length === 0 ? (
-            <p className="text-center text-gray-500">No tickets available.</p>
+          ) : tickets?.length === 0 ? (
+            <p className="text-center text-gray-500">
+              利用可能なチケットがありません。
+            </p>
           ) : (
             <motion.div
               initial={{ opacity: 0 }}
@@ -55,7 +65,7 @@ const GachaTickets = () => {
               transition={{ duration: 0.5 }}
               className="max-w-[390px] mx-auto grid grid-cols-2 gap-[18px]"
             >
-              {availableTickets.map((ticket) => {
+              {tickets?.map((ticket) => {
                 const ticketImage =
                   ticket.gacha_kind === "gold"
                     ? gold
@@ -75,10 +85,10 @@ const GachaTickets = () => {
                       <img
                         src={ticketImage}
                         className="w-[calc(100%-20px)]"
-                        alt="Ticket"
+                        alt="チケット"
                       />
                       <h5 className="-mt-3 text-[#434343]">
-                        {ticket.store_name}
+                        {ticket?.store_name}
                       </h5>
                     </div>
                   </motion.div>
