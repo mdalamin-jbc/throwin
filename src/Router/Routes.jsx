@@ -145,7 +145,7 @@ export const Routes = createBrowserRouter([
         element: <GachaTwo />,
       },
       {
-        path: "/gacha/available_spins/ticket/:store_uidf",
+        path: "/gacha/available_spins/ticket/:store_uid",
         element: <UseTicket />,
       },
       {
