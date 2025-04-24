@@ -20,18 +20,6 @@ const Processing = () => {
 
   return (
     <div>
-      <TitleBar
-        style="mb-0 w-full"
-        back={
-          <RiArrowLeftSLine
-            onClick={() => navigate(-1)}
-            style={{ cursor: "pointer" }}
-            aria-label="Go Back"
-          />
-        }
-        title=""
-        icon={<img className="w-[110px] items-center" src={logo} alt="logo" />}
-      />
       <div className="max-w-[430px] mx-auto">
         <video
           ref={videoRef}

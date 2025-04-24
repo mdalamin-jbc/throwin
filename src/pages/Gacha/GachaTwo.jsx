@@ -18,11 +18,11 @@ const GachaTwo = () => {
           <RiArrowLeftSLine
             onClick={() => navigate(-1)}
             style={{ cursor: "pointer" }}
-            aria-label="Go Back"
+            aria-label="戻る"
           />
         }
         title=""
-        icon={<img className="w-[110px] items-center" src={logo} alt="logo" />}
+        icon={<img className="w-[110px] items-center" src={logo} alt="ロゴ" />}
       />
       <div>
         <motion.h3 
@@ -36,10 +36,10 @@ const GachaTwo = () => {
 
         {isLoading ? (
           <div className="flex justify-center items-center h-[80vh]">
-            <Circles height="80" width="80" color="#49BBDF" ariaLabel="circles-loading" visible />
+            <Circles height="80" width="80" color="#49BBDF" ariaLabel="ローディング中" visible />
           </div>
         ) : isError ? (
-          <p className="text-center text-red-500">Failed to load available spins</p>
+          <p className="text-center text-red-500">ガチャ券の取得に失敗しました</p>
         ) : availableSpins.length > 0 ? (
           <motion.div 
             className="grid gap-4 max-w-[351px] mx-auto"
@@ -72,7 +72,7 @@ const GachaTwo = () => {
             ))}
           </motion.div>
         ) : (
-          <p className="text-center text-[#585858]">No tickets available</p>
+          <p className="text-center text-[#585858]">ガチャ券はありません</p>
         )}
 
         <motion.h2 

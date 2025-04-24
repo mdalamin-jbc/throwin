@@ -65,6 +65,8 @@ import DaNameChange from "../pages/Dashboard/Seetings/DaNameChange";
 import AdminEmailChange from "../pages/Dashboard/Seetings/AdminEmailChange";
 import BankChargeCompleted from "../pages/BillingScreen/BankChargeCompleted";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
+import Test from "../pages/Test/Test";
+import LineLoginCallBack from "../pages/SocialLogin/LineLoginCallBack";
 
 export const Routes = createBrowserRouter([
   {
@@ -76,10 +78,20 @@ export const Routes = createBrowserRouter([
         path: "/",
         element: <Home />,
       },
+
+      {
+        path: "/test",
+        element: <Test />,
+      },
       {
         path: "/socialLogin",
         element: <SocialLogin />,
       },
+      {
+        path: "/callback",
+        element: <LineLoginCallBack />,
+      },
+
       {
         path: "/emailLogin",
         element: <EmailLogin />,

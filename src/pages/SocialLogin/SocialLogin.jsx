@@ -41,7 +41,7 @@ const SocialLogin = () => {
 
   const handleLineLoginCallback = async (code) => {
     try {
-      const LINE_REDIRECT_URI = `${window.location.origin}/socialLogin`;
+      const LINE_REDIRECT_URI = `http://localhost:5173/search`;
 
       const res = await axiosPublic.post("auth/social/line", {
         code: code,
@@ -166,23 +166,23 @@ const SocialLogin = () => {
 
           {/* Line Registration Button */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.4 }}
-            className="relative flex justify-center"
-          >
-            <div className="relative">
-              <img
-                src={lineLogo}
-                alt="Line"
-                className="absolute left-4 w-[38px] h-[38px] z-10"
-              />
-              <LineLogin
-                onSuccess={handleLoginSuccess}
-                onError={handleLoginError}
-              />
-            </div>
-          </motion.div>
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 0.4 }}
+        className="relative flex justify-center"
+      >
+        <div className="relative">
+          <img
+            src={lineLogo}
+            alt="Line"
+            className="absolute left-4 w-[38px] h-[38px] z-10"
+          />
+          <LineLogin
+            onSuccess={handleLoginSuccess}
+            onError={handleLoginError}
+          />
+        </div>
+      </motion.div>
 
           {/* Google Registration Button */}
           <motion.div
