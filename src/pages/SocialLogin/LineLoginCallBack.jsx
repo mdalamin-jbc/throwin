@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAxiosPublic from "../../hooks/axiosPublic";
 import toast from "react-hot-toast";
@@ -45,7 +45,7 @@ const LineLoginCallBack = () => {
           
           // Wait 2 seconds before redirecting back to login
           setTimeout(() => {
-            navigate("/socialLogin");
+            // navigate("/socialLogin");
           }, 2000);
         } finally {
           setLoading(false);

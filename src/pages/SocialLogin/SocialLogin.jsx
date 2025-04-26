@@ -166,46 +166,39 @@ const SocialLogin = () => {
 
           {/* Line Registration Button */}
           <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 0.4 }}
-        className="relative flex justify-center"
-      >
-        <div className="relative">
-          <img
-            src={lineLogo}
-            alt="Line"
-            className="absolute left-4 w-[38px] h-[38px] z-10"
-          />
-          <LineLogin
-            onSuccess={handleLoginSuccess}
-            onError={handleLoginError}
-          />
-        </div>
-      </motion.div>
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.4 }}
+            className="relative flex justify-center"
+          >
+            <div className="relative">
+              <img
+                src={lineLogo}
+                alt="Line"
+                className="absolute left-4 w-[38px] z-10 mt-1"
+              />
+              <LineLogin
+                onSuccess={handleLoginSuccess}
+                onError={handleLoginError}
+              />
+            </div>
+          </motion.div>
 
           {/* Google Registration Button */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.5 }}
-            className="flex justify-center"
+            className="relative flex justify-center"
           >
-            <div className="w-[246px] h-[49px] bg-white rounded-lg shadow-md flex items-center justify-center relative">
-              <img
-                src={googleLogo}
-                alt="Google"
-                className="absolute left-4 w-[26px] h-[26px] z-10"
-              />
-              <div className="opacity-0">
+            <div className="relative w-[246px]">
+              <div className="inset-0 rounded-none overflow-hidden">
                 <GoogleLoginButton
                   onSuccess={handleLoginSuccess}
                   onError={handleLoginError}
+                  className="w-full h-full cursor-pointer rounded-none"
                 />
               </div>
-              <span className="font-hiragino font-semibold text-[14px] leading-[21px] tracking-[0.03em] text-gray-800">
-                Google
-              </span>
             </div>
           </motion.div>
 
