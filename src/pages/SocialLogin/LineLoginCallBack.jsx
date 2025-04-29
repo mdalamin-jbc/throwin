@@ -21,7 +21,7 @@ const LineLoginCallBack = () => {
           setLoading(true);
           const response = await axiosPublic.post("auth/social/line", {
             code: code,
-            redirect_uri: "http://localhost:5173/search",
+            redirect_uri: "http://localhost:5173/callback",
           });
 
           console.log("ログイン成功:", response.data);

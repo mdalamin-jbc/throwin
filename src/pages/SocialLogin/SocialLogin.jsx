@@ -192,7 +192,7 @@ const SocialLogin = () => {
             className="relative flex justify-center"
           >
             <div className="relative w-[246px]">
-              <div className="inset-0 rounded-none overflow-hidden">
+              <div className="inset-0 ">
                 <GoogleLoginButton
                   onSuccess={handleLoginSuccess}
                   onError={handleLoginError}
