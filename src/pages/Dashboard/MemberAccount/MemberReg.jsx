@@ -24,14 +24,14 @@ const MemberReg = () => {
     bio: "",
     thanksMessage: "",
     gacha: "public",
-    image: null
+    image: null,
   });
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    watch
+    watch,
   } = useForm();
 
   // Watch form values for real-time updates
@@ -39,16 +39,16 @@ const MemberReg = () => {
 
   // Update preview data when form values change
   const updatePreviewData = (field, value) => {
-    setPreviewData(prev => ({
+    setPreviewData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setTopImage(file);
-    
+
     // Create image preview URL
     if (file) {
       const reader = new FileReader();
@@ -84,7 +84,7 @@ const MemberReg = () => {
         }
       );
 
-      toast.success("Member registered successfully!", {
+      toast.success("メンバーが正常に登録されました！", {
         duration: 3000,
         position: "top-center",
       });
@@ -92,7 +92,7 @@ const MemberReg = () => {
       setTimeout(() => navigate(-1), 1500);
     } catch (error) {
       console.error("Error registering member:", error);
-      toast.error("Registration failed. Please try again.", {
+      toast.error("登録に失敗しました。もう一度お試しください。", {
         duration: 3000,
         position: "top-center",
       });
@@ -210,7 +210,9 @@ const MemberReg = () => {
                         <select
                           {...register("gacha")}
                           className="bg-transparent w-full focus:outline-none appearance-none text-right"
-                          onChange={(e) => updatePreviewData("gacha", e.target.value)}
+                          onChange={(e) =>
+                            updatePreviewData("gacha", e.target.value)
+                          }
                         >
                           <option value="public">公開</option>
                           <option value="private">プライベート</option>
