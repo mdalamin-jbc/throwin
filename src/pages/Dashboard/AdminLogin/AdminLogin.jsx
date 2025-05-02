@@ -4,13 +4,20 @@ import { toast } from "react-hot-toast";
 import logo from "../../../assets/images/socialLogin/logo2.png";
 import ButtonPrimary from "../../../components/ButtonPrimary";
 import useAxiosPublic from "../../../hooks/axiosPublic";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import AuthContext from "../../../contexts/AuthContext";
 
 const AdminLogin = () => {
   const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
+
+  useEffect(() => {
+    const userRole = localStorage.getItem("userRole");
+    if (userRole === "fc_admin") {
+      navigate("/dashboard");
+    }
+  }, [navigate]);
 
   const {
     register,
@@ -45,12 +52,10 @@ const AdminLogin = () => {
           duration: 3000,
         });
 
-        // Redirect to the dashboard
         navigate(`/dashboard`);
       }
     } catch (error) {
-      console.error("Error:", error); // Debugging
-
+      console.error("Error:", error);
       if (error.response) {
         toast.error("無効なメールまたはパスワード", {
           position: "top-center",
