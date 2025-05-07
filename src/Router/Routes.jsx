@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import Root from "../Root/Root";
 import Home from "../pages/home/Home";
 import SocialLogin from "../pages/SocialLogin/SocialLogin";
@@ -67,6 +67,23 @@ import BankChargeCompleted from "../pages/BillingScreen/BankChargeCompleted";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import Test from "../pages/Test/Test";
 import LineLoginCallBack from "../pages/SocialLogin/LineLoginCallBack";
+import ProtectedRoute from "./ProtectedRoute";
+
+import { useAuth } from "../hooks/useAuth";
+import { ROLES } from "../constants/role";
+
+const RootRoute = () => {
+  const { user } = useAuth();
+  if (user && user.role === ROLES.CONSUMER) {
+    return <Navigate to="/search" />;
+  } else if (
+    (user && user.role === ROLES.FC_ADMIN) ||
+    (user && user.role === ROLES.RESTAURANT_OWNER) ||
+    (user && user.role === ROLES.SALES_AGENT)
+  ) {
+    return <Home />;
+  }
+};
 
 export const Routes = createBrowserRouter([
   {
@@ -76,7 +93,7 @@ export const Routes = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: <RootRoute />,
       },
 
       {
@@ -228,9 +245,9 @@ export const Routes = createBrowserRouter([
       {
         path: "/myPage",
         element: (
-          <PrivateRoute>
+          <ProtectedRoute allowedRoles={[ROLES.CONSUMER]}>
             <UserProfile />
-          </PrivateRoute>
+          </ProtectedRoute>
         ),
       },
 
@@ -287,9 +304,15 @@ export const Routes = createBrowserRouter([
       {
         path: "/dashboard",
         element: (
-          <PrivateRoute>
+          <ProtectedRoute
+            allowedRoles={[
+              ROLES.FC_ADMIN,
+              ROLES.RESTAURANT_OWNER,
+              ROLES.SALES_AGENT,
+            ]}
+          >
             <Dashboard />
-          </PrivateRoute>
+          </ProtectedRoute>
         ),
         children: [
           {
@@ -340,7 +363,6 @@ export const Routes = createBrowserRouter([
               </PrivateRoute>
             ),
           },
-          // fc/glow admin
           {
             path: "client",
             element: (
