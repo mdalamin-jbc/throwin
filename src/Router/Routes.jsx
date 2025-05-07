@@ -83,6 +83,7 @@ const RootRoute = () => {
   ) {
     return <Home />;
   }
+  return <Home />;
 };
 
 export const Routes = createBrowserRouter([
