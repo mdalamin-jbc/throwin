@@ -3,7 +3,6 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import search from "../../../assets/icons/search_3.png";
 import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import UseGetSalesAgents from "../../../hooks/Dashboard/UseGetSalesAgents";
 import UseGetOrganizations from "../../../hooks/Dashboard/UseGetOrganizations";
 import { Circles } from "react-loader-spinner";
 
