@@ -2,15 +2,9 @@ import { createContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
+import { ROLES } from "../constants/role";
 
 const AuthContext = createContext(null);
-
-const ROLES = {
-  CONSUMER: "consumer",
-  RESTAURANT_OWNER: "restaurant_owner",
-  SALES_AGENT: "sales_agent",
-  FC_ADMIN: "fc_admin",
-};
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
