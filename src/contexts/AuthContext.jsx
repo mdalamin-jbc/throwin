@@ -5,6 +5,13 @@ import toast from "react-hot-toast";
 
 const AuthContext = createContext(null);
 
+const ROLES = {
+  CONSUMER: "consumer",
+  RESTAURANT_OWNER: "restaurant_owner",
+  SALES_AGENT: "sales_agent",
+  FC_ADMIN: "fc_admin",
+};
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -54,10 +61,19 @@ export const AuthProvider = ({ children }) => {
     Cookies.set("refresh_token", userData.refresh, { expires: 7 });
     Cookies.set("user_role", userData.role, { expires: 7 });
   };
-
   const logout = () => {
+    // Store the user role before clearing cookies for redirect logic
+    const userRole = user?.role || Cookies.get("user_role");
+
     setUser(null);
     clearCookies();
+
+    // Redirect based on user role
+    if (userRole === ROLES.CONSUMER) {
+      window.location.href = "/login";
+    } else {
+      window.location.href = "/admin/login";
+    }
   };
 
   return (
