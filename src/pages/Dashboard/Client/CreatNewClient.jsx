@@ -1,28 +1,30 @@
-import { useForm } from "react-hook-form";
-import ButtonPrimary from "../../../components/ButtonPrimary";
-import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { Circles } from "react-loader-spinner";
+import ButtonPrimary from "../../../components/ButtonPrimary";
 import useAxiosPrivate from "../../../hooks/axiousPrivate";
 import UseGetOrganizations from "../../../hooks/Dashboard/UseGetOrganizations";
-import { Circles } from "react-loader-spinner";
+import ClientForm from "../../../components/Form/ClientForm";
+import { useState } from "react"; // Added import for useState
 
+/**
+ * CreateNewSalesAgent component for registering new client accounts
+ * @returns {JSX.Element} CreateNewSalesAgent component
+ */
 const CreateNewSalesAgent = () => {
   const { refetch, isLoading } = UseGetOrganizations();
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
+  const [isSubmitting, setIsSubmitting] = useState(false); // Added state for tracking submission status
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    mode: "onChange",
-    defaultValues: {
-      accountType: "futsuu",
-    },
-  });
-
+  /**
+   * Handle form submission to create a new client
+   * @param {Object} data - Form data
+   */
   const onSubmit = async (data) => {
+    console.log("submit call holo...");
+    setIsSubmitting(true); // Set submitting state to true
+
     const requestBody = {
       company_name: data.companyName,
       address: data.address,
@@ -40,22 +42,33 @@ const CreateNewSalesAgent = () => {
       account_number: data.accountNumber,
       account_holder_name: data.accountHolderName,
     };
+    console.log("Sending request with data:", requestBody);
 
     try {
+      // Make sure the URL is correct and the API endpoint exists
       const response = await axiosPrivate.post(
         "/admins/organizations",
-        requestBody
+        requestBody,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
+
+      console.log("API response:", response);
 
       if (response.status === 200 || response.status === 201) {
         toast.success("新しいクライアントが正常に作成されました！");
-        refetch();
+        await refetch(); // Make sure refetch completes
         navigate("/dashboard/client");
       } else {
         const errorMessage = "クライアントの作成に失敗しました。";
         toast.error(errorMessage);
       }
     } catch (error) {
+      console.error("API request failed:", error);
+
       const errorMessage =
         error.response?.data?.detail ||
         error.response?.data?.message ||
@@ -63,15 +76,30 @@ const CreateNewSalesAgent = () => {
           .map(([key, value]) => `${key}: ${value}`)
           .join(", ") ||
         "エラーが発生しました。もう一度お試しください。";
+
       toast.error(errorMessage);
+    } finally {
+      setIsSubmitting(false); // Reset submitting state regardless of outcome
     }
   };
 
+  /**
+   * Submit form and close modal
+   */
   const submitForm = () => {
-    handleSubmit(onSubmit)();
-    document.getElementById("my_modal_9").close();
+    const form = document.getElementById("clientForm");
+    if (form) {
+      form.dispatchEvent(
+        new Event("submit", { cancelable: true, bubbles: true })
+      );
+      document.getElementById("my_modal_9").close();
+    } else {
+      console.error("Client form element not found");
+      toast.error("フォームが見つかりません。ページを更新してお試しください。");
+    }
   };
 
+  // Show loading spinner while fetching data
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -79,7 +107,7 @@ const CreateNewSalesAgent = () => {
           height="80"
           width="80"
           color="#49BBDF"
-          ariaLabel="読み込み中"
+          ariaLabel="Loading"
           visible
         />
       </div>
@@ -98,33 +126,28 @@ const CreateNewSalesAgent = () => {
           </h4>
           <div className="border-b-[3px] mb-5"></div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            <table className="table border-none">
-              <tbody>
-                {/* ここから各入力項目（省略せずにそのまま） */}
-                {/* フォーム項目はすでに日本語化されているので省略せずにそのまま使用可 */}
-                {/* 以下略、元のコードと変わりません（フォームフィールド） */}
-                ...
-              </tbody>
-            </table>
+          {/* Client form component */}
+          <div id="clientForm">
+            <ClientForm onSubmit={onSubmit} />
+          </div>
 
-            {/* 作成ボタン */}
-            <div className="flex justify-center mt-5">
-              <button
-                type="button"
-                onClick={() =>
-                  document.getElementById("my_modal_9").showModal()
-                }
-              >
-                <ButtonPrimary
-                  style="rounded-full bg-[#49BBDF] w-[342px] text-[#FFFFFF] font-bold text-lg"
-                  btnText={"作成する"}
-                />
-              </button>
-            </div>
-          </form>
+          {/* Registration button */}
+          <div className="flex justify-center mt-5">
+            <button
+              type="button"
+              onClick={() => document.getElementById("my_modal_9").showModal()}
+              disabled={isSubmitting}
+            >
+              <ButtonPrimary
+                style={`rounded-full ${
+                  isSubmitting ? "bg-gray-400" : "bg-[#49BBDF]"
+                } w-[342px] text-[#FFFFFF] font-bold text-lg`}
+                btnText={isSubmitting ? "処理中..." : "登録する"}
+              />
+            </button>
+          </div>
 
-          {/* モーダル（確認ダイアログ） */}
+          {/* Confirmation modal */}
           <dialog id="my_modal_9" className="modal w-[400px] mx-auto">
             <div className="modal-box bg-[#F9F9F9] p-0 pt-7">
               <div className="pb-8">
@@ -149,8 +172,11 @@ const CreateNewSalesAgent = () => {
                   <button
                     onClick={submitForm}
                     className="px-4 py-4 flex items-center justify-center text-[#2976EA]"
+                    disabled={isSubmitting}
                   >
-                    <span className="ml-8">登録する</span>
+                    <span className="ml-8">
+                      {isSubmitting ? "処理中..." : "登録する"}
+                    </span>
                   </button>
                 </div>
               </div>

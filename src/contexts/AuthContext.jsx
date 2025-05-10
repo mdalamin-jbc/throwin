@@ -2,6 +2,7 @@ import { createContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
+import { ROLES } from "../constants/role";
 
 const AuthContext = createContext(null);
 
@@ -54,10 +55,19 @@ export const AuthProvider = ({ children }) => {
     Cookies.set("refresh_token", userData.refresh, { expires: 7 });
     Cookies.set("user_role", userData.role, { expires: 7 });
   };
-
   const logout = () => {
+    // Store the user role before clearing cookies for redirect logic
+    const userRole = user?.role || Cookies.get("user_role");
+
     setUser(null);
     clearCookies();
+
+    // Redirect based on user role
+    if (userRole === ROLES.CONSUMER) {
+      window.location.href = "/login";
+    } else {
+      window.location.href = "/admin/login";
+    }
   };
 
   return (
