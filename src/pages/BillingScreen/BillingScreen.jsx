@@ -26,7 +26,6 @@ const BillingScreen = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
-  console.log(staff_details.throwin_amounts);
 
   const staff = JSON.parse(localStorage.getItem("staff"));
   const {
@@ -313,8 +312,6 @@ const BillingScreen = () => {
                 token: generatedToken,
                 message: review,
               };
-
-              console.log("Payment payload:", paymentData);
 
               const response = await axiosPrivate.post(
                 "/payment_service/gmo-pg/credit-card/",
