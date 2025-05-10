@@ -18,6 +18,7 @@ import StaffProfileCard from "../../components/StaffProfileCard/StaffProfileCard
 import toast from "react-hot-toast";
 import UseGetUserDetails from "../../hooks/Staff/UseGetUserDetails";
 import useAxiosPublic from "../../hooks/axiosPublic";
+import { ROLES } from "../../constants/role";
 
 const BillingScreen = () => {
   const { store_code, username } = useParams();
@@ -57,9 +58,26 @@ const BillingScreen = () => {
     }
   }, []);
 
+  // Set the appropriate nickname based on user status
+  const getNickname = () => {
+    if (!userDetails || !userDetails.name) {
+      return "Guest";
+    } else if (
+      userDetails?.role === ROLES.FC_ADMIN ||
+      ROLES.RESTAURANT_OWNER ||
+      ROLES.SALES_AGENT
+    ) {
+      return "Guest"; // FC admins should always show as "Guest"
+    } else if (userDetails?.role === ROLES.CONSUMER) {
+      return userDetails?.name; // Regular users show their actual name
+    } else {
+      return "Guest";
+    }
+  };
+
   const billingData = useMemo(
     () => ({
-      nickname: userDetails?.name || "Guest",
+      nickname: getNickname(),
       staff_uid: staff?.uid,
       restaurant_uid: staff?.restaurant_uid,
       store_uid: staff?.store_uid,
@@ -75,7 +93,7 @@ const BillingScreen = () => {
     [
       store_code,
       username,
-      userDetails?.name,
+      userDetails,
       staff?.uid,
       staff?.restaurant_uid,
       staff?.store_uid,
@@ -241,8 +259,6 @@ const BillingScreen = () => {
     }
   };
 
-  // Replace the handleCreditCardPayment function with this improved version
-
   const handleCreditCardPayment = async (data) => {
     const modal = document.getElementById("visa_payment_modal");
 
@@ -288,9 +304,8 @@ const BillingScreen = () => {
                 generatedToken = generatedToken[0];
               }
 
-              // ✅ Prepare billing data here and include `message`
               const paymentData = {
-                nickname: userDetails?.name || "Guest",
+                nickname: getNickname(),
                 staff_uid: staff?.uid,
                 store_uid: staff?.store_uid,
                 amount: billingData.amount.toString(),
