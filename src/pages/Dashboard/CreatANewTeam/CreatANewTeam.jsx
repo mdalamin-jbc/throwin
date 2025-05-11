@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import DashboardButton from "../../../utils/DashboardButton/DashboardButton";
 
@@ -13,7 +13,7 @@ const CreateANewTeam = () => {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log("Submitted Data:", data);
+    console.log("Submitted Data new team:", data);
   };
 
   const handleInputChange = (e) => {

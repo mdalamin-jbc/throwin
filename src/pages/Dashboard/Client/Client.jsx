@@ -7,7 +7,7 @@ import UseGetOrganizations from "../../../hooks/Dashboard/UseGetOrganizations";
 import { Circles } from "react-loader-spinner";
 
 const Client = () => {
-  const { organizations, refetch, isLoading } = UseGetOrganizations();
+  const { organizations, isLoading } = UseGetOrganizations();
   console.log(organizations);
   const {
     register,
