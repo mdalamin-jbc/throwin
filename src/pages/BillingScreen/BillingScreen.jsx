@@ -472,7 +472,9 @@ const BillingScreen = () => {
                     onChange={handleReview}
                     value={review}
                     className="border-[1px] rounded-md w-full h-[200px] px-5 py-3 text-[#434343] text-sm"
-                    placeholder="メッセージを書く..."
+                    placeholder="いつも明るい姿に元気をもらっています！
+これからも変わらずお店の看板娘と
+して頑張って欲しいです！"
                   />
                 </div>
 
