@@ -310,6 +310,7 @@ export const Routes = createBrowserRouter([
               ROLES.FC_ADMIN,
               ROLES.RESTAURANT_OWNER,
               ROLES.SALES_AGENT,
+              ROLES.GLOW_ADMIN,
             ]}
           >
             <Dashboard />

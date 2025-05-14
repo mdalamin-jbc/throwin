@@ -6,6 +6,7 @@ import ButtonPrimary from "../../../components/ButtonPrimary";
 import useAxiosPublic from "../../../hooks/axiosPublic";
 import { useContext, useEffect } from "react";
 import AuthContext from "../../../contexts/AuthContext";
+import { ROLES } from "../../../constants/role";
 
 const AdminLogin = () => {
   const axiosPublic = useAxiosPublic();
@@ -40,7 +41,10 @@ const AdminLogin = () => {
         return;
       }
 
-      if (response.status === 200 && response.data.data.role !== "consumer") {
+      if (
+        response.status === 200 &&
+        response.data.data.role !== ROLES.CONSUMER
+      ) {
         const result = response.data;
         login(response.data.data);
 
