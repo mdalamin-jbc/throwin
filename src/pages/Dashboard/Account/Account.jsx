@@ -20,7 +20,6 @@ const Account = () => {
   } = useForm();
   const searchQuery = watch("searchMember", "");
 
-  // Calculate pagination
   const filteredStores = storeList.filter(
     (store) =>
       store.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||

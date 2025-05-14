@@ -40,7 +40,6 @@ const BillingScreen = () => {
 
   // billing data
   const [selectedAmount, setSelectedAmount] = useState("0");
-  // const [message, setMessage] = useState("");
   const [review, setReview] = useState("");
 
   // Form handling
@@ -204,7 +203,6 @@ const BillingScreen = () => {
         `/payment_service/make-payment/`,
         billingData
       );
-
       if (response.status === 200 || response.status === 201) {
         window.location.href = response.data.approval_url;
         if (modal) modal.close();
@@ -556,11 +554,16 @@ const BillingScreen = () => {
                   </div>
                 </div>
 
-                <div className="p-4">
+                <div className="py-4">
                   <h3 className="font-bold text-sm text-gray-700 mb-4">
                     クレジットカード決済
                   </h3>
-                  <div className="flex items-start mb-4">
+                  <div
+                    className={`flex items-start p-4  ${
+                      selectedPaymentMethod === "existing-card" &&
+                      " bg-[#F4FCFF]"
+                    }`}
+                  >
                     <input
                       type="radio"
                       id="existing-card"
@@ -578,8 +581,12 @@ const BillingScreen = () => {
                       </span>
                     </label>
                   </div>
-                  <hr className="my-4 border-gray-300" />
-                  <div className="flex items-start">
+                  <hr className=" border-gray-300" />
+                  <div
+                    className={`flex  items-start p-4 ${
+                      selectedPaymentMethod === "new-card" && " bg-[#F4FCFF]"
+                    }`}
+                  >
                     <input
                       type="radio"
                       id="new-card"
