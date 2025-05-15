@@ -134,8 +134,8 @@ const ClientForm = ({
           <tbody>
             {/* row 1 */}
             <tr className="hover">
-              <td className="flex items-center gap-[17px]">
-                <label className="block text-gray-700">企業名（屋号）*</label>
+              <td className="flex items-center lg:min-w-[200px] gap-[17px]">
+                <label className="block  text-gray-700">企業名（屋号）*</label>
               </td>
               <td>
                 <input
