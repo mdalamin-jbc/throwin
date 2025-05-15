@@ -7,7 +7,7 @@ const LineLogin = ({ onSuccess, onError }) => {
   
   // LINE Login Constants
   const LINE_CLIENT_ID = '2007107180';
-  const LINE_REDIRECT_URI = `http://localhost:5173/callback`;
+  const LINE_REDIRECT_URI = `https://alpha.throwin-glow.com/callback`;
   
   // Handle LINE login initiation
   const handleLineLogin = () => {
