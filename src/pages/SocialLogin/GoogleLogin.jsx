@@ -37,7 +37,8 @@ const GoogleLoginButton = ({ onSuccess, onError }) => {
       onSuccess={handleGoogleLoginSuccess}
       onError={handleGoogleLoginFailure}
       useOneTap
-      shape="pill"
+      shape="square"
+      size="large"
     />
   );
 };
