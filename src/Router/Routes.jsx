@@ -71,6 +71,8 @@ import ProtectedRoute from "./ProtectedRoute";
 
 import { useAuth } from "../hooks/useAuth";
 import { ROLES } from "../constants/role";
+import MyTestRoute from "../components/test/MyTestRoute";
+import EditClient from "../components/client/EditClient";
 
 const RootRoute = () => {
   const { user } = useAuth();
@@ -310,6 +312,7 @@ export const Routes = createBrowserRouter([
               ROLES.FC_ADMIN,
               ROLES.RESTAURANT_OWNER,
               ROLES.SALES_AGENT,
+              ROLES.GLOW_ADMIN,
             ]}
           >
             <Dashboard />
@@ -369,6 +372,14 @@ export const Routes = createBrowserRouter([
             element: (
               <PrivateRoute>
                 <Client />
+              </PrivateRoute>
+            ),
+          },
+          {
+            path: "client/edit/:id",
+            element: (
+              <PrivateRoute>
+                <EditClient />
               </PrivateRoute>
             ),
           },
