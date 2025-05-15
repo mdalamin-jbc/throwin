@@ -12,7 +12,8 @@ const LineLogin = ({ onSuccess, onError }) => {
   // Handle LINE login initiation
   const handleLineLogin = () => {
     const state = Math.random().toString(36).substring(2, 15); // Simple random state
-    const scope = 'profile openid';
+    const scope = 'profile openid email';
+    
     
     // Store state in localStorage to verify after callback
     localStorage.setItem('line_login_state', state);
