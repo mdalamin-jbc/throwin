@@ -99,7 +99,7 @@ const SocialLogin = () => {
   };
 
   return (
-    <GoogleOAuthProvider clientId="518915798524-jkvlf5hggamfogto0apg7p7ja97953db.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId="392502139852-emenhc36d9d5o4c1g95vn8r6pscqadpl.apps.googleusercontent.com">
       <div
         className="flex flex-col justify-center items-center h-screen bg-cover bg-center p-4 overflow-hidden"
         style={{ backgroundImage: `url(${socialBg})` }}
