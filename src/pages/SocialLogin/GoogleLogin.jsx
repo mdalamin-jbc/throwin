@@ -1,5 +1,4 @@
 import { GoogleLogin } from "@react-oauth/google";
-import axios from "axios";
 import useAxiosPublic from "../../hooks/axiosPublic";
 
 const GoogleLoginButton = ({ onSuccess, onError }) => {
