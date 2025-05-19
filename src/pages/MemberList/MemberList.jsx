@@ -13,8 +13,7 @@ const MemberList = () => {
   const [searchData, setSearchData] = useState([]);
   const { staffName } = useParams();
   const { storeId, isLoading } = UseStaffDetailsWithStoreId(staffName);
-
-  console.log(storeId);
+  const [loadingImages, setLoadingImages] = useState({});
 
   const {
     register,
@@ -24,6 +23,12 @@ const MemberList = () => {
   useEffect(() => {
     if (storeId) {
       setSearchData(storeId);
+      // Initialize loading state for all images
+      const initialLoadingState = {};
+      storeId.forEach((staff) => {
+        initialLoadingState[staff.username] = true;
+      });
+      setLoadingImages(initialLoadingState);
     }
   }, [storeId]);
 
@@ -39,6 +44,20 @@ const MemberList = () => {
       );
       setSearchData(filteredData);
     }
+  };
+
+  const handleImageLoad = (username) => {
+    setLoadingImages((prev) => ({
+      ...prev,
+      [username]: false,
+    }));
+  };
+
+  const handleImageError = (username) => {
+    setLoadingImages((prev) => ({
+      ...prev,
+      [username]: false,
+    }));
   };
 
   if (isLoading) {
@@ -106,7 +125,7 @@ const MemberList = () => {
         </h2>
 
         {/* Team Images */}
-        <div className="grid grid-cols-2  gap-3 max-w-[342px]  mx-auto">
+        <div className="grid grid-cols-2 gap-3 max-w-[342px] mx-auto">
           {searchData.length > 0 ? (
             searchData.map((staff, index) => (
               <div
@@ -123,6 +142,14 @@ const MemberList = () => {
                   }
                 >
                   <div className="relative">
+                    {/* Image loading skeleton using Daisy UI */}
+                    {loadingImages[staff.username] && (
+                      <div className="absolute inset-0 rounded-lg flex items-center justify-center">
+                        <div className="skeleton h-[170px] w-[170px] rounded-lg"></div>
+                      </div>
+                    )}
+
+                    {/* Box image */}
                     <img
                       src={
                         staff.image?.medium
@@ -130,19 +157,32 @@ const MemberList = () => {
                           : "https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
                       }
                       alt={`${staff.username} image`}
-                      className="object-cover rounded-lg w-[170px] h-[170px]"
+                      className={`object-cover rounded-lg w-[170px] h-[170px] ${
+                        loadingImages[staff.username]
+                          ? "opacity-0"
+                          : "opacity-100"
+                      } transition-opacity duration-300`}
+                      onLoad={() => handleImageLoad(staff.username)}
+                      onError={() => handleImageError(staff.username)}
                     />
 
-                    {/* Rating in the top right corner */}
-                    <div className="absolute top-[6px] right-[6px] bg-white text-[#49BBDF] flex items-center gap-1 px-2 py-1 rounded-[4px] shadow-md">
-                      <IoMdStar />
-                      {staff.score}
-                    </div>
-                    {/* Name and Type in the bottom left corner */}
-                    <div className="absolute bottom-0 left-0 bg-gradient-to-t from-black via-transparent to-transparent w-full p-2 text-white rounded-b-lg">
-                      <h3 className="text-sm font-semibold">{staff.name}</h3>
-                      <p className="text-xs">{staff.introduction}</p>
-                    </div>
+                    {/* Only show these elements when image is loaded */}
+                    {!loadingImages[staff.username] && (
+                      <>
+                        {/* Rating in the top right corner */}
+                        <div className="absolute top-[6px] right-[6px] bg-white text-[#49BBDF] flex items-center gap-1 px-2 py-1 rounded-[4px] shadow-md">
+                          <IoMdStar />
+                          {staff.score}
+                        </div>
+                        {/* Name and Type in the bottom left corner */}
+                        <div className="absolute bottom-0 left-0 bg-gradient-to-t from-black via-transparent to-transparent w-full p-2 text-white rounded-b-lg">
+                          <h3 className="text-sm font-semibold">
+                            {staff.name}
+                          </h3>
+                          <p className="text-xs">{staff.introduction}</p>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </Link>
               </div>

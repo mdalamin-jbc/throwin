@@ -24,7 +24,8 @@ const StaffPreviewSection = ({ previewData = {} }) => {
 
   // Default placeholder image
   const defaultImage =
-    "https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg";
+    "https://miro.medium.com/v2/resize:fit:882/1*9EBHIOzhE1XfMYoKz1JcsQ.gif";
+  // "https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg";
 
   return (
     <div className="w-[340px] mx-auto">

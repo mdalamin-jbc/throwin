@@ -33,7 +33,7 @@ const Home = () => {
         >
           <source src={video} type="video/mp4" />
         </video>
-        
+
         <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/20" />
       </motion.div>
 
