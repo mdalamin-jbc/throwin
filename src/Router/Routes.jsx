@@ -26,7 +26,6 @@ import BillingScreen from "../pages/BillingScreen/BillingScreen";
 import DisplayName from "../pages/DisplayName/DisplayName";
 import ForgetPassword from "../pages/Login/ForgetPassword";
 import ResetPassword from "../pages/Login/ResetPassword";
-import TermsAndConditions from "../pages/TermsAndConditions/TermsAndConditions";
 import ChargeCompleted from "../pages/BillingScreen/ChargeCompleted";
 import History from "../pages/History/History";
 import VerifyEmail from "../pages/Profile/VerifyEmail";
@@ -71,8 +70,9 @@ import ProtectedRoute from "./ProtectedRoute";
 
 import { useAuth } from "../hooks/useAuth";
 import { ROLES } from "../constants/role";
-import MyTestRoute from "../components/test/MyTestRoute";
 import EditClient from "../components/client/EditClient";
+import TermsOfUser from "../pages/TermsOfUser/TermsOfUser";
+import PrivacyPolicy from "../pages/PrivacyPolicy/PrivacyPolicy";
 
 const RootRoute = () => {
   const { user } = useAuth();
@@ -287,8 +287,13 @@ export const Routes = createBrowserRouter([
         element: <NotificationDetails />,
       },
       {
-        path: "/terms",
-        element: <TermsAndConditions />,
+        path: "/terms-of-user",
+        element: <TermsOfUser />,
+      },
+
+      {
+        path: "/privacy-policy",
+        element: <PrivacyPolicy />,
       },
 
       // -------------------------------------dashboard
