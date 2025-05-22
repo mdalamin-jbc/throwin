@@ -130,16 +130,28 @@ const UserProfile = () => {
           </h4>
         </div>
 
-        {/* Terms and Policies */}
-        <Link className="hover:cursor-pointer" to="/terms">
+        {/* terms-of Use */}
+        <Link className="hover:cursor-pointer" to="/terms-of-user">
           <div className="flex justify-between border-b-[1.5px] my-5">
-            <h4>規約とポリシー</h4>
+            <h4>利用規約（ユーザー）</h4>
             <h4 className="flex items-center text-[#9F9999] mb-5">
               <span className="text-sm font-semibold"> </span>
               <GoChevronRight className="text-3xl " />
             </h4>
           </div>
         </Link>
+
+        {/* terms-of-service */}
+        <Link className="hover:cursor-pointer" to="/privacy-policy">
+          <div className="flex justify-between border-b-[1.5px] my-5">
+            <h4>プライバシーポリシー</h4>
+            <h4 className="flex items-center text-[#9F9999] mb-5">
+              <span className="text-sm font-semibold"> </span>
+              <GoChevronRight className="text-3xl " />
+            </h4>
+          </div>
+        </Link>
+
         {/* Logout */}
 
         {/* -------------------------------------------------------------------------------------- */}
