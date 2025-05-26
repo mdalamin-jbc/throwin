@@ -10,8 +10,6 @@ const GoogleLoginButton = ({ onSuccess, onError }) => {
         access_token: response.credential,
       });
 
-      console.log("Google response:", res.data);
-
       // Parse the access_token string to an object
       // First replace single quotes with double quotes to make it valid JSON
       const tokenString = res.data.access_token.replace(/'/g, '"');

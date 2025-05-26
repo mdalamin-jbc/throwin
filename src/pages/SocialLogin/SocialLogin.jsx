@@ -22,7 +22,7 @@ import GoogleLoginButton from "./GoogleLogin";
 import useAxiosPublic from "../../hooks/axiosPublic";
 
 const SocialLogin = () => {
-  const { socialLogin } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
   const { refetch } = UseUserDetails();
   const navigate = useNavigate();
   const location = useLocation();
@@ -69,7 +69,7 @@ const SocialLogin = () => {
   const handleLoginSuccess = (userData) => {
     console.log("Login data:", userData);
     refetch();
-    socialLogin(userData);
+    login(userData);
 
     toast.success("ログインに成功しました。", {
       position: "top-center",
