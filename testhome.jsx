@@ -20,27 +20,30 @@ const Home = () => {
   return (
     <div className="fixed inset-0 w-full h-full overflow-hidden bg-black">
       {" "}
+      {/* ✅ Default background */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
       >
+        {/* ✅ Handle Video Load before showing */}
         <video
           ref={videoRef}
           autoPlay
           loop
           muted
-          preload="auto" //
           playsInline
           className="absolute inset-0 w-full h-full object-fill opacity-0 transition-opacity duration-700"
-          onLoadedData={() => setVideoLoaded(true)}
-          style={{ opacity: videoLoaded ? 1 : 0 }}
+          onLoadedData={() => setVideoLoaded(true)} // ✅ Track when video loads
+          style={{ opacity: videoLoaded ? 1 : 0 }} // ✅ Hide until loaded
         >
           <source src={video} type="video/mp4" />
         </video>
 
+        {/* ✅ Gradient overlay for smooth effect */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40" />
       </motion.div>
+      {/* ✅ Fix Logo Flickering */}
       <motion.div
         className="absolute inset-0 flex justify-center items-center z-20"
         initial={{ opacity: 0 }}
@@ -56,6 +59,7 @@ const Home = () => {
           transition={{ duration: 1, ease: "easeOut" }}
         />
       </motion.div>
+      {/* ✅ Buttons with smoother animation */}
       <div className="fixed bottom-8 left-0 right-0 flex flex-col gap-3 items-center z-30">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
