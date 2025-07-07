@@ -2,25 +2,35 @@ import ButtonPrimary from "../../components/ButtonPrimary";
 import TitleBar from "../../components/TitleBar";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
 import useAxiosPrivate from "../../hooks/axiousPrivate";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import toast from "react-hot-toast";
+import UseUserDetails from "../../hooks/UseUserDetails";
+import { Circles } from "react-loader-spinner";
 
 const DisplayName = () => {
   const [error, setError] = useState();
+  const { userDetails, isLoading } = UseUserDetails();
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  console.log(userDetails?.name);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm();
+
+  // Set the name field value when userDetails is loaded
+  useEffect(() => {
+    if (userDetails?.name) {
+      setValue("name", userDetails.name);
+    }
+  }, [userDetails, setValue]);
 
   const onSubmit = async (data) => {
     try {
@@ -59,6 +69,20 @@ const DisplayName = () => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Circles
+          height="80"
+          width="80"
+          color="#49BBDF"
+          ariaLabel="circles-loading"
+          visible={true}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="">
       <Helmet>
@@ -84,12 +108,12 @@ const DisplayName = () => {
         >
           <div className="form-control">
             <input
-              {...register("name", { required: "Name is required" })}
+              {...register("name", { required: "名前が必要です" })}
               name="name"
               type="text"
-              placeholder="名前"
+              placeholder={userDetails?.name || "名前"}
               className="input rounded-[5px] py-4 mt-1 mb-[9px] w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 border-[#D9D9D9] focus:border-[#707070] focus:outline-none"
-              defaultValue={user?.name}
+              defaultValue={userDetails?.name}
             />
             {errors.name && (
               <span className="text-[#F43C3C]  text-sm mt-2">

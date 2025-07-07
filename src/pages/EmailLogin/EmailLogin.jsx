@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import closeIcon from "../../assets/icons/close.png";
 import logo from "../../assets/images/socialLogin/logo2.png";
 import socialBg from "../../assets/images/socialLogin/social bg.jpeg";
@@ -7,10 +8,30 @@ import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import useAxiosPublic from "../../hooks/axiosPublic";
 import toast from "react-hot-toast";
+import UseUserDetails from "../../hooks/UseUserDetails";
 
 const EmailLogin = () => {
+  const { userDetails } = UseUserDetails();
   const navigate = useNavigate();
   const axiosPublic = useAxiosPublic();
+
+  // Check if user is already logged in
+  useEffect(() => {
+    if (userDetails?.email) {
+      // Show Japanese toast notification for already logged in
+      toast.success("すでにログインしています。", {
+        position: "top-center",
+        duration: 3000,
+        id: "already-logged-in",
+      });
+      
+      // Ask if they want to go to search page
+      const confirmRedirect = window.confirm("検索ページに移動しますか？");
+      if (confirmRedirect) {
+        navigate("/search");
+      }
+    }
+  }, [userDetails?.email, navigate]);
 
   const handleClose = () => {
     navigate("/socialLogin");

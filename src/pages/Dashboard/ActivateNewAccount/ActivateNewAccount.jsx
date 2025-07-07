@@ -29,7 +29,7 @@ const ActivateNewAccount = () => {
 
     // Validate passwords
     if (formData.password !== formData.confirm_password) {
-      setError("Passwords do not match");
+      setError("パスワードが一致しません");
       setLoading(false);
       return;
     }
@@ -46,14 +46,14 @@ const ActivateNewAccount = () => {
 
       // Check for success status directly, not response.ok
       if (response.status === 200) {
-        setMessage("Account activated successfully! You can now log in.");
+        setMessage("アカウントが正常に有効化されました！ログインできるようになりました。");
         navigate("/admin/login");
       } else {
-        throw new Error(response.data?.message || "Failed to activate account");
+        throw new Error(response.data?.message || "アカウントの有効化に失敗しました");
       }
     } catch (err) {
       setError(
-        err.response?.data?.detail || err.message || "An error occurred while activating your account"
+        err.response?.data?.detail || err.message || "アカウントの有効化中にエラーが発生しました"
       );
     } finally {
       setLoading(false);
@@ -64,7 +64,7 @@ const ActivateNewAccount = () => {
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
         <h1 className="text-2xl font-bold mb-6 text-center">
-          Activate Your Account
+          アカウントを有効化する
         </h1>
 
         {message ? (
@@ -84,7 +84,7 @@ const ActivateNewAccount = () => {
                 className="block text-gray-700 text-sm font-bold mb-2"
                 htmlFor="password"
               >
-                New Password
+                新しいパスワード
               </label>
               <input
                 type="password"
@@ -103,7 +103,7 @@ const ActivateNewAccount = () => {
                 className="block text-gray-700 text-sm font-bold mb-2"
                 htmlFor="confirm_password"
               >
-                Confirm Password
+                パスワード（確認用）
               </label>
               <input
                 type="password"
@@ -123,7 +123,7 @@ const ActivateNewAccount = () => {
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
                 disabled={loading}
               >
-                {loading ? "Activating..." : "Activate Account"}
+                {loading ? "処理中..." : "アカウントを有効化する"}
               </button>
             </div>
           </form>

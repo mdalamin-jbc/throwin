@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import Root from "../Root/Root";
 import Home from "../pages/home/Home";
 import SocialLogin from "../pages/SocialLogin/SocialLogin";
@@ -26,7 +26,6 @@ import BillingScreen from "../pages/BillingScreen/BillingScreen";
 import DisplayName from "../pages/DisplayName/DisplayName";
 import ForgetPassword from "../pages/Login/ForgetPassword";
 import ResetPassword from "../pages/Login/ResetPassword";
-import TermsAndConditions from "../pages/TermsAndConditions/TermsAndConditions";
 import ChargeCompleted from "../pages/BillingScreen/ChargeCompleted";
 import History from "../pages/History/History";
 import VerifyEmail from "../pages/Profile/VerifyEmail";
@@ -64,23 +63,55 @@ import SingUp from "../pages/Dashboard/SalesAgent/SingUp";
 import DaNameChange from "../pages/Dashboard/Seetings/DaNameChange";
 import AdminEmailChange from "../pages/Dashboard/Seetings/AdminEmailChange";
 import BankChargeCompleted from "../pages/BillingScreen/BankChargeCompleted";
-import MemberChart_sa from "../pages/Dashboard/SalesManagement/MemberChart_sa";
-import StoreTeamChart_sa from "../pages/Dashboard/SalesManagement/StoreTeamChart_sa";
-import ClientChart_sa from "../pages/Dashboard/SalesManagement/ClientChart_sa";
+import ErrorPage from "../pages/ErrorPage/ErrorPage";
+import Test from "../pages/Test/Test";
+import LineLoginCallBack from "../pages/SocialLogin/LineLoginCallBack";
+import ProtectedRoute from "./ProtectedRoute";
+
+import { useAuth } from "../hooks/useAuth";
+import { ROLES } from "../constants/role";
+import EditClient from "../components/client/EditClient";
+import TermsOfUser from "../pages/TermsOfUser/TermsOfUser";
+import PrivacyPolicy from "../pages/PrivacyPolicy/PrivacyPolicy";
+
+const RootRoute = () => {
+  const { user } = useAuth();
+  if (user && user.role === ROLES.CONSUMER) {
+    return <Navigate to="/search" />;
+  } else if (
+    (user && user.role === ROLES.FC_ADMIN) ||
+    (user && user.role === ROLES.RESTAURANT_OWNER) ||
+    (user && user.role === ROLES.SALES_AGENT)
+  ) {
+    return <Home />;
+  }
+  return <Home />;
+};
 
 export const Routes = createBrowserRouter([
   {
     path: "/",
-    element: <Root></Root>,
+    element: <Root />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: <RootRoute />,
+      },
+
+      {
+        path: "/test",
+        element: <Test />,
       },
       {
         path: "/socialLogin",
         element: <SocialLogin />,
       },
+      {
+        path: "/callback",
+        element: <LineLoginCallBack />,
+      },
+
       {
         path: "/emailLogin",
         element: <EmailLogin />,
@@ -146,7 +177,7 @@ export const Routes = createBrowserRouter([
         element: <GachaTwo />,
       },
       {
-        path: "/gacha/available_spins/ticket/:store_uidf",
+        path: "/gacha/available_spins/ticket/:store_uid",
         element: <UseTicket />,
       },
       {
@@ -217,9 +248,9 @@ export const Routes = createBrowserRouter([
       {
         path: "/myPage",
         element: (
-          <PrivateRoute>
+          <ProtectedRoute allowedRoles={[ROLES.CONSUMER]}>
             <UserProfile />
-          </PrivateRoute>
+          </ProtectedRoute>
         ),
       },
 
@@ -256,8 +287,13 @@ export const Routes = createBrowserRouter([
         element: <NotificationDetails />,
       },
       {
-        path: "/terms",
-        element: <TermsAndConditions />,
+        path: "/terms-of-user",
+        element: <TermsOfUser />,
+      },
+
+      {
+        path: "/privacy-policy",
+        element: <PrivacyPolicy />,
       },
 
       // -------------------------------------dashboard
@@ -275,89 +311,179 @@ export const Routes = createBrowserRouter([
       },
       {
         path: "/dashboard",
-        element: <Dashboard />,
+        element: (
+          <ProtectedRoute
+            allowedRoles={[
+              ROLES.FC_ADMIN,
+              ROLES.RESTAURANT_OWNER,
+              ROLES.SALES_AGENT,
+              ROLES.GLOW_ADMIN,
+            ]}
+          >
+            <Dashboard />
+          </ProtectedRoute>
+        ),
         children: [
           {
             path: "sales_management",
-            element: <SalesManagement />,
+            element: (
+              <PrivateRoute>
+                <SalesManagement />
+              </PrivateRoute>
+            ),
           },
           {
             path: "account",
-            element: <Account />,
+            element: (
+              <PrivateRoute>
+                <Account />
+              </PrivateRoute>
+            ),
           },
           {
             path: "account/creat_newStore",
-            element: <CreateANewAccount />,
+            element: (
+              <PrivateRoute>
+                <CreateANewAccount />
+              </PrivateRoute>
+            ),
           },
           {
             path: "/dashboard/account/:store_code",
-            element: <ResturentStore />,
+            element: (
+              <PrivateRoute>
+                <ResturentStore />
+              </PrivateRoute>
+            ),
           },
           {
             path: "m_account",
-            element: <MemberAccount />,
+            element: (
+              <PrivateRoute>
+                <MemberAccount />
+              </PrivateRoute>
+            ),
           },
           {
             path: "/dashboard/account/:id/creat_newStaff",
-            element: <MemberReg />,
+            element: (
+              <PrivateRoute>
+                <MemberReg />
+              </PrivateRoute>
+            ),
           },
-          // fc/glow admin
           {
             path: "client",
-            element: <Client />,
+            element: (
+              <PrivateRoute>
+                <Client />
+              </PrivateRoute>
+            ),
+          },
+          {
+            path: "client/edit/:id",
+            element: (
+              <PrivateRoute>
+                <EditClient />
+              </PrivateRoute>
+            ),
           },
           {
             path: "client/creat_new",
-            element: <CreatNewClient />,
+            element: (
+              <PrivateRoute>
+                <CreatNewClient />
+              </PrivateRoute>
+            ),
           },
           {
             path: "sales_agent",
-            element: <SalesAgent />,
+            element: (
+              <PrivateRoute>
+                <SalesAgent />
+              </PrivateRoute>
+            ),
           },
           {
             path: "sales_agent/sign_up",
-            element: <SingUp />,
+            element: (
+              <PrivateRoute>
+                <SingUp />
+              </PrivateRoute>
+            ),
           },
           {
             path: "comments",
-            element: <DaComments />,
+            element: (
+              <PrivateRoute>
+                <DaComments />
+              </PrivateRoute>
+            ),
           },
           {
             path: "qr_creation",
-            element: <QrCreation />,
+            element: (
+              <PrivateRoute>
+                <QrCreation />
+              </PrivateRoute>
+            ),
           },
           {
             path: "deHistorys",
-            element: <DeHistory />,
+            element: (
+              <PrivateRoute>
+                <DeHistory />
+              </PrivateRoute>
+            ),
           },
           {
             path: "creat_a_new_team",
-            element: <CreateANewTeam />,
+            element: (
+              <PrivateRoute>
+                <CreateANewTeam />
+              </PrivateRoute>
+            ),
           },
 
           {
-            path: "adminLogin",
-            element: <AdminLogin />,
-          },
-          {
             path: "deGacha",
-            element: <DeGacha />,
+            element: (
+              <PrivateRoute>
+                <DeGacha />
+              </PrivateRoute>
+            ),
           },
           {
             path: "payment_management",
-            element: <PaymentManagement />,
+            element: (
+              <PrivateRoute>
+                <PaymentManagement />
+              </PrivateRoute>
+            ),
           },
           {
             path: "settings",
-            element: <DeSeetings />,
+            element: (
+              <PrivateRoute>
+                <DeSeetings />
+              </PrivateRoute>
+            ),
           },
           {
             path: "/dashboard/settings/name/change",
-            element: <DaNameChange />,
+            element: (
+              <PrivateRoute>
+                <DaNameChange />
+              </PrivateRoute>
+            ),
           },
           {
             path: "/dashboard/settings/email/change",
-            element: <AdminEmailChange />,
+            element: (
+              <PrivateRoute>
+                <AdminEmailChange />
+              </PrivateRoute>
+            ),
           },
         ],
       },

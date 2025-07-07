@@ -4,13 +4,21 @@ import { toast } from "react-hot-toast";
 import logo from "../../../assets/images/socialLogin/logo2.png";
 import ButtonPrimary from "../../../components/ButtonPrimary";
 import useAxiosPublic from "../../../hooks/axiosPublic";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import AuthContext from "../../../contexts/AuthContext";
+import { ROLES } from "../../../constants/role";
 
 const AdminLogin = () => {
   const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
+
+  useEffect(() => {
+    const userRole = localStorage.getItem("userRole");
+    if (userRole === "fc_admin") {
+      navigate("/dashboard");
+    }
+  }, [navigate]);
 
   const {
     register,
@@ -25,41 +33,41 @@ const AdminLogin = () => {
         password: data.password,
       });
 
-      console.log("Response:", response);
+      if (response.data.data.role == "consumer") {
+        toast.error("許可されていないアクセス", {
+          position: "top-center",
+          duration: 3000,
+        });
+        return;
+      }
 
-      if (response.status === 200) {
+      if (
+        response.status === 200 &&
+        response.data.data.role !== ROLES.CONSUMER
+      ) {
         const result = response.data;
         login(response.data.data);
 
         // Extract user role and tokens
         const userRole = result.data?.role;
         localStorage.setItem("userRole", userRole);
-        // localStorage.setItem("accessToken", result.data?.access);
-        // localStorage.setItem("refreshToken", result.data?.refresh);
-        console.log(result);
-
         toast.success(`ようこそ, ${result.data?.role}`, {
           position: "top-center",
           duration: 3000,
         });
 
-        // Redirect to the dashboard
         navigate(`/dashboard`);
       }
     } catch (error) {
-      console.error("Error:", error); // Debugging
-
+      console.error("Error:", error);
       if (error.response) {
-        toast.error(
-          error.response.data.detail || "無効なメールまたはパスワード",
-          {
-            position: "top-right",
-            duration: 3000,
-          }
-        );
+        toast.error("無効なメールまたはパスワード", {
+          position: "top-center",
+          duration: 3000,
+        });
       } else {
         toast.error("サーバーに接続できません。後でもう一度お試しください。", {
-          position: "top-right",
+          position: "top-center",
           duration: 3000,
         });
       }

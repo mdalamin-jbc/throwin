@@ -14,7 +14,7 @@ const IndividualStores = () => {
   const { storeDetails } = UseGetStoreDetailsByStoreCode(store_code);
   console.log(store);
 
-  // Prioritize location state, otherwise fallback to localStorage
+
 
   if (isLoading) {
     return (
@@ -38,7 +38,10 @@ const IndividualStores = () => {
         {/* Store Image with Gradient Overlay and Store Name */}
         <div className="relative">
           <img
-            src={storeDetails?.banner?.large || { banner }}
+            src={
+              storeDetails?.banner?.large ||
+              "https://i.postimg.cc/59TmqbZv/d85bf08137ca367e755012d701fbcc11.png"
+            }
             alt={storeDetails?.name || "Store Image"}
             className="w-full"
           />

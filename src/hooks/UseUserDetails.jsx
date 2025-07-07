@@ -6,7 +6,7 @@ const UseUserDetails = () => {
   const axiosPublic = useAxiosPublic();
   const { user } = useAuth();
 
-  const { refetch, data: userDetails = {} } = useQuery({
+  const { refetch, data: userDetails = {},isLoading, isError } = useQuery({
     queryKey: ["userData", user?.access],
     queryFn: async () => {
       const res = await axiosPublic.get(`/auth/users/me`, {
@@ -18,7 +18,7 @@ const UseUserDetails = () => {
     enabled: !!user?.access,
   });
 
-  return { userDetails, refetch };
+  return { userDetails, refetch, isLoading, isError };
 };
 
 export default UseUserDetails;

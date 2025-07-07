@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import TitleBar from "../../components/TitleBar";
 import { Helmet } from "react-helmet";
@@ -34,12 +34,12 @@ const ChangePassword = () => {
           confirm_password: data.confirmPassword,
         });
         console.log(response);
-        // Show SweetAlert success notification
-        Swal.fire({
-          icon: "success",
-          title: "パスワードが正常に変更されました",
-          showConfirmButton: false,
-          timer: 1500,
+
+        // Show success notification with react-hot-toast
+        toast.success("パスワードが正常に変更されました", {
+          position: "top-center",
+          duration: 1500,
+          id: "password-change-success",
         });
 
         navigate("/myPage");
@@ -50,11 +50,11 @@ const ChangePassword = () => {
           error.response?.data || error.message
         );
 
-        // Show SweetAlert error notification
-        Swal.fire({
-          icon: "error",
-          title: "パスワードの変更に失敗しました",
-          text: "再試行してください",
+        // Show error notification with react-hot-toast
+        toast.error("パスワードの変更に失敗しました。再試行してください", {
+          position: "top-center",
+          duration: 3000,
+          id: "password-change-error",
         });
       }
     }
@@ -91,7 +91,7 @@ const ChangePassword = () => {
               <div className="form-control">
                 <input
                   {...register("current_pass", {
-                    required: "Current password is required",
+                    required: "現在のパスワードが必要です",
                   })}
                   name="current_pass"
                   type="password"
@@ -112,7 +112,7 @@ const ChangePassword = () => {
                       required: "新しいパスワードを入力してください",
                       minLength: {
                         value: 6,
-                        message: "Password must be at least 6 characters",
+                        message: "パスワードは6文字以上でなければなりません。",
                       },
                     })}
                     name="password"

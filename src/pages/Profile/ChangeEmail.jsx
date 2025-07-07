@@ -6,9 +6,10 @@ import useAxiosPrivate from "../../hooks/axiousPrivate";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { Circles } from "react-loader-spinner";
 
 const ChangeEmail = () => {
-  const { userDetails } = UseUserDetails();
+  const { userDetails, isLoading } = UseUserDetails();
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
   const {
@@ -45,6 +46,20 @@ const ChangeEmail = () => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Circles
+          height="80"
+          width="80"
+          color="#49BBDF"
+          ariaLabel="circles-loading"
+          visible={true}
+        />
+      </div>
+    );
+  }
+
   return (
     <div>
       <TitleBar
@@ -73,7 +88,7 @@ const ChangeEmail = () => {
               Password
             </label>
             <input
-              {...register("password", { required: "password is required" })}
+              {...register("password", { required: "パスワードが必要です" })}
               id="password"
               name="password"
               type="password"
@@ -93,10 +108,10 @@ const ChangeEmail = () => {
             </label>
             <input
               {...register("email", {
-                required: "Email is required",
+                required: "メールアドレスは必須です",
                 pattern: {
                   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: "Invalid email format",
+                  message: "無効な電子メール形式",
                 },
               })}
               id="email"

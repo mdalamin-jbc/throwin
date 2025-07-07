@@ -6,7 +6,7 @@ const DeGacha = () => {
   console.log(resturentGachaHisotry);
   return (
     <div>
-      <h2 className="font-semibold text-[27px] text-[#73879C]">アカウント</h2>
+      <h2 className="font-semibold text-[27px] text-[#73879C]">ガチャ</h2>
       <div className="bg-white mt-[27px] rounded-xl pb-8 ">
         <h4 className="font-semibold text-[18px] text-[#73879C] pt-[30px] pl-[33px] pb-[21px] ">
           ガチャ使用状況

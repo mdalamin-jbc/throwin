@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import ButtonPrimary from "../../components/ButtonPrimary";
 import logo from "/logo.png";
 import video from "../../assets/video/banner_video.mp4";
@@ -8,6 +8,7 @@ import video from "../../assets/video/banner_video.mp4";
 const Home = () => {
   const navigate = useNavigate();
   const videoRef = useRef(null);
+  const [videoLoaded, setVideoLoaded] = useState(false); // ✅ Handle initial white screen
 
   const handleNavigation = (path) => {
     if (videoRef.current) {
@@ -17,7 +18,8 @@ const Home = () => {
   };
 
   return (
-    <div className="fixed inset-0 w-full h-full overflow-hidden bg-gradient-to-br from-[#49BBDF]/5 via-[#2399F4]/5 to-[#49BBDF]/5">
+    <div className="fixed inset-0 w-full h-full overflow-hidden bg-black">
+      {" "}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -28,15 +30,17 @@ const Home = () => {
           autoPlay
           loop
           muted
+          preload="auto" //
           playsInline
-          className="absolute inset-0 w-full h-full object-fill"
+          className="absolute inset-0 w-full h-full object-fill opacity-0 transition-opacity duration-700"
+          onLoadedData={() => setVideoLoaded(true)}
+          style={{ opacity: videoLoaded ? 1 : 0 }}
         >
           <source src={video} type="video/mp4" />
         </video>
-        
-        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/20" />
-      </motion.div>
 
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40" />
+      </motion.div>
       <motion.div
         className="absolute inset-0 flex justify-center items-center z-20"
         initial={{ opacity: 0 }}
@@ -52,7 +56,6 @@ const Home = () => {
           transition={{ duration: 1, ease: "easeOut" }}
         />
       </motion.div>
-
       <div className="fixed bottom-8 left-0 right-0 flex flex-col gap-3 items-center z-30">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -60,22 +63,11 @@ const Home = () => {
           transition={{ duration: 0.8, delay: 0.3 }}
           className="relative group"
         >
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-[#65D0F2] to-[#2399F4] rounded-full opacity-0 group-hover:opacity-20 transition-all duration-300 blur-xl"
-            animate={{
-              scale: [1, 1.05, 1],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
           <motion.button
             onClick={() => handleNavigation("/socialLogin")}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="relative transform transition-all duration-300 overflow-hidden group"
+            className="relative overflow-hidden group"
           >
             <ButtonPrimary
               btnText="始める"
@@ -90,17 +82,6 @@ const Home = () => {
           transition={{ duration: 0.8, delay: 0.3 }}
           className="relative group"
         >
-          <motion.div
-            className="absolute inset-0 border-2 border-white/30 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 blur-sm"
-            animate={{
-              scale: [1, 1.05, 1],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
           <motion.button
             onClick={() => handleNavigation("/login")}
             className="border-2 border-white min-w-[350px] lg:py-6 text-center py-[15px] font-bold rounded-full font-hiragino text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/10"

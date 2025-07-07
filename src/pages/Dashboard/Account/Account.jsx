@@ -1,15 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import search from "../../../assets/icons/search_3.png";
-import img from "../../../assets/images/store&staff/image.png";
 import { Link } from "react-router-dom";
 import UseGetRestaurantOwnerStoreList from "../../../hooks/Dashboard/UseGetRestaurantOwnerStoreList";
 import Pagination from "./Pagination";
 
 const Account = () => {
-  const { storeList, refetch, isLoading, isError, error } =
-    UseGetRestaurantOwnerStoreList();
+  const { storeList } = UseGetRestaurantOwnerStoreList();
 
   // Add pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -22,23 +20,6 @@ const Account = () => {
   } = useForm();
   const searchQuery = watch("searchMember", "");
 
-  const [teams, setTeams] = useState([]);
-
-  useEffect(() => {
-    // Fetch or set data dynamically
-    const fetchTeams = async () => {
-      // Replace with real API call
-      const data = [
-        { id: 1, name: "かりん", status: "公開" },
-        { id: 2, name: "さくら", status: "非公開" },
-        { id: 3, name: "たけし", status: "公開" },
-      ];
-      setTeams(data);
-    };
-    fetchTeams();
-  }, []);
-
-  // Calculate pagination
   const filteredStores = storeList.filter(
     (store) =>
       store.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -130,7 +111,7 @@ const Account = () => {
                           <img
                             src={
                               store.banner?.small ||
-                              "https://s3-alpha-sig.figma.com/img/a8e5/b83e/e461f47e6b5f7786158f8f5f3eb4817d?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=CI6U4GQBbgwQyv9Ju2E4xXJLONjRqa4zuZEPN7W6cVylnjTo2tkEWz73wXqYGDhjreEUZxncRElUwnoP1rB3Vc~ugFHqYqU4-AuycHXPZvQOsmg~Q0jf~lE46bCwQtm3mFqy-Z2ZyXXBE8IxhdVIO85xQIPiyuJTT2Hlh1u9dwRJJQ9DRmmIOQBE9~mNklM7ju4HY2JlMNpEbRaJuwJLDvH~W9h4KMHjVPdn2NsTUZY~PWNGyNokCFNz221O989do5FUQDI1kBevwX3Cgiu4Bv81sHkHcCLWbhJs4zHIjhvE1-MplyKfEmZPTP~MM-4xTj8q2EZ4aHCPsrzz352eOw__"
+                              "https://i.postimg.cc/HLdQr5yp/5e3ca18b58c181ccc105ca95163e891c.jpg"
                             }
                             alt={store.name}
                             className="w-[29px] rounded-full"
@@ -140,8 +121,8 @@ const Account = () => {
                       </Link>
                       <td>{store.code}</td>
                       <td>
-                        <button className="bg-[#ABABAB] rounded-full px-3 py-1 text-white">
-                          {store.exposure}
+                        <button className="bg-[#ABABAB] rounded-full px-3 pb-1 text-white">
+                          {store.status}
                         </button>
                       </td>
                     </tr>

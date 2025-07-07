@@ -10,7 +10,6 @@ const Root = () => {
     "favorite",
     "gacha",
     "notice",
-
     "member_list",
     "myPage",
     "store",
@@ -18,24 +17,20 @@ const Root = () => {
     "staff",
     "stuff_list",
     "displayName",
-    "terms",
     "history",
     "nickName_reg",
-  ].some((path) => location.pathname.includes(path));
-
-  // Check if the current path is within the dashboard
+  ].some((path) => location.pathname.includes(path)) &&
+    !["/terms-of-user", "/privacy-policy"].includes(location.pathname);
 
   return (
     <div className="bg-[#F9FAFB] min-h-screen flex flex-col">
-    {/* Top Navigation Menu */}
-    {shouldRenderNavMenu && <NavMenu />}
-  
-    {/* Main Content */}
-    <main className="flex-grow">
-      <Outlet />
-    </main>
-  </div>
-  
+      {/* Top Navigation Menu */}
+      {shouldRenderNavMenu && <NavMenu />}
+      {/* Main Content */}
+      <main className="flex-grow">
+        <Outlet />
+      </main>
+    </div>
   );
 };
 
