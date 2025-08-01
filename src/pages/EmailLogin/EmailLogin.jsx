@@ -24,7 +24,7 @@ const EmailLogin = () => {
         duration: 3000,
         id: "already-logged-in",
       });
-      
+
       // Ask if they want to go to search page
       const confirmRedirect = window.confirm("検索ページに移動しますか？");
       if (confirmRedirect) {
