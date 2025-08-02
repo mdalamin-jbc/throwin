@@ -26,15 +26,6 @@ const GachaTwo = () => {
         icon={<img className="w-[110px] items-center" src={logo} alt="ロゴ" />}
       />
       <div>
-        {/* <motion.h3
-          className="text-center mt-[29px] mb-[18px] font-semibold text-xl text-[#585858]"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-        >
-          保有中のガチャ券
-        </motion.h3> */}
-
         {isLoading ? (
           <div className="flex justify-center items-center h-[80vh]">
             <Circles
