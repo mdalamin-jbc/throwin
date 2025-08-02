@@ -42,7 +42,7 @@ const GachaTwo = () => {
           </p>
         ) : availableSpins.length > 0 ? (
           <motion.div
-            className="grid gap-4 max-w-[351px] mx-auto"
+            className="grid gap-4 mt-14 max-w-[351px] mx-auto"
             initial="hidden"
             animate="visible"
             variants={{
