@@ -3,7 +3,6 @@ import { Scanner } from "@yudiel/react-qr-scanner";
 
 const QRScannerComponent = () => {
   const [qrData, setQrData] = useState(null);
-  console.log(qrData);
 
   const handleScan = (result) => {
     if (result) {

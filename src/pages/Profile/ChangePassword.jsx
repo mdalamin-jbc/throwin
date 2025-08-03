@@ -33,7 +33,6 @@ const ChangePassword = () => {
           new_password: data.password,
           confirm_password: data.confirmPassword,
         });
-        console.log(response);
 
         // Show success notification with react-hot-toast
         toast.success("パスワードが正常に変更されました", {

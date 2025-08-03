@@ -6,7 +6,6 @@ const UseGetResturentWonerSettings = () => {
   const userRole = localStorage.getItem("userRole");
   const AxiosPrivate = useAxiosPrivate();
   const { user } = useAuth();
-  console.log(user);
 
   const {
     refetch,

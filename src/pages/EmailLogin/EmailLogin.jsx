@@ -49,7 +49,6 @@ const EmailLogin = () => {
       const response = await axiosPublic.post("/auth/register/check-email", {
         email: data.mail,
       });
-      console.log(response);
 
       // If email is available, navigate to registration
       navigate("/new_reg", { state: { email: data.mail } });
@@ -57,7 +56,7 @@ const EmailLogin = () => {
       const errorMsg =
         error.response?.data?.email?.[0] ||
         "エラーが発生しました。後で再試行してください。";
-      console.log(errorMsg);
+
       toast.error(
         "すでにアカウントがあります。アカウントをアクティベートしてください。",
         {

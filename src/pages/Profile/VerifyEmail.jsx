@@ -39,7 +39,7 @@ const VerifyEmail = () => {
             },
           }
         );
-        console.log(response);
+
         if (isMounted) {
           toast
             .success("あなたのメールアドレスが確認されました！", {

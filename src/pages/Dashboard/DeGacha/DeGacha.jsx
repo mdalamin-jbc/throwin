@@ -3,7 +3,7 @@ import img from "../../../assets/images/dashboard/Oval 7.png";
 import UseGetGachaHistory from "../../../hooks/Dashboard/UseGetGachaHistory";
 const DeGacha = () => {
   const { resturentGachaHisotry } = UseGetGachaHistory();
-  console.log(resturentGachaHisotry);
+
   return (
     <div>
       <h2 className="font-semibold text-[27px] text-[#73879C]">ガチャ</h2>

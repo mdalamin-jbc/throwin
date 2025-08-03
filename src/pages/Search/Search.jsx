@@ -22,7 +22,6 @@ const Search = () => {
     UseStaffDetailsWithStoreId(searchByStuffName);
   const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
-  console.log(storeId);
 
   const {
     register,
@@ -40,7 +39,6 @@ const Search = () => {
   }, []);
 
   const handleQRCodeResult = (result) => {
-    console.log("QR Code Result:", result.text);
     try {
       const url = new URL(result.text);
       window.location.href = url.href;
