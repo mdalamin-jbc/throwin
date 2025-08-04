@@ -15,8 +15,6 @@ const TicketTermsAndConditons = () => {
   const location = useLocation();
   const ticketResponse = location.state?.ticketResponse;
 
-  console.log("Ticket Response:", ticketResponse);
-
   const ticketImage =
     ticketResponse?.result === "gold"
       ? gold

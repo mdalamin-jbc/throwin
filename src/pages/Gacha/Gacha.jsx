@@ -28,9 +28,11 @@ const Gacha = () => {
               style="font-hiragino bg-gradient-to-r from-[#65D0F2] to-[#2399F4] max-w-[342px] mx-auto rounded-full text-center py-[10px] font-bold text-white"
             />
           </Link>
-          <h5 className="mt-[11px] underline font-semibold text-[#434343]">
-            TICKET BOXを見る
-          </h5>
+          <Link to={"/gacha/tickets"}>
+            <h5 className="mt-[11px] underline font-semibold text-[#434343]">
+              TICKET BOXを見る
+            </h5>
+          </Link>
         </div>
       </div>
     </div>

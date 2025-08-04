@@ -11,7 +11,6 @@ const Processing = () => {
 
   const location = useLocation();
   const ticketResponse = location.state?.ticketResponse;
-  console.log(ticketResponse);
 
   // Function to navigate after video ends
   const handleVideoEnd = () => {
