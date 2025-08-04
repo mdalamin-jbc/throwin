@@ -13,7 +13,7 @@ const ClientForm = ({
 }) => {
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
-  console.log({ defaultValues });
+
   const {
     register,
     handleSubmit,
@@ -46,8 +46,6 @@ const ClientForm = ({
       account_holder_name: data.accountHolderName,
     };
 
-    console.log("Submitting data:", requestBody);
-
     try {
       let response;
 
@@ -70,8 +68,6 @@ const ClientForm = ({
           toast.success("新しいクライアントが作成されました！");
         }
       }
-
-      console.log("API Response:", response);
 
       if (response.status === 200 || response.status === 201) {
         // Execute any additional success callback

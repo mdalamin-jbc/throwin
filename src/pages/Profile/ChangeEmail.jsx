@@ -22,11 +22,10 @@ const ChangeEmail = () => {
   const onSubmit = async (data) => {
     const { password, email: new_email } = data;
     try {
-      const response = await axiosPrivate.post(
-        `auth/users/email-change-request`,
-        { password, new_email }
-      );
-      console.log(response);
+      await axiosPrivate.post(`auth/users/email-change-request`, {
+        password,
+        new_email,
+      });
 
       // Show success alert
       toast.success("確認メールが送信されました。", {

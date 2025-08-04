@@ -12,7 +12,6 @@ const Favorite = () => {
   const { favoriteStuffs, refetch, isLoading } = useGetFavoriteStuff();
   const axiosPrivate = useAxiosPrivate();
   const [isProcessing, setIsProcessing] = useState(false);
-  console.log(favoriteStuffs)
 
   const handleLikeDelete = async (id) => {
     if (isProcessing) return; // Prevent duplicate requests
@@ -20,7 +19,6 @@ const Favorite = () => {
 
     try {
       const response = await axiosPrivate.post(`/auth/users/staff/${id}/like`);
-      console.log("API Response:", response);
 
       if ([200, 201, 204].includes(response.status)) {
         await refetch(); // Refresh the data
@@ -75,7 +73,10 @@ const Favorite = () => {
             </div>
           ) : (
             favoriteStuffs.map((staff) => (
-              <div key={staff.uid} className="flex items-center shadow-md rounded-lg p-4">
+              <div
+                key={staff.uid}
+                className="flex items-center shadow-md rounded-lg p-4"
+              >
                 <Link
                   to={{
                     pathname: `/store/${staff.store_code}/staff/${staff.username}`,
@@ -98,7 +99,10 @@ const Favorite = () => {
                     </p>
                   </div>
                 </Link>
-                <button onClick={() => handleLikeDelete(staff.uid)} className="ml-2">
+                <button
+                  onClick={() => handleLikeDelete(staff.uid)}
+                  className="ml-2"
+                >
                   <FaHeart className="text-[#F24E1E] text-xl" />
                 </button>
               </div>

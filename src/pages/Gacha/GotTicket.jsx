@@ -14,7 +14,6 @@ const GotTicket = () => {
   const location = useLocation();
   const ticketResponse = location.state?.ticketResponse;
 
-  console.log("Ticket Response:", ticketResponse);
   const handleTickitTerms = () => {
     navigate("ticket-terms", { state: { ticketResponse } });
   };

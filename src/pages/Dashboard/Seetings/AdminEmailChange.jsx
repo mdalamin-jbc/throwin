@@ -25,7 +25,7 @@ const AdminEmailChange = () => {
         "/restaurant-owner/settings/change-email-request",
         { email, password }
       );
-      console.log("Email change request sent successfully", response.data);
+
       navigate("/dashboard/settings");
     } catch (error) {
       console.error("Error changing email", error);

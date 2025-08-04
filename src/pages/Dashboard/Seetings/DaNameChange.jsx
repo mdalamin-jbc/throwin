@@ -18,7 +18,7 @@ const DaNameChange = () => {
         "/restaurant-owner/settings/change-name",
         { name }
       );
-      console.log("Name changed successfully", response.data);
+
       navigate("/dashboard/settings");
     } catch (error) {
       console.error("Error changing name", error);

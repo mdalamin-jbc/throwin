@@ -88,7 +88,6 @@ const EditClient = () => {
         if (!data || typeof data !== "object") {
           throw new Error("無効なデータ形式が受信されました");
         }
-        console.log({ data });
 
         const formattedData = formatClientData(data, id);
         setClientData(formattedData);

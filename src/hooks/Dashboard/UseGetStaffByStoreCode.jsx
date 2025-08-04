@@ -7,8 +7,6 @@ const UseGetStaffByStoreCode = (store_code) => {
   axiosPrivate;
   const { user } = useAuth();
 
-  console.log(store_code);
-
   const {
     refetch,
     data: restaurantStaffListByStoreCode = [],
@@ -36,7 +34,6 @@ const UseGetStaffByStoreCode = (store_code) => {
     },
     enabled: Boolean(user?.access),
   });
-  console.log(restaurantStaffListByStoreCode);
 
   return { restaurantStaffListByStoreCode, refetch, isLoading, isError, error };
 };

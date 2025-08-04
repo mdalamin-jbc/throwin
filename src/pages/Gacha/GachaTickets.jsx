@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 const GachaTickets = () => {
   const { tickets, isLoading, isError } = UseGetSpins();
-  console.log(tickets);
+
   const navigate = useNavigate();
 
   return (

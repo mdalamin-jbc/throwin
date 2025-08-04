@@ -66,7 +66,7 @@ const History = () => {
       <Helmet>
         <title>Throwin | 履歴</title>
       </Helmet>
-      
+
       <TitleBar style="mb-0 w-full" title="履歴" icon={null} />
 
       <div className="w-full max-w-[430px] mx-auto px-4 sm:px-6 mt-7 text-[#44495B] grid gap-2">
@@ -107,7 +107,7 @@ const History = () => {
           ))
         ) : (
           <div className="text-center mt-10 text-[#9C9C9C]">
-            <p>利用可能な履歴はありません</p>
+            <p>Throwin履歴はありません</p>
           </div>
         )}
       </div>

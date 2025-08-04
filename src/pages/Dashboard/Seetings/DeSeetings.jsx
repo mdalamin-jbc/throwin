@@ -11,7 +11,6 @@ const DeSettings = () => {
   const { resturentWonerSettings, refetch, isLoading } =
     UseGetResturentWonerSettings();
   const axiosPrivate = useAxiosPrivate();
-  console.log(resturentWonerSettings);
 
   // Name change states
   const [isEditingName, setIsEditingName] = useState(false);
@@ -44,7 +43,11 @@ const DeSettings = () => {
 
     try {
       let endpoint = "";
-      if (userRole === "fc_admin" || userRole === "glow_admin"||userRole === "sales_agent") {
+      if (
+        userRole === "fc_admin" ||
+        userRole === "glow_admin" ||
+        userRole === "sales_agent"
+      ) {
         endpoint = "/admins/settings/change-name";
       } else {
         endpoint = "/restaurant-owner/settings/change-name";
@@ -58,7 +61,6 @@ const DeSettings = () => {
         userRefetch();
       }
 
-      console.log("Name changed successfully", response.status);
       setIsEditingName(false);
     } catch (error) {
       toast.error("名前の変更に失敗しました。");

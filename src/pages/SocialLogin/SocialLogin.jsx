@@ -48,8 +48,6 @@ const SocialLogin = () => {
         redirect_uri: LINE_REDIRECT_URI,
       });
 
-      console.log("LINE Login Response:", res.data);
-
       // Parse the access_token string to an object
       const tokenString = res.data.access_token.replace(/'/g, '"');
       const tokenData = JSON.parse(tokenString);
@@ -67,7 +65,6 @@ const SocialLogin = () => {
   };
 
   const handleLoginSuccess = (userData) => {
-    console.log("Login data:", userData);
     refetch();
     login(userData);
 

@@ -18,7 +18,7 @@ const UseGetPaymentHistory = () => {
     queryFn: async () => {
       try {
         const response = await AxiosPrivate.get("/payment_service/payments");
-        console.log("Payment History Response:", response.data); // Debugging log
+
         return response.data;
       } catch (error) {
         console.error(

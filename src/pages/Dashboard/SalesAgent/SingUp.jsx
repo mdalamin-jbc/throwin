@@ -38,15 +38,11 @@ const SingUp = () => {
       account_holder_name: data.accountHolderName,
     };
 
-    console.log("Submitting data:", requestBody);
-
     try {
       const response = await axiosPrivate.post(
         "/admins/sales-agents",
         requestBody
       );
-
-      console.log("API Response:", response);
 
       if (response.status === 200 || response.status === 201) {
         toast.success("新しい営業担当者が作成されました！");

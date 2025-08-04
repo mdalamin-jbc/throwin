@@ -16,8 +16,6 @@ const StaffPreviewSection = ({ previewData = {} }) => {
   const [selectedAmount, setSelectedAmount] = useState("0");
   const amounts = storeDetails?.throwin_amounts;
 
-  console.log(storeDetails);
-
   const handleClick = (amount) => {
     setSelectedAmount(amount);
   };

@@ -27,7 +27,6 @@ const DaComments = () => {
         message: data.reply,
       });
 
-      console.log("Reply sent successfully:", response.data);
       reset();
       setReplyingToReplyId(null);
       refetch();

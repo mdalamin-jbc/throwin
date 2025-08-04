@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 const NotificationDetails = () => {
   const navigate = useNavigate();
 
-  const { id } = useParams(); 
+  const { id } = useParams();
 
   const notifications = [
     {
@@ -32,13 +32,12 @@ const NotificationDetails = () => {
     },
   ];
 
- 
   const notification = notifications.find((notif) => notif.id === parseInt(id));
 
   if (!notification) {
     return <p>Notification not found</p>;
   }
-  console.log(notification);
+
   return (
     <div>
       <div>

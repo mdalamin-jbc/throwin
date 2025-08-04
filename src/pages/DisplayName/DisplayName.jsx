@@ -15,7 +15,6 @@ const DisplayName = () => {
   const { userDetails, isLoading } = UseUserDetails();
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
-  console.log(userDetails?.name);
 
   const {
     register,
@@ -37,7 +36,7 @@ const DisplayName = () => {
       const response = await axiosPrivate.post(`auth/users/name`, {
         name: data.name,
       });
-      console.log(response);
+
       toast.success("名前が正常に変更されました。", {
         position: "top-center",
         duration: 1500,

@@ -17,8 +17,6 @@ const UserProfile = () => {
 
   const axiosPrivate = useAxiosPrivate();
 
-  console.log(userDetails);
-
   const handleLogout = () => {
     toast.success("正常にログアウトされました", {
       position: "top-center",
@@ -32,7 +30,6 @@ const UserProfile = () => {
   const handleUserIdDelete = async () => {
     try {
       const response = await axiosPrivate.delete(`/auth/users/delete`);
-      console.log("User deleted successfully:", response.data);
 
       toast.success("ユーザーが正常に削除されました。", {
         position: "top-center",

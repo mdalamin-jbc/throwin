@@ -27,7 +27,7 @@ const ForgetPassword = () => {
       const response = await axiosPublic.post("/auth/password/reset-request", {
         email: data.mail,
       });
-      console.log(response);
+
       toast.success("パスワードリセットのリクエストが正常に送信されました！", {
         position: "top-center",
         duration: 3000,

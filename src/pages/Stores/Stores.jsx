@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 
 const Stores = () => {
   const [data, setData] = useState([]);
-  console.log(data);
 
   useEffect(() => {
     fetch("/stores.json") // Make sure the file path is correct and that stores.json is in the public folder
