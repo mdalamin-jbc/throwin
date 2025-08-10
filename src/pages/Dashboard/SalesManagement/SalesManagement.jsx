@@ -51,7 +51,6 @@ const SalesManagement = () => {
     updateFilters,
     filters,
   } = useAnalytics();
-  console.log({ chartData: data });
 
   // Define role-specific tab configurations
   const tabConfigurations = {
