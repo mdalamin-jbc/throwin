@@ -1,62 +1,17 @@
+import React, { useState } from "react";
 import { Bar } from "react-chartjs-2";
+import useAnalytics from "../../../hooks/useAnalytics";
 
 const ClientChart_sa = () => {
-  const dataOverall = {
-    labels: [
-      "1 火",
-      "2 水",
-      "3 木",
-      "4 金",
-      "5 土",
-      "6 日",
-      "7 月",
-      "9",
-      "10",
-      "11",
-      "12",
-      "13",
-      "14",
-      "15",
-      "16",
-      "17",
-      "18",
-      "18",
-      "20",
-      "21",
-      "22",
-      "23",
-      "24",
-      "25",
-      "26",
-      "27",
-      "28",
-    ],
-    datasets: [
-      {
-        type: "line",
-        label: "客数",
-        borderColor: "#9E9E9E",
-        borderWidth: 2,
-        pointRadius: 4,
-        fill: false,
-        data: [
-          2.1, 2.5, 3.6, 2, 0, 0, 2.4, 2.9, 2, 2.5, 0, 0, 2.6, 2.8, 1.7, 2, 1.8,
-          0, 0, 2.5, 2.9, 0, 0, 2.7, 2.2, 0, 3.7,
-        ],
-        yAxisID: "y1",
-      },
-      {
-        type: "bar",
-        label: "売上",
-        backgroundColor: "#49BBDF",
-        data: [
-          12, 14.5, 17.5, 11, 0, 0, 14, 17, 11, 13, 0, 0, 15, 16.2, 9, 12, 10.5,
-          0, 0, 15, 17, 0, 0, 15.5, 13, 0, 21,
-        ],
-        yAxisID: "y",
-      },
-    ],
-  };
+  const [selectedYear, setSelectedYear] = useState(
+    new Date().getFullYear().toString()
+  );
+  const [selectedMonth, setSelectedMonth] = useState("1");
+  const [selectedClient, setSelectedClient] = useState("");
+
+  const { data, loading, generateChartData, formatCurrency, updateFilters } =
+    useAnalytics();
+
   const options = {
     responsive: true,
     scales: {
@@ -76,37 +31,56 @@ const ClientChart_sa = () => {
     },
   };
 
+  const handleSearch = () => {
+    updateFilters({
+      year: parseInt(selectedYear),
+      month: parseInt(selectedMonth),
+      // Add client filtering logic when available in API
+    });
+  };
+
+  const chartData = generateChartData();
+
   return (
     <div>
       <div className="mt-[22px] flex items-center gap-4 font-semibold text-xs">
         <label className="text-[#434343] mr-9">期間指定</label>
         <div className="flex items-center gap-2  py-[5px] px-2 rounded-md">
           <select
-            // value={selectedYear}
-            // onChange={handleYearChange}
+            value={selectedYear}
+            onChange={(e) => setSelectedYear(e.target.value)}
             className="border rounded px-2 py-1 w-[134px]"
           >
             {[...Array(21)].map((_, i) => (
-              <option key={i}>{new Date().getFullYear() - i}年</option>
+              <option key={i} value={new Date().getFullYear() - i}>
+                {new Date().getFullYear() - i}年
+              </option>
             ))}
           </select>
 
           <select
-            // value={selectedMonth}
-            // onChange={handleMonthChange}
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}
             className="border rounded px-2 py-1 w-[111px]"
           >
             {[...Array(12)].map((_, i) => (
-              <option key={i}>{i + 1}月</option>
+              <option key={i} value={i + 1}>
+                {i + 1}月
+              </option>
             ))}
           </select>
         </div>
 
-        <button className="bg-[#49BBDF] py-[6px] px-4 rounded-md text-white">
-          集計
+        <button
+          onClick={handleSearch}
+          className="bg-[#49BBDF] py-[6px] px-4 rounded-md text-white"
+          disabled={loading}
+        >
+          {loading ? "読み込み中..." : "集計"}
         </button>
       </div>
-      {/* ------------------------------- */}
+
+      {/* Sales Agent Selector */}
       <div className="mt-[px] flex items-center gap-4 font-semibold text-xs">
         <label className="text-[#434343]">営業代理店　　</label>
         <div className="flex items-center gap-2  py-[5px] px-2 rounded-md">
@@ -115,15 +89,25 @@ const ClientChart_sa = () => {
           </select>
         </div>
       </div>
+
+      {/* Stats Cards */}
       <div className="mt-[33px] grid grid-cols-3 gap-[17px]">
         {[
           {
             title: "売上額(Throwin額)",
-            value: "1,000,000",
+            value: data ? formatCurrency(data.total_amount_jpy) : "0",
             unit: "円",
           },
-          { title: "利益額", value: "300,000", unit: "円" },
-          { title: "稼働メンバー数", value: "5", unit: "" },
+          {
+            title: "利益額",
+            value: data ? formatCurrency(data.latest_balance_jpy) : "0",
+            unit: "円",
+          },
+          {
+            title: "稼働メンバー数",
+            value: data ? data.total_stores.toString() : "0",
+            unit: "",
+          },
         ].map((item, i) => (
           <div
             key={i}
@@ -139,9 +123,17 @@ const ClientChart_sa = () => {
           </div>
         ))}
       </div>
-      <div className="mt-[27px]">
-        <Bar height={200} width={600} data={dataOverall} options={options} />
-      </div>
+
+      {/* Chart */}
+      {chartData ? (
+        <div className="mt-[27px]">
+          <Bar height={200} width={600} data={chartData} options={options} />
+        </div>
+      ) : (
+        <div className="mt-[27px] flex justify-center items-center h-48">
+          <p className="text-gray-500">データがありません</p>
+        </div>
+      )}
     </div>
   );
 };
