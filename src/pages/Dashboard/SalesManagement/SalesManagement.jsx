@@ -123,13 +123,6 @@ const SalesManagement = () => {
     const year = parseInt(selectedYear.replace("年", ""));
     const month = parseInt(selectedMonth.replace("月", ""));
 
-    console.log("handlePeriodChange called");
-    console.log("Selected year string:", selectedYear);
-    console.log("Selected month string:", selectedMonth);
-    console.log("Parsed year:", year);
-    console.log("Parsed month:", month);
-    console.log("About to call updateFilters with:", { year, month });
-
     updateFilters({
       year: year,
       month: month,
