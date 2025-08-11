@@ -1,62 +1,35 @@
+import { useState } from "react";
 import { Bar } from "react-chartjs-2";
+import useAnalytics from "../../../hooks/useAnalytics";
 
 const MemberChart = () => {
-  const dataOverall = {
-    labels: [
-      "1 火",
-      "2 水",
-      "3 木",
-      "4 金",
-      "5 土",
-      "6 日",
-      "7 月",
-      "9",
-      "10",
-      "11",
-      "12",
-      "13",
-      "14",
-      "15",
-      "16",
-      "17",
-      "18",
-      "18",
-      "20",
-      "21",
-      "22",
-      "23",
-      "24",
-      "25",
-      "26",
-      "27",
-      "28",
-    ],
-    datasets: [
-      {
-        type: "line",
-        label: "客数",
-        borderColor: "#9E9E9E",
-        borderWidth: 2,
-        pointRadius: 4,
-        fill: false,
-        data: [
-          2.1, 2.5, 3.6, 2, 0, 0, 2.4, 2.9, 2, 2.5, 0, 0, 2.6, 2.8, 1.7, 2, 1.8,
-          0, 0, 2.5, 2.9, 0, 0, 2.7, 2.2, 0, 3.7,
-        ],
-        yAxisID: "y1",
-      },
-      {
-        type: "bar",
-        label: "売上",
-        backgroundColor: "#49BBDF",
-        data: [
-          12, 14.5, 17.5, 11, 0, 0, 14, 17, 11, 13, 0, 0, 15, 16.2, 9, 12, 10.5,
-          0, 0, 15, 17, 0, 0, 15.5, 13, 0, 21,
-        ],
-        yAxisID: "y",
-      },
-    ],
+  const [selectedYear, setSelectedYear] = useState("2025年");
+  const [selectedMonth, setSelectedMonth] = useState("1月");
+  const [selectedTeam, setSelectedTeam] = useState("");
+  const [selectedMember, setSelectedMember] = useState("");
+
+  const {
+    data,
+    loading,
+    generateChartData,
+    formatCurrency,
+    updateFilters,
+    filters,
+  } = useAnalytics();
+
+  const handlePeriodChange = () => {
+    const year = selectedYear.replace("年", "");
+    const month = selectedMonth.replace("月", "");
+
+    updateFilters({
+      year: parseInt(year),
+      month: parseInt(month),
+      team: selectedTeam,
+      member: selectedMember,
+    });
   };
+
+  const chartData = generateChartData();
 
   const options = {
     responsive: true,
@@ -77,14 +50,33 @@ const MemberChart = () => {
     },
   };
 
+  // Mock data - replace with actual API data
+  const teams = [
+    { id: "1", name: "BBT 福井" },
+    { id: "2", name: "BBT 東京" },
+    { id: "3", name: "BBT 大阪" },
+  ];
+
+  const members = [
+    { id: "1", name: "山田　花梨（かりん）", teamId: "1" },
+    { id: "2", name: "佐藤　太郎", teamId: "1" },
+    { id: "3", name: "田中　花子", teamId: "2" },
+  ];
+
+  // Filter members based on selected team
+  const filteredMembers = selectedTeam
+    ? members.filter((member) => member.teamId === selectedTeam)
+    : members;
+
   return (
     <div>
+      {/* Period Selection */}
       <div className="mt-[22px] flex items-center gap-4 font-semibold text-xs">
         <label className="text-[#434343] mr-9">期間指定</label>
-        <div className="flex items-center gap-2  py-[5px] px-2 rounded-md">
+        <div className="flex items-center gap-2 py-[5px] px-2 rounded-md">
           <select
-            // value={selectedYear}
-            // onChange={handleYearChange}
+            value={selectedYear}
+            onChange={(e) => setSelectedYear(e.target.value)}
             className="border rounded px-2 py-1 w-[134px]"
           >
             {[...Array(21)].map((_, i) => (
@@ -93,53 +85,91 @@ const MemberChart = () => {
           </select>
 
           <select
-            // value={selectedMonth}
-            // onChange={handleMonthChange}
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}
             className="border rounded px-2 py-1 w-[111px]"
           >
             {[...Array(12)].map((_, i) => (
-              <option key={i}>{i + 1}</option>
+              <option key={i}>{i + 1}月</option>
             ))}
           </select>
         </div>
 
-        <button className="bg-[#49BBDF] py-[6px] px-4 rounded-md text-white">
-          集計
+        <button
+          onClick={handlePeriodChange}
+          className="bg-[#49BBDF] py-[6px] px-4 rounded-md text-white"
+          disabled={loading}
+        >
+          {loading ? "読み込み中..." : "集計"}
         </button>
       </div>
-      {/* ------------------------------- */}
+
+      {/* Team Selection */}
       <div className="mt-[px] flex items-center gap-4 font-semibold text-xs">
         <label className="text-[#434343]">チーム（店舗）</label>
-        <div className="flex items-center gap-2  py-[5px] px-2 rounded-md">
-          <select className="border rounded px-2 py-1 w-[295px]">
-            <option value="">BBT 福井</option>
+        <div className="flex items-center gap-2 py-[5px] px-2 rounded-md">
+          <select
+            value={selectedTeam}
+            onChange={(e) => {
+              setSelectedTeam(e.target.value);
+              setSelectedMember(""); // Reset member selection when team changes
+            }}
+            className="border rounded px-2 py-1 w-[295px]"
+          >
+            <option value="">全て</option>
+            {teams.map((team) => (
+              <option key={team.id} value={team.id}>
+                {team.name}
+              </option>
+            ))}
           </select>
         </div>
       </div>
-      {/* ------------------------------- */}
+
+      {/* Member Selection */}
       <div className="mt-[px] flex items-center gap-[50px] font-semibold text-xs">
         <label className="text-[#434343]">メンバー</label>
-        <div className="flex items-center gap-2  py-[5px] px-2 rounded-md">
-          <select className="border rounded px-2 py-1 w-[295px]">
-            <option value="">山田　花梨（かりん）</option>
+        <div className="flex items-center gap-2 py-[5px] px-2 rounded-md">
+          <select
+            value={selectedMember}
+            onChange={(e) => setSelectedMember(e.target.value)}
+            className="border rounded px-2 py-1 w-[295px]"
+            disabled={!selectedTeam && filteredMembers.length === 0}
+          >
+            <option value="">全て</option>
+            {filteredMembers.map((member) => (
+              <option key={member.id} value={member.id}>
+                {member.name}
+              </option>
+            ))}
           </select>
         </div>
       </div>
+
+      {/* Stats Cards */}
       <div className="mt-[33px] grid grid-cols-3 gap-[17px]">
         {[
           {
             title: "売上（Throwin額)",
-            value: "1,000,000",
+            value: data ? formatCurrency(data.total_amount_jpy) : "0",
             unit: "円",
           },
-          { title: "利益額", value: "300,000", unit: "円" },
-          { title: "Throwin回数", value: "1,500", unit: "回" },
+          {
+            title: "利益額",
+            value: data ? formatCurrency(data.latest_balance_jpy) : "0",
+            unit: "円",
+          },
+          {
+            title: "Throwin回数",
+            value: data ? formatCurrency(data.total_throwins) : "0",
+            unit: "回",
+          },
         ].map((item, i) => (
           <div
             key={i}
             className="bg-[#F9F9F9] py-[47px] text-center rounded-[20px]"
           >
-            <p className="font-semibold text-lg text-[利益額]">{item.title}</p>
+            <p className="font-semibold text-lg">{item.title}</p>
             <div className="flex justify-center items-center gap-6">
               <h3 className="text-[#49BBDF] font-semibold text-[36px] mt-[28px] ml-10">
                 {item.value}
@@ -149,9 +179,17 @@ const MemberChart = () => {
           </div>
         ))}
       </div>
-      <div className="mt-[27px]">
-        <Bar height={200} width={600} data={dataOverall} options={options} />
-      </div>
+
+      {/* Chart */}
+      {chartData ? (
+        <div className="mt-[27px]">
+          <Bar height={200} width={600} data={chartData} options={options} />
+        </div>
+      ) : (
+        <div className="mt-[27px] flex justify-center items-center p-8">
+          {loading ? "Loading..." : "No data available"}
+        </div>
+      )}
     </div>
   );
 };
