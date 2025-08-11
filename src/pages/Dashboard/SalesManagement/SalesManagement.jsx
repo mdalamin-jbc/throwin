@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -40,9 +40,13 @@ ChartJS.register(
 
 const SalesManagement = () => {
   const userRole = "restaurant_owner"; // Replace with actual localStorage call when needed
-  const [selectedYear, setSelectedYear] = useState("2025年");
-  const [selectedMonth, setSelectedMonth] = useState("1月");
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1; // getMonth() returns 0-11, so add 1
 
+  const [selectedYear, setSelectedYear] = useState(`${currentYear}年`);
+  const [selectedMonth, setSelectedMonth] = useState(`${currentMonth}月`);
+
+  // Initialize useAnalytics with current year only (no month filter initially)
   const {
     data,
     loading,
@@ -50,7 +54,19 @@ const SalesManagement = () => {
     formatCurrency,
     updateFilters,
     filters,
-  } = useAnalytics();
+  } = useAnalytics({
+    year: currentYear,
+    // No month on initial load - filter by year only
+  });
+
+  // Auto-filter on component mount with default year only
+  useEffect(() => {
+    console.log("Component mounted, applying default year filter");
+    updateFilters({
+      year: currentYear,
+      // No month filter on initial load - filter by year only
+    });
+  }, []); // Empty dependency array means this runs once on mount
 
   // Define role-specific tab configurations
   const tabConfigurations = {
@@ -104,13 +120,54 @@ const SalesManagement = () => {
   };
 
   const handlePeriodChange = () => {
-    const year = selectedYear.replace("年", "");
-    const month = selectedMonth.replace("月", "");
+    const year = parseInt(selectedYear.replace("年", ""));
+    const month = parseInt(selectedMonth.replace("月", ""));
+
+    console.log("handlePeriodChange called");
+    console.log("Selected year string:", selectedYear);
+    console.log("Selected month string:", selectedMonth);
+    console.log("Parsed year:", year);
+    console.log("Parsed month:", month);
+    console.log("About to call updateFilters with:", { year, month });
 
     updateFilters({
-      year: parseInt(year),
-      month: parseInt(month),
+      year: year,
+      month: month,
     });
+  };
+
+  // Generate year options (current year + 10 years back)
+  const generateYearOptions = () => {
+    const years = [];
+    const currentYear = new Date().getFullYear();
+    for (let i = 0; i <= 10; i++) {
+      years.push(currentYear - i);
+    }
+    return years;
+  };
+
+  // Handle year change and auto-update
+  const handleYearChange = (e) => {
+    const newYear = e.target.value;
+    setSelectedYear(newYear);
+
+    const year = parseInt(newYear.replace("年", ""));
+    const month = parseInt(selectedMonth.replace("月", ""));
+
+    console.log("Year changed, auto updating filters:", { year, month });
+    updateFilters({ year, month });
+  };
+
+  // Handle month change and auto-update
+  const handleMonthChange = (e) => {
+    const newMonth = e.target.value;
+    setSelectedMonth(newMonth);
+
+    const year = parseInt(selectedYear.replace("年", ""));
+    const month = parseInt(newMonth.replace("月", ""));
+
+    console.log("Month changed, auto updating filters:", { year, month });
+    updateFilters({ year, month });
   };
 
   // Common period selector component
@@ -120,20 +177,24 @@ const SalesManagement = () => {
       <div className="flex items-center gap-2 py-[5px] px-2 rounded-md">
         <select
           value={selectedYear}
-          onChange={(e) => setSelectedYear(e.target.value)}
+          onChange={handleYearChange}
           className="border rounded px-2 py-1"
         >
-          {[...Array(21)].map((_, i) => (
-            <option key={i}>{new Date().getFullYear() - i}年</option>
+          {generateYearOptions().map((year) => (
+            <option key={year} value={`${year}年`}>
+              {year}年
+            </option>
           ))}
         </select>
         <select
           value={selectedMonth}
-          onChange={(e) => setSelectedMonth(e.target.value)}
+          onChange={handleMonthChange}
           className="border rounded px-2 py-1"
         >
           {[...Array(12)].map((_, i) => (
-            <option key={i}>{i + 1}月</option>
+            <option key={i + 1} value={`${i + 1}月`}>
+              {i + 1}月
+            </option>
           ))}
         </select>
       </div>
