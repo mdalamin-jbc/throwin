@@ -1,12 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Bar } from "react-chartjs-2";
 import useAnalytics from "../../../hooks/useAnalytics";
 
 const TeamChart = () => {
-  const [selectedYear, setSelectedYear] = useState("2025年");
-  const [selectedMonth, setSelectedMonth] = useState("1月");
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1;
+
+  const [selectedYear, setSelectedYear] = useState(`${currentYear}年`);
+  const [selectedMonth, setSelectedMonth] = useState(`${currentMonth}月`);
   const [selectedTeam, setSelectedTeam] = useState("");
 
+  // Initialize useAnalytics with current year only (no month filter initially)
   const {
     data,
     loading,
@@ -14,15 +18,86 @@ const TeamChart = () => {
     formatCurrency,
     updateFilters,
     filters,
-  } = useAnalytics();
+  } = useAnalytics({
+    year: currentYear,
+    // No month on initial load - filter by year only
+  });
+
+  // Auto-filter on component mount with default year only
+  useEffect(() => {
+    console.log("TeamChart mounted, applying default year filter");
+    updateFilters({
+      year: currentYear,
+      team: selectedTeam,
+      // No month filter on initial load - filter by year only
+    });
+  }, []); // Empty dependency array means this runs once on mount
+
+  // Generate year options (current year + 20 years back)
+  const generateYearOptions = () => {
+    const years = [];
+    const currentYear = new Date().getFullYear();
+    for (let i = 0; i <= 20; i++) {
+      years.push(currentYear - i);
+    }
+    return years;
+  };
+
+  // Handle year change and auto-update
+  const handleYearChange = (e) => {
+    const newYear = e.target.value;
+    setSelectedYear(newYear);
+
+    const year = parseInt(newYear.replace("年", ""));
+    const month = parseInt(selectedMonth.replace("月", ""));
+
+    console.log("Year changed, auto updating filters:", {
+      year,
+      month,
+      team: selectedTeam,
+    });
+    updateFilters({ year, month, team: selectedTeam });
+  };
+
+  // Handle month change and auto-update
+  const handleMonthChange = (e) => {
+    const newMonth = e.target.value;
+    setSelectedMonth(newMonth);
+
+    const year = parseInt(selectedYear.replace("年", ""));
+    const month = parseInt(newMonth.replace("月", ""));
+
+    console.log("Month changed, auto updating filters:", {
+      year,
+      month,
+      team: selectedTeam,
+    });
+    updateFilters({ year, month, team: selectedTeam });
+  };
+
+  // Handle team change and auto-update
+  const handleTeamChange = (e) => {
+    const newTeam = e.target.value;
+    setSelectedTeam(newTeam);
+
+    const year = parseInt(selectedYear.replace("年", ""));
+    const month = parseInt(selectedMonth.replace("月", ""));
+
+    console.log("Team changed, auto updating filters:", {
+      year,
+      month,
+      team: newTeam,
+    });
+    updateFilters({ year, month, team: newTeam });
+  };
 
   const handlePeriodChange = () => {
-    const year = selectedYear.replace("年", "");
-    const month = selectedMonth.replace("月", "");
+    const year = parseInt(selectedYear.replace("年", ""));
+    const month = parseInt(selectedMonth.replace("月", ""));
 
     updateFilters({
-      year: parseInt(year),
-      month: parseInt(month),
+      year: year,
+      month: month,
       team: selectedTeam,
     });
   };
@@ -63,21 +138,25 @@ const TeamChart = () => {
         <div className="flex items-center gap-2 py-[5px] px-2 rounded-md">
           <select
             value={selectedYear}
-            onChange={(e) => setSelectedYear(e.target.value)}
+            onChange={handleYearChange}
             className="border rounded px-2 py-1 w-[134px]"
           >
-            {[...Array(21)].map((_, i) => (
-              <option key={i}>{new Date().getFullYear() - i}年</option>
+            {generateYearOptions().map((year) => (
+              <option key={year} value={`${year}年`}>
+                {year}年
+              </option>
             ))}
           </select>
 
           <select
             value={selectedMonth}
-            onChange={(e) => setSelectedMonth(e.target.value)}
+            onChange={handleMonthChange}
             className="border rounded px-2 py-1 w-[111px]"
           >
             {[...Array(12)].map((_, i) => (
-              <option key={i}>{i + 1}月</option>
+              <option key={i + 1} value={`${i + 1}月`}>
+                {i + 1}月
+              </option>
             ))}
           </select>
         </div>
@@ -97,7 +176,7 @@ const TeamChart = () => {
         <div className="flex items-center gap-2 py-[5px] px-2 rounded-md">
           <select
             value={selectedTeam}
-            onChange={(e) => setSelectedTeam(e.target.value)}
+            onChange={handleTeamChange}
             className="border rounded px-2 py-1 w-[295px]"
           >
             <option value="">全て</option>

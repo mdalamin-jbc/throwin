@@ -1,13 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Bar } from "react-chartjs-2";
 import useAnalytics from "../../../hooks/useAnalytics";
 
 const MemberChart = () => {
-  const [selectedYear, setSelectedYear] = useState("2025年");
-  const [selectedMonth, setSelectedMonth] = useState("1月");
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1;
+
+  const [selectedYear, setSelectedYear] = useState(`${currentYear}年`);
+  const [selectedMonth, setSelectedMonth] = useState(`${currentMonth}月`);
   const [selectedTeam, setSelectedTeam] = useState("");
   const [selectedMember, setSelectedMember] = useState("");
 
+  // Initialize useAnalytics with current year only (no month filter initially)
   const {
     data,
     loading,
@@ -15,15 +19,108 @@ const MemberChart = () => {
     formatCurrency,
     updateFilters,
     filters,
-  } = useAnalytics();
+  } = useAnalytics({
+    year: currentYear,
+    // No month on initial load - filter by year only
+  });
+
+  // Auto-filter on component mount with default year only
+  useEffect(() => {
+    console.log("MemberChart mounted, applying default year filter");
+    updateFilters({
+      year: currentYear,
+      team: selectedTeam,
+      member: selectedMember,
+      // No month filter on initial load - filter by year only
+    });
+  }, []); // Empty dependency array means this runs once on mount
+
+  // Generate year options (current year + 20 years back)
+  const generateYearOptions = () => {
+    const years = [];
+    const currentYear = new Date().getFullYear();
+    for (let i = 0; i <= 20; i++) {
+      years.push(currentYear - i);
+    }
+    return years;
+  };
+
+  // Handle year change and auto-update
+  const handleYearChange = (e) => {
+    const newYear = e.target.value;
+    setSelectedYear(newYear);
+
+    const year = parseInt(newYear.replace("年", ""));
+    const month = parseInt(selectedMonth.replace("月", ""));
+
+    console.log("Year changed, auto updating filters:", {
+      year,
+      month,
+      team: selectedTeam,
+      member: selectedMember,
+    });
+    updateFilters({ year, month, team: selectedTeam, member: selectedMember });
+  };
+
+  // Handle month change and auto-update
+  const handleMonthChange = (e) => {
+    const newMonth = e.target.value;
+    setSelectedMonth(newMonth);
+
+    const year = parseInt(selectedYear.replace("年", ""));
+    const month = parseInt(newMonth.replace("月", ""));
+
+    console.log("Month changed, auto updating filters:", {
+      year,
+      month,
+      team: selectedTeam,
+      member: selectedMember,
+    });
+    updateFilters({ year, month, team: selectedTeam, member: selectedMember });
+  };
+
+  // Handle team change and auto-update
+  const handleTeamChange = (e) => {
+    const newTeam = e.target.value;
+    setSelectedTeam(newTeam);
+    setSelectedMember(""); // Reset member selection when team changes
+
+    const year = parseInt(selectedYear.replace("年", ""));
+    const month = parseInt(selectedMonth.replace("月", ""));
+
+    console.log("Team changed, auto updating filters:", {
+      year,
+      month,
+      team: newTeam,
+      member: "",
+    });
+    updateFilters({ year, month, team: newTeam, member: "" });
+  };
+
+  // Handle member change and auto-update
+  const handleMemberChange = (e) => {
+    const newMember = e.target.value;
+    setSelectedMember(newMember);
+
+    const year = parseInt(selectedYear.replace("年", ""));
+    const month = parseInt(selectedMonth.replace("月", ""));
+
+    console.log("Member changed, auto updating filters:", {
+      year,
+      month,
+      team: selectedTeam,
+      member: newMember,
+    });
+    updateFilters({ year, month, team: selectedTeam, member: newMember });
+  };
 
   const handlePeriodChange = () => {
-    const year = selectedYear.replace("年", "");
-    const month = selectedMonth.replace("月", "");
+    const year = parseInt(selectedYear.replace("年", ""));
+    const month = parseInt(selectedMonth.replace("月", ""));
 
     updateFilters({
-      year: parseInt(year),
-      month: parseInt(month),
+      year: year,
+      month: month,
       team: selectedTeam,
       member: selectedMember,
     });
@@ -76,21 +173,25 @@ const MemberChart = () => {
         <div className="flex items-center gap-2 py-[5px] px-2 rounded-md">
           <select
             value={selectedYear}
-            onChange={(e) => setSelectedYear(e.target.value)}
+            onChange={handleYearChange}
             className="border rounded px-2 py-1 w-[134px]"
           >
-            {[...Array(21)].map((_, i) => (
-              <option key={i}>{new Date().getFullYear() - i}年</option>
+            {generateYearOptions().map((year) => (
+              <option key={year} value={`${year}年`}>
+                {year}年
+              </option>
             ))}
           </select>
 
           <select
             value={selectedMonth}
-            onChange={(e) => setSelectedMonth(e.target.value)}
+            onChange={handleMonthChange}
             className="border rounded px-2 py-1 w-[111px]"
           >
             {[...Array(12)].map((_, i) => (
-              <option key={i}>{i + 1}月</option>
+              <option key={i + 1} value={`${i + 1}月`}>
+                {i + 1}月
+              </option>
             ))}
           </select>
         </div>
@@ -110,10 +211,7 @@ const MemberChart = () => {
         <div className="flex items-center gap-2 py-[5px] px-2 rounded-md">
           <select
             value={selectedTeam}
-            onChange={(e) => {
-              setSelectedTeam(e.target.value);
-              setSelectedMember(""); // Reset member selection when team changes
-            }}
+            onChange={handleTeamChange}
             className="border rounded px-2 py-1 w-[295px]"
           >
             <option value="">全て</option>
@@ -132,7 +230,7 @@ const MemberChart = () => {
         <div className="flex items-center gap-2 py-[5px] px-2 rounded-md">
           <select
             value={selectedMember}
-            onChange={(e) => setSelectedMember(e.target.value)}
+            onChange={handleMemberChange}
             className="border rounded px-2 py-1 w-[295px]"
             disabled={!selectedTeam && filteredMembers.length === 0}
           >
