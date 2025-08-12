@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Bar } from "react-chartjs-2";
 import useAnalytics from "../../../hooks/useAnalytics";
 import UseGetRestaurantOwnerStoreList from "../../../hooks/Dashboard/UseGetRestaurantOwnerStoreList";
+import UseGetStaffByStoreCode from "../../../hooks/Dashboard/UseGetStaffByStoreCode";
 
 const MemberChart = () => {
   const currentYear = new Date().getFullYear();
@@ -25,7 +26,6 @@ const MemberChart = () => {
     year: currentYear,
     // No month on initial load - filter by year only
   });
-
   // Auto-filter on component mount with default year only
   useEffect(() => {
     console.log("MemberChart mounted, applying default year filter");
@@ -37,7 +37,7 @@ const MemberChart = () => {
     });
   }, []); // Empty dependency array means this runs once on mount
 
-  console.log({ selectedTeam });
+  let teams;
 
   // Generate year options (current year + 20 years back)
   const generateYearOptions = () => {
@@ -76,6 +76,10 @@ const MemberChart = () => {
     const newTeam = e.target.value;
     setSelectedTeam(newTeam);
     setSelectedMember(""); // Reset member selection when team changes
+
+    const codeArr = teams.filter((team) => team.uid === newTeam);
+    const { code } = codeArr[0];
+    setStoreUid(code);
 
     const year = parseInt(selectedYear.replace("年", ""));
     const month = parseInt(selectedMonth.replace("月", ""));
@@ -138,8 +142,15 @@ const MemberChart = () => {
     },
   };
   const { storeList } = UseGetRestaurantOwnerStoreList();
-  const teams = storeList.map(({ uid, name }) => ({ uid, name }));
+  teams = storeList.map(({ uid, name, code }) => ({ uid, name, code }));
 
+  const { restaurantStaffListByStoreCode } = UseGetStaffByStoreCode(storeUid);
+  console.log({ restaurantStaffListByStoreCode });
+  const memberd = restaurantStaffListByStoreCode.map(({ uid, name, code }) => ({
+    uid,
+    name,
+    code,
+  }));
   const members = [
     { id: "1", name: "山田　花梨（かりん）", teamId: "1" },
     { id: "2", name: "佐藤　太郎", teamId: "1" },
