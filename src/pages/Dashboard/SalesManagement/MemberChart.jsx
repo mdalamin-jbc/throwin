@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Bar } from "react-chartjs-2";
 import useAnalytics from "../../../hooks/useAnalytics";
+import UseGetRestaurantOwnerStoreList from "../../../hooks/Dashboard/UseGetRestaurantOwnerStoreList";
+import UseGetStaffByStoreCode from "../../../hooks/Dashboard/UseGetStaffByStoreCode";
 
 const MemberChart = () => {
   const currentYear = new Date().getFullYear();
@@ -10,6 +12,7 @@ const MemberChart = () => {
   const [selectedMonth, setSelectedMonth] = useState(`${currentMonth}月`);
   const [selectedTeam, setSelectedTeam] = useState("");
   const [selectedMember, setSelectedMember] = useState("");
+  const [storeUid, setStoreUid] = useState("");
 
   // Initialize useAnalytics with current year only (no month filter initially)
   const {
@@ -23,17 +26,18 @@ const MemberChart = () => {
     year: currentYear,
     // No month on initial load - filter by year only
   });
-
   // Auto-filter on component mount with default year only
   useEffect(() => {
     console.log("MemberChart mounted, applying default year filter");
     updateFilters({
       year: currentYear,
-      team: selectedTeam,
-      member: selectedMember,
+      store_uid: selectedTeam,
+      staff_uid: selectedMember,
       // No month filter on initial load - filter by year only
     });
   }, []); // Empty dependency array means this runs once on mount
+
+  let teams;
 
   // Generate year options (current year + 20 years back)
   const generateYearOptions = () => {
@@ -53,12 +57,6 @@ const MemberChart = () => {
     const year = parseInt(newYear.replace("年", ""));
     const month = parseInt(selectedMonth.replace("月", ""));
 
-    console.log("Year changed, auto updating filters:", {
-      year,
-      month,
-      team: selectedTeam,
-      member: selectedMember,
-    });
     updateFilters({ year, month, team: selectedTeam, member: selectedMember });
   };
 
@@ -70,12 +68,6 @@ const MemberChart = () => {
     const year = parseInt(selectedYear.replace("年", ""));
     const month = parseInt(newMonth.replace("月", ""));
 
-    console.log("Month changed, auto updating filters:", {
-      year,
-      month,
-      team: selectedTeam,
-      member: selectedMember,
-    });
     updateFilters({ year, month, team: selectedTeam, member: selectedMember });
   };
 
@@ -85,16 +77,14 @@ const MemberChart = () => {
     setSelectedTeam(newTeam);
     setSelectedMember(""); // Reset member selection when team changes
 
+    const codeArr = teams.filter((team) => team.uid === newTeam);
+    const { code } = codeArr[0];
+    setStoreUid(code);
+
     const year = parseInt(selectedYear.replace("年", ""));
     const month = parseInt(selectedMonth.replace("月", ""));
 
-    console.log("Team changed, auto updating filters:", {
-      year,
-      month,
-      team: newTeam,
-      member: "",
-    });
-    updateFilters({ year, month, team: newTeam, member: "" });
+    updateFilters({ year, month, store_uid: selectedTeam, staff_uid: "" });
   };
 
   // Handle member change and auto-update
@@ -108,10 +98,15 @@ const MemberChart = () => {
     console.log("Member changed, auto updating filters:", {
       year,
       month,
-      team: selectedTeam,
-      member: newMember,
+      store_uid: selectedTeam,
+      staff_uid: newMember,
     });
-    updateFilters({ year, month, team: selectedTeam, member: newMember });
+    updateFilters({
+      year,
+      month,
+      store_uid: selectedTeam,
+      staff_uid: newMember,
+    });
   };
 
   const handlePeriodChange = () => {
@@ -121,8 +116,8 @@ const MemberChart = () => {
     updateFilters({
       year: year,
       month: month,
-      team: selectedTeam,
-      member: selectedMember,
+      store_uid: selectedTeam,
+      staff_uid: selectedMember,
     });
   };
 
@@ -146,14 +141,16 @@ const MemberChart = () => {
       },
     },
   };
+  const { storeList } = UseGetRestaurantOwnerStoreList();
+  teams = storeList.map(({ uid, name, code }) => ({ uid, name, code }));
 
-  // Mock data - replace with actual API data
-  const teams = [
-    { id: "1", name: "BBT 福井" },
-    { id: "2", name: "BBT 東京" },
-    { id: "3", name: "BBT 大阪" },
-  ];
-
+  const { restaurantStaffListByStoreCode } = UseGetStaffByStoreCode(storeUid);
+  console.log({ restaurantStaffListByStoreCode });
+  const memberd = restaurantStaffListByStoreCode.map(({ uid, name, code }) => ({
+    uid,
+    name,
+    code,
+  }));
   const members = [
     { id: "1", name: "山田　花梨（かりん）", teamId: "1" },
     { id: "2", name: "佐藤　太郎", teamId: "1" },
@@ -216,7 +213,7 @@ const MemberChart = () => {
           >
             <option value="">全て</option>
             {teams.map((team) => (
-              <option key={team.id} value={team.id}>
+              <option key={team.uid} value={team.uid}>
                 {team.name}
               </option>
             ))}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Bar } from "react-chartjs-2";
 import useAnalytics from "../../../hooks/useAnalytics";
+import UseGetRestaurantOwnerStoreList from "../../../hooks/Dashboard/UseGetRestaurantOwnerStoreList";
 
 const TeamChart = () => {
   const currentYear = new Date().getFullYear();
@@ -83,12 +84,7 @@ const TeamChart = () => {
     const year = parseInt(selectedYear.replace("年", ""));
     const month = parseInt(selectedMonth.replace("月", ""));
 
-    console.log("Team changed, auto updating filters:", {
-      year,
-      month,
-      team: newTeam,
-    });
-    updateFilters({ year, month, team: newTeam });
+    updateFilters({ year, month, store_uid: newTeam });
   };
 
   const handlePeriodChange = () => {
@@ -123,12 +119,15 @@ const TeamChart = () => {
     },
   };
 
+  const { storeList } = UseGetRestaurantOwnerStoreList();
+  const teams = storeList.map(({ uid, name }) => ({ uid, name }));
+
   // Mock team data - replace with actual API data
-  const teams = [
-    { id: "1", name: "BBT 福井" },
-    { id: "2", name: "BBT 東京" },
-    { id: "3", name: "BBT 大阪" },
-  ];
+  // const teams = [
+  //   { id: "1", name: "BBT 福井" },
+  //   { id: "2", name: "BBT 東京" },
+  //   { id: "3", name: "BBT 大阪" },
+  // ];
 
   return (
     <div>
@@ -181,7 +180,7 @@ const TeamChart = () => {
           >
             <option value="">全て</option>
             {teams.map((team) => (
-              <option key={team.id} value={team.id}>
+              <option key={team.uid} value={team.uid}>
                 {team.name}
               </option>
             ))}

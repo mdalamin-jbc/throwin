@@ -23,7 +23,6 @@ const DeHistory = () => {
       <p className="text-center mt-10 text-red-500">Error: {error.message}</p>
     );
   }
-
   return (
     <div>
       <h2 className="font-semibold text-[27px] text-[#73879C]">履歴</h2>
@@ -69,7 +68,9 @@ const DeHistory = () => {
                       <td>{formatDate(payment.created_at)}</td>
 
                       <td>
-                        <p className="text-[#49BBDF]">{payment.restaurant_name}</p>
+                        <p className="text-[#49BBDF]">
+                          {payment.restaurant_name}
+                        </p>
                       </td>
                       <td>
                         <p>{payment.amount ? `${payment.amount}円` : "N/A"}</p>
@@ -92,7 +93,7 @@ const DeHistory = () => {
                 ) : (
                   <tr>
                     <td colSpan="5" className="text-center text-gray-500 py-5">
-                    お支払い履歴はありません。
+                      お支払い履歴はありません。
                     </td>
                   </tr>
                 )}
