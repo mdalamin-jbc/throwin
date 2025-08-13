@@ -1,62 +1,126 @@
+import { useState, useEffect } from "react";
 import { Bar } from "react-chartjs-2";
+import useAnalytics from "../../../hooks/useAnalytics";
+import UseGetRestaurantOwnerStoreList from "../../../hooks/Dashboard/UseGetRestaurantOwnerStoreList";
+import UseGetStaffByStoreCode from "../../../hooks/Dashboard/UseGetStaffByStoreCode";
 
 const MemberChart = () => {
-  const dataOverall = {
-    labels: [
-      "1 火",
-      "2 水",
-      "3 木",
-      "4 金",
-      "5 土",
-      "6 日",
-      "7 月",
-      "9",
-      "10",
-      "11",
-      "12",
-      "13",
-      "14",
-      "15",
-      "16",
-      "17",
-      "18",
-      "18",
-      "20",
-      "21",
-      "22",
-      "23",
-      "24",
-      "25",
-      "26",
-      "27",
-      "28",
-    ],
-    datasets: [
-      {
-        type: "line",
-        label: "客数",
-        borderColor: "#9E9E9E",
-        borderWidth: 2,
-        pointRadius: 4,
-        fill: false,
-        data: [
-          2.1, 2.5, 3.6, 2, 0, 0, 2.4, 2.9, 2, 2.5, 0, 0, 2.6, 2.8, 1.7, 2, 1.8,
-          0, 0, 2.5, 2.9, 0, 0, 2.7, 2.2, 0, 3.7,
-        ],
-        yAxisID: "y1",
-      },
-      {
-        type: "bar",
-        label: "売上",
-        backgroundColor: "#49BBDF",
-        data: [
-          12, 14.5, 17.5, 11, 0, 0, 14, 17, 11, 13, 0, 0, 15, 16.2, 9, 12, 10.5,
-          0, 0, 15, 17, 0, 0, 15.5, 13, 0, 21,
-        ],
-        yAxisID: "y",
-      },
-    ],
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1;
+
+  const [selectedYear, setSelectedYear] = useState(`${currentYear}年`);
+  const [selectedMonth, setSelectedMonth] = useState(`${currentMonth}月`);
+  const [selectedTeam, setSelectedTeam] = useState("");
+  const [selectedMember, setSelectedMember] = useState("");
+  const [storeUid, setStoreUid] = useState("");
+
+  // Initialize useAnalytics with current year only (no month filter initially)
+  const {
+    data,
+    loading,
+    generateChartData,
+    formatCurrency,
+    updateFilters,
+    filters,
+  } = useAnalytics({
+    year: currentYear,
+    // No month on initial load - filter by year only
+  });
+  // Auto-filter on component mount with default year only
+  useEffect(() => {
+    console.log("MemberChart mounted, applying default year filter");
+    updateFilters({
+      year: currentYear,
+      store_uid: selectedTeam,
+      staff_uid: selectedMember,
+      // No month filter on initial load - filter by year only
+    });
+  }, []); // Empty dependency array means this runs once on mount
+
+  let teams;
+
+  // Generate year options (current year + 20 years back)
+  const generateYearOptions = () => {
+    const years = [];
+    const currentYear = new Date().getFullYear();
+    for (let i = 0; i <= 20; i++) {
+      years.push(currentYear - i);
+    }
+    return years;
   };
+
+  // Handle year change and auto-update
+  const handleYearChange = (e) => {
+    const newYear = e.target.value;
+    setSelectedYear(newYear);
+
+    const year = parseInt(newYear.replace("年", ""));
+    const month = parseInt(selectedMonth.replace("月", ""));
+
+    updateFilters({ year, month, team: selectedTeam, member: selectedMember });
+  };
+
+  // Handle month change and auto-update
+  const handleMonthChange = (e) => {
+    const newMonth = e.target.value;
+    setSelectedMonth(newMonth);
+
+    const year = parseInt(selectedYear.replace("年", ""));
+    const month = parseInt(newMonth.replace("月", ""));
+
+    updateFilters({ year, month, team: selectedTeam, member: selectedMember });
+  };
+
+  // Handle team change and auto-update
+  const handleTeamChange = (e) => {
+    const newTeam = e.target.value;
+    setSelectedTeam(newTeam);
+    setSelectedMember(""); // Reset member selection when team changes
+
+    const codeArr = teams.filter((team) => team.uid === newTeam);
+    const { code } = codeArr[0];
+    setStoreUid(code);
+
+    const year = parseInt(selectedYear.replace("年", ""));
+    const month = parseInt(selectedMonth.replace("月", ""));
+
+    updateFilters({ year, month, store_uid: selectedTeam, staff_uid: "" });
+  };
+
+  // Handle member change and auto-update
+  const handleMemberChange = (e) => {
+    const newMember = e.target.value;
+    setSelectedMember(newMember);
+    console.log({ newMember });
+
+    const year = parseInt(selectedYear.replace("年", ""));
+    const month = parseInt(selectedMonth.replace("月", ""));
+
+    console.log("Member changed, auto updating filters:", {
+      year,
+      month,
+      staff_uid: newMember,
+    });
+    updateFilters({
+      year,
+      month,
+      staff_uid: newMember,
+    });
+  };
+
+  const handlePeriodChange = () => {
+    const year = parseInt(selectedYear.replace("年", ""));
+    const month = parseInt(selectedMonth.replace("月", ""));
+
+    updateFilters({
+      year: year,
+      month: month,
+      store_uid: selectedTeam,
+      staff_uid: selectedMember,
+    });
+  };
+
+  const chartData = generateChartData();
 
   const options = {
     responsive: true,
@@ -76,70 +140,127 @@ const MemberChart = () => {
       },
     },
   };
+  console.log({ code: storeUid });
+  const { storeList } = UseGetRestaurantOwnerStoreList();
+  teams = storeList.map(({ uid, name, code }) => ({ uid, name, code }));
+
+  const { restaurantStaffListByStoreCode } = UseGetStaffByStoreCode(storeUid);
+  console.log({ restaurantStaffListByStoreCode });
+  const members = restaurantStaffListByStoreCode.map(({ uid, name, code }) => ({
+    uid,
+    name,
+    code,
+  }));
+  // console.log({ memberd });
+
+  // Filter members based on selected team
+  // const filteredMembers = selectedTeam
+  //   ? members.filter((member) => member.teamId === selectedTeam)
+  //   : members;
 
   return (
     <div>
+      {/* Period Selection */}
       <div className="mt-[22px] flex items-center gap-4 font-semibold text-xs">
         <label className="text-[#434343] mr-9">期間指定</label>
-        <div className="flex items-center gap-2  py-[5px] px-2 rounded-md">
+        <div className="flex items-center gap-2 py-[5px] px-2 rounded-md">
           <select
-            // value={selectedYear}
-            // onChange={handleYearChange}
+            value={selectedYear}
+            onChange={handleYearChange}
             className="border rounded px-2 py-1 w-[134px]"
           >
-            {[...Array(21)].map((_, i) => (
-              <option key={i}>{new Date().getFullYear() - i}年</option>
+            {generateYearOptions().map((year) => (
+              <option key={year} value={`${year}年`}>
+                {year}年
+              </option>
             ))}
           </select>
 
           <select
-            // value={selectedMonth}
-            // onChange={handleMonthChange}
+            value={selectedMonth}
+            onChange={handleMonthChange}
             className="border rounded px-2 py-1 w-[111px]"
           >
             {[...Array(12)].map((_, i) => (
-              <option key={i}>{i + 1}</option>
+              <option key={i + 1} value={`${i + 1}月`}>
+                {i + 1}月
+              </option>
             ))}
           </select>
         </div>
 
-        <button className="bg-[#49BBDF] py-[6px] px-4 rounded-md text-white">
-          集計
+        <button
+          onClick={handlePeriodChange}
+          className="bg-[#49BBDF] py-[6px] px-4 rounded-md text-white"
+          disabled={loading}
+        >
+          {loading ? "読み込み中..." : "集計"}
         </button>
       </div>
-      {/* ------------------------------- */}
+
+      {/* Team Selection */}
       <div className="mt-[px] flex items-center gap-4 font-semibold text-xs">
         <label className="text-[#434343]">チーム（店舗）</label>
-        <div className="flex items-center gap-2  py-[5px] px-2 rounded-md">
-          <select className="border rounded px-2 py-1 w-[295px]">
-            <option value="">BBT 福井</option>
+        <div className="flex items-center gap-2 py-[5px] px-2 rounded-md">
+          <select
+            value={selectedTeam}
+            onChange={handleTeamChange}
+            className="border rounded px-2 py-1 w-[295px]"
+          >
+            <option value="">全て</option>
+            {teams.map((team) => (
+              <option key={team.uid} value={team.uid}>
+                {team.name}
+              </option>
+            ))}
           </select>
         </div>
       </div>
-      {/* ------------------------------- */}
+
+      {/* Member Selection */}
       <div className="mt-[px] flex items-center gap-[50px] font-semibold text-xs">
         <label className="text-[#434343]">メンバー</label>
-        <div className="flex items-center gap-2  py-[5px] px-2 rounded-md">
-          <select className="border rounded px-2 py-1 w-[295px]">
-            <option value="">山田　花梨（かりん）</option>
+        <div className="flex items-center gap-2 py-[5px] px-2 rounded-md">
+          <select
+            value={selectedMember}
+            onChange={handleMemberChange}
+            className="border rounded px-2 py-1 w-[295px]"
+            disabled={!selectedTeam && members.length === 0}
+          >
+            <option value="">全て</option>
+            {members.map((member) => (
+              <option key={member.uid} value={member.uid}>
+                {member.name}
+              </option>
+            ))}
           </select>
         </div>
       </div>
+
+      {/* Stats Cards */}
       <div className="mt-[33px] grid grid-cols-3 gap-[17px]">
         {[
           {
             title: "売上（Throwin額)",
-            value: "1,000,000",
+            value: data ? formatCurrency(data.total_amount_jpy) : "0",
             unit: "円",
           },
-          { title: "利益額", value: "300,000", unit: "円" },
-          { title: "Throwin回数", value: "1,500", unit: "回" },
+          {
+            title: "利益額",
+            value: data ? formatCurrency(data.latest_balance_jpy) : "0",
+            unit: "円",
+          },
+          {
+            title: "Throwin回数",
+            value: data ? formatCurrency(data.total_throwins) : "0",
+            unit: "回",
+          },
         ].map((item, i) => (
           <div
             key={i}
             className="bg-[#F9F9F9] py-[47px] text-center rounded-[20px]"
           >
-            <p className="font-semibold text-lg text-[利益額]">{item.title}</p>
+            <p className="font-semibold text-lg">{item.title}</p>
             <div className="flex justify-center items-center gap-6">
               <h3 className="text-[#49BBDF] font-semibold text-[36px] mt-[28px] ml-10">
                 {item.value}
@@ -149,9 +270,17 @@ const MemberChart = () => {
           </div>
         ))}
       </div>
-      <div className="mt-[27px]">
-        <Bar height={200} width={600} data={dataOverall} options={options} />
-      </div>
+
+      {/* Chart */}
+      {chartData ? (
+        <div className="mt-[27px]">
+          <Bar height={200} width={600} data={chartData} options={options} />
+        </div>
+      ) : (
+        <div className="mt-[27px] flex justify-center items-center p-8">
+          {loading ? "Loading..." : "No data available"}
+        </div>
+      )}
     </div>
   );
 };

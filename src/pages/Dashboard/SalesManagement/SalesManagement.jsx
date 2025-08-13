@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -13,9 +13,9 @@ import {
   BarController,
   LineController,
 } from "chart.js";
+
 import TeamChart from "./TeamChart";
 import MemberChart from "./MemberChart";
-import ClientChart from "./ClientChart_sa";
 import ClientChart_sa from "./ClientChart_sa";
 import StoreTeamChart_sa from "./StoreTeamChart_sa";
 import MemberChart_sa from "./MemberChart_sa";
@@ -23,6 +23,7 @@ import SalesAgentChart_admin from "./FcGlowAdimnChart/SalesAgentChart_admin";
 import ClientChart_admin from "./FcGlowAdimnChart/ClientChart_admin";
 import StoreTeamChart_admin from "./FcGlowAdimnChart/StoreTeamChart_admin";
 import MemberChart_admin from "./FcGlowAdimnChart/MemberChart_admin";
+import useAnalytics from "../../../hooks/useAnalytics";
 
 ChartJS.register(
   CategoryScale,
@@ -38,9 +39,34 @@ ChartJS.register(
 );
 
 const SalesManagement = () => {
-  const userRole = localStorage.getItem("userRole");
-  const [selectedYear, setSelectedYear] = useState("2025年");
-  const [selectedMonth, setSelectedMonth] = useState("1月");
+  const userRole = "restaurant_owner"; // Replace with actual localStorage call when needed
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1; // getMonth() returns 0-11, so add 1
+
+  const [selectedYear, setSelectedYear] = useState(`${currentYear}年`);
+  const [selectedMonth, setSelectedMonth] = useState(`${currentMonth}月`);
+
+  // Initialize useAnalytics with current year only (no month filter initially)
+  const {
+    data,
+    loading,
+    generateChartData,
+    formatCurrency,
+    updateFilters,
+    filters,
+  } = useAnalytics({
+    year: currentYear,
+    // No month on initial load - filter by year only
+  });
+
+  // Auto-filter on component mount with default year only
+  useEffect(() => {
+    console.log("Component mounted, applying default year filter");
+    updateFilters({
+      year: currentYear,
+      // No month filter on initial load - filter by year only
+    });
+  }, []); // Empty dependency array means this runs once on mount
 
   // Define role-specific tab configurations
   const tabConfigurations = {
@@ -71,67 +97,8 @@ const SalesManagement = () => {
     ],
   };
 
-  // Get available tabs based on user role
   const availableTabs = tabConfigurations[userRole] || [];
   const [activeTab, setActiveTab] = useState(availableTabs[0]?.id || "overall");
-
-  // Common chart data
-  const chartData = {
-    labels: [
-      "1 火",
-      "2 水",
-      "3 木",
-      "4 金",
-      "5 土",
-      "6 日",
-      "7 月",
-      "9",
-      "10",
-      "11",
-      "12",
-      "13",
-      "14",
-      "15",
-      "16",
-      "17",
-      "18",
-      "18",
-      "20",
-      "21",
-      "22",
-      "23",
-      "24",
-      "25",
-      "26",
-      "27",
-      "28",
-    ],
-    datasets: [
-      {
-        type: "line",
-        label: "客数",
-        borderColor: "#9E9E9E",
-        borderWidth: 2,
-        pointRadius: 4,
-        fill: false,
-        data: [
-          2.1, 2.5, 3.6, 2, 0, 0, 2.4, 2.9, 2, 2.5, 0, 0, 2.6, 2.8, 1.7, 2, 1.8,
-          0, 0, 2.5, 2.9, 0, 0, 2.7, 2.2, 0, 3.7,
-        ],
-        yAxisID: "y1",
-      },
-      {
-        type: "bar",
-        label: "売上",
-        backgroundColor: "#49BBDF",
-        data: [
-          12, 14.5, 17.5, 11, 0, 0, 14, 17, 11, 13, 0, 0, 15, 16.2, 9, 12, 10.5,
-          0, 0, 15, 17, 0, 0, 15.5, 13, 0, 21,
-        ],
-        yAxisID: "y",
-      },
-    ],
-  };
 
   const chartOptions = {
     responsive: true,
@@ -152,6 +119,50 @@ const SalesManagement = () => {
     },
   };
 
+  const handlePeriodChange = () => {
+    const year = parseInt(selectedYear.replace("年", ""));
+    const month = parseInt(selectedMonth.replace("月", ""));
+
+    updateFilters({
+      year: year,
+      month: month,
+    });
+  };
+
+  // Generate year options (current year + 10 years back)
+  const generateYearOptions = () => {
+    const years = [];
+    const currentYear = new Date().getFullYear();
+    for (let i = 0; i <= 10; i++) {
+      years.push(currentYear - i);
+    }
+    return years;
+  };
+
+  // Handle year change and auto-update
+  const handleYearChange = (e) => {
+    const newYear = e.target.value;
+    setSelectedYear(newYear);
+
+    const year = parseInt(newYear.replace("年", ""));
+    const month = parseInt(selectedMonth.replace("月", ""));
+
+    console.log("Year changed, auto updating filters:", { year, month });
+    updateFilters({ year, month });
+  };
+
+  // Handle month change and auto-update
+  const handleMonthChange = (e) => {
+    const newMonth = e.target.value;
+    setSelectedMonth(newMonth);
+
+    const year = parseInt(selectedYear.replace("年", ""));
+    const month = parseInt(newMonth.replace("月", ""));
+
+    console.log("Month changed, auto updating filters:", { year, month });
+    updateFilters({ year, month });
+  };
+
   // Common period selector component
   const PeriodSelector = () => (
     <div className="mt-[22px] flex items-center gap-4 font-semibold text-xs">
@@ -159,25 +170,33 @@ const SalesManagement = () => {
       <div className="flex items-center gap-2 py-[5px] px-2 rounded-md">
         <select
           value={selectedYear}
-          onChange={(e) => setSelectedYear(e.target.value)}
+          onChange={handleYearChange}
           className="border rounded px-2 py-1"
         >
-          {[...Array(21)].map((_, i) => (
-            <option key={i}>{new Date().getFullYear() - i}年</option>
+          {generateYearOptions().map((year) => (
+            <option key={year} value={`${year}年`}>
+              {year}年
+            </option>
           ))}
         </select>
         <select
           value={selectedMonth}
-          onChange={(e) => setSelectedMonth(e.target.value)}
+          onChange={handleMonthChange}
           className="border rounded px-2 py-1"
         >
           {[...Array(12)].map((_, i) => (
-            <option key={i}>{i + 1}月</option>
+            <option key={i + 1} value={`${i + 1}月`}>
+              {i + 1}月
+            </option>
           ))}
         </select>
       </div>
-      <button className="bg-[#49BBDF] py-[6px] px-4 rounded-md text-white">
-        集計
+      <button
+        onClick={handlePeriodChange}
+        className="bg-[#49BBDF] py-[6px] px-4 rounded-md text-white"
+        disabled={loading}
+      >
+        {loading ? "読み込み中..." : "集計"}
       </button>
       <button className="bg-[#4DBAEF] py-[6px] px-4 rounded-md text-white">
         支払い通知書ダウンロード
@@ -209,25 +228,45 @@ const SalesManagement = () => {
   const renderRestaurantOwnerContent = () => {
     switch (activeTab) {
       case "overall":
+        const chartData = generateChartData();
+
         return (
           <>
             <PeriodSelector />
             <StatsCards
               stats={[
-                { title: "売上額(Throwin額)", value: "1,000,000", unit: "円" },
-                { title: "利益額", value: "15,00", unit: "" },
-                { title: "Throwin回数", value: "1,500", unit: "回" },
-                { title: "稼働店舗（チーム）数", value: "5", unit: "" },
+                {
+                  title: "売上額(Throwin額)",
+                  value: data ? formatCurrency(data.total_amount_jpy) : "0",
+                  unit: "円",
+                },
+                {
+                  title: "利益額",
+                  value: data ? formatCurrency(data.latest_balance_jpy) : "0",
+                  unit: "円",
+                },
+                {
+                  title: "Throwin回数",
+                  value: data ? formatCurrency(data.total_throwins) : "0",
+                  unit: "回",
+                },
+                {
+                  title: "稼働店舗（チーム）数",
+                  value: data ? data.total_stores.toString() : "0",
+                  unit: "",
+                },
               ]}
             />
-            <div className="mt-[27px]">
-              <Bar
-                height={200}
-                width={600}
-                data={chartData}
-                options={chartOptions}
-              />
-            </div>
+            {chartData && (
+              <div className="mt-[27px]">
+                <Bar
+                  height={200}
+                  width={600}
+                  data={chartData}
+                  options={chartOptions}
+                />
+              </div>
+            )}
           </>
         );
       case "team":
@@ -242,6 +281,8 @@ const SalesManagement = () => {
   const renderSalesAgentContent = () => {
     switch (activeTab) {
       case "whole":
+        const chartData = generateChartData();
+
         return (
           <>
             <PeriodSelector />
@@ -249,21 +290,31 @@ const SalesManagement = () => {
               stats={[
                 {
                   title: "売上額(Throwin額)",
-                  value: "1,000,000",
+                  value: data ? formatCurrency(data.total_amount_jpy) : "0",
                   unit: "円",
                 },
-                { title: "利益額", value: "300,000", unit: "円" },
-                { title: "稼働メンバー数", value: "5", unit: "" },
+                {
+                  title: "利益額",
+                  value: data ? formatCurrency(data.latest_balance_jpy) : "0",
+                  unit: "円",
+                },
+                {
+                  title: "稼働メンバー数",
+                  value: data ? data.total_stores.toString() : "0",
+                  unit: "",
+                },
               ]}
             />
-            <div className="mt-[27px]">
-              <Bar
-                height={200}
-                width={600}
-                data={chartData}
-                options={chartOptions}
-              />
-            </div>
+            {chartData && (
+              <div className="mt-[27px]">
+                <Bar
+                  height={200}
+                  width={600}
+                  data={chartData}
+                  options={chartOptions}
+                />
+              </div>
+            )}
           </>
         );
       case "client":
@@ -280,26 +331,56 @@ const SalesManagement = () => {
   const renderAdminContent = () => {
     switch (activeTab) {
       case "whole":
+        const chartData = generateChartData();
+
         return (
           <>
             <PeriodSelector />
             <StatsCards
               stats={[
-                { title: "合計売上", value: "1,000,000", unit: "円" },
-                { title: "稼働クライアント数", value: "5", unit: "" },
-                { title: "glow利益", value: "140,000", unit: "円" },
-                { title: "Free Company 利益", value: "140,000", unit: "円" },
-                { title: "クライアント 利益", value: "7000,000", unit: "円" },
+                {
+                  title: "合計売上",
+                  value: data ? formatCurrency(data.total_amount_jpy) : "0",
+                  unit: "円",
+                },
+                {
+                  title: "稼働クライアント数",
+                  value: data ? data.total_stores.toString() : "0",
+                  unit: "",
+                },
+                {
+                  title: "glow利益",
+                  value: data
+                    ? formatCurrency(Math.floor(data.total_amount_jpy * 0.1))
+                    : "0",
+                  unit: "円",
+                },
+                {
+                  title: "Free Company 利益",
+                  value: data
+                    ? formatCurrency(Math.floor(data.total_amount_jpy * 0.1))
+                    : "0",
+                  unit: "円",
+                },
+                {
+                  title: "クライアント 利益",
+                  value: data
+                    ? formatCurrency(Math.floor(data.total_amount_jpy * 0.8))
+                    : "0",
+                  unit: "円",
+                },
               ]}
             />
-            <div className="mt-[27px]">
-              <Bar
-                height={200}
-                width={600}
-                data={chartData}
-                options={chartOptions}
-              />
-            </div>
+            {chartData && (
+              <div className="mt-[27px]">
+                <Bar
+                  height={200}
+                  width={600}
+                  data={chartData}
+                  options={chartOptions}
+                />
+              </div>
+            )}
           </>
         );
       case "sales_agent":
@@ -317,6 +398,12 @@ const SalesManagement = () => {
 
   // Main render function based on user role
   const renderContent = () => {
+    if (loading && !data) {
+      return (
+        <div className="flex justify-center items-center p-8">Loading...</div>
+      );
+    }
+
     switch (userRole) {
       case "restaurant_owner":
         return renderRestaurantOwnerContent();
