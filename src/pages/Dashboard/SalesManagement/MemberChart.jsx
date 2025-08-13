@@ -91,6 +91,7 @@ const MemberChart = () => {
   const handleMemberChange = (e) => {
     const newMember = e.target.value;
     setSelectedMember(newMember);
+    console.log({ newMember });
 
     const year = parseInt(selectedYear.replace("年", ""));
     const month = parseInt(selectedMonth.replace("月", ""));
@@ -98,13 +99,11 @@ const MemberChart = () => {
     console.log("Member changed, auto updating filters:", {
       year,
       month,
-      store_uid: selectedTeam,
       staff_uid: newMember,
     });
     updateFilters({
       year,
       month,
-      store_uid: selectedTeam,
       staff_uid: newMember,
     });
   };
@@ -141,26 +140,23 @@ const MemberChart = () => {
       },
     },
   };
+  console.log({ code: storeUid });
   const { storeList } = UseGetRestaurantOwnerStoreList();
   teams = storeList.map(({ uid, name, code }) => ({ uid, name, code }));
 
   const { restaurantStaffListByStoreCode } = UseGetStaffByStoreCode(storeUid);
   console.log({ restaurantStaffListByStoreCode });
-  const memberd = restaurantStaffListByStoreCode.map(({ uid, name, code }) => ({
+  const members = restaurantStaffListByStoreCode.map(({ uid, name, code }) => ({
     uid,
     name,
     code,
   }));
-  const members = [
-    { id: "1", name: "山田　花梨（かりん）", teamId: "1" },
-    { id: "2", name: "佐藤　太郎", teamId: "1" },
-    { id: "3", name: "田中　花子", teamId: "2" },
-  ];
+  // console.log({ memberd });
 
   // Filter members based on selected team
-  const filteredMembers = selectedTeam
-    ? members.filter((member) => member.teamId === selectedTeam)
-    : members;
+  // const filteredMembers = selectedTeam
+  //   ? members.filter((member) => member.teamId === selectedTeam)
+  //   : members;
 
   return (
     <div>
@@ -229,11 +225,11 @@ const MemberChart = () => {
             value={selectedMember}
             onChange={handleMemberChange}
             className="border rounded px-2 py-1 w-[295px]"
-            disabled={!selectedTeam && filteredMembers.length === 0}
+            disabled={!selectedTeam && members.length === 0}
           >
             <option value="">全て</option>
-            {filteredMembers.map((member) => (
-              <option key={member.id} value={member.id}>
+            {members.map((member) => (
+              <option key={member.uid} value={member.uid}>
                 {member.name}
               </option>
             ))}
