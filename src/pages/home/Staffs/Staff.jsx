@@ -30,8 +30,6 @@ const Staff = () => {
   const { staff_details } = UseGetUserDetails(username, store_code);
   const { userReview } = UseGetUserReview(staff_details?.uid);
 
-  console.log("hiiiiiiiiiiiiiiiiiiiii", staff_details);
-  // console.log(staff.uid);
   const { favoriteStuffs, refetch, isLoading } = UseGetFavorite_stuff();
 
   const axiosPrivate = useAxiosPrivate();

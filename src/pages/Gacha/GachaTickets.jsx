@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 const GachaTickets = () => {
   const { tickets, isLoading, isError } = UseGetSpins();
-  console.log(tickets);
+
   const navigate = useNavigate();
 
   return (
@@ -39,8 +39,6 @@ const GachaTickets = () => {
           transition={{ duration: 0.5 }}
           className="mx-[10px]"
         >
-          <h4 className="text-center mb-3">チケットボックス</h4>
-
           {isLoading ? (
             <div className="flex justify-center items-center h-[80vh]">
               <Circles
@@ -56,9 +54,16 @@ const GachaTickets = () => {
               チケットの読み込みに失敗しました。もう一度お試しください。
             </p>
           ) : tickets?.length === 0 ? (
-            <p className="text-center text-gray-500">
-              利用可能なチケットがありません。
-            </p>
+            <div>
+              <p className="text-center text-gray-500">
+                利用可能な景品はありません
+              </p>
+              <h3 className="text-center mt-56 text-[#49BBDF] font-bold">
+                ガチャを回して、
+                <br />
+                景品をゲットしよう！
+              </h3>
+            </div>
           ) : (
             <motion.div
               initial={{ opacity: 0 }}

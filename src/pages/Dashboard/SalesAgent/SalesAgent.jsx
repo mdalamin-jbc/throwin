@@ -18,7 +18,6 @@ const SalesAgent = () => {
   } = useForm();
 
   const searchValue = watch("searchMember");
-  console.log("Search Input:", searchValue);
 
   if (isLoading) {
     return (

@@ -26,6 +26,8 @@ const BillingScreen = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
+  const [selectedCardIndex, setSelectedCardIndex] = useState(null);
+  const [savedCards, setSavedCards] = useState(JSON.parse(localStorage.getItem("savedCards")) || []);
 
   const staff = JSON.parse(localStorage.getItem("staff"));
   const {
@@ -47,7 +49,40 @@ const BillingScreen = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm();
+
+  // Real-time validation states
+  const [cardNumberError, setCardNumberError] = useState("");
+  const [expiryMonthError, setExpiryMonthError] = useState("");
+  const [expiryYearError, setExpiryYearError] = useState("");
+  const [securityCodeError, setSecurityCodeError] = useState("");
+  const [cardHolderError, setCardHolderError] = useState("");
+  const [cardType, setCardType] = useState("Unknown");
+
+  // Luhn algorithm for card validation
+  function luhnCheck(cardNumber) {
+    let sum = 0;
+    let shouldDouble = false;
+    for (let i = cardNumber.length - 1; i >= 0; i--) {
+      let digit = parseInt(cardNumber.charAt(i));
+      if (shouldDouble) {
+        digit *= 2;
+        if (digit > 9) digit -= 9;
+      }
+      sum += digit;
+      shouldDouble = !shouldDouble;
+    }
+    return sum % 10 === 0;
+  }
+
+  // Function to detect card type
+  const getCardType = (cardNumber) => {
+    if (!cardNumber) return 'Unknown';
+    if (/^4/.test(cardNumber)) return 'Visa';
+    if (/^5[1-5]/.test(cardNumber) || /^2[2-7]/.test(cardNumber)) return 'Mastercard';
+    return 'Unknown';
+  };
 
   // Initialize GMO PG Multipayment
   useEffect(() => {
@@ -174,8 +209,16 @@ const BillingScreen = () => {
     }
   }, [staff, favoriteStuffs]);
 
-  const handlePaymentMethodChange = (event) =>
-    setSelectedPaymentMethod(event.target.value);
+  const handlePaymentMethodChange = (event) => {
+    const value = event.target.value;
+    if (value.startsWith("existing-card-")) {
+      setSelectedPaymentMethod("existing-card");
+      setSelectedCardIndex(parseInt(value.split("-")[2]));
+    } else {
+      setSelectedPaymentMethod(value);
+      setSelectedCardIndex(null);
+    }
+  };
 
   const handleAmountChange = (event) => {
     let input = event.target.value.replace(/[^\d]/g, "").slice(0, 5);
@@ -233,19 +276,104 @@ const BillingScreen = () => {
         localStorage.setItem("staff_details", JSON.stringify(staff_details));
       }
 
-      const mockPaymentId = `VISA_${Date.now()}`;
-      navigate(`/store/${store_code}/staff/${username}/chargeCompleted`, {
-        state: {
-          paymentId: mockPaymentId,
-          PayerID: "VISA_DIRECT",
-          amount: selectedAmount,
-          timestamp: Date.now(),
-          payment_method: "visa",
-        },
-        replace: true,
-      });
+      if (savedCards.length > 0 && selectedCardIndex !== null) {
+        // Use saved card for real payment
+        const selectedCard = savedCards[selectedCardIndex];
+        if (!window.Multipayment) {
+          if (modal) modal.close();
+          toast.error("決済サービスが利用できません。", {
+            position: "top-center",
+            duration: 3000,
+          });
+          return;
+        }
 
-      if (modal) modal.close();
+        const loadingToast = toast.loading("処理中...", {
+          position: "top-center",
+        });
+
+        window.Multipayment.getToken(
+          {
+            cardno: selectedCard.cardNumber,
+            expire: `${selectedCard.expiryYear}${selectedCard.expiryMonth}`,
+            securitycode: selectedCard.securityCode,
+            holdername: selectedCard.cardHolder,
+            tokennumber: "1",
+          },
+          async (result) => {
+            try {
+              if (result.resultCode !== "000") {
+                throw new Error(`トークン生成に失敗しました: ${result.resultCode}`);
+              }
+
+              let generatedToken = result.tokenObject.token;
+              if (Array.isArray(generatedToken)) {
+                generatedToken = generatedToken[0];
+              }
+
+              const paymentData = {
+                nickname: getNickname(),
+                staff_uid: staff?.uid,
+                store_uid: staff?.store_uid,
+                amount: billingData.amount.toString(),
+                currency: "JPY",
+                token: generatedToken,
+                message: review,
+              };
+
+              const response = await axiosPrivate.post(
+                "/payment_service/gmo-pg/credit-card/",
+                paymentData
+              );
+
+              toast.dismiss(loadingToast);
+
+              if (response.data.transaction_id) {
+                if (modal) modal.close();
+
+                localStorage.setItem(
+                  "payment_details",
+                  JSON.stringify({
+                    paymentId: response.data.transaction_id,
+                    PayerID: "CREDIT_CARD_DIRECT",
+                    amount: selectedAmount.replace(/,/g, ""),
+                    timestamp: Date.now(),
+                    payment_method: "credit_card",
+                  })
+                );
+
+                const chargeCompletedUrl = `/store/${store_code}/staff/${username}/chargeCompleted?paymentId=${response.data.transaction_id}&PayerID=CREDIT_CARD_DIRECT`;
+
+                navigate(chargeCompletedUrl, { replace: true });
+              } else {
+                throw new Error("Transaction ID missing from response");
+              }
+            } catch (error) {
+              toast.dismiss(loadingToast);
+              if (modal) modal.close();
+              toast.error(error.message || "支払い処理中にエラーが発生しました。", {
+                position: "top-center",
+                duration: 3000,
+              });
+            }
+          }
+        );
+      } else {
+        // Fallback to demo payment if no saved card
+        const mockPaymentId = `VISA_${Date.now()}`;
+        navigate(`/store/${store_code}/staff/${username}/chargeCompleted`, {
+          state: {
+            paymentId: mockPaymentId,
+            PayerID: "VISA_DIRECT",
+            amount: selectedAmount,
+            timestamp: Date.now(),
+            payment_method: "visa",
+          },
+          replace: true,
+        });
+
+        if (modal) modal.close();
+      }
     } catch (error) {
       if (modal) modal.close();
       console.error("Navigation error:", error);
@@ -335,20 +463,36 @@ const BillingScreen = () => {
           localStorage.setItem("staff_details", JSON.stringify(staff_details));
         }
 
-        localStorage.setItem(
-          "payment_details",
-          JSON.stringify({
-            paymentId: resultData.transaction_id,
-            PayerID: "CREDIT_CARD_DIRECT",
-            amount: selectedAmount.replace(/,/g, ""),
-            timestamp: Date.now(),
-            payment_method: "credit_card",
-          })
-        );
+                localStorage.setItem(
+                  "payment_details",
+                  JSON.stringify({
+                    paymentId: resultData.transaction_id,
+                    PayerID: "CREDIT_CARD_DIRECT",
+                    amount: selectedAmount.replace(/,/g, ""),
+                    timestamp: Date.now(),
+                    payment_method: "credit_card",
+                  })
+                );
 
-        const chargeCompletedUrl = `/store/${store_code}/staff/${username}/chargeCompleted?paymentId=${resultData.transaction_id}&PayerID=CREDIT_CARD_DIRECT`;
+                // Save card if checked
+                if (data.saveCard) {
+                  const newCard = {
+                    cardNumber: data.cardNumber,
+                    expiryMonth: data.expiryMonth,
+                    expiryYear: data.expiryYear,
+                    securityCode: data.securityCode,
+                    cardHolder: data.cardHolder,
+                  };
+                  // Check if card already exists
+                  const cardExists = savedCards.some(card => card.cardNumber === newCard.cardNumber);
+                  if (!cardExists) {
+                    const updatedCards = [...savedCards, newCard];
+                    setSavedCards(updatedCards);
+                    localStorage.setItem("savedCards", JSON.stringify(updatedCards));
+                  }
+                }
 
-        navigate(chargeCompletedUrl, { replace: true });
+                const chargeCompletedUrl = `/store/${store_code}/staff/${username}/chargeCompleted?paymentId=${resultData.transaction_id}&PayerID=CREDIT_CARD_DIRECT`;        navigate(chargeCompletedUrl, { replace: true });
       } else {
         throw new Error("Transaction ID missing from response");
       }
@@ -377,9 +521,10 @@ const BillingScreen = () => {
   const getPaymentMethodDisplay = () => {
     switch (selectedPaymentMethod) {
       case "existing-card":
-        return "VISA (下4桁: 1234)";
+        const card = savedCards[selectedCardIndex];
+        return card ? `${getCardType(card.cardNumber)} (下4桁: ${card.cardNumber.slice(-4)})` : "クレジットカード (下4桁: 1234)";
       case "new-card":
-        return "VISA";
+        return cardType === 'Unknown' ? "新規クレジットカード" : `新規${cardType}`;
       case "paypal":
         return "PayPal";
       default:
@@ -490,98 +635,43 @@ const BillingScreen = () => {
                     <FcGoogle />
                     <span>Pay</span>
                   </h3>
-                  <div className="text-[#44495B] p-0">
-                    <button
-                      className="w-full"
-                      onClick={() =>
-                        document.getElementById("my_modal_6").showModal()
-                      }
-                    >
-                      <button
-                        onClick={() =>
-                          localStorage.setItem(
-                            "staff_details",
-                            JSON.stringify(staff_details)
-                          )
-                        }
-                        className="flex items-center border rounded px-3 py-2 gap-1"
-                      >
-                        <SlPaypal />
-                        <span>Pay</span>
-                      </button>
-                    </button>
-                    <dialog
-                      id="my_modal_6"
-                      className="modal max-w-[343px] mx-auto rounded-lg shadow-lg"
-                    >
-                      <div className="modal-box p-0 rounded-lg overflow-hidden">
-                        <div className="bg-[#49BBDF] text-white flex items-center justify-center py-4">
-                          <img
-                            src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_111x69.jpg"
-                            alt="PayPal Logo"
-                            className="h-14 rounded-[10px]"
-                          />
-                        </div>
-                        <div className="px-6 pt-4 pb-4">
-                          <p className="text-base font-medium">
-                            <span className="underline font-semibold">
-                              {staff?.name}
-                            </span>{" "}
-                            に、スローインします。 よろしいですか？
-                          </p>
-                          <div className="flex justify-between items-center text-sm mt-4">
-                            <p className="text-sm font-medium">
-                              金額 : {selectedAmount}円
-                            </p>
-                            <p>決済方法 : PayPal</p>
-                          </div>
-                        </div>
-                        <div className="flex justify-center gap-4 border-t border-gray-200">
-                          <form method="dialog" className="w-1/2">
-                            <button className="px-4 py-3 w-full text-red-600 border-r border-gray-300 text-center text-[15px]">
-                              キャンセル
-                            </button>
-                          </form>
-                          <button
-                            onClick={handlePaypalPayment}
-                            className="px-4 py-3 w-full text-blue-600 text-[15px] text-center"
-                          >
-                            確定
-                          </button>
-                        </div>
-                      </div>
-                    </dialog>
-                  </div>
                 </div>
 
                 <div className="py-4">
                   <h3 className="font-bold text-sm text-gray-700 mb-4">
                     クレジットカード決済
                   </h3>
-                  <div
-                    className={`flex items-start p-4  ${
-                      selectedPaymentMethod === "existing-card" &&
-                      " bg-[#F4FCFF]"
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      id="existing-card"
-                      name="payment_method"
-                      value="existing-card"
-                      className="mt-1 mr-3"
-                      onChange={handlePaymentMethodChange}
-                    />
-                    <label htmlFor="existing-card" className="flex flex-col">
-                      <span className="font-medium text-sm text-gray-800">
-                        Visa (オーナーズカード)
-                      </span>
-                      <span className="text-gray-500 text-xs">
-                        Visa 下4桁 1234
-                      </span>
-                    </label>
-                  </div>
-                  <hr className=" border-gray-300" />
+                  {savedCards.length > 0 && (
+                    <>
+                      {savedCards.map((card, index) => (
+                        <div key={index}>
+                          <div
+                            className={`flex items-start p-4 ${
+                              selectedPaymentMethod === "existing-card" && selectedCardIndex === index && " bg-[#F4FCFF]"
+                            }`}
+                          >
+                            <input
+                              type="radio"
+                              id={`existing-card-${index}`}
+                              name="payment_method"
+                              value={`existing-card-${index}`}
+                              className="mt-1 mr-3"
+                              onChange={handlePaymentMethodChange}
+                            />
+                            <label htmlFor={`existing-card-${index}`} className="flex flex-col">
+                              <span className="font-medium text-sm text-gray-800">
+                                {getCardType(card.cardNumber)} (オーナーズカード)
+                              </span>
+                              <span className="text-gray-500 text-xs">
+                                {getCardType(card.cardNumber)} 下4桁 {card.cardNumber.slice(-4)}
+                              </span>
+                            </label>
+                          </div>
+                          <hr className=" border-gray-300" />
+                        </div>
+                      ))}
+                    </>
+                  )}
                   <div
                     className={`flex  items-start p-4 ${
                       selectedPaymentMethod === "new-card" && " bg-[#F4FCFF]"
@@ -599,7 +689,7 @@ const BillingScreen = () => {
                       htmlFor="new-card"
                       className="font-medium text-sm text-gray-800"
                     >
-                      新規クレジットカード
+                      新規{cardType === 'Unknown' ? 'クレジットカード' : cardType}
                     </label>
                   </div>
 
@@ -619,18 +709,29 @@ const BillingScreen = () => {
                                 "有効な16桁のカード番号を入力してください",
                             },
                           })}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/\D/g, '').slice(0,16);
+                            setValue("cardNumber", value);
+                            setCardType(getCardType(value));
+                            if (value.length === 16 && !luhnCheck(value)) {
+                              setCardNumberError("無効なカード番号です");
+                            } else {
+                              setCardNumberError("");
+                            }
+                          }}
                           name="cardNumber"
                           type="text"
                           placeholder="1234 5678 1234 5678"
                           className={`input rounded-[5px] py-4 mt-1 w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 ${
-                            errors.cardNumber
+                            errors.cardNumber || cardNumberError
                               ? "border-red-500"
                               : "border-[#D9D9D9]"
                           } focus:border-[#707070] focus:outline-none`}
+                          maxLength="16"
                         />
-                        {errors.cardNumber && (
+                        {(errors.cardNumber || cardNumberError) && (
                           <span className="text-red-500 text-sm mt-1 block">
-                            {errors.cardNumber.message}
+                            {errors.cardNumber?.message || cardNumberError}
                           </span>
                         )}
                       </div>
@@ -647,18 +748,28 @@ const BillingScreen = () => {
                                 message: "有効な月 (01-12) を入力してください",
                               },
                             })}
+                            onChange={(e) => {
+                              const value = e.target.value.replace(/\D/g, '').slice(0,2);
+                              setValue("expiryMonth", value);
+                              if (value && (parseInt(value) < 1 || parseInt(value) > 12)) {
+                                setExpiryMonthError("有効な月 (01-12) を入力してください");
+                              } else {
+                                setExpiryMonthError("");
+                              }
+                            }}
                             name="expiryMonth"
                             type="text"
                             placeholder="MM"
                             className={`input rounded-[5px] py-4 mt-1 w-[68px] pl-4 font-Noto text-[#44495B80] text-sm border-2 ${
-                              errors.expiryMonth
+                              errors.expiryMonth || expiryMonthError
                                 ? "border-red-500"
                                 : "border-[#D9D9D9]"
                             } focus:border-[#707070] focus:outline-none`}
+                            maxLength="2"
                           />
-                          {errors.expiryMonth && (
+                          {(errors.expiryMonth || expiryMonthError) && (
                             <span className="text-red-500 text-sm mt-1 block">
-                              {errors.expiryMonth.message}
+                              {errors.expiryMonth?.message || expiryMonthError}
                             </span>
                           )}
                         </div>
@@ -672,18 +783,29 @@ const BillingScreen = () => {
                                 message: "有効な年 (YY) を入力してください",
                               },
                             })}
+                            onChange={(e) => {
+                              const value = e.target.value.replace(/\D/g, '').slice(0,2);
+                              setValue("expiryYear", value);
+                              const currentYear = new Date().getFullYear() % 100;
+                              if (value && parseInt(value) < currentYear) {
+                                setExpiryYearError("有効期限が切れています");
+                              } else {
+                                setExpiryYearError("");
+                              }
+                            }}
                             name="expiryYear"
                             type="text"
                             placeholder="YY"
                             className={`input rounded-[5px] py-4 mt-1 w-[94px] pl-4 font-Noto text-[#44495B80] text-sm border-2 ${
-                              errors.expiryYear
+                              errors.expiryYear || expiryYearError
                                 ? "border-red-500"
                                 : "border-[#D9D9D9]"
                             } focus:border-[#707070] focus:outline-none`}
+                            maxLength="2"
                           />
-                          {errors.expiryYear && (
+                          {(errors.expiryYear || expiryYearError) && (
                             <span className="text-red-500 text-sm mt-1 block">
-                              {errors.expiryYear.message}
+                              {errors.expiryYear?.message || expiryYearError}
                             </span>
                           )}
                         </div>
@@ -701,18 +823,28 @@ const BillingScreen = () => {
                                 "有効なセキュリティコードを入力してください",
                             },
                           })}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/\D/g, '').slice(0,4);
+                            setValue("securityCode", value);
+                            if (value.length < 3) {
+                              setSecurityCodeError("3-4桁のセキュリティコードを入力してください");
+                            } else {
+                              setSecurityCodeError("");
+                            }
+                          }}
                           name="securityCode"
                           type="text"
                           placeholder="123"
                           className={`input rounded-[5px] py-4 mt-1 w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 ${
-                            errors.securityCode
+                            errors.securityCode || securityCodeError
                               ? "border-red-500"
                               : "border-[#D9D9D9]"
                           } focus:border-[#707070] focus:outline-none`}
+                          maxLength="4"
                         />
-                        {errors.securityCode && (
+                        {(errors.securityCode || securityCodeError) && (
                           <span className="text-red-500 text-sm mt-1 block">
-                            {errors.securityCode.message}
+                            {errors.securityCode?.message || securityCodeError}
                           </span>
                         )}
                       </div>
@@ -727,20 +859,40 @@ const BillingScreen = () => {
                               message: "英文字で名前を入力してください",
                             },
                           })}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/[^a-zA-Z\s]/g, '');
+                            setValue("cardHolder", value);
+                            if (value && !/^[a-zA-Z\s]+$/.test(value)) {
+                              setCardHolderError("英文字で名前を入力してください");
+                            } else {
+                              setCardHolderError("");
+                            }
+                          }}
                           name="cardHolder"
                           type="text"
                           placeholder="名前"
                           className={`input rounded-[5px] py-4 mt-1 w-full pl-4 font-Noto text-[#44495B80] text-sm border-2 ${
-                            errors.cardHolder
+                            errors.cardHolder || cardHolderError
                               ? "border-red-500"
                               : "border-[#D9D9D9]"
                           } focus:border-[#707070] focus:outline-none`}
                         />
-                        {errors.cardHolder && (
+                        {(errors.cardHolder || cardHolderError) && (
                           <span className="text-red-500 text-sm mt-1 block">
-                            {errors.cardHolder.message}
+                            {errors.cardHolder?.message || cardHolderError}
                           </span>
                         )}
+                      </div>
+                      {/* Save Card Checkbox */}
+                      <div className="form-control mb-4">
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            {...register("saveCard")}
+                            className="mr-2"
+                          />
+                          <span>このカードを保存する</span>
+                        </label>
                       </div>
                     </form>
                   )}

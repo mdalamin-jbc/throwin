@@ -10,7 +10,6 @@ const ResturentStore = () => {
   const store = JSON.parse(localStorage.getItem("store"));
   const { restaurantStaffListByStoreCode, refetch, isLoading, isError, error } =
     UseGetStaffByStoreCode(store_code.store_code);
-  console.log(restaurantStaffListByStoreCode);
 
   const {
     register,

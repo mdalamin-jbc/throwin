@@ -1,8 +1,142 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Bar } from "react-chartjs-2";
+import useAnalytics from "../../../hooks/useAnalytics";
 
 const StoreTeamChart = () => {
-  const dataOverall = {
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1;
+
+  const [selectedYear, setSelectedYear] = useState(`${currentYear}年`);
+  const [selectedMonth, setSelectedMonth] = useState(`${currentMonth}月`);
+  const [selectedClient, setSelectedClient] = useState("");
+  const [selectedStore, setSelectedStore] = useState("");
+
+  // Initialize useAnalytics with current year only (no month filter initially)
+  const {
+    data,
+    loading,
+    generateChartData,
+    formatCurrency,
+    updateFilters,
+    filters,
+  } = useAnalytics({
+    year: currentYear,
+    // No month on initial load - filter by year only
+  });
+
+  // Auto-filter on component mount with default year only
+  useEffect(() => {
+    console.log("StoreTeamChart mounted, applying default year filter");
+    updateFilters({
+      year: currentYear,
+      client: selectedClient,
+      store: selectedStore,
+      // No month filter on initial load - filter by year only
+    });
+  }, []); // Empty dependency array means this runs once on mount
+
+  // Generate year options (current year + 20 years back)
+  const generateYearOptions = () => {
+    const years = [];
+    const currentYear = new Date().getFullYear();
+    for (let i = 0; i <= 20; i++) {
+      years.push(currentYear - i);
+    }
+    return years;
+  };
+
+  // Handle year change and auto-update
+  const handleYearChange = (e) => {
+    const newYear = e.target.value;
+    setSelectedYear(newYear);
+
+    const year = parseInt(newYear.replace("年", ""));
+    const month = parseInt(selectedMonth.replace("月", ""));
+
+    console.log("Year changed, auto updating filters:", {
+      year,
+      month,
+      client: selectedClient,
+      store: selectedStore,
+    });
+    updateFilters({
+      year,
+      month,
+      client: selectedClient,
+      store: selectedStore,
+    });
+  };
+
+  // Handle month change and auto-update
+  const handleMonthChange = (e) => {
+    const newMonth = e.target.value;
+    setSelectedMonth(newMonth);
+
+    const year = parseInt(selectedYear.replace("年", ""));
+    const month = parseInt(newMonth.replace("月", ""));
+
+    console.log("Month changed, auto updating filters:", {
+      year,
+      month,
+      client: selectedClient,
+      store: selectedStore,
+    });
+    updateFilters({
+      year,
+      month,
+      client: selectedClient,
+      store: selectedStore,
+    });
+  };
+
+  // Handle client change and auto-update
+  const handleClientChange = (e) => {
+    const newClient = e.target.value;
+    setSelectedClient(newClient);
+
+    const year = parseInt(selectedYear.replace("年", ""));
+    const month = parseInt(selectedMonth.replace("月", ""));
+
+    console.log("Client changed, auto updating filters:", {
+      year,
+      month,
+      client: newClient,
+      store: selectedStore,
+    });
+    updateFilters({ year, month, client: newClient, store: selectedStore });
+  };
+
+  // Handle store change and auto-update
+  const handleStoreChange = (e) => {
+    const newStore = e.target.value;
+    setSelectedStore(newStore);
+
+    const year = parseInt(selectedYear.replace("年", ""));
+    const month = parseInt(selectedMonth.replace("月", ""));
+
+    console.log("Store changed, auto updating filters:", {
+      year,
+      month,
+      client: selectedClient,
+      store: newStore,
+    });
+    updateFilters({ year, month, client: selectedClient, store: newStore });
+  };
+
+  const handlePeriodChange = () => {
+    const year = parseInt(selectedYear.replace("年", ""));
+    const month = parseInt(selectedMonth.replace("月", ""));
+
+    updateFilters({
+      year: year,
+      month: month,
+      client: selectedClient,
+      store: selectedStore,
+    });
+  };
+
+  // Use dynamic data or fallback to static data
+  const chartData = generateChartData() || {
     labels: [
       "1 火",
       "2 水",
@@ -78,69 +212,119 @@ const StoreTeamChart = () => {
     },
   };
 
+  // Mock data - replace with actual API data
+  const clients = [
+    { id: "1", name: "居酒屋ABC" },
+    { id: "2", name: "レストランXYZ" },
+  ];
+
+  const stores = [
+    { id: "1", name: "居酒屋ABC_大阪店" },
+    { id: "2", name: "居酒屋ABC_東京店" },
+  ];
+
   return (
     <div>
+      {/* Period Selection */}
       <div className="mt-[22px] flex items-center gap-4 font-semibold text-xs">
         <label className="text-[#434343] mr-9">期間指定</label>
-        <div className="flex items-center gap-2  py-[5px] px-2 rounded-md">
+        <div className="flex items-center gap-2 py-[5px] px-2 rounded-md">
           <select
-            // value={selectedYear}
-            // onChange={handleYearChange}
+            value={selectedYear}
+            onChange={handleYearChange}
             className="border rounded px-2 py-1 w-[134px]"
           >
-            {[...Array(21)].map((_, i) => (
-              <option key={i}>{new Date().getFullYear() - i}年</option>
+            {generateYearOptions().map((year) => (
+              <option key={year} value={`${year}年`}>
+                {year}年
+              </option>
             ))}
           </select>
 
           <select
-            // value={selectedMonth}
-            // onChange={handleMonthChange}
+            value={selectedMonth}
+            onChange={handleMonthChange}
             className="border rounded px-2 py-1 w-[111px]"
           >
             {[...Array(12)].map((_, i) => (
-              <option key={i}>{i + 1}</option>
+              <option key={i + 1} value={`${i + 1}月`}>
+                {i + 1}月
+              </option>
             ))}
           </select>
         </div>
 
-        <button className="bg-[#49BBDF] py-[6px] px-4 rounded-md text-white">
-          集計
+        <button
+          onClick={handlePeriodChange}
+          className="bg-[#49BBDF] py-[6px] px-4 rounded-md text-white"
+          disabled={loading}
+        >
+          {loading ? "読み込み中..." : "集計"}
         </button>
       </div>
-      {/* ------------------------------- */}
+
+      {/* Client Selection */}
       <div className="mt-[px] flex items-center gap-4 font-semibold text-xs">
         <label className="text-[#434343]">クライアント　</label>
-        <div className="flex items-center gap-2  py-[5px] px-2 rounded-md">
-          <select className="border rounded px-2 py-1 w-[295px]">
-            <option value="">居酒屋ABC</option>
+        <div className="flex items-center gap-2 py-[5px] px-2 rounded-md">
+          <select
+            value={selectedClient}
+            onChange={handleClientChange}
+            className="border rounded px-2 py-1 w-[295px]"
+          >
+            <option value="">全て</option>
+            {clients.map((client) => (
+              <option key={client.id} value={client.id}>
+                {client.name}
+              </option>
+            ))}
           </select>
         </div>
       </div>
-      {/* ------------------------------- */}
-      <div className=" flex items-center gap-[32px] font-semibold text-xs">
+
+      {/* Store Selection */}
+      <div className="flex items-center gap-[32px] font-semibold text-xs">
         <label className="text-[#434343]">店舗(チーム)</label>
-        <div className="flex items-center gap-2  py-[5px] px-2 rounded-md">
-          <select className="border rounded px-2 py-1 w-[295px]">
-            <option value="">居酒屋ABC_大阪店</option>
+        <div className="flex items-center gap-2 py-[5px] px-2 rounded-md">
+          <select
+            value={selectedStore}
+            onChange={handleStoreChange}
+            className="border rounded px-2 py-1 w-[295px]"
+          >
+            <option value="">全て</option>
+            {stores.map((store) => (
+              <option key={store.id} value={store.id}>
+                {store.name}
+              </option>
+            ))}
           </select>
         </div>
       </div>
+
+      {/* Stats Cards */}
       <div className="mt-[33px] grid grid-cols-3 gap-[17px]">
         {[
           {
             title: "売上（Throwin額)",
-            value: "1,000,000",
+            value: data ? formatCurrency(data.total_amount_jpy) : "1,000,000",
             unit: "円",
           },
-          { title: "利益額", value: "300,000", unit: "円" },
-          { title: "稼働メンバー数", value: "5", unit: "" },
+          {
+            title: "利益額",
+            value: data ? formatCurrency(data.latest_balance_jpy) : "300,000",
+            unit: "円",
+          },
+          {
+            title: "稼働メンバー数",
+            value: data ? data.total_stores?.toString() : "5",
+            unit: "",
+          },
         ].map((item, i) => (
           <div
             key={i}
             className="bg-[#F9F9F9] py-[47px] text-center rounded-[20px]"
           >
-            <p className="font-semibold text-lg text-[利益額]">{item.title}</p>
+            <p className="font-semibold text-lg">{item.title}</p>
             <div className="flex justify-center items-center gap-6">
               <h3 className="text-[#49BBDF] font-semibold text-[36px] mt-[28px] ml-10">
                 {item.value}
@@ -150,8 +334,14 @@ const StoreTeamChart = () => {
           </div>
         ))}
       </div>
+
+      {/* Chart */}
       <div className="mt-[27px]">
-        <Bar height={200} width={600} data={dataOverall} options={options} />
+        {loading ? (
+          <div className="flex justify-center items-center p-8">Loading...</div>
+        ) : (
+          <Bar height={200} width={600} data={chartData} options={options} />
+        )}
       </div>
     </div>
   );

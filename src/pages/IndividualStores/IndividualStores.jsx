@@ -12,9 +12,6 @@ const IndividualStores = () => {
   const { store, isLoading } = useGetStuffsByStoreCode(store_code);
 
   const { storeDetails } = UseGetStoreDetailsByStoreCode(store_code);
-  console.log(store);
-
-
 
   if (isLoading) {
     return (

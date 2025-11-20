@@ -67,7 +67,6 @@ const Login = () => {
         email: data.mail,
         password: data.password,
       });
-      console.log(response.data.data.role);
 
       if (response.data.data.role !== "consumer") {
         toast.error("許可されていないアクセス", {

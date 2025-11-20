@@ -11,7 +11,6 @@ const DeSettings = () => {
   const { resturentWonerSettings, refetch, isLoading } =
     UseGetResturentWonerSettings();
   const axiosPrivate = useAxiosPrivate();
-  console.log(resturentWonerSettings);
 
   // Name change states
   const [isEditingName, setIsEditingName] = useState(false);
@@ -22,18 +21,41 @@ const DeSettings = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // PayPal edit states
+  const [isEditingPayPal, setIsEditingPayPal] = useState(false);
+  const [cardNumber, setCardNumber] = useState("");
+  const [expiryMonth, setExpiryMonth] = useState("");
+  const [expiryYear, setExpiryYear] = useState("");
+  const [cvc, setCvc] = useState("");
+  const [cardName, setCardName] = useState("");
+
   useEffect(() => {
     if (resturentWonerSettings) {
       setName(resturentWonerSettings.owner_name || "");
       setEmail(resturentWonerSettings.email || "");
+      setCardNumber(resturentWonerSettings?.paypal_id || "");
+      setExpiryMonth("");
+      setExpiryYear("");
+      setCvc("");
+      setCardName("");
     }
   }, [resturentWonerSettings]);
 
-  // Handle edit name button click
-  const handleEditName = () => {
-    setName(""); // Clear name to show placeholder
-    setIsEditingName(true);
-  };
+  // Luhn algorithm for card validation
+  function luhnCheck(cardNumber) {
+    let sum = 0;
+    let shouldDouble = false;
+    for (let i = cardNumber.length - 1; i >= 0; i--) {
+      let digit = parseInt(cardNumber.charAt(i));
+      if (shouldDouble) {
+        digit *= 2;
+        if (digit > 9) digit -= 9;
+      }
+      sum += digit;
+      shouldDouble = !shouldDouble;
+    }
+    return sum % 10 === 0;
+  }
 
   // Handle Name Change
   const handleSaveName = async () => {
@@ -44,7 +66,11 @@ const DeSettings = () => {
 
     try {
       let endpoint = "";
-      if (userRole === "fc_admin" || userRole === "glow_admin"||userRole === "sales_agent") {
+      if (
+        userRole === "fc_admin" ||
+        userRole === "glow_admin" ||
+        userRole === "sales_agent"
+      ) {
         endpoint = "/admins/settings/change-name";
       } else {
         endpoint = "/restaurant-owner/settings/change-name";
@@ -58,7 +84,6 @@ const DeSettings = () => {
         userRefetch();
       }
 
-      console.log("Name changed successfully", response.status);
       setIsEditingName(false);
     } catch (error) {
       toast.error("名前の変更に失敗しました。");
@@ -66,36 +91,71 @@ const DeSettings = () => {
     }
   };
 
-  // Handle Email Change
-  const handleSubmitEmail = async (e) => {
-    e.preventDefault();
+  // Handle PayPal Change
+  const handleSavePayPal = async () => {
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth() + 1;
 
-    if (!email.trim() || !password.trim()) {
-      toast.error("メールアドレスとパスワードを入力してください。");
+    if (!/^\d{13,16}$/.test(cardNumber)) {
+      toast.error("カード番号は13-16桁の数字で入力してください。");
       return;
     }
 
-    const toastId = toast.loading("変更を送信中...");
+    if (!luhnCheck(cardNumber)) {
+      toast.error("無効なカード番号です。");
+      return;
+    }
+
+    if (!expiryMonth || !expiryYear) {
+      toast.error("有効期限を選択してください。");
+      return;
+    }
+
+    if (parseInt(expiryYear) < currentYear || (parseInt(expiryYear) === currentYear && parseInt(expiryMonth) < currentMonth)) {
+      toast.error("有効期限は未来の日付を選択してください。");
+      return;
+    }
+
+    if (!/^\d{3,4}$/.test(cvc)) {
+      toast.error("セキュリティコードは3-4桁の数字で入力してください。");
+      return;
+    }
+
+    if (!cardName.trim()) {
+      toast.error("カード名義を入力してください。");
+      return;
+    }
+
+    const uid = resturentWonerSettings?.bank_uid;
+    if (!uid) {
+      toast.error("銀行口座が設定されていません。まず銀行口座を設定してください。");
+      return;
+    }
 
     try {
-      const response = await axiosPrivate.post(
-        "admins/settings/change-email-request",
-        { email, password }
-      );
+      let endpoint = "";
 
-      if (response.status === 200) {
-        toast.success("確認メールを送信しました！", { id: toastId });
+      if (
+        userRole === "fc_admin" ||
+        userRole === "glow_admin" ||
+        userRole === "sales_agent"
+      ) {
+        endpoint = `/admins/settings/bank-accounts/${uid}`;
+      } else {
+        endpoint = `/restaurant-owner/settings/bank-accounts/${uid}`;
       }
 
-      setIsEditingEmail(false);
-      refetch();
-    } catch (error) {
-      console.error("Error changing email", error);
+      const response = await axiosPrivate.patch(endpoint, { paypal_id: paypalId });
 
-      const errorMessage =
-        error?.response?.data?.message ||
-        "メールアドレスの変更に失敗しました。";
-      toast.error(errorMessage, { id: toastId });
+      if (response.status === 200) {
+        toast.success("PayPal IDが正常に変更されました！");
+        refetch();
+      }
+
+      setIsEditingPayPal(false);
+    } catch (error) {
+      toast.error("PayPal IDの変更に失敗しました。");
+      console.error("Error changing PayPal", error);
     }
   };
 
@@ -330,17 +390,80 @@ const DeSettings = () => {
                 </tr>
 
                 <tr className="hover">
-                  <td>振込先口座情報</td>
+                  <td>クレジットカード情報</td>
                   <td>
-                    {resturentWonerSettings?.bank_name || "未登録"} 銀行　
-                    {resturentWonerSettings?.branch_name || "未登録"} 支店　
-                    {resturentWonerSettings?.account_type || "未登録"}　
-                    {resturentWonerSettings?.account_number || "未登録"}
+                    {isEditingPayPal ? (
+                      <div className="space-y-2">
+                        <input
+                          type="text"
+                          value={cardNumber}
+                          onChange={(e) => setCardNumber(e.target.value.replace(/\D/g, '').slice(0,16))}
+                          placeholder="クレジットカード番号"
+                          className="border p-1 w-full rounded-md"
+                          maxLength="16"
+                        />
+                        <div className="flex gap-2">
+                          <select
+                            value={expiryMonth}
+                            onChange={(e) => setExpiryMonth(e.target.value)}
+                            className="border p-1 rounded-md"
+                          >
+                            <option value="">月</option>
+                            {Array.from({length:12}, (_,i) => <option key={i+1} value={String(i+1).padStart(2,'0')}>{String(i+1).padStart(2,'0')}</option>)}
+                          </select>
+                          <select
+                            value={expiryYear}
+                            onChange={(e) => setExpiryYear(e.target.value)}
+                            className="border p-1 rounded-md"
+                          >
+                            <option value="">年</option>
+                            {Array.from({length:10}, (_,i) => <option key={new Date().getFullYear() + i} value={new Date().getFullYear() + i}>{new Date().getFullYear() + i}</option>)}
+                          </select>
+                        </div>
+                        <input
+                          type="text"
+                          value={cvc}
+                          onChange={(e) => setCvc(e.target.value.replace(/\D/g, '').slice(0,4))}
+                          placeholder="セキュリティコード"
+                          className="border p-1 w-full rounded-md"
+                          maxLength="4"
+                        />
+                        <input
+                          type="text"
+                          value={cardName}
+                          onChange={(e) => setCardName(e.target.value)}
+                          placeholder="クレジットカード名義"
+                          className="border p-1 w-full rounded-md"
+                        />
+                      </div>
+                    ) : (
+                      resturentWonerSettings?.paypal_id ? `**** **** **** ${resturentWonerSettings.paypal_id.slice(-4)}` : "未登録"
+                    )}
                   </td>
                   <td className="text-center">
-                    <button className="border py-1 px-3 rounded-md bg-gray-200">
-                      情報の編集
-                    </button>
+                    {isEditingPayPal ? (
+                      <div className="flex gap-2">
+                        <button
+                          onClick={handleSavePayPal}
+                          className="border py-1 px-3 rounded-md bg-blue-200"
+                        >
+                          提出する
+                        </button>
+                        <button
+                          onClick={() => setIsEditingPayPal(false)}
+                          className="border py-1 px-3 rounded-md bg-gray-200"
+                        >
+                          キャンセル
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={handleEditPayPal}
+                        className="border py-1 px-3 rounded-md bg-gray-200"
+                      >
+                        情報の編集
+                      </button>
+                    )}
                   </td>
                 </tr>
               </tbody>

@@ -130,9 +130,6 @@ const SideMenu = () => {
           .querySelector('meta[name="csrf-token"]')
           ?.getAttribute("content") || "";
 
-      console.log("User Info:", user);
-      console.log("Refresh Token:", refreshToken);
-
       const response = await fetch(
         "https://api-dev.throwin-glow.com/auth/logout",
         {
@@ -148,8 +145,6 @@ const SideMenu = () => {
           }),
         }
       );
-
-      console.log("Logout status:", response.status);
 
       if (response.ok) {
         logout(); // ローカルの認証データをクリア

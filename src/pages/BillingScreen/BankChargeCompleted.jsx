@@ -91,7 +91,6 @@ const BankChargeCompleted = () => {
   const { width, height } = useWindowSize();
   const confettiTriggeredRef = useRef(false);
   const toastTriggeredRef = useRef(false);
-  console.log(staff_details)
 
   const fireConfetti = () => {
     const count = 200;
@@ -124,9 +123,6 @@ const BankChargeCompleted = () => {
     // Get paymentId from URL
     const url = new URL(window.location.href);
     const paymentId = url.searchParams.get("paymentId");
-
-    // Log payment ID to console
-    console.log("Payment ID:", paymentId);
 
     // Show success toast with payment ID if available
     if (paymentId && !toastTriggeredRef.current) {

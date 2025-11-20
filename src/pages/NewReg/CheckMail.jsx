@@ -8,7 +8,6 @@ const CheckMail = () => {
   const axiosPublic = useAxiosPublic();
   const location = useLocation();
   const email = location.state?.email;
-  console.log(email);
 
   const [isLoading, setIsLoading] = useState(false); // For loading indicator
 

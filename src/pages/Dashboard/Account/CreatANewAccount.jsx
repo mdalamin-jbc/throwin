@@ -65,10 +65,6 @@ const CreateANewAccount = () => {
 
   // Form Submit Function
   const onSubmit = async (data) => {
-    console.log("Form Data:", data);
-    console.log("Amounts:", amounts);
-    console.log("Top Image:", topImage);
-
     const formData = new FormData();
     formData.append("name", data.storeName);
     formData.append("location", data.location);
@@ -94,8 +90,6 @@ const CreateANewAccount = () => {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
-
-      console.log("Response:", response);
 
       if (response.status === 200 || response.status === 201) {
         toast.success("アカウントが正常に作成されました！");

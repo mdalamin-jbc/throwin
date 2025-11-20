@@ -13,7 +13,7 @@ const ClientForm = ({
 }) => {
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
-  console.log({ defaultValues });
+
   const {
     register,
     handleSubmit,
@@ -21,7 +21,6 @@ const ClientForm = ({
   } = useForm({
     mode: "onChange", // Validate on change for better user experience
     defaultValues: {
-      accountType: "futsuu", // Set default account type
       ...defaultValues, // Override defaults with any provided values for editing
     },
   });
@@ -39,14 +38,8 @@ const ClientForm = ({
       owner_name: data.contactName,
       telephone_number: data.telephoneNumber,
       email: data.email,
-      bank_name: data.bankName,
-      branch_name: data.branchName,
-      account_type: data.accountType || "futsuu",
-      account_number: data.accountNumber,
-      account_holder_name: data.accountHolderName,
+      paypal_id: data.paypalId,
     };
-
-    console.log("Submitting data:", requestBody);
 
     try {
       let response;
@@ -70,8 +63,6 @@ const ClientForm = ({
           toast.success("新しいクライアントが作成されました！");
         }
       }
-
-      console.log("API Response:", response);
 
       if (response.status === 200 || response.status === 201) {
         // Execute any additional success callback
@@ -366,113 +357,26 @@ const ClientForm = ({
                 </div>
               </td>
             </tr>
-            {/* row 10 - Bank account information section */}
+            {/* row 10 - PayPal ID */}
             <tr className="hover">
               <td className="flex items-center gap-[17px]">
-                <label className="block text-gray-700">振込先口座情報*</label>
+                <label className="block text-gray-700">PayPal ID*</label>
               </td>
               <td>
-                <div className="grid grid-cols-3 gap-8 md:gap-16">
-                  <div>
-                    <div className="flex items-center gap-[14px]">
-                      <input
-                        {...register("bankName", {
-                          required: "必須入力項目です",
-                        })}
-                        type="text"
-                        placeholder="三井住友"
-                        className="w-[94px] border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-                      />
-                      <label className="block text-black">銀行</label>
-                    </div>
-                    <div className="flex justify-between text-xs text-gray-500 mt-1">
-                      {errors.bankName && (
-                        <p className="text-red-500">
-                          {errors.bankName.message}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-[14px]">
-                      <input
-                        {...register("branchName", {
-                          required: "必須入力項目です",
-                        })}
-                        type="text"
-                        placeholder="梅田支店"
-                        className="w-[94px] border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-                      />
-                      <label className="block text-black">支店</label>
-                    </div>
-                    <div className="flex justify-between text-xs text-gray-500 mt-1">
-                      {errors.branchName && (
-                        <p className="text-red-500">
-                          {errors.branchName.message}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-[14px]">
-                      <select
-                        {...register("accountType", {
-                          required: "アカウントタイプを選択してください",
-                        })}
-                        className="w-[120px] md:w-[150px] border rounded px-2 md:px-4 py-2 focus:outline-none focus:border-blue-500"
-                      >
-                        <option value="futsuu">普通</option>
-                      </select>
-                      <label className="block text-black">種別</label>
-                    </div>
-                    <div className="flex justify-between text-xs text-gray-500 mt-1">
-                      {errors.accountType && (
-                        <p className="text-red-500">
-                          {errors.accountType.message}
-                        </p>
-                      )}
-                    </div>
-                  </div>
+                <div className="">
+                  <input
+                    {...register("paypalId", {
+                      required: "必須入力項目です",
+                    })}
+                    type="email"
+                    placeholder="your-email@example.com"
+                    className="w-full border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+                  />
                 </div>
-                <div className="flex flex-col md:flex-row gap-5 mt-3">
-                  <div>
-                    <div className="">
-                      <input
-                        {...register("accountNumber", {
-                          required: "必須入力項目です",
-                        })}
-                        type="text"
-                        placeholder="口座番号"
-                        className="w-full md:w-[245px] border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-                      />
-                    </div>
-                    <div className="flex justify-between text-xs text-gray-500 mt-1">
-                      {errors.accountNumber && (
-                        <p className="text-red-500">
-                          {errors.accountNumber.message}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="">
-                      <input
-                        {...register("accountHolderName", {
-                          required: "必須入力項目です",
-                        })}
-                        type="text"
-                        placeholder="口座名義"
-                        className="w-full md:w-[245px] border rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-                      />
-                    </div>
-                    <div className="flex justify-between text-xs text-gray-500 mt-1">
-                      {errors.accountHolderName && (
-                        <p className="text-red-500">
-                          {errors.accountHolderName.message}
-                        </p>
-                      )}
-                    </div>
-                  </div>
+                <div className="flex justify-between text-xs text-gray-500 mt-1">
+                  {errors.paypalId && (
+                    <p className="text-red-500">{errors.paypalId.message}</p>
+                  )}
                 </div>
               </td>
             </tr>

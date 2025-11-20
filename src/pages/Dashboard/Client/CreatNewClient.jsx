@@ -16,7 +16,6 @@ const CreateNewClient = () => {
           refetch={refetch}
           redirectPath="/dashboard/client"
           onSuccess={(data) => {
-            console.log("New client created:", data);
             // Any additional actions after successful creation
           }}
         />

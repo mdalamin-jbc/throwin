@@ -25,12 +25,12 @@ const NickNameReg = () => {
       const response = await axiosPrivate.post(`auth/users/name`, {
         name: data.name,
       });
-      console.log(response);
+
       toast.success("ニックネームが正常に設定されました。", {
         position: "top-center",
         duration: 1500,
       });
-  
+
       // Redirect after the toast notification is shown
       setTimeout(() => {
         reset();
@@ -42,21 +42,21 @@ const NickNameReg = () => {
         "Error setting name:",
         error.response ? error.response.data : error
       );
-  
+
       const errorMessage =
-        error.response?.data?.name?.[0] === "User with this name already exists."
+        error.response?.data?.name?.[0] ===
+        "User with this name already exists."
           ? "すでに使用されているニックネームです"
           : "エラーが発生しました";
-  
+
       setError({ name: errorMessage }); // Set the error state with the appropriate message
-  
+
       toast.error(errorMessage, {
         position: "top-center",
         duration: 1500,
       });
     }
   };
-  
 
   return (
     <div className="">
