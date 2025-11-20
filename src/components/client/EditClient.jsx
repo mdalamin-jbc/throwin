@@ -29,11 +29,7 @@ const EditClient = () => {
       invoiceNumber: data.invoice_number || "",
       agencyCode: data.agency_code || "",
       corporateNumber: data.corporate_number || "",
-      bankName: data.bank_name || "",
-      branchName: data.branch_name || "",
-      accountType: data.account_type || "futsuu",
-      accountNumber: data.account_number || "",
-      accountHolderName: data.account_holder_name || "",
+      paypalId: data.paypal_id || "",
     };
   }, []);
 
@@ -178,11 +174,7 @@ ClientForm.propTypes = {
     invoiceNumber: PropTypes.string,
     agencyCode: PropTypes.string,
     corporateNumber: PropTypes.string,
-    bankName: PropTypes.string,
-    branchName: PropTypes.string,
-    accountType: PropTypes.oneOf(["futsuu", "touza", "chochiku"]),
-    accountNumber: PropTypes.string,
-    accountHolderName: PropTypes.string,
+    paypalId: PropTypes.string,
   }).isRequired,
   isEditMode: PropTypes.bool.isRequired,
   refetch: PropTypes.func.isRequired,
